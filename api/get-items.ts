@@ -30,16 +30,15 @@ export default async (req: VercelRequest, res: VercelResponse) => {
 			let response: any[] = [];
 			records.forEach((rec: any) => {
 				response.push({
-					id: rec.get('id'),
-					name: rec.get('Item'),
-					pic: rec.get('Pic'),
-					price: rec.get('Price'),
-					notes: rec.get('Notes'),
-					recipient: rec.get('Recipient'),
-					link: rec.get('Link'),
-					purchased: rec.get('Purchased?'),
+					id: rec._rawJson.get('id'),
+					name: rec._rawJson.get('Item'),
+					pic: rec._rawJson.get('Pic'),
+					price: rec._rawJson.get('Price'),
+					notes: rec._rawJson.get('Notes'),
+					recipient: rec._rawJson.get('Recipient'),
+					link: rec._rawJson.get('Link'),
+					purchased: rec._rawJson.get('Purchased?'),
 				});
-				console.log('Retrieved', rec.get('Item'));
 			});
 
 			res.status(200);

@@ -30,8 +30,6 @@ const getters: GetterTree<GiftItemState, RootState> = {
 		const allGiftItems = state.ids.map((id: string) => state.entities[id]);
 		const query = state.query;
 
-		console.log(allGiftItems);
-
 		if (!query) {
 			return allGiftItems;
 		}
@@ -52,6 +50,8 @@ const actions: ActionTree<GiftItemState, RootState> = {
 		const url = baseUrl + '/get-items';
 
 		const { data } = await axios.get<GiftItem[]>(url);
+
+		console.log(data);
 		commit('saveAllGiftItems', data);
 	},
 };

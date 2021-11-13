@@ -2,12 +2,12 @@ export interface GiftItem {
 	[key: string]: any;
 	id: string;
 	name: string;
-	pic: Pic[];
-	price: number;
-	notes: string;
+	pic?: Pic[];
+	price?: number;
+	notes?: string;
 	recipient: string[];
-	link: string;
-	purchased: boolean;
+	link?: string;
+	purchased?: boolean;
 }
 
 interface Pic {
