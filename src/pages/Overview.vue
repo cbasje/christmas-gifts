@@ -125,7 +125,7 @@
 										<div class="flex-shrink-0 h-10 w-10">
 											<img
 												class="h-10 w-10 rounded-full"
-												:src="item.image"
+												:src="item.pic"
 												alt=""
 											/>
 										</div>
@@ -145,13 +145,15 @@
 										</div>
 									</div>
 								</td>
-								<td class="px-6 py-4 whitespace-nowrap">
-									<div class="text-sm text-gray-900">
-										{{ item.title }}
-									</div>
-									<div class="text-sm text-gray-500">
-										{{ item.department }}
-									</div>
+								<td
+									class="
+										px-6
+										py-4
+										whitespace-nowrap
+										text-sm text-gray-500
+									"
+								>
+									{{ item.link }}
 								</td>
 								<td class="px-6 py-4 whitespace-nowrap">
 									<span
@@ -166,7 +168,7 @@
 											text-green-800
 										"
 									>
-										Active
+										{{ item.recipient.name }}
 									</span>
 								</td>
 								<td
@@ -177,15 +179,15 @@
 										text-sm text-gray-500
 									"
 								>
-									{{ item.role }}
+									{{ item.link }}
 								</td>
 								<td class="p-4">
 									<Switch
 										v-model="enabled"
 										:class="
 											enabled
-												? 'bg-teal-900'
-												: 'bg-teal-700'
+												? 'bg-green-900'
+												: 'bg-green-700'
 										"
 										class="
 											relative
@@ -251,18 +253,6 @@ import { mapActions, mapGetters, mapMutations } from 'vuex';
 import { GiftItem } from '@/types/gift-item';
 
 import { Switch } from '@headlessui/vue';
-
-const people = [
-	{
-		name: 'Jane Cooper',
-		title: 'Regional Paradigm Technician',
-		department: 'Optimization',
-		role: 'Admin',
-		email: 'jane.cooper@example.com',
-		image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
-	},
-	// More people...
-];
 
 export default defineComponent({
 	components: { Switch },
