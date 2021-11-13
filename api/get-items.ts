@@ -28,7 +28,7 @@ export default async (req: VercelRequest, res: VercelResponse) => {
 		.firstPage((err: any, records: any) => {
 			if (err) {
 				console.error(err);
-				res.status(500);
+				res.status(501);
 				res.send(err);
 
 				return;
