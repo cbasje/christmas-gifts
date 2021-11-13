@@ -30,6 +30,9 @@ const getters: GetterTree<GiftItemState, RootState> = {
 		const allGiftItems = state.ids.map((id: string) => state.entities[id]);
 		const query = state.query;
 
+		console.log(allGiftItems);
+		
+
 		if (!query) {
 			return allGiftItems;
 		}
