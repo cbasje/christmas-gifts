@@ -31,15 +31,18 @@ const getters: GetterTree<GiftItemState, RootState> = {
 		const query = state.query;
 
 		console.log(allGiftItems);
-		
 
 		if (!query) {
 			return allGiftItems;
 		}
 
-		return allGiftItems.filter(
-			(giftItem: GiftItem) => giftItem.recipient.name.indexOf(query) === -1
-		);
+		return allGiftItems.filter((giftItem: GiftItem) => {
+			let filter = false;
+			giftItem.recipient.forEach((recipient) => {
+				filter = recipient.indexOf(query) === -1;
+			});
+			return filter;
+		});
 	},
 };
 

@@ -1,16 +1,11 @@
 export interface GiftItem {
-    [key: string]: string | number | Recipient | boolean | undefined
+    [key: string]: string | number | string[] | boolean | undefined
 	id: string;
 	name: string;
 	pic: string;
 	price: number;
 	notes: string;
-	recipient: Recipient;
+	recipient: string[];
 	link: string;
 	purchased: boolean;
-}
-
-interface Recipient {
-	id: string;
-	name: string;
 }

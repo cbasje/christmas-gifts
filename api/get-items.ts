@@ -29,7 +29,16 @@ export default async (req: VercelRequest, res: VercelResponse) => {
 			}
 			let response: any[] = [];
 			records.forEach((rec: any) => {
-				response.push(rec);
+				response.push({
+					id: rec.get('id'),
+					name: rec.get('Item'),
+					pic: rec.get('Pic'),
+					price: rec.get('Price'),
+					notes: rec.get('Notes'),
+					recipient: rec.get('Recipient'),
+					link: rec.get('Link'),
+					purchased: rec.get('Purchased?'),
+				});
 				console.log('Retrieved', rec.get('Item'));
 			});
 
