@@ -32,7 +32,7 @@ export default async (req: VercelRequest, res: VercelResponse) => {
 				},
 			},
 		],
-		function (err, records) {
+		function (err: any, records: any[]) {
 			if (err) {
 				console.error(err);
 				res.status(500);
@@ -43,8 +43,8 @@ export default async (req: VercelRequest, res: VercelResponse) => {
 				}
 				return;
 			}
-			let response = [];
-			records.forEach(rec => {
+			let response: any[] = [];
+			records.forEach((rec: any) => {
 				response.push(rec._rawJson)
 			});
 

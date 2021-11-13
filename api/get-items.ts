@@ -25,7 +25,7 @@ export default async (req: VercelRequest, res: VercelResponse) => {
 		.select({
 			view: 'Main View',
 		})
-		.firstPage(function (err, records) {
+		.firstPage((err: any, records: any) => {
 			if (err) {
 				console.error(err);
 				res.status(500);
@@ -33,8 +33,8 @@ export default async (req: VercelRequest, res: VercelResponse) => {
 
 				return;
 			}
-			let response = [];
-			records.forEach((rec) => {
+			let response: any[] = [];
+			records.forEach((rec: any) => {
 				response.push(rec._rawJson);
 				console.log('Retrieved', rec.get('Item'));
 			});
