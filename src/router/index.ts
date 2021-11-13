@@ -1,25 +1,33 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 
-const Category = () => import('@/pages/Category.vue');
-const CategoryItem = () => import('@/pages/CategoryItem.vue');
-const Contact = () => import('@/pages/Contact.vue');
+const Overview = () => import('@/pages/Overview.vue');
+const OwnList = () => import('@/pages/OwnList.vue');
+const Login = () => import('@/pages/Login.vue');
 
 const routes: Array<RouteRecordRaw> = [
 	{
 		path: '/',
-		redirect: 'work',
+		redirect: 'overview',
 	},
 	{
-		path: '/:categoryId',
-		component: Category,
+		path: '/overview',
+		component: Overview,
 	},
 	{
-		path: '/:categoryId/:projectId',
-		component: CategoryItem,
+		path: '/overview/:itemId',
+		component: Overview,
 	},
 	{
-		path: '/contact',
-		component: Contact,
+		path: '/own-list',
+		component: OwnList,
+	},
+	{
+		path: '/own-list/:itemId',
+		component: OwnList,
+	},
+	{
+		path: '/login',
+		component: Login,
 	},
 ];
 

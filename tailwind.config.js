@@ -9,7 +9,8 @@ module.exports = {
 			black: colors.black,
 			gray: colors.gray,
 			white: colors.white,
-			amber: colors.yellow
+			amber: colors.yellow,
+			green: colors.emerald
 		},
 		fontFamily: {
 			display: ['Poppins', 'sans-serif'],

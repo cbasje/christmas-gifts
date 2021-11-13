@@ -1,28 +1,24 @@
 <template>
 	<div class="bg-gray-100 dark:bg-gray-900 min-h-screen">
-		<Navigation />
+		<header>
+			<Navigation />
+		</header>
 
 		<div class="container mx-auto pt-16 px-3">
 			<router-view />
 		</div>
+		
+		<Footer />
 	</div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { mapActions } from 'vuex';
 
-import Navigation from './components/NavigationTW.vue';
+import Navigation from './components/Navigation.vue';
+import Footer from './components/Footer.vue';
 
 export default defineComponent({
-	components: { Navigation },
-	async mounted() {
-		await this.loadProjects();
-	},
-	methods: {
-		...mapActions('projects', {
-			loadProjects: 'loadProjects',
-		}),
-	},
+	components: { Navigation, Footer }
 });
 </script>

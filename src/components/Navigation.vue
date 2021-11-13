@@ -1,93 +1,241 @@
 <template>
-	<nav
-		class="
-			w-screen
-			fixed
-			z-50
-			p-5
-			bg-gradient-to-b
-			from-gray-100
-			dark:from-gray-900
-		"
-	>
-		<div class="flex items-center">
-			<ul class="flex-1 flex justify-start">
-				<li v-for="tab in tabs" :key="tab.id" class="pr-3">
-					<router-link
+	<Disclosure as="nav" class="bg-gray-800" v-slot="{ open }">
+		<div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+			<div class="relative flex items-center justify-between h-16">
+				<div
+					class="
+						absolute
+						inset-y-0
+						left-0
+						flex
+						items-center
+						sm:hidden
+					"
+				>
+					<!-- Mobile menu button-->
+					<DisclosureButton
 						class="
-							text-black
-							dark:text-white
-							active:font-bold
-							uppercase
-							font-display
+							inline-flex
+							items-center
+							justify-center
+							p-2
+							rounded-md
+							text-gray-400
+							hover:text-white hover:bg-gray-700
+							focus:outline-none
+							focus:ring-2
+							focus:ring-inset
+							focus:ring-white
 						"
-						:to="tab.link"
-						active-class="font-bold"
 					>
-						{{ tab.title }}
-					</router-link>
-				</li>
-			</ul>
-
-			<router-link
-				class="text-black dark:text-white font-display flex-none"
-				to="/"
-			>
-				<!-- <p>benjamiin.</p> -->
-				<BenjamiinLogo class="w-8 h-8" />
-			</router-link>
-
-			<ul class="flex-1 flex justify-end">
-				<li v-for="link in socialLinks" :key="link.id" class="pr-3">
-					<a
-						class="text-black dark:text-white inline-block w-6 h-6"
-						:href="link.link"
-						target="_blank"
+						<span class="sr-only">Open main menu</span>
+						<MenuIcon
+							v-if="!open"
+							class="block h-6 w-6"
+							aria-hidden="true"
+						/>
+						<XIcon
+							v-else
+							class="block h-6 w-6"
+							aria-hidden="true"
+						/>
+					</DisclosureButton>
+				</div>
+				<div
+					class="
+						flex-1 flex
+						items-center
+						justify-center
+						sm:items-stretch sm:justify-start
+					"
+				>
+					<div class="hidden sm:block">
+						<div class="flex space-x-4">
+							<router-link
+								v-for="item in navigation"
+								:key="item.name"
+								:to="item.href"
+								class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+								exact-active-class="bg-gray-900 text-white"
+								:aria-current="
+									item.current ? 'page' : undefined
+								"
+							>
+								{{ item.name }}
+							</router-link>
+						</div>
+					</div>
+				</div>
+				<div
+					class="
+						absolute
+						inset-y-0
+						right-0
+						flex
+						items-center
+						pr-2
+						sm:static sm:inset-auto sm:ml-6 sm:pr-0
+					"
+				>
+					<button
+						type="button"
+						class="
+							bg-gray-800
+							p-1
+							rounded-full
+							text-gray-400
+							hover:text-white
+							focus:outline-none
+							focus:ring-2
+							focus:ring-offset-2
+							focus:ring-offset-gray-800
+							focus:ring-white
+						"
 					>
-						<component :is="link.logo" />
-					</a>
-				</li>
-			</ul>
+						<span class="sr-only">View notifications</span>
+						<BellIcon class="h-6 w-6" aria-hidden="true" />
+					</button>
+
+					<!-- Profile dropdown -->
+					<Menu as="div" class="ml-3 relative">
+						<div>
+							<MenuButton
+								class="
+									bg-gray-800
+									flex
+									text-sm
+									rounded-full
+									focus:outline-none
+									focus:ring-2
+									focus:ring-offset-2
+									focus:ring-offset-gray-800
+									focus:ring-white
+								"
+							>
+								<span class="sr-only">Open user menu</span>
+								<img
+									class="h-8 w-8 rounded-full"
+									src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+									alt=""
+								/>
+							</MenuButton>
+						</div>
+						<transition
+							enter-active-class="transition ease-out duration-100"
+							enter-from-class="transform opacity-0 scale-95"
+							enter-to-class="transform opacity-100 scale-100"
+							leave-active-class="transition ease-in duration-75"
+							leave-from-class="transform opacity-100 scale-100"
+							leave-to-class="transform opacity-0 scale-95"
+						>
+							<MenuItems
+								class="
+									origin-top-right
+									absolute
+									right-0
+									mt-2
+									w-48
+									rounded-md
+									shadow-lg
+									py-1
+									bg-white
+									ring-1 ring-black ring-opacity-5
+									focus:outline-none
+								"
+							>
+								<MenuItem v-slot="{ active }">
+									<a
+										href="#"
+										:class="[
+											active ? 'bg-gray-100' : '',
+											'block px-4 py-2 text-sm text-gray-700',
+										]"
+										>
+										Your Profile
+									</a>
+								</MenuItem>
+								<MenuItem v-slot="{ active }">
+									<a
+										href="#"
+										:class="[
+											active ? 'bg-gray-100' : '',
+											'block px-4 py-2 text-sm text-gray-700',
+										]"
+										>Settings</a
+									>
+								</MenuItem>
+								<MenuItem v-slot="{ active }">
+									<a
+										href="#"
+										:class="[
+											active ? 'bg-gray-100' : '',
+											'block px-4 py-2 text-sm text-gray-700',
+										]"
+										>Sign out</a
+									>
+								</MenuItem>
+							</MenuItems>
+						</transition>
+					</Menu>
+				</div>
+			</div>
 		</div>
-	</nav>
+
+		<DisclosurePanel class="sm:hidden">
+			<div class="px-2 pt-2 pb-3 space-y-1">
+				<DisclosureButton
+					v-for="item in navigation"
+					:key="item.name"
+					as="a"
+					:href="item.href"
+					:class="[
+						item.current
+							? 'bg-gray-900 text-white'
+							: 'text-gray-300 hover:bg-gray-700 hover:text-white',
+						'block px-3 py-2 rounded-md text-base font-medium',
+					]"
+					:aria-current="item.current ? 'page' : undefined"
+					>{{ item.name }}</DisclosureButton
+				>
+			</div>
+		</DisclosurePanel>
+	</Disclosure>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import {
+	Disclosure,
+	DisclosureButton,
+	DisclosurePanel,
+	Menu,
+	MenuButton,
+	MenuItem,
+	MenuItems,
+} from '@headlessui/vue';
+import { BellIcon, MenuIcon, XIcon } from '@heroicons/vue/outline';
 
-import Sun from '../components/icons/sun.vue';
-import BenjamiinLogo from './logos/Benjamiin.vue';
-import LinkedInLogo from './logos/LinkedIn.vue';
-import InstagramLogo from './logos/Instagram.vue';
-import GithubLogo from './logos/Github.vue';
+const navigation = [
+	{ name: 'Overview', href: '/overview', current: true },
+	{ name: 'Own list', href: '/own-list', current: false },
+];
 
-export default defineComponent({
-	components: { Sun, BenjamiinLogo, LinkedInLogo, InstagramLogo, GithubLogo },
-	data() {
+export default {
+	components: {
+		Disclosure,
+		DisclosureButton,
+		DisclosurePanel,
+		Menu,
+		MenuButton,
+		MenuItem,
+		MenuItems,
+		BellIcon,
+		MenuIcon,
+		XIcon,
+	},
+	setup() {
 		return {
-			tabs: [
-				{ id: 1, title: 'Work', link: '/work' },
-				{ id: 2, title: 'Fun', link: '/fun' },
-				{ id: 3, title: 'Contact', link: '/contact' },
-			],
-			socialLinks: [
-				{
-					id: 1,
-					logo: 'LinkedInLogo',
-					link: 'https://www.linkedin.com/in/sebastiaanbenjamins/',
-				},
-				{
-					id: 2,
-					logo: 'InstagramLogo',
-					link: 'http://instagram.com/cbasje',
-				},
-				{
-					id: 3,
-					logo: 'GithubLogo',
-					link: 'https://github.com/sebastiaanb',
-				},
-			],
+			navigation,
 		};
 	},
-});
+};
 </script>
