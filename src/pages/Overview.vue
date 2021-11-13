@@ -279,7 +279,8 @@ export default defineComponent({
 	},
 	computed: {
 		...mapGetters('giftItem', {
-			items: 'getQueryResults',
+			// items: 'getQueryResults',
+			items: 'getAllGiftItems',
 		}),
 	},
 });

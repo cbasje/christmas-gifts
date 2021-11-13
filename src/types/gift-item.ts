@@ -1,11 +1,34 @@
 export interface GiftItem {
-    [key: string]: string | number | string[] | boolean | undefined
+	[key: string]: any;
 	id: string;
 	name: string;
-	pic: string;
+	pic: Pic[];
 	price: number;
 	notes: string;
 	recipient: string[];
 	link: string;
 	purchased: boolean;
+}
+
+interface Pic {
+	id: string;
+	filename: string;
+	height: number;
+	width: number;
+	size: number;
+	type: string;
+	url: string;
+	thumbnails: Thumbnails;
+}
+
+interface Thumbnails {
+	small: SingleThumbnail;
+	large: SingleThumbnail;
+	full: SingleThumbnail;
+}
+
+interface SingleThumbnail {
+	url: string;
+	height: number;
+	width: number;
 }
