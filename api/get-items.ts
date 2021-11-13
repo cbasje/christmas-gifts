@@ -29,7 +29,7 @@ export default async (req: VercelRequest, res: VercelResponse) => {
 			}
 			let response: any[] = [];
 			records.forEach((rec: any) => {
-				response.push(rec._rawJson);
+				response.push(rec);
 				console.log('Retrieved', rec.get('Item'));
 			});
 
