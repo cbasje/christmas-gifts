@@ -298,7 +298,6 @@ export default defineComponent({
 			if (!elements || !users) {
 				return null;
 			}
-			console.log(elements, users);
 
 			const grouped: Grouped = elements.reduce(
 				(groups: Grouped, element: GiftItem) => {
@@ -314,6 +313,8 @@ export default defineComponent({
 				},
 				{}
 			);
+			console.log(grouped);
+			
 
 			return Object.keys(grouped).map((key) => grouped[key]);
 		},
