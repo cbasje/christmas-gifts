@@ -268,6 +268,8 @@ export default defineComponent({
 		};
 	},
 	mounted() {
+		console.log(this.users);
+		
 		this.loadGiftItems();
 	},
 	methods: {
@@ -295,7 +297,7 @@ export default defineComponent({
 			}
 
 			const grouped: Grouped = elements.reduce(
-				(groups: Grouped, element: any) => {
+				(groups: Grouped, element: GiftItem) => {
 					const key = groupBy(element);
 					if (!groups[key]) {
 						groups[key] = {

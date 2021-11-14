@@ -67,8 +67,6 @@ const actions: ActionTree<UserState, RootState> = {
 	async signIn({ commit, state }, password: string) {
 		return new Promise<string>((resolve, reject) => {
 			const result = state.ids.find((id: string) => {
-				console.log(state.entities[id].password, password);
-
 				return state.entities[id].password == password;
 			});
 			if (result != undefined) {
