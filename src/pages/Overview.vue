@@ -1,7 +1,7 @@
 <template>
 	<div class="flex flex-col">
 		<div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-			<div class="overflow-scroll" aria-label="Table">
+			<div v-if="groups" class="overflow-scroll" aria-label="Table">
 				<div
 					v-for="group in groups"
 					:key="group.user.id"

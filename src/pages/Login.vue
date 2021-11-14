@@ -112,7 +112,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions } from 'vuex';
 
 import { LockClosedIcon } from '@heroicons/vue/solid';
 

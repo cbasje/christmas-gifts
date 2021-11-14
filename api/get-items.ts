@@ -17,7 +17,7 @@ export default async (req: VercelRequest, res: VercelResponse) => {
 	var base = Airtable.base('appswuXRTyToGWzD2');
 	base('Gift Ideas')
 		.select({
-			view: 'Main View',
+			view: 'Main view',
 		})
 		.firstPage((err: any, records: any) => {
 			if (err) {
