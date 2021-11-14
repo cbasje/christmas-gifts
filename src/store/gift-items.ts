@@ -125,9 +125,9 @@ const mutations: MutationTree<GiftItemState> = {
 	},
 	savePurchased(
 		state: GiftItemState,
-		payload: { item: GiftItem; purchased: boolean }
+		payload: { id: string; purchased: boolean }
 	) {
-		state.entities[payload.item.id].purchased = payload.purchased;
+		state.entities[payload.id].purchased = payload.purchased;
 	},
 };
 
