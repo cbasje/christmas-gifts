@@ -1,3 +1,4 @@
+import { GiftItem } from '@/types/gift-item';
 import { VercelRequest, VercelResponse } from '@vercel/node';
 
 export default async (req: VercelRequest, res: VercelResponse) => {
@@ -9,17 +10,28 @@ export default async (req: VercelRequest, res: VercelResponse) => {
 		'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers'
 	);
 
+	if (!req.body) {
+		res.status(500);
+		res.end();
+		return;
+	}
+
 	var Airtable = require('airtable');
 	Airtable.configure({
 		apiKey: process.env.VITE_AIRTABLE_API_KEY,
 	});
 
 	var base = Airtable.base('appswuXRTyToGWzD2');
-	base('Gift Ideas')
-		.select({
-			view: 'Main View',
-		})
-		.firstPage((err: any, records: any) => {
+	base('Gift Ideas').update(
+		[
+			{
+				id: req.body.id,
+				fields: {
+					'Purchased?': req.body.purchased,
+				},
+			},
+		],
+		function (err: any, records: any[]) {
 			if (err) {
 				console.error(err);
 				res.status(500);
@@ -27,21 +39,19 @@ export default async (req: VercelRequest, res: VercelResponse) => {
 
 				return;
 			}
-			let response: any[] = [];
-			records.forEach((rec: any) => {
-				response.push({
-					id: rec._rawJson.id,
-					name: rec.get('Item'),
-					pic: rec.get('Pic'),
-					price: rec.get('Price'),
-					notes: rec.get('Notes'),
-					recipient: rec.get('Recipient'),
-					link: rec.get('Link'),
-					purchased: rec.get('Purchased?'),
-				});
-			});
+
+			if (records.length == 0) {
+				res.status(400);
+				res.end();
+			}
+
+			let response = {
+				id: records[0]._rawJson.id,
+				purchased: records[0].get('Purchased?'),
+			};
 
 			res.status(200);
 			res.json(response);
-		});
+		}
+	);
 };

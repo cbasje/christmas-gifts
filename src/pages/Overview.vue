@@ -9,6 +9,7 @@
 						min-w-full
 						shadow
 						border-b border-gray-200
+						divide-gray-200
 						rounded-lg
 						mb-3
 						bg-white
@@ -17,8 +18,20 @@
 				>
 					<div class="bg-gray-50 rounded-lg overflow-hidden">
 						<tr>
-							<th class="px-6 py-3 text-left">
-								<h2>{{ group.name }}</h2>
+							<th class="px-6 py-3 text-left whitespace-nowrap">
+								<span
+									class="
+										px-3
+										inline-flex
+										text-md
+										font-semibold
+										rounded-full
+										bg-green-100
+										text-green-800
+									"
+								>
+									{{ group.name }}
+								</span>
 							</th>
 							<th></th>
 							<th></th>
@@ -134,22 +147,6 @@
 							>
 								{{ item.price }}
 							</td>
-							<!-- <td class="px-6 py-4 whitespace-nowrap">
-									<span
-										class="
-											px-2
-											inline-flex
-											text-xs
-											leading-5
-											font-semibold
-											rounded-full
-											bg-green-100
-											text-green-800
-										"
-									>
-										{{ item.recipient.name }}
-									</span>
-								</td> -->
 							<td
 								class="
 									px-6
@@ -182,12 +179,12 @@
 								<Switch
 									:model-value="item.purchased"
 									@update:model-value="
-										(evt) => (enabled = evt)
+										(evt) => switchPurchased(item, evt)
 									"
 									:class="
-										enabled
-											? 'bg-green-900'
-											: 'bg-green-700'
+										item.purchased
+											? 'bg-green-700'
+											: 'bg-gray-300'
 									"
 									class="
 										relative
@@ -203,7 +200,7 @@
 									</span>
 									<span
 										:class="
-											enabled
+											item.purchased
 												? 'translate-x-6'
 												: 'translate-x-1'
 										"
@@ -272,18 +269,21 @@ export default defineComponent({
 	},
 	mounted() {
 		this.loadGiftItems();
-
-		console.log(process.env.NODE_ENV);
 	},
 	methods: {
 		editItem(item: GiftItem) {
 			alert(item.name);
+		},
+		switchPurchased(item: GiftItem, purchased: boolean) {
+			console.log(item.id, purchased);
+			this.togglePurchased({ item, purchased });
 		},
 		...mapMutations('giftItem', {
 			selectCategory: 'selectCategory',
 		}),
 		...mapActions('giftItem', {
 			loadGiftItems: 'loadGiftItems',
+			togglePurchased: 'togglePurchased',
 		}),
 	},
 	computed: {

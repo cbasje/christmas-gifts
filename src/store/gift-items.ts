@@ -72,9 +72,25 @@ const actions: ActionTree<GiftItemState, RootState> = {
 		const url = baseUrl + '/get-items';
 
 		const { data } = await axios.get<GiftItem[]>(url);
-
-		console.log(data);
 		commit('saveAllGiftItems', data);
+	},
+	async togglePurchased(
+		{ commit },
+		payload: { item: GiftItem; purchased: boolean }
+	) {
+		const baseUrl = '/api';
+		const url = baseUrl + '/set-purchased';
+
+		const body = {
+			id: payload.item.id,
+			purchased: payload.purchased,
+		};
+
+		const { data } = await axios.post<{ id: string; purchased: boolean }>(
+			url,
+			body
+		);
+		commit('savePurchased', data);
 	},
 };
 
@@ -104,6 +120,12 @@ const mutations: MutationTree<GiftItemState> = {
 	},
 	selectGiftItem(state: GiftItemState, id: string) {
 		state.selectedId = id;
+	},
+	savePurchased(
+		state: GiftItemState,
+		payload: { item: GiftItem; purchased: boolean }
+	) {
+		state.entities[payload.item.id].purchased = payload.purchased;
 	},
 };
 
