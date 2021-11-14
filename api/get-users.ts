@@ -29,8 +29,11 @@ export default async (req: VercelRequest, res: VercelResponse) => {
 			}
 			let response: any[] = [];
 			records.forEach((rec: any) => {
+				console.log(rec._rawJson.fields);
+				
 				response.push({
 					id: rec._rawJson.id,
+					...rec._rawJson.fields,
 					name: rec.get('Name'),
 					password: rec.get('Password'),
 					color: rec.get('Color'),
