@@ -1,7 +1,11 @@
 <template>
 	<div class="flex flex-col">
 		<div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-			<div v-if="groups" class="overflow-scroll" aria-label="Table">
+			<div
+				v-if="groups != null"
+				class="overflow-scroll"
+				aria-label="Table"
+			>
 				<div
 					v-for="group in groups"
 					:key="group.user.id"
@@ -294,6 +298,7 @@ export default defineComponent({
 			if (!elements || !users) {
 				return null;
 			}
+			console.log(elements, users);
 
 			const grouped: Grouped = elements.reduce(
 				(groups: Grouped, element: GiftItem) => {
