@@ -4,7 +4,7 @@
 			<Navigation />
 		</header>
 
-		<div class="container mx-auto pt-16 px-3">
+		<div class="container mx-auto p-3">
 			<router-view />
 		</div>
 		

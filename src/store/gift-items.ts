@@ -48,8 +48,18 @@ const actions: ActionTree<GiftItemState, RootState> = {
 	async loadGiftItems({ commit }) {
 		if (process.env.NODE_ENV == 'development') {
 			const data = [
-				{ id: '1', name: 'Gift', notes: 'Hallo, ik heb mooie cadeau\'s gekocht voor alle mensen in de familie.', recipient: ['Recipient'] },
-				{ id: '2', name: 'Gift2', notes: 'Hallo, ik heb mooie cadeau\'s gekocht voor alle mensen in de familie.', recipient: ['Recipient2'] },
+				{
+					id: '1',
+					name: 'Gift',
+					notes: "Hallo, ik heb mooie cadeau's gekocht voor alle mensen in de familie. Er zijn natuurlijk veel dingen die ik heb gekocht, maar door moeilijke onderdelen zijn er interessante onderdelen.",
+					recipient: ['Recipient'],
+				},
+				{
+					id: '2',
+					name: 'Gift2',
+					notes: "Hallo, ik heb mooie cadeau's gekocht voor alle mensen in de familie. Er zijn natuurlijk veel dingen die ik heb gekocht, maar door moeilijke onderdelen zijn er interessante onderdelen.",
+					recipient: ['Recipient2'],
+				},
 			];
 			commit('saveAllGiftItems', data);
 			return;
