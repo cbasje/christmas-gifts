@@ -155,9 +155,9 @@
 										text-sm text-gray-500
 									"
 								>
-									{{ item.link }}
+									{{ item.price }}
 								</td>
-								<td class="px-6 py-4 whitespace-nowrap">
+								<!-- <td class="px-6 py-4 whitespace-nowrap">
 									<span
 										class="
 											px-2
@@ -172,6 +172,16 @@
 									>
 										{{ item.recipient.name }}
 									</span>
+								</td> -->
+								<td
+									class="
+										px-6
+										py-4
+										whitespace-nowrap
+										text-sm text-gray-500
+									"
+								>
+									{{ item.notes }}
 								</td>
 								<td
 									class="
@@ -279,8 +289,8 @@ export default defineComponent({
 	},
 	computed: {
 		...mapGetters('giftItem', {
-			// items: 'getQueryResults',
-			items: 'getAllGiftItems',
+			items: 'getQueryResults',
+			// items: 'getAllGiftItems',
 		}),
 	},
 });
