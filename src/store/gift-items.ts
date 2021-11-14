@@ -37,7 +37,7 @@ const getters: GetterTree<GiftItemState, RootState> = {
 		return allGiftItems.filter((giftItem: GiftItem) => {
 			let filter = false;
 			giftItem.recipient.forEach((recipient) => {
-				filter = recipient.name.indexOf(query) === -1;
+				filter = recipient.indexOf(query) === -1;
 			});
 			return filter;
 		});
@@ -53,14 +53,7 @@ const actions: ActionTree<GiftItemState, RootState> = {
 					name: 'Gift',
 					notes: "Hallo, ik heb mooie cadeau's gekocht voor alle mensen in de familie. Er zijn natuurlijk veel dingen die ik heb gekocht, maar door moeilijke onderdelen zijn er interessante onderdelen.",
 					price: '70-80, these are cheapest that look like they are worth anything :(',
-					recipient: [
-						{
-							id: '1',
-							name: 'Recipient',
-							color: '#CFDFFF',
-							colorDark: '#102046',
-						},
-					],
+					recipient: ['1'],
 				},
 				{
 					id: '2',
@@ -68,20 +61,7 @@ const actions: ActionTree<GiftItemState, RootState> = {
 					notes: "Hallo, ik heb mooie cadeau's gekocht voor alle mensen in de familie. Er zijn natuurlijk veel dingen die ik heb gekocht, maar door moeilijke onderdelen zijn er interessante onderdelen.",
 					price: '$50-70',
 					link: 'https://www.etsy.com/listing/845176166/black-corset-renaissance-bodice-lace-up?ga_order=most_relevant&ga_search_type=all&ga_view_type=gallery&ga_search_query=historical+corset&ref=sr_gallery-4-12&variation0=1514586839,%20https://www.etsy.com/listing/71779680/civil-war-lined-working-corset-with?ga_order=most_relevant&ga_search_type=all&ga_view_type=gallery&ga_search_query=historical+corset&ref=sr_gallery-1-3&organic_search_click=1&variation0=663574723',
-					recipient: [
-						{
-							id: '2',
-							name: 'Recipient2',
-							color: '#D0F0FD',
-							colorDark: '#04283F',
-						},
-						{
-							id: '3',
-							name: 'Recipient3',
-							color: '#C1F5E9',
-							colorDark: '#012524',
-						},
-					],
+					recipient: ['2', '3'],
 					purchased: true,
 				},
 			];

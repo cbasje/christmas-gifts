@@ -33,11 +33,11 @@ export default async (req: VercelRequest, res: VercelResponse) => {
 				
 				response.push({
 					id: rec._rawJson.id,
-					...rec._rawJson.fields,
 					name: rec.get('Name'),
 					password: rec.get('Password'),
 					color: rec.get('Color'),
 					colorDark: rec.get('ColorDark'),
+					items: rec.get('Gift Ideas')
 				});
 			});
 

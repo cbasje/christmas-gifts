@@ -257,7 +257,7 @@ export interface Grouped {
 }
 
 function groupBy(item: GiftItem) {
-	return item.recipient[0].id;
+	return item.recipient[0];
 }
 
 export default defineComponent({

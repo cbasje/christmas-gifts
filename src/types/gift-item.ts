@@ -1,5 +1,3 @@
-import { User } from "./user";
-
 export interface GiftItem {
 	[key: string]: any;
 	id: string;
@@ -7,7 +5,7 @@ export interface GiftItem {
 	pic?: Pic[];
 	price?: number;
 	notes?: string;
-	recipient: User[];
+	recipient: string[];
 	link?: string;
 	purchased?: boolean;
 }
