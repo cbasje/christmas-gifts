@@ -22,8 +22,9 @@
 					<table class="min-w-full divide-y divide-gray-200">
 						<thead class="bg-gray-50">
 							<tr>
-								<th class="px-6 py-3 text-left">Hay</th>
-								<th></th>
+								<th class="px-6 py-3 text-left">
+									<h2>Hay</h2>
+									</th>
 								<th></th>
 								<th></th>
 								<th></th>
@@ -108,9 +109,9 @@
 						</thead>
 						<tbody class="bg-white divide-y divide-gray-200">
 							<tr v-for="item in items" :key="item.email">
-								<td class="px-6 py-4 whitespace-nowrap">
+								<td class="px-6 py-4 whitespace-nowrap max-w-md">
 									<div class="ml-4">
-										<div
+										<h3
 											class="
 												text-sm
 												font-medium
@@ -118,10 +119,10 @@
 											"
 										>
 											{{ item.name }}
-										</div>
-										<div class="text-sm text-gray-500">
+										</h3>
+										<p class="text-sm text-gray-500">
 											{{ item.notes }}
-										</div>
+										</p>
 									</div>
 								</td>
 								<td
@@ -259,6 +260,8 @@ export default defineComponent({
 	},
 	mounted() {
 		this.loadGiftItems();
+
+		console.log(process.env.NODE_ENV);
 	},
 	methods: {
 		editItem(item: GiftItem) {

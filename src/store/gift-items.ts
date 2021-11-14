@@ -46,6 +46,15 @@ const getters: GetterTree<GiftItemState, RootState> = {
 
 const actions: ActionTree<GiftItemState, RootState> = {
 	async loadGiftItems({ commit }) {
+		if (process.env.NODE_ENV == 'development') {
+			const data = [
+				{ id: '1', name: 'Gift', notes: 'Hallo, ik heb mooie cadeau\'s gekocht voor alle mensen in de familie.', recipient: ['Recipient'] },
+				{ id: '2', name: 'Gift2', notes: 'Hallo, ik heb mooie cadeau\'s gekocht voor alle mensen in de familie.', recipient: ['Recipient2'] },
+			];
+			commit('saveAllGiftItems', data);
+			return;
+		}
+
 		const baseUrl = '/api';
 		const url = baseUrl + '/get-items';
 
