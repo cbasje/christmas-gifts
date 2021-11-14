@@ -90,6 +90,8 @@ const actions: ActionTree<GiftItemState, RootState> = {
 			url,
 			body
 		);
+		console.log(data);
+		
 		commit('savePurchased', data);
 	},
 };
