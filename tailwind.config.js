@@ -10,12 +10,16 @@ module.exports = {
 			gray: colors.gray,
 			white: colors.white,
 			amber: colors.yellow,
-			green: colors.emerald
+			green: colors.emerald,
 		},
 		fontFamily: {
 			display: ['Poppins', 'sans-serif'],
 		},
-		extend: {},
+		extend: {
+			gridTemplateColumns: {
+				table: '2fr 1fr 1fr 1fr 1fr 1fr',
+			},
+		},
 	},
 	variants: {
 		extend: {},
