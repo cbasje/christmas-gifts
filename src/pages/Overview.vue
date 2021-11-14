@@ -4,7 +4,7 @@
 			<div class="overflow-scroll" aria-label="Table">
 				<div
 					v-for="group in groups"
-					:key="group.name"
+					:key="group.user.id"
 					class="
 						min-w-full
 						shadow
@@ -26,11 +26,10 @@
 										text-md
 										font-semibold
 										rounded-full
-										bg-green-100
-										text-green-800
 									"
+									:style="`background-color: ${group.user.color}; color: ${group.user.colorDark};`"
 								>
-									{{ group.name }}
+									{{ group.user.name }}
 								</span>
 							</th>
 							<th></th>
@@ -161,7 +160,7 @@
 									:href="item.link"
 									target="_blank"
 									rel="noopener noreferrer"
-									class="underline text-amber-500"
+									class="underline text-cyan-500"
 								>
 									{{ item.link }}
 								</a>
@@ -183,8 +182,8 @@
 									"
 									:class="
 										item.purchased
-											? 'bg-green-700'
-											: 'bg-gray-300'
+											? 'bg-green-500'
+											: 'bg-gray-200'
 									"
 									class="
 										relative
@@ -225,7 +224,7 @@
 								"
 							>
 								<a
-									class="text-amber-600 hover:text-amber-900"
+									class="text-cyan-600 hover:text-cyan-900"
 									@click="editItem(item)"
 								>
 									Edit
@@ -243,12 +242,13 @@
 import { defineComponent } from 'vue';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 
-import { GiftItem } from '@/types/gift-item';
-
 import { Switch } from '@headlessui/vue';
 
+import { GiftItem } from '@/types/gift-item';
+import { User } from '@/types/user';
+
 export interface Group {
-	name: string;
+	user: User;
 	elements: any[];
 }
 
@@ -257,7 +257,7 @@ export interface Grouped {
 }
 
 function groupBy(item: GiftItem) {
-	return item.recipient[0];
+	return item.recipient[0].id;
 }
 
 export default defineComponent({
@@ -299,7 +299,7 @@ export default defineComponent({
 					const key = groupBy(element);
 					if (!groups[key]) {
 						groups[key] = {
-							name: key,
+							user: this.users[key],
 							elements: [],
 						};
 					}
@@ -314,6 +314,9 @@ export default defineComponent({
 		...mapGetters('giftItem', {
 			items: 'getQueryResults',
 			// items: 'getAllGiftItems',
+		}),
+		...mapGetters('users', {
+			users: 'getAllUsers',
 		}),
 	},
 });

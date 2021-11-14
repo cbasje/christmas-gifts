@@ -6,11 +6,12 @@ module.exports = {
 	darkMode: 'media',
 	theme: {
 		colors: {
+			transparent: colors.transparent,
 			black: colors.black,
 			gray: colors.gray,
 			white: colors.white,
-			amber: colors.yellow,
 			green: colors.emerald,
+			cyan: colors.cyan,
 		},
 		fontFamily: {
 			display: ['Poppins', 'sans-serif'],
