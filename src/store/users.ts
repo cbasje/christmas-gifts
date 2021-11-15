@@ -5,6 +5,8 @@ import axios from 'axios';
 
 import { User } from '@/types/user';
 
+const baseUrl = process.env.VITE_API_BASE_URL;
+
 interface UserState {
 	ids: string[];
 	entities: { [id: string]: User };
@@ -64,7 +66,6 @@ const actions: ActionTree<UserState, RootState> = {
 			return;
 		}
 
-		const baseUrl = '/api';
 		const url = baseUrl + '/get-users';
 
 		const { data } = await axios.get<User[]>(url);

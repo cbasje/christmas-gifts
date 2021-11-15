@@ -5,6 +5,8 @@ import axios from 'axios';
 
 import { GiftItem, NewGiftItem } from '@/types/gift-item';
 
+const baseUrl = process.env.VITE_API_BASE_URL;
+
 interface GiftItemState {
 	ids: string[];
 	entities: { [id: string]: GiftItem };
@@ -90,7 +92,6 @@ const actions: ActionTree<GiftItemState, RootState> = {
 			return;
 		}
 
-		const baseUrl = '/api';
 		const url = baseUrl + '/get-items';
 
 		const { data } = await axios.get<GiftItem[]>(url);
@@ -105,7 +106,6 @@ const actions: ActionTree<GiftItemState, RootState> = {
 			purchased: payload.purchased,
 		});
 
-		const baseUrl = '/api';
 		const url = baseUrl + '/set-purchased';
 
 		const body = {
@@ -129,7 +129,6 @@ const actions: ActionTree<GiftItemState, RootState> = {
 		const tempId = 'randomid';
 		commit('saveNewItem', { id: tempId, ...item });
 
-		const baseUrl = '/api';
 		const url = baseUrl + '/add-item';
 
 		try {
@@ -142,7 +141,6 @@ const actions: ActionTree<GiftItemState, RootState> = {
 		commit('saveRemoveItem', tempId);
 	},
 	async removeItem({ commit }, item: GiftItem) {
-		const baseUrl = '/api';
 		const url = baseUrl + '/remove-item';
 
 		try {
