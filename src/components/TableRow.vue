@@ -16,6 +16,8 @@
 		</td>
 		<td
 			class="
+				flex
+				items-center
 				px-6
 				py-4
 				whitespace-nowrap
@@ -28,6 +30,8 @@
 		</td>
 		<td
 			class="
+				flex
+				items-center
 				px-6
 				py-4
 				whitespace-nowrap
@@ -55,7 +59,7 @@
 				/>
 			</div>
 		</td>
-		<td v-if="allowPurchased" class="px-6 py-3">
+		<td v-if="allowPurchased" class="flex items-center px-6 py-3">
 			<Switch
 				:model-value="item.purchased"
 				@update:model-value="
@@ -73,13 +77,40 @@
 		</td>
 		<td
 			v-if="allowEdit"
-			class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+			class="
+				flex
+				items-center
+				px-6
+				py-4
+				whitespace-nowrap
+				text-right text-sm
+				font-medium
+			"
 		>
 			<a
 				class="text-cyan-600 hover:text-cyan-900"
 				@click="$emit('editItem', item)"
 			>
-				Edit
+				<PencilIcon class="h-6 w-6" aria-hidden="true" />
+			</a>
+		</td>
+		<td
+			v-if="allowEdit"
+			class="
+				flex
+				items-center
+				px-6
+				py-4
+				whitespace-nowrap
+				text-right text-sm
+				font-medium
+			"
+		>
+			<a
+				class="text-red-600 hover:text-red-900"
+				@click="$emit('removeItem', item)"
+			>
+				<TrashIcon class="h-6 w-6" aria-hidden="true" />
 			</a>
 		</td>
 	</tr>
@@ -90,9 +121,10 @@ import { GiftItem } from '@/types/gift-item';
 import { defineComponent } from 'vue';
 
 import { Switch } from '@headlessui/vue';
+import { PencilIcon, TrashIcon } from '@heroicons/vue/outline';
 
 export default defineComponent({
-	components: { Switch },
+	components: { Switch, PencilIcon, TrashIcon },
 	props: {
 		item: {
 			type: Object,

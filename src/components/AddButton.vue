@@ -392,6 +392,7 @@ import {
 	DialogTitle,
 } from '@headlessui/vue';
 import { PlusIcon } from '@heroicons/vue/outline';
+
 import { NewGiftItem } from '@/types/gift-item';
 
 export default defineComponent({
@@ -439,9 +440,18 @@ export default defineComponent({
 				purchased: this.purchased,
 			};
 
-			this.addItem(newItem).finally(() => {
-				this.closeModal();
-			});
+			this.addItem(newItem)
+				.then(() => {
+					this.name = '';
+					this.price = '';
+					this.notes = '';
+					this.recipients = [] as string[];
+					this.pic = '';
+					this.link = '';
+				})
+				.finally(() => {
+					this.closeModal();
+				});
 		},
 		...mapActions('giftItem', {
 			addItem: 'addItem',

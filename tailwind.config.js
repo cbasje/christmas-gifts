@@ -11,11 +11,12 @@ module.exports = {
 			gray: colors.gray,
 			white: colors.white,
 			green: colors.emerald,
+			red: colors.rose,
 			cyan: colors.cyan,
 		},
 		extend: {
 			gridTemplateColumns: {
-				table: '2fr 1fr 1fr 1fr 1fr 1fr',
+				table: '2fr 1fr 1fr 1fr auto auto',
 			},
 		},
 	},

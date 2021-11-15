@@ -5,6 +5,7 @@ import axios from 'axios';
 
 import { GiftItem, NewGiftItem } from '@/types/gift-item';
 import addItem from 'api/add-item';
+import removeItem from 'api/remove-item';
 
 interface GiftItemState {
 	ids: string[];
@@ -132,7 +133,22 @@ const actions: ActionTree<GiftItemState, RootState> = {
 			console.error(e);
 		}
 
-		commit('removeItem', tempId);
+		commit('saveRemoveItem', tempId);
+	},
+	async removeItem({ commit }, item: GiftItem) {
+		const baseUrl = '/api';
+		const url = baseUrl + '/remove-item';
+
+		const body = {
+			id: item.id,
+		};
+
+		try {
+			const { data } = await axios.post<{ id: string }>(url, body);
+			commit('saveRemoveItem', data.id);
+		} catch (e) {
+			console.error(e);
+		}
 	},
 };
 
@@ -170,7 +186,7 @@ const mutations: MutationTree<GiftItemState> = {
 			[item.id]: item,
 		};
 	},
-	removeItem(state: GiftItemState, id: string) {
+	saveRemoveItem(state: GiftItemState, id: string) {
 		const index = state.ids.indexOf(id);
 		if (index != -1) state.ids.splice(index, 1);
 

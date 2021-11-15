@@ -22,6 +22,7 @@
 							:item="item"
 							:allow-edit="true"
 							@editItem="editItem"
+							@removeItem="removeItem"
 						/>
 					</template>
 				</Table>
@@ -36,7 +37,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapMutations } from 'vuex';
 
 import Loader from '@/components/icons/Loader.vue';
 import Header from '@/components/Header.vue';
@@ -63,8 +64,13 @@ export default defineComponent({
 		editItem(item: GiftItem) {
 			alert(item.name);
 		},
+		removeItem(item: GiftItem) {
+			const value: boolean = confirm('Are you sure?');
+			if (value) this.removeItemDb(item.id);
+		},
 		...mapActions('giftItem', {
 			loadGiftItems: 'loadGiftItems',
+			removeItemDb: 'removeItem',
 		}),
 	},
 	computed: {
