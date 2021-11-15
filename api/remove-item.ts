@@ -16,6 +16,8 @@ export default async (req: VercelRequest, res: VercelResponse) => {
 		return;
 	}
 
+    console.log(req.body.id);
+
 	var Airtable = require('airtable');
 	Airtable.configure({
 		apiKey: process.env.VITE_AIRTABLE_API_KEY,

@@ -139,12 +139,8 @@ const actions: ActionTree<GiftItemState, RootState> = {
 		const baseUrl = '/api';
 		const url = baseUrl + '/remove-item';
 
-		const body = {
-			id: item.id,
-		};
-
 		try {
-			const { data } = await axios.post<{ id: string }>(url, body);
+			const { data } = await axios.post<{ id: string }>(url, item);
 			commit('saveRemoveItem', data.id);
 		} catch (e) {
 			console.error(e);
