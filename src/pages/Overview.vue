@@ -9,7 +9,7 @@
 			</template>
 		</Header>
 
-		<template v-if="groups != null">
+		<template v-if="groups">
 			<Table v-for="group in groups" :key="group.user.id">
 				<template #heading>
 					<TableHeading :group="group" :allow-purchased="true" />

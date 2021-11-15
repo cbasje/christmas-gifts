@@ -8,7 +8,7 @@
 			</template>
 		</Header>
 
-		<div v-if="items != null" class="min-w-full" aria-label="Table">
+		<div v-if="items" class="min-w-full" aria-label="Table">
 			<Table>
 				<template #heading>
 					<TableHeading />
