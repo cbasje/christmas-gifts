@@ -173,7 +173,7 @@
 								<div class="flex-shrink-0 h-10 w-10">
 									<img
 										class="h-10 w-10 rounded-full"
-										:src="item.pic"
+										:src="item.pic ? item.pic[0].url : ''"
 										alt=""
 									/>
 								</div>
@@ -256,7 +256,7 @@ import { User } from '@/types/user';
 
 export interface Group {
 	user: User;
-	elements: any[];
+	elements: GiftItem[];
 }
 
 export interface Grouped {
