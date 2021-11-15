@@ -66,7 +66,7 @@ export default defineComponent({
 		},
 		removeItem(item: GiftItem) {
 			const value: boolean = confirm('Are you sure?');
-			if (value) this.removeItemDb(item.id);
+			if (value) this.removeItemDb(item);
 		},
 		...mapActions('giftItem', {
 			loadGiftItems: 'loadGiftItems',
