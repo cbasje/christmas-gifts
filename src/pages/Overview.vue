@@ -15,7 +15,7 @@
 		>
 			<Table v-for="group in groups" :key="group.user.id">
 				<template #heading>
-					<TableHeading :group="group" :purchased="true" />
+					<TableHeading :group="group" :allow-purchased="true" />
 				</template>
 				<template #body>
 					<TableRow

@@ -49,7 +49,7 @@
 				{{ item.link }}
 			</a>
 		</td>
-		<td class="flex items-center">
+		<td class="flex items-center px-6 py-3">
 			<div class="flex-shrink-0 h-10 w-10">
 				<img
 					v-if="item.pic"
@@ -59,7 +59,7 @@
 				/>
 			</div>
 		</td>
-		<td v-if="allowPurchased" class="flex items-center px-6 py-3">
+		<td v-if="allowPurchased" class="flex justify-center items-center px-6 py-3">
 			<Switch
 				:model-value="item.purchased"
 				@update:model-value="
@@ -68,17 +68,19 @@
 				:class="item.purchased ? 'bg-green-500' : 'bg-gray-200'"
 				class="relative inline-flex items-center h-6 rounded-full w-11"
 			>
-				<span class="sr-only"> Enable notifications </span>
+				<span class="sr-only">Item purchased</span>
 				<span
 					:class="item.purchased ? 'translate-x-6' : 'translate-x-1'"
 					class="inline-block w-4 h-4 transform bg-white rounded-full"
 				/>
 			</Switch>
 		</td>
-		<td
+		<!-- FIXME -->
+		<!-- <td
 			v-if="allowEdit"
 			class="
 				flex
+				justify-center
 				items-center
 				px-6
 				py-4
@@ -93,11 +95,12 @@
 			>
 				<PencilIcon class="h-6 w-6" aria-hidden="true" />
 			</a>
-		</td>
+		</td> -->
 		<td
 			v-if="allowEdit"
 			class="
 				flex
+				justify-center
 				items-center
 				px-6
 				py-4

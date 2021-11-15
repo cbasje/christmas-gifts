@@ -13,7 +13,8 @@
 			<th></th>
 			<th></th>
 			<th></th>
-			<th></th>
+			<!-- FIXME -->
+			<!-- <th></th> -->
 		</tr>
 		<tr class="grid grid-cols-table">
 			<th
@@ -87,9 +88,10 @@
 			>
 				Purchased?
 			</th>
-			<th v-if="allowEdit" scope="col" class="relative px-6 py-3">
+			<!-- FIXME -->
+			<!-- <th v-if="allowEdit" scope="col" class="relative px-6 py-3">
 				<span class="sr-only">Edit</span>
-			</th>
+			</th> -->
 		</tr>
 	</div>
 </template>
