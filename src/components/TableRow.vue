@@ -1,5 +1,5 @@
 <template>
-	<tr class="grid grid-cols-table">
+	<tr class="grid grid-cols-table group">
 		<td class="flex flex-col justify-center px-6 py-4 min-w-full">
 			<h3 class="text-sm font-medium text-gray-900">
 				{{ item.name }}
@@ -8,7 +8,7 @@
 				v-if="item.notes"
 				class="min-w-full
 					text-sm text-gray-500
-					whitespace-nowrap
+					whitespace-nowrap group-hover:whitespace-normal
 					overflow-hidden overflow-ellipsis
 				"
 			>
