@@ -4,8 +4,6 @@ import { RootState } from '.';
 import axios from 'axios';
 
 import { GiftItem, NewGiftItem } from '@/types/gift-item';
-import addItem from 'api/add-item';
-import removeItem from 'api/remove-item';
 
 interface GiftItemState {
 	ids: string[];

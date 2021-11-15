@@ -401,13 +401,9 @@ export default defineComponent({
 			pic: '',
 			price: '',
 			notes: '',
-			recipients: [] as string[],
 			link: '',
 			purchased: false,
 		};
-	},
-	mounted() {
-		this.recipients.push(this.currentUserId);
 	},
 	methods: {
 		closeModal() {
@@ -424,7 +420,7 @@ export default defineComponent({
 				name: this.name,
 				price: this.price,
 				notes: this.notes,
-				recipients: this.recipients,
+				recipients: [this.currentUserId],
 				pic: this.pic,
 				link: this.link,
 				purchased: this.purchased,
