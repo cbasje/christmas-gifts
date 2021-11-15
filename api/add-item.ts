@@ -26,7 +26,7 @@ export default async (req: VercelRequest, res: VercelResponse) => {
 		[
 			{
 				fields: {
-					Name: req.body.name,
+					Item: req.body.name,
 					Price: req.body.price,
 					Notes: req.body.notes,
 					Link: req.body.link,
