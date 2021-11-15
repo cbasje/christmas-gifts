@@ -27,23 +27,9 @@ export default async (req: VercelRequest, res: VercelResponse) => {
 		function (err: any, deletedRecords: any[]) {
 			if (err) {
 				console.error(err);
-				res.status(500);
-				res.send(err);
-
 				return;
 			}
-
-			if (deletedRecords.length == 0) {
-				res.status(400);
-				res.end();
-			}
-
-			let response = {
-				id: deletedRecords[0]._rawJson.id,
-			};
-
-			res.status(200);
-			res.json(response);
+			console.log('Deleted', deletedRecords.length, 'records');
 		}
 	);
 };
