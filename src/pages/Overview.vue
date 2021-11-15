@@ -302,7 +302,7 @@ export default defineComponent({
 			const grouped: Grouped = elements.reduce(
 				(groups: Grouped, element: GiftItem) => {
 					const key = groupBy(element);
-					console.log(element, users, key);
+					console.log(users, key, users[key]);
 					if (!groups[key]) {
 						groups[key] = {
 							user: users[key],
