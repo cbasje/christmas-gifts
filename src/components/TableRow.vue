@@ -1,12 +1,12 @@
 <template>
 	<tr class="grid grid-cols-table">
-		<td class="flex items-center px-6 py-4 min-w-full">
+		<td class="flex flex-col justify-center px-6 py-4 min-w-full">
 			<h3 class="text-sm font-medium text-gray-900">
 				{{ item.name }}
 			</h3>
 			<p
 				v-if="item.notes"
-				class="
+				class="min-w-full
 					text-sm text-gray-500
 					whitespace-nowrap
 					overflow-hidden overflow-ellipsis
