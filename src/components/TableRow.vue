@@ -1,0 +1,114 @@
+<template>
+	<tr class="grid grid-cols-table">
+		<td class="px-6 py-4 max-w-sm">
+			<h3 class="text-sm font-medium text-gray-900">
+				{{ item.name }}
+			</h3>
+			<p
+				class="
+					text-sm text-gray-500
+					whitespace-nowrap
+					overflow-hidden overflow-ellipsis
+				"
+			>
+				{{ item.notes }}
+			</p>
+		</td>
+		<td
+			class="
+				px-6
+				py-4
+				whitespace-nowrap
+				overflow-hidden overflow-ellipsis
+				text-sm text-gray-500
+				max-w-xs
+			"
+		>
+			{{ item.price }}
+		</td>
+		<td
+			class="
+				px-6
+				py-4
+				whitespace-nowrap
+				overflow-hidden overflow-ellipsis
+				text-sm text-gray-500
+				max-w-sm
+			"
+		>
+			<a
+				:href="item.link"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="underline text-cyan-500"
+			>
+				{{ item.link }}
+			</a>
+		</td>
+		<td class="flex items-center">
+			<div class="flex-shrink-0 h-10 w-10">
+				<img
+					v-if="item.pic"
+					class="h-10 w-10 rounded-md"
+					:src="item.pic[0].url"
+					alt=""
+				/>
+			</div>
+		</td>
+		<td v-if="allowPurchased" class="px-6 py-3">
+			<Switch
+				:model-value="item.purchased"
+				@update:model-value="
+					(evt) => $emit('switchPurchased', item, evt)
+				"
+				:class="item.purchased ? 'bg-green-500' : 'bg-gray-200'"
+				class="relative inline-flex items-center h-6 rounded-full w-11"
+			>
+				<span class="sr-only"> Enable notifications </span>
+				<span
+					:class="item.purchased ? 'translate-x-6' : 'translate-x-1'"
+					class="inline-block w-4 h-4 transform bg-white rounded-full"
+				/>
+			</Switch>
+		</td>
+		<td
+			v-if="allowEdit"
+			class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+		>
+			<a
+				class="text-cyan-600 hover:text-cyan-900"
+				@click="$emit('editItem', item)"
+			>
+				Edit
+			</a>
+		</td>
+	</tr>
+</template>
+
+<script lang="ts">
+import { GiftItem } from '@/types/gift-item';
+import { defineComponent } from 'vue';
+
+import { Switch } from '@headlessui/vue';
+
+export default defineComponent({
+	components: { Switch },
+	props: {
+		item: {
+			type: Object,
+			default: {} as GiftItem,
+			required: true,
+		},
+		allowPurchased: {
+			type: Boolean,
+			default: false,
+			required: false,
+		},
+		allowEdit: {
+			type: Boolean,
+			default: false,
+			required: false,
+		},
+	},
+});
+</script>

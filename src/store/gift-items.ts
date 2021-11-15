@@ -26,7 +26,7 @@ const getters: GetterTree<GiftItemState, RootState> = {
 	getSelectedGiftItem(state: GiftItemState) {
 		return (state.selectedId && state.entities[state.selectedId]) || null;
 	},
-	getQueryResults(state: GiftItemState) {
+	getOverviewList(state: GiftItemState) {
 		const allGiftItems = state.ids.map((id: string) => state.entities[id]);
 		const query = state.query;
 
@@ -35,11 +35,19 @@ const getters: GetterTree<GiftItemState, RootState> = {
 		}
 
 		return allGiftItems.filter((giftItem: GiftItem) => {
-			let filter = false;
-			giftItem.recipient.forEach((recipient) => {
-				filter = recipient.indexOf(query) === -1;
-			});
-			return filter;
+			return giftItem.recipient.findIndex((rec) => rec == query) == -1;
+		});
+	},
+	getWishList(state: GiftItemState) {
+		const allGiftItems = state.ids.map((id: string) => state.entities[id]);
+		const query = state.query;
+
+		if (!query) {
+			return allGiftItems;
+		}
+
+		return allGiftItems.filter((giftItem: GiftItem) => {
+			return giftItem.recipient.findIndex((rec) => rec == query) !== -1;
 		});
 	},
 };
@@ -53,7 +61,12 @@ const actions: ActionTree<GiftItemState, RootState> = {
 					name: 'Gift',
 					notes: "Hallo, ik heb mooie cadeau's gekocht voor alle mensen in de familie. Er zijn natuurlijk veel dingen die ik heb gekocht, maar door moeilijke onderdelen zijn er interessante onderdelen.",
 					price: '70-80, these are cheapest that look like they are worth anything :(',
-					recipient: ['1'],
+					pic: [
+						{
+							url: 'https://images.unsplash.com/photo-1636949548377-1a21fb086b5a?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+						},
+					],
+					recipient: ['2', '1'],
 				},
 				{
 					id: '2',
@@ -79,6 +92,11 @@ const actions: ActionTree<GiftItemState, RootState> = {
 		{ commit },
 		payload: { item: GiftItem; purchased: boolean }
 	) {
+		commit('savePurchased', {
+			id: payload.item.id,
+			purchased: payload.purchased,
+		});
+
 		const baseUrl = '/api';
 		const url = baseUrl + '/set-purchased';
 
@@ -87,11 +105,19 @@ const actions: ActionTree<GiftItemState, RootState> = {
 			purchased: payload.purchased,
 		};
 
-		const { data } = await axios.post<{ id: string; purchased: boolean }>(
-			url,
-			body
-		);
-		commit('savePurchased', data);
+		try {
+			const { data } = await axios.post<{
+				id: string;
+				purchased: boolean;
+			}>(url, body);
+			commit('savePurchased', data);
+		} catch (e) {
+			console.error(e);
+			commit('savePurchased', {
+				id: payload.item.id,
+				purchased: !payload.purchased,
+			});
+		}
 	},
 };
 

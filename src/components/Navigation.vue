@@ -1,5 +1,5 @@
 <template>
-	<Disclosure as="nav" class="bg-gray-800" v-slot="{ open }">
+	<Disclosure as="nav" class="bg-gray-900" v-slot="{ open }">
 		<div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
 			<div class="relative flex items-center justify-between h-16">
 				<div
@@ -62,9 +62,9 @@
 									py-2
 									rounded-md
 									text-sm
-									font-medium
+									font-semibold
 								"
-								exact-active-class="bg-gray-900 text-white"
+								exact-active-class="bg-gray-800 text-white"
 								:aria-current="
 									item.current ? 'page' : undefined
 								"
@@ -87,21 +87,6 @@
 				>
 					<!-- Profile dropdown -->
 					<div class="ml-3 relative">
-						<!-- <div
-							class="
-								bg-gray-800
-								flex
-								text-sm
-								rounded-full
-							"
-						>
-							<span class="sr-only">Open user menu</span>
-							<img
-								class="h-8 w-8 rounded-full"
-								src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-								alt=""
-							/>
-						</div> -->
 						<div
 							v-if="currentUser"
 							class="
@@ -125,17 +110,25 @@
 				<DisclosureButton
 					v-for="item in navigation"
 					:key="item.name"
-					as="a"
-					:href="item.href"
-					:class="[
-						item.current
-							? 'bg-gray-900 text-white'
-							: 'text-gray-300 hover:bg-gray-700 hover:text-white',
-						'block px-3 py-2 rounded-md text-base font-medium',
-					]"
-					:aria-current="item.current ? 'page' : undefined"
+					class="w-full text-left"
 				>
-					{{ item.name }}
+					<router-link
+						:to="item.href"
+						class="
+							block
+							text-gray-300
+							hover:bg-gray-700 hover:text-white
+							px-3
+							py-2
+							rounded-md
+							text-sm
+							font-semibold
+						"
+						exact-active-class="bg-gray-800 text-white"
+						:aria-current="item.current ? 'page' : undefined"
+					>
+						{{ item.name }}
+					</router-link>
 				</DisclosureButton>
 			</div>
 		</DisclosurePanel>
@@ -157,7 +150,7 @@ import { mapGetters } from 'vuex';
 
 const navigation = [
 	{ name: 'Overview', href: '/overview', current: true },
-	{ name: 'Own list', href: '/own-list', current: false },
+	{ name: 'Wish list', href: '/wish-list', current: false },
 ];
 
 export default {

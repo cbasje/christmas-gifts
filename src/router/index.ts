@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 
 const Overview = () => import('@/pages/Overview.vue');
-const OwnList = () => import('@/pages/OwnList.vue');
+const WishList = () => import('@/pages/WishList.vue');
 const Login = () => import('@/pages/Login.vue');
 
 const routes: Array<RouteRecordRaw> = [
@@ -18,12 +18,12 @@ const routes: Array<RouteRecordRaw> = [
 		component: Overview,
 	},
 	{
-		path: '/own-list',
-		component: OwnList,
+		path: '/wish-list',
+		component: WishList,
 	},
 	{
-		path: '/own-list/:itemId',
-		component: OwnList,
+		path: '/wish-list/:itemId',
+		component: WishList,
 	},
 	{
 		path: '/login',
@@ -37,10 +37,22 @@ const router = createRouter({
 	routes,
 });
 
+import store from '../store';
+
 router.beforeEach((to, from, next) => {
-	const user = localStorage.getItem('user');
-	if (user == null && to.path != '/login') next({ path: '/login' });
-	else next();
+	const userId = localStorage.getItem('user');
+
+	// const user = localStorage.getItem('user');
+	// if (user != null) {
+	// 	this.saveCurrentUserId(user);
+	// 	this.selectQuery(user);
+	// }
+	if (userId == null && to.path != '/login') next({ path: '/login' });
+	else {
+		store.commit('users/saveCurrentUserId', userId);
+		store.commit('giftItem/selectQuery', userId);
+		next();
+	}
 });
 
 export default router;

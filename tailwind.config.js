@@ -13,9 +13,6 @@ module.exports = {
 			green: colors.emerald,
 			cyan: colors.cyan,
 		},
-		fontFamily: {
-			display: ['Poppins', 'sans-serif'],
-		},
 		extend: {
 			gridTemplateColumns: {
 				table: '2fr 1fr 1fr 1fr 1fr 1fr',

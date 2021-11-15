@@ -1,25 +1,39 @@
 <template>
-	<div
-		class="px-0 py-16 md:py-32 md:px-24 lg:px-32 text-black dark:text-white"
-	>
-		<h1 class="uppercase font-display text-5xl font-bold">
+	<div class="px-3 py-5 md:px-3">
+		<h1
+			class="
+				text-3xl
+				font-bold
+				text-gray-900
+				dark:text-gray-100
+			"
+		>
 			<slot />
 		</h1>
 
-		<p v-if="hasSubtitle" class="uppercase font-display text-xl font-medium mt-3">
+		<p
+			v-if="hasSubtitle"
+			class="
+				text-lg
+				font-regular
+				mb-3
+				text-gray-700
+				dark:text-gray-300
+			"
+		>
 			<slot name="subtitle" />
 		</p>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from 'vue';
 
 export default defineComponent({
 	computed: {
 		hasSubtitle() {
-			return this.$slots.subtitle
-		}
-	}
-})
+			return this.$slots.subtitle;
+		},
+	},
+});
 </script>
