@@ -302,6 +302,7 @@ export default defineComponent({
 			const grouped: Grouped = elements.reduce(
 				(groups: Grouped, element: GiftItem) => {
 					const key = groupBy(element);
+					console.log(element, users, key);
 					if (!groups[key]) {
 						groups[key] = {
 							user: users[key],
@@ -313,8 +314,6 @@ export default defineComponent({
 				},
 				{}
 			);
-			console.log(grouped);
-			
 
 			return Object.keys(grouped).map((key) => grouped[key]);
 		},
