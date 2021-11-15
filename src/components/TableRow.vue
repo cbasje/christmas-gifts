@@ -1,6 +1,6 @@
 <template>
 	<tr class="grid grid-cols-table">
-		<td class="px-6 py-4 max-w-sm">
+		<td class="px-6 py-4 min-w-full">
 			<h3 class="text-sm font-medium text-gray-900">
 				{{ item.name }}
 			</h3>
@@ -14,37 +14,33 @@
 				{{ item.notes }}
 			</p>
 		</td>
-		<td
-			class="
-				flex
-				items-center
-				px-6
-				py-4
-				whitespace-nowrap
-				overflow-hidden overflow-ellipsis
-				text-sm text-gray-500
-				max-w-xs
-			"
-		>
-			{{ item.price }}
+		<td class="flex items-center min-w-full">
+			<span
+				class="
+					px-6
+					py-4
+					whitespace-nowrap
+					overflow-hidden overflow-ellipsis
+					text-sm text-gray-500
+				"
+			>
+				{{ item.price }}
+			</span>
 		</td>
-		<td
-			class="
-				flex
-				items-center
-				px-6
-				py-4
-				whitespace-nowrap
-				overflow-hidden overflow-ellipsis
-				text-sm text-gray-500
-				max-w-sm
-			"
-		>
+		<td class="flex items-center min-w-full">
 			<a
 				:href="item.link"
 				target="_blank"
 				rel="noopener noreferrer"
-				class="underline text-cyan-500"
+				class="
+					px-6
+					py-4
+					whitespace-nowrap
+					overflow-hidden overflow-ellipsis
+					text-sm
+					underline
+					text-cyan-500
+				"
 			>
 				{{ item.link }}
 			</a>
@@ -59,7 +55,10 @@
 				/>
 			</div>
 		</td>
-		<td v-if="allowPurchased" class="flex justify-center items-center px-6 py-3">
+		<td
+			v-if="allowPurchased"
+			class="flex justify-center items-center px-6 py-3"
+		>
 			<Switch
 				:model-value="item.purchased"
 				@update:model-value="

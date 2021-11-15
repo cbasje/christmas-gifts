@@ -1,7 +1,8 @@
 <template>
 	<div
 		class="
-			min-w-full
+			container
+			mx-auto
 			shadow
 			border-b border-gray-200
 			divide-gray-200

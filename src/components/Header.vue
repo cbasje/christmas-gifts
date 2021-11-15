@@ -1,5 +1,5 @@
 <template>
-	<div class="px-3 py-5 md:px-3">
+	<div class="max-w-7xl mx-auto px-2 py-5 sm:px-6 lg:px-8 w-full">
 		<h1
 			class="
 				text-3xl

@@ -1,38 +1,35 @@
 <template>
-	<div>
-		<div class="flex flex-col">
-			<Header>
-				Wish list
+	<div class="flex flex-col gap-5">
+		<Header>
+			Wish list
 
-				<template #subtitle>
-					This is your own wish list. You can add, remove or edit
-					items.
+			<template #subtitle>
+				This is your own wish list. You can add, remove or edit items.
+			</template>
+		</Header>
+
+		<div v-if="items != null" class="min-w-full" aria-label="Table">
+			<Table>
+				<template #heading>
+					<TableHeading />
 				</template>
-			</Header>
-
-			<div v-if="items != null" class="min-w-full" aria-label="Table">
-				<Table>
-					<template #heading>
-						<TableHeading />
-					</template>
-					<template #body>
-						<TableRow
-							v-for="item in items"
-							:key="item.id"
-							:item="item"
-							:allow-edit="true"
-							@editItem="editItem"
-							@removeItem="removeItem"
-						/>
-					</template>
-				</Table>
-			</div>
-
-			<Loader v-else class="text-gray-900 dark:text-gray-100" />
+				<template #body>
+					<TableRow
+						v-for="item in items"
+						:key="item.id"
+						:item="item"
+						:allow-edit="true"
+						@editItem="editItem"
+						@removeItem="removeItem"
+					/>
+				</template>
+			</Table>
 		</div>
 
-		<AddButton />
+		<Loader v-else class="text-gray-900 dark:text-gray-100" />
 	</div>
+
+	<AddButton />
 </template>
 
 <script lang="ts">
