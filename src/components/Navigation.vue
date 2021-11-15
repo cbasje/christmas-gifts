@@ -1,5 +1,5 @@
 <template>
-	<Disclosure as="nav" class="bg-gray-900" v-slot="{ open }">
+	<Disclosure as="nav" class="bg-white dark:bg-gray-800" v-slot="{ open }">
 		<div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
 			<div class="relative flex items-center justify-between h-16">
 				<div
@@ -20,12 +20,15 @@
 							justify-center
 							p-2
 							rounded-md
-							text-gray-400
-							hover:text-white hover:bg-gray-700
+							text-gray-600
+							dark:text-gray-400
+							hover:text-black hover:bg-gray-300
+							dark:hover:text-white dark:hover:bg-gray-700
 							focus:outline-none
 							focus:ring-2
 							focus:ring-inset
-							focus:ring-white
+							focus:ring-black
+							dark:focus:ring-white
 						"
 					>
 						<span class="sr-only">Open main menu</span>
@@ -56,15 +59,17 @@
 								:key="item.name"
 								:to="item.href"
 								class="
-									text-gray-300
-									hover:bg-gray-700 hover:text-white
+									text-gray-700
+									dark:text-gray-300
+									hover:bg-gray-300 hover:text-black
+									dark:hover:bg-gray-700 dark:hover:text-white
 									px-3
 									py-2
 									rounded-md
 									text-sm
 									font-semibold
 								"
-								exact-active-class="bg-gray-800 text-white"
+								exact-active-class="bg-gray-100 dark:bg-gray-900 dark:text-black dark:text-white"
 								:aria-current="
 									item.current ? 'page' : undefined
 								"
@@ -116,15 +121,17 @@
 						:to="item.href"
 						class="
 							block
-							text-gray-300
-							hover:bg-gray-700 hover:text-white
+							text-gray-700
+							dark:text-gray-300
+							hover:bg-gray-300 hover:text-black
+							dark:hover:bg-gray-700 dark:hover:text-white
 							px-3
 							py-2
 							rounded-md
 							text-sm
 							font-semibold
 						"
-						exact-active-class="bg-gray-800 text-white"
+						exact-active-class="bg-gray-100 dark:bg-gray-900 dark:text-black dark:text-white"
 						:aria-current="item.current ? 'page' : undefined"
 					>
 						{{ item.name }}
