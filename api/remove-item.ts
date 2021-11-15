@@ -25,7 +25,7 @@ export default async (req: VercelRequest, res: VercelResponse) => {
 	base('Gift Tracker').destroy(
 		[req.body.id],
 		function (err: any, deletedRecords: any[]) {
-            if (err) {
+			if (err) {
 				console.error(err);
 				res.status(500);
 				res.send(err);
@@ -33,7 +33,7 @@ export default async (req: VercelRequest, res: VercelResponse) => {
 				return;
 			}
 
-			console.log('Deleted', deletedRecords.length, 'records');
+			console.log('Deleted', deletedRecords[0], 'records');
 
 			if (deletedRecords.length == 0) {
 				res.status(400);
@@ -41,7 +41,8 @@ export default async (req: VercelRequest, res: VercelResponse) => {
 			}
 
 			let response = {
-				id: deletedRecords[0]._rawJson.id,
+				// id: deletedRecords[0]._rawJson.id,
+				id: req.body.id,
 			};
 
 			res.status(200);
