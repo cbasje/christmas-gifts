@@ -1,18 +1,15 @@
 <template>
-	<div class="flex flex-col">
+	<div class="flex flex-col gap-5">
 		<Header>
 			Gift Tracker
 
 			<template #subtitle>
-				This is the overview of all the gifts. Please let everyone know if you have bought an item!
+				This is the overview of all the gifts. Please let everyone know
+				if you have bought an item!
 			</template>
 		</Header>
 
-		<div
-			v-if="groups != null"
-			class="min-w-full"
-			aria-label="Table"
-		>
+		<template v-if="groups != null">
 			<Table v-for="group in groups" :key="group.user.id">
 				<template #heading>
 					<TableHeading :group="group" :allow-purchased="true" />
@@ -28,7 +25,7 @@
 					/>
 				</template>
 			</Table>
-		</div>
+		</template>
 
 		<Loader v-else class="text-gray-900 dark:text-gray-100" />
 	</div>

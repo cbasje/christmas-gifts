@@ -6,7 +6,6 @@
 			border-b border-gray-200
 			divide-gray-200
 			rounded-lg
-			mb-3
 			bg-white
 			overflow-scroll
 		"
