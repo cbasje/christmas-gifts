@@ -52,7 +52,7 @@ export default async (req: VercelRequest, res: VercelResponse) => {
 
 			let response = <GiftItem>{
 				id: records[0]._rawJson.id,
-				name: records[0].get('Name'),
+				name: records[0].get('Item'),
 				price: records[0].get('Price'),
 				notes: records[0].get('Notes'),
 				link: records[0].get('Link'),
