@@ -4,7 +4,18 @@
 			<h3 class="text-sm font-medium text-gray-900">
 				{{ item.name }}
 			</h3>
-			<p
+			<MarkdownDisplay
+				v-if="item.notes"
+				class="
+					min-w-full
+					text-gray-500
+					whitespace-nowrap
+					group-hover:whitespace-normal
+					overflow-hidden overflow-ellipsis
+				"
+				:markdown="item.notes"
+			/>
+			<!-- <p
 				v-if="item.notes"
 				class="min-w-full
 					text-sm text-gray-500
@@ -13,7 +24,7 @@
 				"
 			>
 				{{ item.notes }}
-			</p>
+			</p> -->
 		</td>
 		<td class="flex items-center min-w-full">
 			<span
@@ -40,7 +51,10 @@
 					overflow-hidden overflow-ellipsis
 					text-sm
 					underline
+					cursor-pointer
+					font-normal
 					text-cyan-500
+					hover:text-cyan-600
 				"
 			>
 				{{ item.link }}
@@ -90,7 +104,7 @@
 			"
 		>
 			<a
-				class="text-cyan-600 hover:text-cyan-900"
+				class="cursor-pointer font-normal text-cyan-500 hover:text-cyan-600"
 				@click="$emit('editItem', item)"
 			>
 				<PencilIcon class="h-6 w-6" aria-hidden="true" />
@@ -110,7 +124,12 @@
 			"
 		>
 			<a
-				class="text-red-600 hover:text-red-900"
+				class="
+					cursor-pointer
+					font-normal
+					text-red-500
+					hover:text-red-600
+				"
 				@click="$emit('removeItem', item)"
 			>
 				<TrashIcon class="h-6 w-6" aria-hidden="true" />
@@ -126,8 +145,10 @@ import { defineComponent } from 'vue';
 import { Switch } from '@headlessui/vue';
 import { PencilIcon, TrashIcon } from '@heroicons/vue/outline';
 
+import MarkdownDisplay from './MarkdownDisplay.vue';
+
 export default defineComponent({
-	components: { Switch, PencilIcon, TrashIcon },
+	components: { Switch, PencilIcon, TrashIcon, MarkdownDisplay },
 	props: {
 		item: {
 			type: Object,
