@@ -5,7 +5,7 @@ import axios from 'axios';
 
 import { User } from '@/types/user';
 
-const baseUrl = process.env.VITE_API_BASE_URL;
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 interface UserState {
 	ids: string[];
@@ -38,36 +38,8 @@ const getters: GetterTree<UserState, RootState> = {
 
 const actions: ActionTree<UserState, RootState> = {
 	async loadUsers({ commit }) {
-		if (process.env.NODE_ENV == 'development') {
-			const data = [
-				{
-					id: '1',
-					name: 'Recipient',
-					password: 'rep123',
-					color: '#CFDFFF',
-					colorDark: '#102046',
-				},
-				{
-					id: '2',
-					name: 'Recipient2',
-					password: 'rep23',
-					color: '#D0F0FD',
-					colorDark: '#04283F',
-				},
-				{
-					id: '3',
-					name: 'Recipient3',
-					password: 'rep3',
-					color: '#C1F5E9',
-					colorDark: '#012524',
-				},
-			];
-			commit('saveAllUsers', data);
-			return;
-		}
-
 		const url = baseUrl + '/get-users';
-
+		
 		const { data } = await axios.get<User[]>(url);
 		commit('saveAllUsers', data);
 	},

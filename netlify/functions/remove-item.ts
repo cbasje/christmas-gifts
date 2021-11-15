@@ -23,40 +23,22 @@ const handler: Handler = async (event, context) => {
 
 	var base = Airtable.base('appswuXRTyToGWzD2');
 	try {
-		const records = await base('Gift Tracker').create([
-			{
-				fields: {
-					Item: body.name,
-					Price: body.price,
-					Notes: body.notes,
-					Link: body.link,
-					Pic: body.pic,
-					Recipients: body.recipients,
-					'Purchased?': false,
-				},
-			},
-		]);
+		const records = await base('Gift Tracker').destroy([body.id]);
 
 		if (records.length == 0) {
 			return {
 				statusCode: 400,
 				body: JSON.stringify({
 					status: 400,
-					error: 'No records created',
+					error: 'No records deleted',
 				}),
 				headers,
 			};
 		}
 
 		let response = {
-			id: records[0]._rawJson.id,
-			name: records[0].get('Item'),
-			price: records[0].get('Price'),
-			notes: records[0].get('Notes'),
-			link: records[0].get('Link'),
-			pic: records[0].get('Pic'),
-			recipients: records[0].get('Recipients'),
-			purchased: records[0].get('Purchased?'),
+			// id: records[0]._rawJson.id,
+			id: body.id,
 		};
 
 		return {

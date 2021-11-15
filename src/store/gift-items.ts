@@ -5,7 +5,7 @@ import axios from 'axios';
 
 import { GiftItem, NewGiftItem } from '@/types/gift-item';
 
-const baseUrl = process.env.VITE_API_BASE_URL;
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 interface GiftItemState {
 	ids: string[];
@@ -56,42 +56,6 @@ const getters: GetterTree<GiftItemState, RootState> = {
 
 const actions: ActionTree<GiftItemState, RootState> = {
 	async loadGiftItems({ commit }) {
-		if (process.env.NODE_ENV == 'development') {
-			const data = [
-				{
-					id: '1',
-					name: 'Gift',
-					notes: "Hallo, ik heb mooie cadeau's gekocht voor alle mensen in de familie. Er zijn natuurlijk veel dingen die ik heb gekocht, maar door moeilijke onderdelen zijn er interessante onderdelen.",
-					price: '70-80, these are cheapest that look like they are worth anything :(',
-					pic: [
-						{
-							url: 'https://images.unsplash.com/photo-1636949548377-1a21fb086b5a?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-						},
-					],
-					recipients: ['2', '1'],
-				},
-				{
-					id: '2',
-					name: 'Gift2',
-					notes: "Hallo, ik heb mooie cadeau's gekocht voor alle mensen in de familie. Er zijn natuurlijk veel dingen die ik heb gekocht, maar door moeilijke onderdelen zijn er interessante onderdelen. This one: [amazon.co.uk/gp/product/1350032700](https://www.amazon.co.uk/gp/product/1350032700).",
-					price: '$50-70',
-					link: 'https://www.etsy.com/listing/845176166/black-corset-renaissance-bodice-lace-up?ga_order=most_relevant&ga_search_type=all&ga_view_type=gallery&ga_search_query=historical+corset&ref=sr_gallery-4-12&variation0=1514586839,%20https://www.etsy.com/listing/71779680/civil-war-lined-working-corset-with?ga_order=most_relevant&ga_search_type=all&ga_view_type=gallery&ga_search_query=historical+corset&ref=sr_gallery-1-3&organic_search_click=1&variation0=663574723',
-					recipients: ['2', '3'],
-					purchased: true,
-				},
-				{
-					id: '3',
-					name: 'Gift3',
-					price: '$50-70',
-					link: 'https://www.etsy.com/listing/845176166/black-corset-renaissance-bodice-lace-up?ga_order=most_relevant&ga_search_type=all&ga_view_type=gallery&ga_search_query=historical+corset&ref=sr_gallery-4-12&variation0=1514586839,%20https://www.etsy.com/listing/71779680/civil-war-lined-working-corset-with?ga_order=most_relevant&ga_search_type=all&ga_view_type=gallery&ga_search_query=historical+corset&ref=sr_gallery-1-3&organic_search_click=1&variation0=663574723',
-					recipients: ['3'],
-					purchased: true,
-				},
-			];
-			commit('saveAllGiftItems', data);
-			return;
-		}
-
 		const url = baseUrl + '/get-items';
 
 		const { data } = await axios.get<GiftItem[]>(url);
@@ -114,7 +78,7 @@ const actions: ActionTree<GiftItemState, RootState> = {
 		};
 
 		try {
-			const { data } = await axios.post(url, body);
+			const { data } = await axios.post(url, JSON.stringify(body));
 			commit('savePurchased', data);
 		} catch (e) {
 			console.error(e);
@@ -132,7 +96,7 @@ const actions: ActionTree<GiftItemState, RootState> = {
 		const url = baseUrl + '/add-item';
 
 		try {
-			const { data } = await axios.post(url, item);
+			const { data } = await axios.post(url, JSON.stringify(item));
 			commit('saveNewItem', data);
 		} catch (e) {
 			console.error(e);
@@ -144,7 +108,10 @@ const actions: ActionTree<GiftItemState, RootState> = {
 		const url = baseUrl + '/remove-item';
 
 		try {
-			const { data } = await axios.post<{ id: string }>(url, item);
+			const { data } = await axios.post<{ id: string }>(
+				url,
+				JSON.stringify(item)
+			);
 			commit('saveRemoveItem', data.id);
 		} catch (e) {
 			console.error(e);
