@@ -26,7 +26,6 @@ export default defineComponent({
 
 			const html = marked(this.markdown);
 			return sanitizeHtml(html, defaultOptions);
-			// return html;
 		},
 	},
 });
