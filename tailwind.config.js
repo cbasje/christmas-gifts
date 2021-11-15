@@ -20,7 +20,9 @@ module.exports = {
 		},
 	},
 	variants: {
-		extend: {},
+		extend: {
+			dropShadow: ['dark'],
+		},
 	},
 	plugins: [
 		require('@tailwindcss/aspect-ratio'),

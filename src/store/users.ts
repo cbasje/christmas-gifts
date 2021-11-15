@@ -21,9 +21,12 @@ const getters: GetterTree<UserState, RootState> = {
 	getAllUsers(state: UserState) {
 		return state.ids.map((id: string) => state.entities[id]);
 	},
-    getUserEntities(state: UserState) {
-        return state.entities;
-    },
+	getUserEntities(state: UserState) {
+		return state.entities;
+	},
+	getCurrentUserId(state: UserState) {
+		return state.currentUserId;
+	},
 	getCurrentUser(state: UserState) {
 		return (
 			(state.currentUserId && state.entities[state.currentUserId]) || null

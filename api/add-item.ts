@@ -1,3 +1,4 @@
+import { GiftItem } from '@/types/gift-item';
 import { VercelRequest, VercelResponse } from '@vercel/node';
 
 export default async (req: VercelRequest, res: VercelResponse) => {
@@ -19,16 +20,19 @@ export default async (req: VercelRequest, res: VercelResponse) => {
 	Airtable.configure({
 		apiKey: process.env.VITE_AIRTABLE_API_KEY,
 	});
-	
-	var base = Airtable.base('appqzvwxOn6A2cxuo');
-	base('Contactformulier').create(
+
+	var base = Airtable.base('appswuXRTyToGWzD2');
+	base('Gift Tracker').create(
 		[
 			{
 				fields: {
-					email: req.body.email,
-					message: req.body.message,
-					firstName: req.body.firstName,
-					lastName: req.body.lastName,
+					Name: req.body.name,
+					Price: req.body.price,
+					Notes: req.body.notes,
+					Link: req.body.link,
+					Pic: req.body.pic,
+					Recipients: req.body.recipients,
+					'Purchased?': false,
 				},
 			},
 		],
@@ -37,16 +41,25 @@ export default async (req: VercelRequest, res: VercelResponse) => {
 				console.error(err);
 				res.status(500);
 				res.send(err);
-				
-				if (err.response) {
-					console.error(err.response.body);
-				}
+
 				return;
 			}
-			let response: any[] = [];
-			records.forEach((rec: any) => {
-				response.push(rec._rawJson)
-			});
+
+			if (records.length == 0) {
+				res.status(400);
+				res.end();
+			}
+
+			let response = <GiftItem>{
+				id: records[0]._rawJson.id,
+				name: records[0].get('Name'),
+				price: records[0].get('Price'),
+				notes: records[0].get('Notes'),
+				link: records[0].get('Link'),
+				pic: records[0].get('Pic'),
+				recipients: records[0].get('Recipients'),
+				purchased: records[0].get('Purchased?'),
+			};
 
 			res.status(200);
 			res.json(response);

@@ -1,13 +1,20 @@
-export interface GiftItem {
-	[key: string]: any;
-	id: string;
+interface Item {
 	name: string;
-	pic?: Pic[];
-	price?: number;
+	price?: string;
 	notes?: string;
-	recipient: string[];
+	recipients: string[];
 	link?: string;
 	purchased?: boolean;
+}
+
+export interface NewGiftItem {
+	pic: string;
+}
+
+export interface GiftItem extends Item {
+	[key: string]: any;
+	id: string;
+	pic?: Pic[];
 }
 
 interface Pic {

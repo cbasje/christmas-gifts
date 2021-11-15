@@ -1,35 +1,36 @@
 <template>
-	<div class="flex flex-col">
-		<Header>
-			Wish list
+	<div>
+		<div class="flex flex-col">
+			<Header>
+				Wish list
 
-			<template #subtitle>
-				This is your own wish list. You can add, remove or edit items.
-			</template>
-		</Header>
+				<template #subtitle>
+					This is your own wish list. You can add, remove or edit
+					items.
+				</template>
+			</Header>
 
-		<div
-			v-if="items != null"
-			class="min-w-full"
-			aria-label="Table"
-		>
-			<Table>
-				<template #heading>
-					<TableHeading />
-				</template>
-				<template #body>
-					<TableRow
-						v-for="item in items"
-						:key="item.id"
-						:item="item"
-						:allow-edit="true"
-						@editItem="editItem"
-					/>
-				</template>
-			</Table>
+			<div v-if="items != null" class="min-w-full" aria-label="Table">
+				<Table>
+					<template #heading>
+						<TableHeading />
+					</template>
+					<template #body>
+						<TableRow
+							v-for="item in items"
+							:key="item.id"
+							:item="item"
+							:allow-edit="true"
+							@editItem="editItem"
+						/>
+					</template>
+				</Table>
+			</div>
+
+			<Loader v-else class="text-gray-900 dark:text-gray-100" />
 		</div>
 
-		<Loader v-else class="text-gray-900 dark:text-gray-100" />
+		<AddButton />
 	</div>
 </template>
 
@@ -44,9 +45,17 @@ import TableRow from '@/components/TableRow.vue';
 import TableHeading from '@/components/TableHeading.vue';
 
 import { GiftItem } from '@/types/gift-item';
+import AddButton from '@/components/AddButton.vue';
 
 export default defineComponent({
-	components: { Loader, Header, Table, TableRow, TableHeading },
+	components: {
+		Loader,
+		Header,
+		Table,
+		TableRow,
+		TableHeading,
+		AddButton,
+	},
 	mounted() {
 		this.loadGiftItems();
 	},

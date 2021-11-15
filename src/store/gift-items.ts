@@ -3,7 +3,8 @@ import { RootState } from '.';
 
 import axios from 'axios';
 
-import { GiftItem } from '@/types/gift-item';
+import { GiftItem, NewGiftItem } from '@/types/gift-item';
+import addItem from 'api/add-item';
 
 interface GiftItemState {
 	ids: string[];
@@ -34,8 +35,8 @@ const getters: GetterTree<GiftItemState, RootState> = {
 			return allGiftItems;
 		}
 
-		return allGiftItems.filter((giftItem: GiftItem) => {
-			return giftItem.recipient.findIndex((rec) => rec == query) == -1;
+		return allGiftItems.filter((item: GiftItem) => {
+			return item.recipients.findIndex((rec) => rec == query) == -1;
 		});
 	},
 	getWishList(state: GiftItemState) {
@@ -46,8 +47,8 @@ const getters: GetterTree<GiftItemState, RootState> = {
 			return allGiftItems;
 		}
 
-		return allGiftItems.filter((giftItem: GiftItem) => {
-			return giftItem.recipient.findIndex((rec) => rec == query) !== -1;
+		return allGiftItems.filter((item: GiftItem) => {
+			return item.recipients.findIndex((rec) => rec == query) !== -1;
 		});
 	},
 };
@@ -66,7 +67,7 @@ const actions: ActionTree<GiftItemState, RootState> = {
 							url: 'https://images.unsplash.com/photo-1636949548377-1a21fb086b5a?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
 						},
 					],
-					recipient: ['2', '1'],
+					recipients: ['2', '1'],
 				},
 				{
 					id: '2',
@@ -74,7 +75,7 @@ const actions: ActionTree<GiftItemState, RootState> = {
 					notes: "Hallo, ik heb mooie cadeau's gekocht voor alle mensen in de familie. Er zijn natuurlijk veel dingen die ik heb gekocht, maar door moeilijke onderdelen zijn er interessante onderdelen.",
 					price: '$50-70',
 					link: 'https://www.etsy.com/listing/845176166/black-corset-renaissance-bodice-lace-up?ga_order=most_relevant&ga_search_type=all&ga_view_type=gallery&ga_search_query=historical+corset&ref=sr_gallery-4-12&variation0=1514586839,%20https://www.etsy.com/listing/71779680/civil-war-lined-working-corset-with?ga_order=most_relevant&ga_search_type=all&ga_view_type=gallery&ga_search_query=historical+corset&ref=sr_gallery-1-3&organic_search_click=1&variation0=663574723',
-					recipient: ['2', '3'],
+					recipients: ['2', '3'],
 					purchased: true,
 				},
 			];
@@ -106,10 +107,7 @@ const actions: ActionTree<GiftItemState, RootState> = {
 		};
 
 		try {
-			const { data } = await axios.post<{
-				id: string;
-				purchased: boolean;
-			}>(url, body);
+			const { data } = await axios.post(url, body);
 			commit('savePurchased', data);
 		} catch (e) {
 			console.error(e);
@@ -118,6 +116,23 @@ const actions: ActionTree<GiftItemState, RootState> = {
 				purchased: !payload.purchased,
 			});
 		}
+	},
+	async addItem({ commit }, item: NewGiftItem) {
+		// FIXME
+		const tempId = 'randomid';
+		commit('saveNewItem', { id: tempId, ...item });
+
+		const baseUrl = '/api';
+		const url = baseUrl + '/add-item';
+
+		try {
+			const { data } = await axios.post(url, item);
+			commit('saveNewItem', data);
+		} catch (e) {
+			console.error(e);
+		}
+
+		commit('removeItem', tempId);
 	},
 };
 
@@ -136,12 +151,6 @@ const mutations: MutationTree<GiftItemState> = {
 		state.ids = giftItemIds;
 		state.entities = giftItemEntities;
 	},
-	saveImage(
-		state: GiftItemState,
-		payload: { giftItem: GiftItem; url: string }
-	) {
-		state.entities[payload.giftItem.id].url = payload.url;
-	},
 	selectQuery(state: GiftItemState, id: string) {
 		state.query = id;
 	},
@@ -153,6 +162,19 @@ const mutations: MutationTree<GiftItemState> = {
 		payload: { id: string; purchased: boolean }
 	) {
 		state.entities[payload.id].purchased = payload.purchased;
+	},
+	saveNewItem(state: GiftItemState, item: GiftItem) {
+		state.ids = [...state.ids, item.id];
+		state.entities = {
+			...state.entities,
+			[item.id]: item,
+		};
+	},
+	removeItem(state: GiftItemState, id: string) {
+		const index = state.ids.indexOf(id);
+		if (index != -1) state.ids.splice(index, 1);
+
+		delete state.entities[id];
 	},
 };
 

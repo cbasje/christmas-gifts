@@ -3,7 +3,7 @@
 		<tr v-if="group != null">
 			<th class="px-6 py-3 text-left whitespace-nowrap">
 				<span
-					class="px-3 inline-flex text-md font-semibold rounded-full"
+					class="px-3 inline-flex text-md font-medium rounded-full"
 					:style="`background-color: ${group.user.color}; color: ${group.user.colorDark};`"
 				>
 					{{ group.user.name }}

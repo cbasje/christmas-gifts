@@ -114,7 +114,7 @@
 import { defineComponent } from 'vue';
 import { mapActions } from 'vuex';
 
-import { LockClosedIcon } from '@heroicons/vue/solid';
+import { LockClosedIcon } from '@heroicons/vue/outline';
 
 export default defineComponent({
 	components: { LockClosedIcon },

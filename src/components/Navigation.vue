@@ -98,7 +98,7 @@
 								px-3
 								inline-flex
 								text-md
-								font-semibold
+								font-medium
 								rounded-full
 							"
 							:style="`background-color: ${currentUser.color}; color: ${currentUser.colorDark};`"

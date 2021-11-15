@@ -15,7 +15,7 @@ export default async (req: VercelRequest, res: VercelResponse) => {
 	});
 
 	var base = Airtable.base('appswuXRTyToGWzD2');
-	base('Gift Ideas')
+	base('Gift Tracker')
 		.select({
 			view: 'Main view',
 		})
@@ -35,7 +35,7 @@ export default async (req: VercelRequest, res: VercelResponse) => {
 					pic: rec.get('Pic'),
 					price: rec.get('Price'),
 					notes: rec.get('Notes'),
-					recipient: rec.get('Recipient'),
+					recipients: rec.get('Recipients'),
 					link: rec.get('Link'),
 					purchased: rec.get('Purchased?'),
 				});

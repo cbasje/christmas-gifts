@@ -22,7 +22,7 @@ export default async (req: VercelRequest, res: VercelResponse) => {
 	});
 
 	var base = Airtable.base('appswuXRTyToGWzD2');
-	base('Gift Ideas').update(
+	base('Gift Tracker').update(
 		[
 			{
 				id: req.body.id,
