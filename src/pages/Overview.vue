@@ -238,6 +238,8 @@
 					</div>
 				</div>
 			</div>
+
+			<Loader v-else />
 		</div>
 	</div>
 </template>
@@ -247,6 +249,7 @@ import { defineComponent } from 'vue';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 
 import { Switch } from '@headlessui/vue';
+import Loader from '@/components/icons/Loader.vue';
 
 import { GiftItem } from '@/types/gift-item';
 import { User } from '@/types/user';
@@ -265,7 +268,7 @@ function groupBy(item: GiftItem) {
 }
 
 export default defineComponent({
-	components: { Switch },
+	components: { Switch, Loader },
 	data() {
 		return {
 			enabled: true,
@@ -275,7 +278,10 @@ export default defineComponent({
 		this.loadGiftItems();
 
 		const user = localStorage.getItem('user');
-		if (user != null) this.saveCurrentUserId(user);
+		if (user != null) {
+			this.saveCurrentUserId(user);
+			this.selectQuery(user);
+		}
 	},
 	methods: {
 		editItem(item: GiftItem) {
@@ -286,7 +292,7 @@ export default defineComponent({
 			this.togglePurchased({ item, purchased });
 		},
 		...mapMutations('giftItem', {
-			selectCategory: 'selectCategory',
+			selectQuery: 'selectQuery',
 		}),
 		...mapMutations('users', {
 			saveCurrentUserId: 'saveCurrentUserId',
