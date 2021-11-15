@@ -91,7 +91,15 @@
 							>
 								Add a wish list item
 							</DialogTitle>
-							<form @submit.prevent="submitForm" class="mt-2">
+							<form
+								@submit.prevent="submitForm"
+								class="mt-2"
+								name="add-item"
+								method="POST"
+								data-netlify="true"
+								data-netlify-honeypot="bot-field"
+							>
+    							<input type="hidden" name="form-name" value="add-item" />
 								<div class="space-y-6 py-6">
 									<div aria-label="Name">
 										<label
@@ -291,7 +299,7 @@
 													"
 												>
 													<label
-														for="file-upload"
+														for="pic"
 														class="
 															relative
 															cursor-pointer
@@ -310,8 +318,8 @@
 															Upload a file
 														</span>
 														<input
-															id="file-upload"
-															name="file-upload"
+															id="pic"
+															name="pic"
 															@change="
 																(evt) =>
 																	uploadFile(
