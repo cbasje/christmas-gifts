@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 
 const Overview = () => import('@/pages/Overview.vue');
 const WishList = () => import('@/pages/WishList.vue');
@@ -7,10 +7,6 @@ const Login = () => import('@/pages/Login.vue');
 const routes: Array<RouteRecordRaw> = [
 	{
 		path: '/',
-		redirect: 'overview',
-	},
-	{
-		path: '/overview',
 		component: Overview,
 	},
 	{
@@ -29,11 +25,15 @@ const routes: Array<RouteRecordRaw> = [
 		path: '/login',
 		component: Login,
 	},
+	{
+		path: "/:catchAll(.*)",
+		redirect: '/'
+	}
 ];
 
 const router = createRouter({
-	history: createWebHashHistory(),
-	// history: createWebHistory(),
+	// history: createWebHashHistory(),
+	history: createWebHistory(),
 	routes,
 });
 

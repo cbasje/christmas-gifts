@@ -94,16 +94,9 @@ const actions: ActionTree<GiftItemState, RootState> = {
 		commit('saveNewItem', { id: tempId, ...item });
 
 		const url = baseUrl + '/add-item';
-		const axiosConfig = {
-			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-		};
 
 		try {
-			const { data } = await axios.post(
-				url,
-				JSON.stringify(item),
-				axiosConfig
-			);
+			const { data } = await axios.post(url, JSON.stringify(item));
 			commit('saveNewItem', data);
 		} catch (e) {
 			console.error(e);

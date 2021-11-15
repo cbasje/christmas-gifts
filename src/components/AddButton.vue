@@ -99,7 +99,11 @@
 								data-netlify="true"
 								data-netlify-honeypot="bot-field"
 							>
-    							<input type="hidden" name="form-name" value="add-item" />
+								<input
+									type="hidden"
+									name="form-name"
+									value="add-item"
+								/>
 								<div class="space-y-6 py-6">
 									<div aria-label="Name">
 										<label
@@ -381,6 +385,8 @@
 import { defineComponent } from 'vue';
 import { mapActions, mapGetters } from 'vuex';
 
+import axios from 'axios';
+
 import {
 	TransitionRoot,
 	TransitionChild,
@@ -423,7 +429,7 @@ export default defineComponent({
 		uploadFile(evt: Event) {
 			console.log('Upload File', evt);
 		},
-		submitForm() {
+		async submitForm() {
 			const newItem: NewGiftItem = {
 				name: this.name,
 				price: this.price,
@@ -434,18 +440,42 @@ export default defineComponent({
 				purchased: this.purchased,
 			};
 
-			this.addItem(newItem)
-				.then(() => {
-					this.name = '';
-					this.price = '';
-					this.notes = '';
-					this.recipients = [] as string[];
-					this.pic = '';
-					this.link = '';
-				})
-				.finally(() => {
-					this.closeModal();
-				});
+			const axiosConfig = {
+				headers: { 'Content-Type': 'multipart/form-data' },
+			};
+
+			try {
+				await axios.post(
+					'/',
+					this.encode({ 'form-name': 'ask-question', ...newItem }),
+					axiosConfig
+				);
+
+				this.addItem(newItem)
+					.then(() => {
+						this.name = '';
+						this.price = '';
+						this.notes = '';
+						this.recipients = [] as string[];
+						this.pic = '';
+						this.link = '';
+					})
+					.finally(() => {
+						this.closeModal();
+					});
+			} catch (e) {
+				console.error(e);
+			}
+		},
+		encode(data: any) {
+			return Object.keys(data)
+				.map(
+					(key) =>
+						`${encodeURIComponent(key)}=${encodeURIComponent(
+							data[key]
+						)}`
+				)
+				.join('&');
 		},
 		...mapActions('giftItem', {
 			addItem: 'addItem',
