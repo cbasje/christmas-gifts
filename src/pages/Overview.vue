@@ -273,6 +273,9 @@ export default defineComponent({
 	},
 	mounted() {
 		this.loadGiftItems();
+
+		const user = localStorage.getItem('user');
+		if (user != null) this.saveCurrentUserId(user);
 	},
 	methods: {
 		editItem(item: GiftItem) {
@@ -284,6 +287,9 @@ export default defineComponent({
 		},
 		...mapMutations('giftItem', {
 			selectCategory: 'selectCategory',
+		}),
+		...mapMutations('users', {
+			saveCurrentUserId: 'saveCurrentUserId',
 		}),
 		...mapActions('giftItem', {
 			loadGiftItems: 'loadGiftItems',
@@ -322,7 +328,7 @@ export default defineComponent({
 			// items: 'getAllGiftItems',
 		}),
 		...mapGetters('users', {
-			users: 'getAllUsers',
+			users: 'getUserEntities',
 		}),
 	},
 });
