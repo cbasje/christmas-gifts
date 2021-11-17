@@ -3,6 +3,7 @@
 		class="
 			container
 			mx-auto
+			mt-5
 			shadow
 			border-b border-gray-200
 			divide-gray-200
@@ -12,9 +13,8 @@
 		"
 		aria-label="Table Section"
 	>
-		<div class="bg-gray-50 rounded-lg min-w-full">
-			<slot name="heading" />
-		</div>
+		<slot name="heading" />
+
 		<div class="divide-y min-w-full">
 			<slot name="body" />
 		</div>

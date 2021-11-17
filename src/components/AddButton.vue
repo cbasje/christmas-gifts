@@ -250,7 +250,7 @@
 										</div>
 									</div>
 
-									<div aria-label="Picture">
+									<!-- <div aria-label="Picture">
 										<label
 											class="
 												block
@@ -335,7 +335,7 @@
 												</p>
 											</div>
 										</div>
-									</div>
+									</div> -->
 								</div>
 
 								<div class="text-right">
@@ -428,31 +428,19 @@ export default defineComponent({
 				purchased: this.purchased,
 			};
 
-			const axiosConfig = {
-				headers: { 'Content-Type': 'multipart/form-data' },
-			};
-
 			try {
-				await axios.post(
-					'/',
-					this.encode({ 'form-name': 'ask-question', ...newItem }),
-					axiosConfig
-				);
+				this.addItem(newItem);
 
-				this.addItem(newItem)
-					.then(() => {
-						this.name = '';
-						this.price = '';
-						this.notes = '';
-						this.recipients = [] as string[];
-						this.pic = '';
-						this.link = '';
-					})
-					.finally(() => {
-						this.closeModal();
-					});
+				this.name = '';
+				this.price = '';
+				this.notes = '';
+				this.recipients = [] as string[];
+				this.pic = '';
+				this.link = '';
 			} catch (e) {
 				console.error(e);
+			} finally {
+				this.closeModal();
 			}
 		},
 		encode(data: any) {

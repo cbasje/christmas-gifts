@@ -1,5 +1,5 @@
 <template>
-	<div class="flex flex-col gap-5">
+	<div class="flex flex-col">
 		<Header>
 			Gift Tracker
 
@@ -74,6 +74,18 @@ export default defineComponent({
 		switchPurchased(item: GiftItem, purchased: boolean) {
 			this.togglePurchased({ item, purchased });
 		},
+		sortObj(obj: Grouped) {
+			return Object.keys(obj).sort((a, b) => {
+				var nameA = obj[a].user.name.toUpperCase();
+				var nameB = obj[b].user.name.toUpperCase();
+
+				if (nameA < nameB) return -1;
+				if (nameA > nameB) return 1;
+
+				// names must be equal
+				return 0;
+			});
+		},
 		...mapActions('giftItem', {
 			loadGiftItems: 'loadGiftItems',
 			togglePurchased: 'togglePurchased',
@@ -103,7 +115,7 @@ export default defineComponent({
 				{}
 			);
 
-			return Object.keys(grouped).map((key) => grouped[key]);
+			return this.sortObj(grouped).map((key: string) => grouped[key]);
 		},
 		...mapGetters('giftItem', {
 			items: 'getOverviewList',

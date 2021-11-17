@@ -94,14 +94,11 @@
 					<div class="ml-3 relative">
 						<div
 							v-if="currentUser"
-							class="
-								px-3
-								inline-flex
-								text-md
-								font-medium
-								rounded-full
-							"
-							:style="`background-color: ${currentUser.color}; color: ${currentUser.colorDark};`"
+							:class="[
+								'px-3 inline-flex text-md font-medium rounded-full',
+								`bg-${currentUser.name.toLowerCase()}-200`,
+								`text-${currentUser.name.toLowerCase()}-900`,
+							]"
 						>
 							{{ currentUser.name }}
 						</div>

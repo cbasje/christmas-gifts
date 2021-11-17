@@ -1,10 +1,18 @@
 <template>
-	<div>
+	<div
+		:class="[
+			'rounded-lg min-w-full',
+			group!= null ? `bg-${group.user.name.toLowerCase()}-50` : 'bg-gray-50',
+		]"
+	>
 		<tr v-if="group != null">
 			<th class="px-6 py-3 text-left whitespace-nowrap">
 				<span
-					class="px-3 inline-flex text-md font-medium rounded-full"
-					:style="`background-color: ${group.user.color}; color: ${group.user.colorDark};`"
+					:class="[
+						'px-3 inline-flex text-md font-medium rounded-full',
+						`bg-${group.user.name.toLowerCase()}-200`,
+						`text-${group.user.name.toLowerCase()}-900`,
+					]"
 				>
 					{{ group.user.name }}
 				</span>

@@ -69,7 +69,6 @@
 							justify-center
 							py-2
 							px-4
-							border border-transparent
 							text-sm
 							font-medium
 							rounded-md
