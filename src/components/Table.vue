@@ -1,22 +1,10 @@
 <template>
 	<div
-		class="
-			container
-			mx-auto
-			mt-5
-			shadow
-			border-b border-gray-200
-			divide-gray-200
-			rounded-lg
-			bg-white
-			overflow-scroll
-		"
+		class="w-min sm:w-full mt-5 shadow bg-white rounded-lg overflow-hidden"
 		aria-label="Table Section"
 	>
 		<slot name="heading" />
 
-		<div class="divide-y min-w-full">
-			<slot name="body" />
-		</div>
+		<slot name="body" />
 	</div>
 </template>

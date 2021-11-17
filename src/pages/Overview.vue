@@ -1,5 +1,5 @@
 <template>
-	<div class="flex flex-col">
+	<div>
 		<Header>
 			Gift Tracker
 
@@ -9,7 +9,11 @@
 			</template>
 		</Header>
 
-		<template v-if="groups != null">
+		<div
+			v-if="groups != null"
+			class="overflow-scroll container mx-auto"
+			aria-label="Table"
+		>
 			<Table v-for="group in groups" :key="group.user.id">
 				<template #heading>
 					<TableHeading :group="group" :allow-purchased="true" />
@@ -25,7 +29,7 @@
 					/>
 				</template>
 			</Table>
-		</template>
+		</div>
 
 		<Loader v-else class="text-gray-900 dark:text-gray-100" />
 	</div>

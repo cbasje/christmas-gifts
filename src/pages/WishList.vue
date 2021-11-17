@@ -1,5 +1,5 @@
 <template>
-	<div class="flex flex-col">
+	<div>
 		<Header>
 			Wish list
 
@@ -8,7 +8,12 @@
 			</template>
 		</Header>
 
-		<div v-if="items != null" class="min-w-full" aria-label="Table">
+
+		<div
+			v-if="items != null"
+			class="overflow-scroll container mx-auto"
+			aria-label="Table"
+		>
 			<Table>
 				<template #heading>
 					<TableHeading />

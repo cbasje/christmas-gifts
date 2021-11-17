@@ -1,6 +1,6 @@
 <template>
-	<tr class="grid grid-cols-table group">
-		<td class="flex flex-col justify-center px-6 py-4 min-w-full">
+	<div class="grid grid-cols-table-4 group border-b border-gray-200">
+		<div class="flex flex-col justify-center px-6 py-4 min-h-4rem min-w-1/2 sm:w-full">
 			<h3 class="text-sm font-medium text-gray-900">
 				{{ item.name }}
 			</h3>
@@ -9,24 +9,15 @@
 				class="
 					min-w-full
 					text-gray-500
-					whitespace-nowrap
+					whitespace-normal
+					sm:whitespace-nowrap
 					group-hover:whitespace-normal
 					overflow-hidden overflow-ellipsis
 				"
 				:markdown="item.notes"
 			/>
-			<!-- <p
-				v-if="item.notes"
-				class="min-w-full
-					text-sm text-gray-500
-					whitespace-nowrap group-hover:whitespace-normal
-					overflow-hidden overflow-ellipsis
-				"
-			>
-				{{ item.notes }}
-			</p> -->
-		</td>
-		<td class="flex items-center min-w-full">
+		</div>
+		<div class="flex items-center min-w-full">
 			<span
 				class="
 					px-6
@@ -38,8 +29,8 @@
 			>
 				{{ item.price }}
 			</span>
-		</td>
-		<td class="flex items-center min-w-full">
+		</div>
+		<div class="flex items-center min-w-full">
 			<a
 				:href="item.link"
 				target="_blank"
@@ -59,8 +50,9 @@
 			>
 				{{ item.link }}
 			</a>
-		</td>
-		<td class="flex items-center px-6 py-3">
+		</div>
+		<!-- FIXME -->
+		<!-- <div class="flex items-center px-6 py-3">
 			<div class="flex-shrink-0 h-10 w-10">
 				<img
 					v-if="item.pic"
@@ -69,8 +61,8 @@
 					alt=""
 				/>
 			</div>
-		</td>
-		<td
+		</div> -->
+		<div
 			v-if="allowPurchased"
 			class="flex justify-center items-center px-6 py-3"
 		>
@@ -88,9 +80,9 @@
 					class="inline-block w-4 h-4 transform bg-white rounded-full"
 				/>
 			</Switch>
-		</td>
+		</div>
 		<!-- FIXME -->
-		<!-- <td
+		<!-- <div
 			v-if="allowEdit"
 			class="
 				flex
@@ -109,8 +101,8 @@
 			>
 				<PencilIcon class="h-6 w-6" aria-hidden="true" />
 			</a>
-		</td> -->
-		<td
+		</div> -->
+		<div
 			v-if="allowEdit"
 			class="
 				flex
@@ -134,8 +126,8 @@
 			>
 				<TrashIcon class="h-6 w-6" aria-hidden="true" />
 			</a>
-		</td>
-	</tr>
+		</div>
+	</div>
 </template>
 
 <script lang="ts">

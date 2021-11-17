@@ -1,73 +1,79 @@
 <template>
 	<div
+		v-if="group != null"
 		:class="[
-			'rounded-lg min-w-full',
-			group!= null ? `bg-${group.user.name.toLowerCase()}-50` : 'bg-gray-50',
+			'px-6 py-3 text-left whitespace-nowrap',
+			group != null
+				? `bg-${group.user.name.toLowerCase()}-50`
+				: 'bg-gray-50',
+		]"
+		aria-label="Table Header"
+	>
+		<span
+			:class="[
+				'px-3 inline-flex text-md font-medium rounded-full',
+				`bg-${group.user.name.toLowerCase()}-200`,
+				`text-${group.user.name.toLowerCase()}-900`,
+			]"
+		>
+			{{ group.user.name }}
+		</span>
+	</div>
+
+	<div
+		:class="[
+			'grid grid-cols-table-4',
+			group != null
+				? `bg-${group.user.name.toLowerCase()}-50`
+				: 'bg-gray-50',
 		]"
 	>
-		<tr v-if="group != null">
-			<th class="px-6 py-3 text-left whitespace-nowrap">
-				<span
-					:class="[
-						'px-3 inline-flex text-md font-medium rounded-full',
-						`bg-${group.user.name.toLowerCase()}-200`,
-						`text-${group.user.name.toLowerCase()}-900`,
-					]"
-				>
-					{{ group.user.name }}
-				</span>
-			</th>
-			<th></th>
-			<th></th>
-			<th></th>
-			<th></th>
-			<!-- FIXME -->
-			<!-- <th></th> -->
-		</tr>
-		<tr class="grid grid-cols-table">
-			<th
-				scope="col"
-				class="
-					px-6
-					py-3
-					text-left text-xs
-					font-medium
-					text-gray-500
-					uppercase
-					tracking-wider
-				"
-			>
-				Item
-			</th>
-			<th
-				scope="col"
-				class="
-					px-6
-					py-3
-					text-left text-xs
-					font-medium
-					text-gray-500
-					uppercase
-					tracking-wider
-				"
-			>
-				Price
-			</th>
-			<th
-				scope="col"
-				class="
-					px-6
-					py-3
-					text-left text-xs
-					font-medium
-					text-gray-500
-					uppercase
-					tracking-wider
-				"
-			>
-				Link
-			</th>
-			<th
+		<div
+			scope="col"
+			class="
+				px-6
+				py-3
+				text-left text-xs
+				font-medium
+				text-gray-500
+				uppercase
+				tracking-wider
+				min-w-1/2
+				sm:w-full
+			"
+		>
+			Item
+		</div>
+		<div
+			scope="col"
+			class="
+				px-6
+				py-3
+				text-left text-xs
+				font-medium
+				text-gray-500
+				uppercase
+				tracking-wider
+			"
+		>
+			Price
+		</div>
+		<div
+			scope="col"
+			class="
+				px-6
+				py-3
+				text-left text-xs
+				font-medium
+				text-gray-500
+				uppercase
+				tracking-wider
+			"
+		>
+			Link
+		</div>
+		<!-- FIXME -->
+		<!-- <div
 				scope="col"
 				class="
 					px-6
@@ -80,27 +86,26 @@
 				"
 			>
 				Picture
-			</th>
-			<th
-				v-if="allowPurchased"
-				scope="col"
-				class="
-					px-6
-					py-3
-					text-left text-xs
-					font-medium
-					text-gray-500
-					uppercase
-					tracking-wider
-				"
-			>
-				Purchased?
-			</th>
-			<!-- FIXME -->
-			<!-- <th v-if="allowEdit" scope="col" class="relative px-6 py-3">
+			</div> -->
+		<div
+			v-if="allowPurchased"
+			scope="col"
+			class="
+				px-6
+				py-3
+				text-left text-xs
+				font-medium
+				text-gray-500
+				uppercase
+				tracking-wider
+			"
+		>
+			Purchased?
+		</div>
+		<!-- FIXME -->
+		<!-- <div v-if="allowEdit" scope="col" class="relative px-6 py-3">
 				<span class="sr-only">Edit</span>
-			</th> -->
-		</tr>
+			</div> -->
 	</div>
 </template>
 

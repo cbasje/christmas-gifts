@@ -42,9 +42,20 @@ module.exports = {
 			red: colors.rose,
 			cyan: colors.cyan,
 		},
+		minWidth: {
+			0: '0',
+			'1/4': '25vw',
+			'1/2': '50vw',
+			'3/4': '75vw',
+			full: '100%',
+		},
+		minHeight: {
+			'4rem': '4rem'
+		},
 		extend: {
 			gridTemplateColumns: {
-				table: '4fr 2fr 2fr 2fr 1fr',
+				'table-4': '4fr 2fr 2fr 2fr',
+				'table-5': '4fr 2fr 2fr 2fr 1fr',
 			},
 			colors: {
 				amani: {
