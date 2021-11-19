@@ -1,11 +1,8 @@
 import { ActionTree, GetterTree, MutationTree } from 'vuex/types';
 import { RootState } from '.';
 
-import axios from 'axios';
-
 import { User } from '@/types/user';
-
-const baseUrl = import.meta.env.VITE_API_BASE_URL;
+import apiService from '@/services/api.service';
 
 interface UserState {
 	ids: string[];
@@ -38,9 +35,7 @@ const getters: GetterTree<UserState, RootState> = {
 
 const actions: ActionTree<UserState, RootState> = {
 	async loadUsers({ commit }) {
-		const url = baseUrl + '/get-users';
-		
-		const { data } = await axios.get<User[]>(url);
+		const { data } = await apiService.loadUsers();
 		commit('saveAllUsers', data);
 	},
 	async signIn({ commit, state }, password: string) {

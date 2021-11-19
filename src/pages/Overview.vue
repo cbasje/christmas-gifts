@@ -80,6 +80,8 @@ export default defineComponent({
 		},
 		sortObj(obj: Grouped) {
 			return Object.keys(obj).sort((a, b) => {
+				if (!obj[a].user || !obj[b].user) return 0;
+
 				var nameA = obj[a].user.name.toUpperCase();
 				var nameB = obj[b].user.name.toUpperCase();
 

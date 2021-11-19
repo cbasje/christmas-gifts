@@ -1,11 +1,10 @@
 import { ActionTree, GetterTree, MutationTree } from 'vuex/types';
 import { RootState } from '.';
 
-import axios from 'axios';
-
 import { GiftItem, NewGiftItem } from '@/types/gift-item';
+import apiService from '@/services/api.service';
 
-const baseUrl = import.meta.env.VITE_API_BASE_URL;
+const { DEV } = import.meta.env;
 
 interface GiftItemState {
 	ids: string[];
@@ -56,9 +55,7 @@ const getters: GetterTree<GiftItemState, RootState> = {
 
 const actions: ActionTree<GiftItemState, RootState> = {
 	async loadGiftItems({ commit }) {
-		const url = baseUrl + '/get-items';
-
-		const { data } = await axios.get<GiftItem[]>(url);
+		const { data } = await apiService.loadGiftItems();
 		commit('saveAllGiftItems', data);
 	},
 	async togglePurchased(
@@ -70,15 +67,11 @@ const actions: ActionTree<GiftItemState, RootState> = {
 			purchased: payload.purchased,
 		});
 
-		const url = baseUrl + '/set-purchased';
-
-		const body = {
-			id: payload.item.id,
-			purchased: payload.purchased,
-		};
-
 		try {
-			const { data } = await axios.post(url, JSON.stringify(body));
+			const { data } = await apiService.togglePurchased(
+				payload.item.id,
+				payload.purchased
+			);
 			commit('savePurchased', data);
 		} catch (e) {
 			console.error(e);
@@ -89,14 +82,14 @@ const actions: ActionTree<GiftItemState, RootState> = {
 		}
 	},
 	async addItem({ commit }, item: NewGiftItem) {
-		// FIXME
 		const tempId = 'randomid';
-		commit('saveNewItem', { id: tempId, ...item });
+		const tempItem = { id: tempId, ...item };
+		commit('saveNewItem', tempItem);
 
-		const url = baseUrl + '/add-item';
+		if (apiService.useMock()) return;
 
 		try {
-			const { data } = await axios.post(url, JSON.stringify(item));
+			const { data } = await apiService.addItem(tempItem);
 			commit('saveNewItem', data);
 		} catch (e) {
 			console.error(e);
@@ -105,13 +98,8 @@ const actions: ActionTree<GiftItemState, RootState> = {
 		commit('saveRemoveItem', tempId);
 	},
 	async removeItem({ commit }, item: GiftItem) {
-		const url = baseUrl + '/remove-item';
-
 		try {
-			const { data } = await axios.post<{ id: string }>(
-				url,
-				JSON.stringify(item)
-			);
+			const { data } = await apiService.removeItem(item.id);
 			commit('saveRemoveItem', data.id);
 		} catch (e) {
 			console.error(e);

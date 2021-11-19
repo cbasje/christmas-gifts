@@ -7,7 +7,7 @@ interface Item {
 	purchased?: boolean;
 }
 
-export interface NewGiftItem {
+export interface NewGiftItem extends Item {
 	pic: string;
 }
 
