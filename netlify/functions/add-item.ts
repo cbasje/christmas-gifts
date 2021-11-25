@@ -33,6 +33,7 @@ const handler: Handler = async (event, context) => {
 					Pic: body.pic,
 					Recipients: body.recipients,
 					'Purchased?': false,
+					Groups: body.groups,
 				},
 			},
 		]);

@@ -5,6 +5,7 @@ interface Item {
 	recipients: string[];
 	link?: string;
 	purchased?: boolean;
+	groups: string[];
 }
 
 export interface NewGiftItem extends Item {

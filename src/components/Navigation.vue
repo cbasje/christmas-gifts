@@ -53,7 +53,7 @@
 					"
 				>
 					<div class="hidden sm:block">
-						<div class="flex space-x-4">
+						<div class="flex space-x-4" v-if="currentUser">
 							<router-link
 								v-for="item in navigation"
 								:key="item.name"
@@ -91,18 +91,127 @@
 					"
 				>
 					<!-- Profile dropdown -->
-					<div class="ml-3 relative">
-						<div
-							v-if="currentUser"
-							:class="[
-								'px-3 inline-flex text-md font-medium rounded-full',
-								`bg-${currentUser.name.toLowerCase()}-200`,
-								`text-${currentUser.name.toLowerCase()}-900`,
-							]"
-						>
-							{{ currentUser.name }}
+					<Menu as="div" class="ml-3 relative" v-if="currentUser">
+						<div>
+							<MenuButton
+								class="
+									flex
+									text-md
+									font-medium
+									rounded-full
+									focus:outline-none
+									focus:ring-2
+									focus:ring-offset-2
+									focus:ring-offset-white
+									focus:ring-black
+									dark:focus:ring-offset-gray-800
+									dark:focus:ring-white
+								"
+							>
+								<span class="sr-only">Open user menu</span>
+								<div
+									:class="[
+										'px-3 inline-flex rounded-full',
+										`bg-${currentUser.name.toLowerCase()}-200`,
+										`text-${currentUser.name.toLowerCase()}-900`,
+									]"
+								>
+									{{ currentUser.name }}
+								</div>
+							</MenuButton>
 						</div>
-					</div>
+						<transition
+							enter-active-class="transition ease-out duration-100"
+							enter-from-class="transform opacity-0 scale-95"
+							enter-to-class="transform opacity-100 scale-100"
+							leave-active-class="transition ease-in duration-75"
+							leave-from-class="transform opacity-100 scale-100"
+							leave-to-class="transform opacity-0 scale-95"
+						>
+							<MenuItems
+								as="ul"
+								class="
+									origin-top-right
+									absolute
+									right-0
+									mt-2
+									w-64
+									rounded-md
+									shadow-lg
+									py-1
+									bg-white
+									ring-1 ring-black ring-opacity-5
+									focus:outline-none
+								"
+							>
+								<MenuItem
+									as="li"
+									v-slot="{ active }"
+									v-if="currentUser.groups.length > 1"
+								>
+									<div
+										class="
+											block
+											px-3
+											py-1.5
+											text-sm text-gray-700
+										"
+									>
+										<RadioGroup
+											:model-value="currentGroup.id"
+											@update:modelValue="
+												(id) => updateGroup(id)
+											"
+										>
+											<RadioGroupLabel class="sr-only">
+												Selected family
+											</RadioGroupLabel>
+											<ul
+												class="
+													flex
+													p-1
+													space-x-1
+													bg-cyan-900/[0.1]
+													rounded-lg
+												"
+											>
+												<RadioGroupOption
+													v-slot="{ checked }"
+													v-for="group in currentUser.groups"
+													:key="group"
+													:value="group"
+													class="flex-grow"
+												>
+													<li
+														:class="[
+															checked
+																? 'text-white bg-cyan-600'
+																: 'text-cyan-700 bg-transparent hover:bg-white/[0.5] hover:text-cyan-600',
+															'w-full h-full cursor-pointer inline-flex justify-center py-1 px-2.5 text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500',
+														]"
+													>
+														{{ groups[group].name }}
+													</li>
+												</RadioGroupOption>
+											</ul>
+										</RadioGroup>
+									</div>
+								</MenuItem>
+								<MenuItem v-slot="{ active }">
+									<router-link
+										to="/login"
+										:class="[
+											active ? 'bg-gray-100' : '',
+											'block px-4 py-2 text-sm text-gray-700',
+										]"
+										@click="signOut"
+									>
+										Sign out
+									</router-link>
+								</MenuItem>
+							</MenuItems>
+						</transition>
+					</Menu>
 				</div>
 			</div>
 		</div>
@@ -140,6 +249,9 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from 'vue';
+import { mapGetters, mapMutations } from 'vuex';
+
 import {
 	Disclosure,
 	DisclosureButton,
@@ -148,16 +260,18 @@ import {
 	MenuButton,
 	MenuItem,
 	MenuItems,
+	RadioGroup,
+	RadioGroupLabel,
+	RadioGroupOption,
 } from '@headlessui/vue';
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/vue/outline';
-import { mapGetters } from 'vuex';
 
 const navigation = [
 	{ name: 'Overview', href: '/overview', current: true },
 	{ name: 'Wish list', href: '/wish-list', current: false },
 ];
 
-export default {
+export default defineComponent({
 	components: {
 		Disclosure,
 		DisclosureButton,
@@ -166,6 +280,9 @@ export default {
 		MenuButton,
 		MenuItem,
 		MenuItems,
+		RadioGroup,
+		RadioGroupLabel,
+		RadioGroupOption,
 		BellIcon,
 		MenuIcon,
 		XIcon,
@@ -175,10 +292,26 @@ export default {
 			navigation,
 		};
 	},
+	methods: {
+		updateGroup(id: string) {
+			console.log(this.currentGroup.id, id);
+			this.saveGroupUser(id);
+			this.saveGroupItem(id);
+		},
+		...mapMutations('users', {
+			signOut: 'signOut',
+			saveGroupUser: 'saveCurrentGroupId',
+		}),
+		...mapMutations('giftItem', {
+			saveGroupItem: 'saveCurrentGroupId',
+		}),
+	},
 	computed: {
 		...mapGetters('users', {
 			currentUser: 'getCurrentUser',
+			currentGroup: 'getCurrentGroup',
+			groups: 'getGroupEntities',
 		}),
 	},
-};
+});
 </script>

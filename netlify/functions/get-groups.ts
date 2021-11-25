@@ -14,7 +14,7 @@ const handler: Handler = async (event, context) => {
 
 	var base = Airtable.base('appswuXRTyToGWzD2');
 	try {
-		const records = await base('Users')
+		const records = await base('Groups')
 			.select({
 				view: 'Main view',
 			})
@@ -25,9 +25,8 @@ const handler: Handler = async (event, context) => {
 			response.push({
 				id: rec._rawJson.id,
 				name: rec.get('Name'),
-				password: rec.get('Password'),
+				users: rec.get('Users'),
 				items: rec.get('Gift Tracker'),
-				groups: rec.get('Groups'),
 			});
 		});
 

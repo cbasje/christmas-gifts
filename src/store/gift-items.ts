@@ -9,14 +9,16 @@ const { DEV } = import.meta.env;
 interface GiftItemState {
 	ids: string[];
 	entities: { [id: string]: GiftItem };
-	query: string | null;
+	currentUserId: string | null;
+	currentGroupId: string | null;
 	selectedId: string | null;
 }
 
 const state = (): GiftItemState => ({
 	ids: [],
 	entities: {},
-	query: null,
+	currentUserId: null,
+	currentGroupId: null,
 	selectedId: null,
 });
 
@@ -29,26 +31,34 @@ const getters: GetterTree<GiftItemState, RootState> = {
 	},
 	getOverviewList(state: GiftItemState) {
 		const allGiftItems = state.ids.map((id: string) => state.entities[id]);
-		const query = state.query;
+		const currentUserId = state.currentUserId;
+		const currentGroupId = state.currentGroupId;
 
-		if (!query) {
+		if (!currentUserId) {
 			return allGiftItems;
 		}
 
 		return allGiftItems.filter((item: GiftItem) => {
-			return item.recipients.findIndex((rec) => rec == query) == -1;
+			return (
+				item.recipients.findIndex((rec) => rec == currentUserId) ==	-1 &&
+				item.groups.findIndex((rec) => rec == currentGroupId) !== -1
+			);
 		});
 	},
 	getWishList(state: GiftItemState) {
 		const allGiftItems = state.ids.map((id: string) => state.entities[id]);
-		const query = state.query;
+		const currentUserId = state.currentUserId;
+		const currentGroupId = state.currentGroupId;
 
-		if (!query) {
+		if (!currentUserId) {
 			return allGiftItems;
 		}
 
 		return allGiftItems.filter((item: GiftItem) => {
-			return item.recipients.findIndex((rec) => rec == query) !== -1;
+			return (
+				item.recipients.findIndex((rec) => rec == currentUserId) !== -1 &&
+				item.groups.findIndex((rec) => rec == currentGroupId) !== -1
+			);
 		});
 	},
 };
@@ -122,8 +132,11 @@ const mutations: MutationTree<GiftItemState> = {
 		state.ids = giftItemIds;
 		state.entities = giftItemEntities;
 	},
-	selectQuery(state: GiftItemState, id: string) {
-		state.query = id;
+	saveCurrentUserId(state: GiftItemState, id: string) {
+		state.currentUserId = id;
+	},
+	saveCurrentGroupId(state: GiftItemState, id: string) {
+		state.currentGroupId = id;
 	},
 	selectGiftItem(state: GiftItemState, id: string) {
 		state.selectedId = id;

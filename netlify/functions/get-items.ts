@@ -31,6 +31,7 @@ const handler: Handler = async (event, context) => {
 				recipients: rec.get('Recipients'),
 				link: rec.get('Link'),
 				purchased: rec.get('Purchased?'),
+				groups: rec.get('Groups'),
 			});
 		});
 

@@ -23,10 +23,12 @@ export default defineComponent({
 	components: { Navigation, Footer },
 	mounted() {
 		this.loadUsers();
+		this.loadGroups();
 	},
 	methods: {
 		...mapActions('users', {
 			loadUsers: 'loadUsers',
+			loadGroups: 'loadGroups'
 		}),
 	},
 });

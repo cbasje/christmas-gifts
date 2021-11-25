@@ -6130,7 +6130,8 @@ var handler = async (event, context) => {
         id: rec._rawJson.id,
         name: rec.get("Name"),
         password: rec.get("Password"),
-        items: rec.get("Gift Ideas")
+        items: rec.get("Gift Tracker"),
+        groups: rec.get("Groups")
       });
     });
     return {

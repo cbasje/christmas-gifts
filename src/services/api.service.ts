@@ -1,6 +1,6 @@
 import { GiftItem, NewGiftItem } from '@/types/gift-item';
-import { User } from '@/types/user';
-import { giftsMock, usersMock } from '@/util/mock';
+import { Group, User } from '@/types/user';
+import { giftsMock, groupsMock, usersMock } from '@/util/mock';
 import axios from 'axios';
 
 
@@ -52,6 +52,12 @@ export default {
 
 		const url = VITE_API_BASE_URL + '/get-users';
 		return await axios.get<User[]>(url);
+	},
+	async loadGroups() {
+		if (this.useMock()) return { data: groupsMock };
+
+		const url = VITE_API_BASE_URL + '/get-groups';
+		return await axios.get<Group[]>(url);
 	},
 
 	useMock() {

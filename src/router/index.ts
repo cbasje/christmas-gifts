@@ -45,16 +45,14 @@ import store from '../store';
 
 router.beforeEach((to, from, next) => {
 	const userId = localStorage.getItem('user');
+	const groupId = localStorage.getItem('group');
 
-	// const user = localStorage.getItem('user');
-	// if (user != null) {
-	// 	this.saveCurrentUserId(user);
-	// 	this.selectQuery(user);
-	// }
 	if (userId == null && to.path != '/login') next({ path: '/login' });
 	else {
 		store.commit('users/saveCurrentUserId', userId);
-		store.commit('giftItem/selectQuery', userId);
+		store.commit('users/saveCurrentGroupId', groupId);
+		store.commit('giftItem/saveCurrentUserId', userId);
+		store.commit('giftItem/saveCurrentGroupId', groupId);
 		next();
 	}
 });

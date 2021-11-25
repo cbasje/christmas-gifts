@@ -423,6 +423,7 @@ export default defineComponent({
 				price: this.price,
 				notes: this.notes,
 				recipients: [this.currentUserId],
+				groups: [this.currentGroupId],
 				pic: this.pic,
 				link: this.link,
 				purchased: this.purchased,
@@ -434,7 +435,6 @@ export default defineComponent({
 				this.name = '';
 				this.price = '';
 				this.notes = '';
-				this.recipients = [] as string[];
 				this.pic = '';
 				this.link = '';
 			} catch (e) {
@@ -460,6 +460,7 @@ export default defineComponent({
 	computed: {
 		...mapGetters('users', {
 			currentUserId: 'getCurrentUserId',
+			currentGroupId: 'getCurrentGroupId',
 		}),
 	},
 });

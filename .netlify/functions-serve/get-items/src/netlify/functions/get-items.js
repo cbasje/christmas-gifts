@@ -6134,7 +6134,8 @@ var handler = async (event, context) => {
         notes: rec.get("Notes"),
         recipients: rec.get("Recipients"),
         link: rec.get("Link"),
-        purchased: rec.get("Purchased?")
+        purchased: rec.get("Purchased?"),
+        groups: rec.get("Groups")
       });
     });
     return {

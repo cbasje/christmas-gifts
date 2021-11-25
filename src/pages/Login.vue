@@ -69,6 +69,7 @@
 							justify-center
 							py-2
 							px-4
+							border border-cyan-700
 							text-sm
 							font-medium
 							rounded-md
@@ -95,8 +96,8 @@
 								class="
 									h-5
 									w-5
-									text-cyan-500
-									group-hover:text-cyan-400
+									text-cyan-400
+									group-hover:text-cyan-300
 								"
 								aria-hidden="true"
 							/>
@@ -126,8 +127,7 @@ export default defineComponent({
 		submitForm() {
 			this.signIn(this.password)
 				.then((id: string) => {
-					localStorage.setItem('user', id);
-                    this.$router.push('/overview')
+					this.$router.push('/overview');
 				})
 				.catch(() => {
 					alert('Signing in was not succesful!');
