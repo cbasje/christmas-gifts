@@ -1,51 +1,23 @@
 const colors = require('tailwindcss/colors');
 
 module.exports = {
-	mode: 'jit',
-	purge: {
 		content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
 		safelist: [
-			'bg-amani-50',
-			'bg-amani-200',
-			'text-amani-900',
-			'bg-charis-50',
-			'bg-charis-200',
-			'text-charis-900',
-			'bg-george-50',
-			'bg-george-200',
-			'text-george-900',
-			'bg-jeanne-50',
-			'bg-jeanne-200',
-			'text-jeanne-900',
-			'bg-mika-50',
-			'bg-mika-200',
-			'text-mika-900',
-			'bg-sebas-50',
-			'bg-sebas-200',
-			'text-sebas-900',
-			'bg-tori-50',
-			'bg-tori-200',
-			'text-tori-900',
-			'bg-will-50',
-			'bg-will-200',
-			'text-will-900',
-			'bg-boudewijn-50',
-			'bg-boudewijn-200',
-			'text-boudewijn-900',
-			'bg-ingrid-50',
-			'bg-ingrid-200',
-			'text-ingrid-900',
-			'bg-simon-50',
-			'bg-simon-200',
-			'text-simon-900',
+			{
+				pattern:
+					/bg-(amani|charis|george|jeanne|mika|sebas|tori|will|boudewijn|ingrid|simon)-(50|200)/,
+			},
+			{
+				pattern:
+					/text-(amani|charis|george|jeanne|mika|sebas|tori|will|boudewijn|ingrid|simon)-(900)/,
+			},
 		],
-	},
 	darkMode: 'media',
 	theme: {
 		colors: {
 			transparent: colors.transparent,
 			black: colors.black,
-			gray: colors.gray,
+			gray: colors.zinc,
 			white: colors.white,
 			green: colors.emerald,
 			red: colors.rose,
