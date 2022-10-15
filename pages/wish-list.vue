@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { PhSpinnerGap } from "phosphor-vue";
 import { GiftItem } from "@prisma/client";
 import { useGiftItemStore } from "~~/stores/gift-item";
 
@@ -22,7 +23,7 @@ definePageMeta({
 </script>
 
 <template>
-    <div>
+    <NuxtLayout name="main">
         <Header>
             Wish list
 
@@ -58,7 +59,7 @@ definePageMeta({
             weight="bold"
             class="text-gray-900 dark:text-gray-100"
         />
-    </div>
 
-    <AddButton />
+        <AddButton />
+    </NuxtLayout>
 </template>

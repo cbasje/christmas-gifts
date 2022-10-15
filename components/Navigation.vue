@@ -19,7 +19,7 @@ const giftItemStore = useGiftItemStore();
 const userStore = useUserStore();
 
 const navigation = [
-    { name: "Overview", href: "/overview", current: true },
+    { name: "Overview", href: "/", current: true },
     { name: "Wish list", href: "/wish-list", current: false },
 ];
 
@@ -72,7 +72,7 @@ const updateGroup = (id: string) => {
                             class="flex space-x-4"
                             v-if="userStore.currentUser"
                         >
-                            <router-link
+                            <NuxtLink
                                 v-for="item in navigation"
                                 :key="item.name"
                                 :to="item.href"
@@ -83,7 +83,7 @@ const updateGroup = (id: string) => {
                                 "
                             >
                                 {{ item.name }}
-                            </router-link>
+                            </NuxtLink>
                         </div>
                     </div>
                 </div>
@@ -172,7 +172,7 @@ const updateGroup = (id: string) => {
                                     </div>
                                 </MenuItem>
                                 <MenuItem v-slot="{ active }">
-                                    <router-link
+                                    <NuxtLink
                                         to="/login"
                                         :class="[
                                             active ? 'bg-gray-100' : '',
@@ -181,7 +181,7 @@ const updateGroup = (id: string) => {
                                         @click="userStore.signOut"
                                     >
                                         Sign out
-                                    </router-link>
+                                    </NuxtLink>
                                 </MenuItem>
                             </MenuItems>
                         </transition>
@@ -197,14 +197,14 @@ const updateGroup = (id: string) => {
                     :key="item.name"
                     class="w-full text-left"
                 >
-                    <router-link
+                    <NuxtLink
                         :to="item.href"
                         class="block text-gray-700 dark:text-gray-300 hover:bg-gray-300 hover:text-black dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md text-sm font-semibold"
                         exact-active-class="bg-gray-100 dark:bg-gray-900 dark:text-black dark:text-white"
                         :aria-current="item.current ? 'page' : undefined"
                     >
                         {{ item.name }}
-                    </router-link>
+                    </NuxtLink>
                 </DisclosureButton>
             </div>
         </DisclosurePanel>

@@ -7,7 +7,7 @@ const hasSubtitle = computed(() => {
 </script>
 
 <template>
-    <div class="max-w-7xl mx-auto px-2 py-5 sm:px-6 lg:px-8 w-full">
+    <header class="max-w-7xl mx-auto px-2 py-5 sm:px-6 lg:px-8 w-full">
         <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">
             <slot />
         </h1>
@@ -18,5 +18,5 @@ const hasSubtitle = computed(() => {
         >
             <slot name="subtitle" />
         </p>
-    </div>
+    </header>
 </template>
