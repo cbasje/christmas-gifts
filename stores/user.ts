@@ -1,19 +1,24 @@
 import { Group, User } from "@prisma/client";
 import { defineStore } from "pinia";
-import prisma from "~~/lib/prisma";
 
 type UserWithGroup = User & { groups: Group[] };
 
 export const useUserStore = defineStore("user", () => {
-    const userLocalStorage = useLocalStorage("user", null);
-    const groupLocalStorage = useLocalStorage("group", null);
+    const curDate = new Date();
+
+    const currentUserId = useCookie("user", {
+        expires: new Date(curDate.getFullYear() + 1, 0, 0),
+        default: null,
+    });
+    const currentGroupId = useCookie("group", {
+        expires: new Date(curDate.getFullYear() + 1, 0, 0),
+        default: null,
+    });
 
     const userIds = ref<string[]>([]);
     const userEntities = ref<Record<string, UserWithGroup>>({});
     const groupIds = ref<string[]>([]);
     const groupEntities = ref<Record<string, Group>>({});
-    const currentUserId = ref<string | null>(null);
-    const currentGroupId = ref<string | null>(null);
 
     const allUsers = computed(() => {
         return userIds.value.map((id: string) => userEntities.value[id]);
@@ -63,18 +68,13 @@ export const useUserStore = defineStore("user", () => {
     }
     function saveCurrentUserId(id: string) {
         currentUserId.value = id;
-        userLocalStorage.value = id;
     }
     function saveCurrentGroupId(id: string) {
         currentGroupId.value = id;
-        groupLocalStorage.value = id;
     }
     function signOut() {
         currentUserId.value = null;
         currentGroupId.value = null;
-
-        userLocalStorage.value = null;
-        groupLocalStorage.value = null;
     }
 
     async function loadUsers() {
