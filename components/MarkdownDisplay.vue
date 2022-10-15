@@ -1,31 +1,28 @@
 <script lang="ts" setup>
-// import sanitizeHtml from 'sanitize-html';
-// import marked from 'marked';
+import { remark } from "remark";
+import remarkParse from "remark-parse";
+import remarkRehype from "remark-rehype";
+// import rehypeFormat from "rehype-format";
+import rehypeSanitize from "rehype-sanitize";
+import rehypeStringify from "rehype-stringify";
 
-export interface Props {
-    markdown: string;
-}
+const slots = useSlots();
+const html = ref("");
 
-const props = withDefaults(defineProps<Props>(), {
-    markdown: "",
-});
+onMounted(async () => {
+    const markdownToHtml = await remark()
+        .use(remarkParse)
+        .use(remarkRehype)
+        .use(rehypeSanitize)
+        .use(rehypeStringify)
+        .process(slots.default()[0].children.toString());
 
-const compiledMarkdown = computed(() => {
-    const defaultOptions = {
-        allowedTags: ["a"],
-        allowedAttributes: {
-            a: ["href"],
-        },
-    };
-
-    // const html = marked(props.markdown);
-    // return sanitizeHtml(html, defaultOptions);
-    return props.markdown;
+    html.value = markdownToHtml.value.toString();
 });
 </script>
 
 <template>
-    <p class="prose prose-sm" v-html="compiledMarkdown" />
+    <p class="prose prose-sm" v-html="html" />
 </template>
 
 <style>

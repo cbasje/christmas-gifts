@@ -16,7 +16,11 @@
         "@pinia/nuxt": "^0.4.3",
         "@prisma/client": "4.4.0",
         "nuxt": "^3.0.0-rc.11",
-        "phosphor-vue": "^4.4.0"
+        "phosphor-vue": "^4.4.0",
+        "rehype-parse": "^8.0.4",
+        "rehype-sanitize": "^5.0.1",
+        "rehype-stringify": "^9.0.3",
+        "remark": "^14.0.2"
     },
     "devDependencies": {
         "@nuxtjs/tailwindcss": "^5.3.5",

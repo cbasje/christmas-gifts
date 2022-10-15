@@ -34,8 +34,9 @@ const emits = defineEmits<{
             <MarkdownDisplay
                 v-if="item.notes"
                 class="min-w-full text-gray-500 whitespace-normal sm:whitespace-nowrap group-hover:whitespace-normal overflow-hidden overflow-ellipsis"
-                :markdown="item.notes"
-            />
+            >
+                {{ item.notes }}
+            </MarkdownDisplay>
         </div>
         <div class="flex items-center min-w-full">
             <span

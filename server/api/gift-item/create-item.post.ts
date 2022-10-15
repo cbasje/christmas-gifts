@@ -16,5 +16,8 @@ export default defineEventHandler(async (event) => {
                 })),
             },
         },
+        include: {
+            groups: true,
+        },
     });
 });

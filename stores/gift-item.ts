@@ -129,7 +129,6 @@ export const useGiftItemStore = defineStore("gift-item", () => {
             ...item,
         };
         // FIXME: see if it needs to be shown as added before actually doing it
-        // saveNewItem(tempItem);
 
         try {
             const data = await $fetch("/api/gift-item/create-item", {
