@@ -7,7 +7,6 @@ import {
     DialogTitle,
 } from "@headlessui/vue";
 import { PhPlus, PhImage } from "phosphor-vue";
-import { reset } from "@formkit/core";
 
 import { useGiftItemStore } from "~~/stores/gift-item";
 import { useUserStore } from "~~/stores/user";
@@ -32,6 +31,14 @@ const openModal = () => {
     isOpen.value = true;
 };
 
+const resetForm = () => {
+    formData.name = "";
+    formData.price = "";
+    formData.notes = "";
+    userStore.currentUserId = "";
+    formData.groups = [userStore.currentGroupId];
+    formData.link = "";
+};
 const submitForm = async () => {
     const newItem: NewGiftItem = {
         name: formData.name,
@@ -45,7 +52,7 @@ const submitForm = async () => {
 
     try {
         giftItemStore.addItem(newItem);
-        reset("newItemForm");
+        resetForm();
     } catch (e) {
         console.error(e);
     } finally {
