@@ -117,6 +117,8 @@ export const useUserStore = defineStore("user", () => {
 
     return {
         userEntities,
+        allGroups,
+        allUsers,
         currentUser,
         currentUserId,
         currentGroup,

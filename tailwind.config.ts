@@ -5,7 +5,6 @@ const colors = require("tailwindcss/colors");
 export default <Config>{
     content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
     safelist: [
-        // "bg-amani-50",
         {
             pattern:
                 /bg-(amani|charis|george|jeanne|mika|sebas|tori|will|boudewijn|ingrid|simon)-(50|200)/,

@@ -31,7 +31,7 @@ export const useGiftItemStore = defineStore("gift-item", () => {
 
         return allGiftItems.value.filter((item: GiftItemWithGroups) => {
             return (
-                item.recipientId == currentUserId &&
+                item.recipientId != currentUserId &&
                 item.groups.findIndex((g) => g.id == currentGroupId) !== -1
             );
         });

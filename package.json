@@ -12,6 +12,7 @@
         "postinstall": "nuxt prepare"
     },
     "dependencies": {
+        "@formkit/nuxt": "^1.0.0-beta.11",
         "@headlessui/vue": "^1.7.3",
         "@pinia/nuxt": "^0.4.3",
         "@prisma/client": "4.4.0",

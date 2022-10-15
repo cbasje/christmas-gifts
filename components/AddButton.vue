@@ -7,6 +7,7 @@ import {
     DialogTitle,
 } from "@headlessui/vue";
 import { PhPlus, PhImage } from "phosphor-vue";
+import { reset } from "@formkit/core";
 
 import { useGiftItemStore } from "~~/stores/gift-item";
 import { useUserStore } from "~~/stores/user";
@@ -16,12 +17,13 @@ const giftItemStore = useGiftItemStore();
 const userStore = useUserStore();
 
 const isOpen = ref(false);
-const name = ref("");
-const pic = ref("");
-const price = ref("");
-const notes = ref("");
-const link = ref("");
-const purchased = ref(false);
+const formData = reactive({
+    name: "",
+    price: "",
+    notes: "",
+    link: "",
+    groups: [],
+});
 
 const closeModal = () => {
     isOpen.value = false;
@@ -29,43 +31,26 @@ const closeModal = () => {
 const openModal = () => {
     isOpen.value = true;
 };
-const uploadFile = (evt: Event) => {
-    console.log("Upload File", evt);
-};
 
 const submitForm = async () => {
     const newItem: NewGiftItem = {
-        name: name.value,
-        price: price.value,
-        notes: notes.value,
+        name: formData.name,
+        price: formData.price,
+        notes: formData.notes,
         recipientId: userStore.currentUserId,
-        groups: [userStore.currentGroupId],
-        link: link.value,
-        purchased: purchased.value,
+        groups: formData.groups,
+        link: formData.link,
+        purchased: false,
     };
 
     try {
         giftItemStore.addItem(newItem);
-
-        name.value = "";
-        price.value = "";
-        notes.value = "";
-        pic.value = "";
-        link.value = "";
+        reset("newItemForm");
     } catch (e) {
         console.error(e);
     } finally {
         closeModal();
     }
-};
-
-const encode = (data: any) => {
-    return Object.keys(data)
-        .map(
-            (key) =>
-                `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`
-        )
-        .join("&");
 };
 </script>
 
@@ -122,191 +107,86 @@ const encode = (data: any) => {
                         >
                             <DialogTitle
                                 as="h3"
-                                class="text-lg font-medium leading-6 text-gray-900"
+                                class="text-lg font-medium leading-6 text-gray-900 mb-2"
                             >
                                 Add a wish list item
                             </DialogTitle>
-                            <form @submit.prevent="submitForm" class="mt-2">
-                                <div class="space-y-6 py-6">
-                                    <div aria-label="Name">
-                                        <label
-                                            for="name"
-                                            class="block text-sm font-medium text-gray-700"
-                                        >
-                                            Name
-                                        </label>
-                                        <input
-                                            type="text"
-                                            name="name"
-                                            id="name"
-                                            v-model="name"
-                                            autocomplete="name"
-                                            required
-                                            class="mt-1 focus:ring-cyan-500 focus:border-cyan-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                        />
-                                    </div>
-
-                                    <div aria-label="Price">
-                                        <label
-                                            for="price"
-                                            class="block text-sm font-medium text-gray-700"
-                                        >
-                                            Price
-                                        </label>
-                                        <input
-                                            type="text"
-                                            inputmode="numeric"
-                                            autocomplete="transaction-amount"
-                                            name="price"
-                                            id="price"
-                                            v-model="price"
-                                            class="mt-1 focus:ring-cyan-500 focus:border-cyan-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                        />
-                                    </div>
-
-                                    <div aria-label="Notes">
-                                        <label
-                                            for="notes"
-                                            class="block text-sm font-medium text-gray-700"
-                                        >
-                                            Notes
-                                        </label>
-                                        <div class="mt-1">
-                                            <textarea
-                                                id="notes"
-                                                name="notes"
-                                                rows="3"
-                                                v-model="notes"
-                                                class="shadow-sm focus:ring-cyan-500 focus:border-cyan-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
-                                                placeholder="Type here more information about the item..."
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div aria-label="Link">
-                                        <label
-                                            for="link"
-                                            class="block text-sm font-medium text-gray-700"
-                                        >
-                                            Link
-                                        </label>
-                                        <div
-                                            class="mt-1 flex rounded-md shadow-sm"
-                                        >
-                                            <span
-                                                class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm"
-                                            >
-                                                https://
-                                            </span>
-                                            <input
-                                                type="url"
-                                                inputmode="url"
-                                                autocomplete="url"
-                                                name="link"
-                                                id="link"
-                                                v-model="link"
-                                                class="focus:ring-cyan-500 focus:border-cyan-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300"
-                                                placeholder="www.example.com"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <!-- <div aria-label="Picture">
-										<label
-											class="
-												block
-												text-sm
-												font-medium
-												text-gray-700
-											"
-										>
-											Picture
-										</label>
-										<div
-											class="
-												mt-1
-												flex
-												justify-center
-												px-6
-												pt-5
-												pb-6
-												border-2
-												border-gray-300
-												border-dashed
-												rounded-md
-											"
-										>
-											<div class="space-y-1 text-center">
-												<ph-image weight="bold"
-													class="
-														mx-auto
-														h-12
-														w-12
-														text-gray-400
-													" />
-												<div
-													class="
-														flex
-														text-sm text-gray-600
-													"
-												>
-													<label
-														for="pic"
-														class="
-															relative
-															cursor-pointer
-															bg-white
-															rounded-md
-															font-medium
-															text-cyan-600
-															hover:text-cyan-500
-															focus-within:outline-none
-															focus-within:ring-2
-															focus-within:ring-offset-2
-															focus-within:ring-cyan-500
-														"
-													>
-														<span>
-															Upload a file
-														</span>
-														<input
-															id="pic"
-															name="pic"
-															@change="
-																(evt) =>
-																	uploadFile(
-																		evt
-																	)
-															"
-															type="file"
-															class="sr-only"
-														/>
-													</label>
-													<p class="pl-1">
-														or drag and drop
-													</p>
-												</div>
-												<p
-													class="
-														text-xs text-gray-500
-													"
-												>
-													PNG, JPG, GIF up to 10MB
-												</p>
-											</div>
-										</div>
-									</div> -->
-                                </div>
-
-                                <div class="text-right">
-                                    <button
-                                        type="submit"
-                                        class="inline-flex justify-center px-4 py-2 text-sm font-medium text-cyan-900 bg-cyan-100 rounded-md hover:bg-cyan-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
-                                    >
-                                        Save
-                                    </button>
-                                </div>
-                            </form>
+                            <FormKit
+                                type="form"
+                                id="newItemForm"
+                                submit-label="Add item"
+                                @submit="submitForm"
+                                form-class="space-y-6 py-6"
+                                :actions="false"
+                            >
+                                <FormKit
+                                    type="text"
+                                    label="Name"
+                                    v-model="formData.name"
+                                    autocomplete="name"
+                                    validation="required"
+                                    label-class="block text-sm font-medium text-gray-700"
+                                    input-class="mt-1 focus:ring-cyan-500 focus:border-cyan-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                    message-class="mt-1 block w-full text-sm text-red-400"
+                                />
+                                <FormKit
+                                    type="text"
+                                    label="Price"
+                                    v-model="formData.price"
+                                    autocomplete="transaction-amount"
+                                    validation="number"
+                                    label-class="block text-sm font-medium text-gray-700"
+                                    input-class="mt-1 focus:ring-cyan-500 focus:border-cyan-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                    message-class="mt-1 block w-full text-sm text-red-400"
+                                />
+                                <FormKit
+                                    type="textarea"
+                                    label="Notes"
+                                    v-model="formData.notes"
+                                    rows="3"
+                                    placeholder="Type here more information about the item..."
+                                    label-class="block text-sm font-medium text-gray-700"
+                                    input-class="shadow-sm focus:ring-cyan-500 focus:border-cyan-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
+                                    message-class="mt-1 block w-full text-sm text-red-400"
+                                />
+                                <FormKit
+                                    type="url"
+                                    label="Link"
+                                    v-model="formData.link"
+                                    placeholder="www.example.com..."
+                                    validation="url"
+                                    label-class="block text-sm font-medium text-gray-700"
+                                    input-class="mt-1 focus:ring-cyan-500 focus:border-cyan-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
+                                    message-class="mt-1 block w-full text-sm text-red-400"
+                                />
+                                <template
+                                    v-if="
+                                        userStore.currentUser.groups.length > 1
+                                    "
+                                >
+                                    <FormKit
+                                        v-model="formData.groups"
+                                        type="select"
+                                        multiple
+                                        label="Groups"
+                                        label-class="block text-sm font-medium text-gray-700"
+                                        input-class="shadow-sm focus:ring-cyan-500 focus:border-cyan-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
+                                        :options="
+                                            userStore.allGroups.map((g) => ({
+                                                label: g.name,
+                                                value: g.id,
+                                            }))
+                                        "
+                                        help="Select all that apply by holding command (macOS) or control (PC)."
+                                    />
+                                </template>
+                                <FormKit
+                                    type="submit"
+                                    label="Add item"
+                                    wrapper-class="text-right"
+                                    input-class="inline-flex justify-center px-4 py-2 text-sm font-medium text-cyan-900 bg-cyan-100 rounded-md hover:bg-cyan-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+                                />
+                            </FormKit>
                         </div>
                     </TransitionChild>
                 </div>
