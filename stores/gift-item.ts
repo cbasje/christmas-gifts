@@ -1,6 +1,5 @@
 import { GiftItem, Group } from "@prisma/client";
 import { defineStore } from "pinia";
-import prisma from "~~/lib/prisma";
 import { NewGiftItem } from "~~/lib/types";
 import { useUserStore } from "./user";
 
@@ -125,14 +124,12 @@ export const useGiftItemStore = defineStore("gift-item", () => {
     }
     async function addItem(item: NewGiftItem) {
         const tempId = "randomid";
-        const tempItem: GiftItemWithGroups = {
+        const tempItem: NewGiftItem & { id: string } = {
             id: tempId,
             ...item,
-            createdAt: null,
-            updatedAt: null,
         };
         // FIXME: see if it needs to be shown as added before actually doing it
-        saveNewItem(tempItem);
+        // saveNewItem(tempItem);
 
         try {
             const data = await $fetch("/api/gift-item/create-item", {

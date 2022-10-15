@@ -9,8 +9,7 @@ export default defineEventHandler(async (event) => {
 
     return await prisma.user.create({
         data: {
-            name: body.name,
-            password: body.password,
+            ...body,
 
             groups: {
                 connect: body.groups.map((groupId) => ({

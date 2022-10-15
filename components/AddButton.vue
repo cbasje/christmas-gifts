@@ -39,7 +39,7 @@ const submitForm = async () => {
         price: price.value,
         notes: notes.value,
         recipientId: userStore.currentUserId,
-        // groups: [userStore.currentGroupId],
+        groups: [userStore.currentGroupId],
         link: link.value,
         purchased: purchased.value,
     };
