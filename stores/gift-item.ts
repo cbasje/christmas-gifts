@@ -1,5 +1,6 @@
 import { GiftItem, Group } from "@prisma/client";
 import { defineStore } from "pinia";
+import prisma from "~~/lib/prisma";
 import { NewGiftItem } from "~~/lib/types";
 import { useUserStore } from "./user";
 
@@ -92,7 +93,7 @@ export const useGiftItemStore = defineStore("gift-item", () => {
     }
 
     async function loadGiftItems() {
-        const { data } = await apiService.loadGiftItems();
+        const data = await $fetch("/api/gift-item/all-items");
         saveAllGiftItems(data);
     }
     async function togglePurchased(payload: {
@@ -106,10 +107,13 @@ export const useGiftItemStore = defineStore("gift-item", () => {
         });
 
         try {
-            const { data } = await apiService.togglePurchased(
-                payload.item.id,
-                payload.purchased
-            );
+            const data = await $fetch("/api/gift-item/update-purchased", {
+                method: "PUT",
+                query: {
+                    id: payload.item.id,
+                    purchased: payload.purchased,
+                },
+            });
             savePurchased(data);
         } catch (e) {
             console.error(e);
@@ -130,10 +134,11 @@ export const useGiftItemStore = defineStore("gift-item", () => {
         // FIXME: see if it needs to be shown as added before actually doing it
         saveNewItem(tempItem);
 
-        if (apiService.useMock()) return;
-
         try {
-            const { data } = await apiService.addItem(tempItem);
+            const data = await $fetch("/api/gift-item/create-item", {
+                method: "POST",
+                body: item,
+            });
             saveNewItem(data);
         } catch (e) {
             console.error(e);
@@ -141,9 +146,14 @@ export const useGiftItemStore = defineStore("gift-item", () => {
 
         saveRemoveItem(tempId);
     }
-    async function removeItem(item: GiftItem) {
+    async function removeItem(id: string) {
         try {
-            const { data } = await apiService.removeItem(item.id);
+            const data = await $fetch("/api/gift-item/delete-item", {
+                method: "DELETE",
+                query: {
+                    id,
+                },
+            });
             saveRemoveItem(data.id);
         } catch (e) {
             console.error(e);

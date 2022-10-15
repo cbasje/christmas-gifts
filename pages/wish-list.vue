@@ -9,7 +9,7 @@ const editItem = (item: GiftItem) => {
 };
 const removeItem = (item: GiftItem) => {
     const value: boolean = confirm("Are you sure?");
-    if (value) giftItemStore.removeItem(item);
+    if (value) giftItemStore.removeItem(item.id);
 };
 
 onMounted(() => {
@@ -53,7 +53,11 @@ definePageMeta({
             </Table>
         </div>
 
-        <Loader v-else class="text-gray-900 dark:text-gray-100" />
+        <ph-spinner-gap
+            v-else
+            weight="bold"
+            class="text-gray-900 dark:text-gray-100"
+        />
     </div>
 
     <AddButton />

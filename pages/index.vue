@@ -105,6 +105,10 @@ definePageMeta({
             </Table>
         </div>
 
-        <Loader v-else class="text-gray-900 dark:text-gray-100" />
+        <ph-spinner-gap
+            v-else
+            weight="bold"
+            class="text-gray-900 dark:text-gray-100"
+        />
     </div>
 </template>

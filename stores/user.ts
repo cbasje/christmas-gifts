@@ -1,5 +1,6 @@
 import { Group, User } from "@prisma/client";
 import { defineStore } from "pinia";
+import prisma from "~~/lib/prisma";
 
 type UserWithGroup = User & { groups: Group[] };
 
@@ -77,11 +78,11 @@ export const useUserStore = defineStore("user", () => {
     }
 
     async function loadUsers() {
-        const { data } = await apiService.loadUsers();
+        const data = await $fetch("/api/user/all-users");
         saveAllUsers(data);
     }
     async function loadGroups() {
-        const { data } = await apiService.loadGroups();
+        const data = await $fetch("/api/group/all-groups");
         saveGroups(data);
     }
     async function signIn(password: string) {
@@ -93,7 +94,7 @@ export const useUserStore = defineStore("user", () => {
                 saveCurrentUserId(result);
 
                 const groups = userEntities.value[result].groups;
-                if (groups) saveCurrentGroupId(groups[0]);
+                if (groups) saveCurrentGroupId(groups[0].id);
 
                 resolve(result);
             } else reject();
