@@ -1,0 +1,124 @@
+<script lang="ts" setup>
+import { GiftItem } from "@prisma/client";
+import { Switch } from "@headlessui/vue";
+import { PhPencil, PhTrash } from "phosphor-vue";
+
+export interface Props {
+    item: GiftItem;
+    allowPurchased?: boolean;
+    allowEdit?: boolean;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+    allowPurchased: false,
+    allowEdit: false,
+});
+const emits = defineEmits<{
+    (
+        e: "switchPurchased",
+        payload: { item: GiftItem; purchased: boolean }
+    ): void;
+    (e: "editItem", value: GiftItem): void;
+    (e: "removeItem", value: GiftItem): void;
+}>();
+</script>
+
+<template>
+    <div class="grid grid-cols-table-4 group border-b border-gray-200">
+        <div
+            class="flex flex-col justify-center px-6 py-4 min-h-4rem min-w-1/2 sm:w-full"
+        >
+            <h3 class="text-sm font-medium text-gray-900">
+                {{ item.name }}
+            </h3>
+            <MarkdownDisplay
+                v-if="item.notes"
+                class="min-w-full text-gray-500 whitespace-normal sm:whitespace-nowrap group-hover:whitespace-normal overflow-hidden overflow-ellipsis"
+                :markdown="item.notes"
+            />
+        </div>
+        <div class="flex items-center min-w-full">
+            <span
+                class="px-6 py-4 whitespace-nowrap overflow-hidden overflow-ellipsis text-sm text-gray-500"
+            >
+                {{ item.price }}
+            </span>
+        </div>
+        <div class="flex items-center min-w-full">
+            <a
+                :href="item.link"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="px-6 py-4 whitespace-nowrap overflow-hidden overflow-ellipsis text-sm underline cursor-pointer font-normal text-cyan-500 hover:text-cyan-600"
+            >
+                {{ item.link }}
+            </a>
+        </div>
+        <!-- FIXME -->
+        <!-- <div class="flex items-center px-6 py-3">
+			<div class="flex-shrink-0 h-10 w-10">
+				<img
+					v-if="item.pic"
+					class="h-10 w-10 rounded-md"
+					:src="item.pic[0].url"
+					alt=""
+				/>
+			</div>
+		</div> -->
+        <div
+            v-if="allowPurchased"
+            class="flex justify-center items-center px-6 py-3"
+        >
+            <Switch
+                :model-value="item.purchased"
+                @update:model-value="
+                    (evt) =>
+                        emits('switchPurchased', {
+                            item,
+                            purchased: evt,
+                        })
+                "
+                :class="item.purchased ? 'bg-green-500' : 'bg-gray-200'"
+                class="relative inline-flex items-center h-6 rounded-full w-11"
+            >
+                <span class="sr-only">Item purchased</span>
+                <span
+                    :class="item.purchased ? 'translate-x-6' : 'translate-x-1'"
+                    class="inline-block w-4 h-4 transform bg-white rounded-full"
+                />
+            </Switch>
+        </div>
+        <!-- FIXME -->
+        <!-- <div
+			v-if="allowEdit"
+			class="
+				flex
+				justify-center
+				items-center
+				px-6
+				py-4
+				whitespace-nowrap
+				text-right text-sm
+				font-medium
+			"
+		>
+			<a
+				class="cursor-pointer font-normal text-cyan-500 hover:text-cyan-600"
+				@click="emits('editItem', item)"
+			>
+				<ph-pencil weight="bold" class="h-6 w-6" />
+			</a>
+		</div> -->
+        <div
+            v-if="allowEdit"
+            class="flex justify-center items-center px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+        >
+            <a
+                class="cursor-pointer font-normal text-red-500 hover:text-red-600"
+                @click="emits('removeItem', item)"
+            >
+                <ph-trash weight="bold" class="h-6 w-6" />
+            </a>
+        </div>
+    </div>
+</template>
