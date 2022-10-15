@@ -35,7 +35,6 @@ const resetForm = () => {
     formData.name = "";
     formData.price = "";
     formData.notes = "";
-    userStore.currentUserId = "";
     formData.groups = [userStore.currentGroupId];
     formData.link = "";
 };
