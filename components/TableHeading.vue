@@ -1,0 +1,92 @@
+<script lang="ts" setup>
+import { Group } from "~~/pages/Overview.vue";
+
+export interface Props {
+    group?: Group;
+    allowPurchased?: boolean;
+    allowEdit?: boolean;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+    group: null,
+    allowPurchased: false,
+    allowEdit: false,
+});
+</script>
+
+<template>
+    <div
+        v-if="group != null"
+        :class="[
+            'px-6 py-3 text-left whitespace-nowrap',
+            group != null
+                ? `bg-${group.user.name.toLowerCase()}-50`
+                : 'bg-gray-50',
+        ]"
+        aria-label="Table Header"
+    >
+        <span
+            :class="[
+                'px-3 inline-flex text-md font-medium rounded-full',
+                `bg-${group.user.name.toLowerCase()}-200`,
+                `text-${group.user.name.toLowerCase()}-900`,
+            ]"
+        >
+            {{ group.user.name }}
+        </span>
+    </div>
+
+    <div
+        :class="[
+            'grid grid-cols-table-4',
+            group != null
+                ? `bg-${group.user.name.toLowerCase()}-50`
+                : 'bg-gray-50',
+        ]"
+    >
+        <div
+            scope="col"
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-1/2 sm:w-full"
+        >
+            Item
+        </div>
+        <div
+            scope="col"
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+        >
+            Price
+        </div>
+        <div
+            scope="col"
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+        >
+            Link
+        </div>
+        <!-- FIXME -->
+        <!-- <div
+				scope="col"
+				class="
+					px-6
+					py-3
+					text-left text-xs
+					font-medium
+					text-gray-500
+					uppercase
+					tracking-wider
+				"
+			>
+				Picture
+			</div> -->
+        <div
+            v-if="allowPurchased"
+            scope="col"
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+        >
+            Purchased?
+        </div>
+        <!-- FIXME -->
+        <!-- <div v-if="allowEdit" scope="col" class="relative px-6 py-3">
+				<span class="sr-only">Edit</span>
+			</div> -->
+    </div>
+</template>
