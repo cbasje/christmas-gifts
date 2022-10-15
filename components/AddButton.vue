@@ -22,7 +22,7 @@ const formData = reactive({
     price: "",
     notes: "",
     link: "",
-    groups: [],
+    groups: [userStore.currentGroupId],
 });
 
 const closeModal = () => {
@@ -169,15 +169,17 @@ const submitForm = async () => {
                                         type="select"
                                         multiple
                                         label="Groups"
+                                        validation="required"
+                                        help="Select all that apply by holding command (macOS) or control (PC)."
                                         label-class="block text-sm font-medium text-gray-700"
                                         input-class="shadow-sm focus:ring-cyan-500 focus:border-cyan-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
+                                        help-class="mt-1 block w-full text-sm text-gray-500"
                                         :options="
                                             userStore.allGroups.map((g) => ({
                                                 label: g.name,
                                                 value: g.id,
                                             }))
                                         "
-                                        help="Select all that apply by holding command (macOS) or control (PC)."
                                     />
                                 </template>
                                 <FormKit

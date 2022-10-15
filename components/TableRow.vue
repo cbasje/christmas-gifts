@@ -2,12 +2,15 @@
 import { GiftItem } from "@prisma/client";
 import { Switch } from "@headlessui/vue";
 import { PhPencil, PhTrash } from "phosphor-vue";
+import { useUserStore } from "~~/stores/user";
 
 export interface Props {
     item: GiftItem;
     allowPurchased?: boolean;
     allowEdit?: boolean;
 }
+
+const userStore = useUserStore();
 
 const props = withDefaults(defineProps<Props>(), {
     allowPurchased: false,
@@ -24,7 +27,14 @@ const emits = defineEmits<{
 </script>
 
 <template>
-    <div class="grid grid-cols-table-4 group border-b border-gray-200">
+    <div
+        :class="[
+            'grid grid-cols-table-4 group border-b border-gray-200',
+            item.purchased && item.recipientId != userStore.currentUserId
+                ? 'opacity-30'
+                : '',
+        ]"
+    >
         <div
             class="flex flex-col justify-center px-6 py-4 min-h-4rem min-w-1/2 sm:w-full"
         >
@@ -42,7 +52,7 @@ const emits = defineEmits<{
             <span
                 class="px-6 py-4 whitespace-nowrap overflow-hidden overflow-ellipsis text-sm text-gray-500"
             >
-                {{ item.price }}
+                {{ new Intl.NumberFormat().format(Number(item.price)) }}
             </span>
         </div>
         <div class="flex items-center min-w-full">
