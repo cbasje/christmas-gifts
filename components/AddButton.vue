@@ -16,6 +16,8 @@ import { NewGiftItem } from "~~/lib/types";
 const giftItemStore = useGiftItemStore();
 const userStore = useUserStore();
 
+const online = useOnline();
+
 const isOpen = ref(false);
 const formData = reactive({
     name: "",
@@ -51,13 +53,15 @@ const submitForm = async () => {
     };
 
     try {
+        if (!online.value) throw new Error("Not online");
+
         giftItemStore.addItem(newItem);
         resetForm();
+
+        closeModal();
     } catch (error) {
         console.error(error);
-        alert("Adding item was not succesful!");
-    } finally {
-        closeModal();
+        alert(`Adding item was not successful! Reason: ${error.message}`);
     }
 };
 

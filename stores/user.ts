@@ -13,45 +13,28 @@ export const useUserStore = defineStore("user", () => {
         default: null,
     });
 
-    const userIds = ref<string[]>([]);
-    const userEntities = ref<Record<string, User>>({});
+    const currentUser = ref<User>(null);
 
-    const allUsers = computed(() => {
-        return userIds.value.map((id: string) => userEntities.value[id]);
-    });
-    const currentUser = computed(() => {
-        return (
-            (currentUserId.value && userEntities.value[currentUserId.value]) ||
-            null
-        );
-    });
-
-    function saveAllUsers(payload: User[]) {
-        const ids = payload.map((user) => user.id);
-        const entities = payload.reduce(
-            (entities: Record<string, User>, user: User) => {
-                return { ...entities, [user.id]: user };
-            },
-            {}
-        );
-
-        userIds.value = ids;
-        userEntities.value = entities;
-    }
     function saveCurrentUserId(id: string) {
         currentUserId.value = id;
     }
     function saveCurrentGroupId(id: string) {
         currentGroupId.value = id;
     }
-    function signOut() {
+
+    async function loadCurrentUser(id: string = currentUserId.value) {
+        const data = await $fetch("/api/user/user", {
+            query: { id },
+        });
+
+        currentUser.value = data;
+    }
+    async function signOut() {
         currentUserId.value = null;
         currentGroupId.value = null;
-    }
 
-    async function loadUsers() {
-        const data = await $fetch("/api/user/all-users");
-        saveAllUsers(data);
+        const router = useRouter();
+        await router.push("/login");
     }
     async function signIn(password: string) {
         const data = await $fetch("/api/user/sign-in", {
@@ -61,17 +44,20 @@ export const useUserStore = defineStore("user", () => {
 
         saveCurrentUserId(data.id);
         saveCurrentGroupId(data.groups[0]);
+
+        await loadCurrentUser();
+
+        const router = useRouter();
+        router.push("/");
     }
 
     return {
-        userEntities,
-        allUsers,
         currentUser,
         currentUserId,
         currentGroupId,
         saveCurrentUserId,
         saveCurrentGroupId,
-        loadUsers,
+        loadCurrentUser,
         signIn,
         signOut,
     };

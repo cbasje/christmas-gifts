@@ -1,5 +1,9 @@
 import prisma from "~~/lib/prisma";
 
 export default defineEventHandler(async (event) => {
-    return await prisma.giftItem.findMany({});
+    return await prisma.giftItem.findMany({
+        include: {
+            recipient: true,
+        },
+    });
 });

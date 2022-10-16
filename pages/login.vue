@@ -3,17 +3,19 @@ import { useUserStore } from "~~/stores/user";
 import { PhLockSimple } from "phosphor-vue";
 
 const userStore = useUserStore();
-const router = useRouter();
+
+const online = useOnline();
 
 const password = ref("");
 
 const submitForm = () => {
     try {
+        if (!online.value) throw new Error("Not online");
+
         userStore.signIn(password.value);
-        router.push("/");
     } catch (error) {
         console.error(error);
-        alert("Signing in was not succesful!");
+        alert(`Signing in was not successful! Reason: ${error.message}`);
     }
 };
 

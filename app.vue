@@ -1,13 +1,3 @@
-<script lang="ts" setup>
-import { useUserStore } from "@/stores/user";
-
-const users = useUserStore();
-
-onMounted(() => {
-    users.loadUsers();
-});
-</script>
-
 <template>
     <div class="bg-gray-100 dark:bg-gray-900 h-screen overflow-scroll">
         <Head>

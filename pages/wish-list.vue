@@ -5,16 +5,33 @@ import { useGiftItemStore } from "~~/stores/gift-item";
 
 const giftItemStore = useGiftItemStore();
 
+const isLoading = ref(true);
+
 const editItem = (item: GiftItem) => {
     alert(item.name);
 };
-const removeItem = (item: GiftItem) => {
+const removeItem = async (item: GiftItem) => {
     const value: boolean = confirm("Are you sure?");
-    if (value) giftItemStore.removeItem(item.id);
+
+    if (value) {
+        try {
+            await giftItemStore.removeItem(item.id);
+        } catch (error) {
+            console.error(error);
+            alert("Removing item was not successful");
+        }
+    }
 };
 
-onMounted(() => {
-    giftItemStore.loadGiftItems();
+onMounted(async () => {
+    try {
+        await giftItemStore.loadGiftItems();
+    } catch (error) {
+        console.error(error);
+        alert("Loading items was not successful");
+    } finally {
+        isLoading.value = false;
+    }
 });
 
 definePageMeta({
@@ -33,7 +50,7 @@ definePageMeta({
         </Header>
 
         <div
-            v-if="giftItemStore.wishList != null"
+            v-if="giftItemStore.wishList != null || !isLoading"
             class="overflow-scroll container mx-auto"
             aria-label="Table"
         >
@@ -57,7 +74,7 @@ definePageMeta({
         <ph-spinner-gap
             v-else
             weight="bold"
-            class="text-gray-900 dark:text-gray-100"
+            class="animate-spin text-gray-900 dark:text-gray-100"
         />
 
         <AddButton />

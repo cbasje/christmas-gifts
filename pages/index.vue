@@ -1,26 +1,29 @@
 <script lang="ts" setup>
 import { PhSpinnerGap } from "phosphor-vue";
 import { GiftItem, User } from "~~/lib/types";
-import { useGiftItemStore } from "~~/stores/gift-item";
-import { useUserStore } from "~~/stores/user";
+import { GiftItemWithRecipient, useGiftItemStore } from "~~/stores/gift-item";
 
 export interface Group {
     user: User;
-    elements: GiftItem[];
+    items: GiftItem[];
 }
 
 export type Grouped = Record<string, Group>;
 
 const giftItemStore = useGiftItemStore();
-const userStore = useUserStore();
 
-const enabled = ref(true);
+const isLoading = ref(true);
 
-const editItem = (item: GiftItem) => {
-    alert(item.name);
-};
-const switchPurchased = (payload: { item: GiftItem; purchased: boolean }) => {
-    giftItemStore.togglePurchased(payload);
+const switchPurchased = async (payload: {
+    item: GiftItem;
+    purchased: boolean;
+}) => {
+    try {
+        await giftItemStore.togglePurchased(payload);
+    } catch (error) {
+        console.error(error);
+        alert("Saving purchase status was not successful!");
+    }
 };
 const sortObj = (obj: Grouped) => {
     return Object.keys(obj).sort((a, b) => {
@@ -39,23 +42,22 @@ const sortObj = (obj: Grouped) => {
 
 // FIXME: can prisma do this?
 const groups = computed(() => {
-    const elements = giftItemStore.overviewList;
-    const users = userStore.userEntities;
+    const items = giftItemStore.overviewList;
 
-    if (!elements || !users) {
+    if (!items) {
         return null;
     }
 
-    const grouped: Grouped = elements.reduce(
-        (groups: Grouped, element: GiftItem) => {
-            const key = element.recipientId;
+    const grouped: Grouped = items.reduce(
+        (groups: Grouped, item: GiftItemWithRecipient) => {
+            const key = item.recipientId;
             if (!groups[key]) {
                 groups[key] = {
-                    user: users[key],
-                    elements: [],
+                    user: item.recipient,
+                    items: [],
                 };
             }
-            groups[key].elements.push(element);
+            groups[key].items.push(item);
             return groups;
         },
         {}
@@ -64,8 +66,15 @@ const groups = computed(() => {
     return sortObj(grouped).map((key: string) => grouped[key]);
 });
 
-onMounted(() => {
-    giftItemStore.loadGiftItems();
+onMounted(async () => {
+    try {
+        await giftItemStore.loadGiftItems();
+    } catch (error) {
+        console.error(error);
+        alert("Loading items was not successful");
+    } finally {
+        isLoading.value = false;
+    }
 });
 
 definePageMeta({
@@ -85,7 +94,7 @@ definePageMeta({
         </Header>
 
         <div
-            v-if="groups != null"
+            v-if="groups != null || !isLoading"
             class="overflow-scroll container mx-auto"
             aria-label="Table"
         >
@@ -95,12 +104,11 @@ definePageMeta({
                 </template>
                 <template #body>
                     <TableRow
-                        v-for="item in group.elements"
+                        v-for="item in group.items"
                         :key="item.id"
                         :item="item"
                         :allow-purchased="true"
                         @switchPurchased="switchPurchased"
-                        @editItem="editItem"
                     />
                 </template>
             </Table>
@@ -109,7 +117,7 @@ definePageMeta({
         <ph-spinner-gap
             v-else
             weight="bold"
-            class="text-gray-900 dark:text-gray-100"
+            class="animate-spin text-gray-900 dark:text-gray-100"
         />
     </NuxtLayout>
 </template>

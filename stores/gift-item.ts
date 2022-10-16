@@ -1,31 +1,22 @@
-import { GiftItem, Group } from "~~/lib/types";
+import { GiftItem, Group, User } from "~~/lib/types";
 import { defineStore } from "pinia";
 import { NewGiftItem } from "~~/lib/types";
 import { useUserStore } from "./user";
 
+export type GiftItemWithRecipient = GiftItem & { recipient?: User };
 export const useGiftItemStore = defineStore("gift-item", () => {
-    const itemIds = ref<string[]>([]);
-    const itemEntities = ref<Record<string, GiftItem>>({});
-    const selectedId = ref<string | null>(null);
+    const giftItems = ref<GiftItemWithRecipient[]>([]);
 
-    const allGiftItems = computed(() => {
-        return itemIds.value.map((id: string) => itemEntities.value[id]);
-    });
-    const selectedGiftItem = computed(() => {
-        return (
-            (selectedId.value && itemEntities.value[selectedId.value]) || null
-        );
-    });
     const overviewList = computed(() => {
         const userStore = useUserStore();
         const currentUserId = userStore.currentUserId;
         const currentGroupId = userStore.currentGroupId;
 
-        if (!currentUserId) {
-            return [];
+        if (!currentUserId || !currentGroupId) {
+            return null;
         }
 
-        return allGiftItems.value.filter((item: GiftItem) => {
+        return giftItems.value.filter((item: GiftItem) => {
             return (
                 item.recipientId != currentUserId &&
                 item.groups.findIndex((g) => Group[g] === currentGroupId) !== -1
@@ -37,11 +28,11 @@ export const useGiftItemStore = defineStore("gift-item", () => {
         const currentUserId = userStore.currentUserId;
         const currentGroupId = userStore.currentGroupId;
 
-        if (!currentUserId) {
-            return [];
+        if (!currentUserId || !currentGroupId) {
+            return null;
         }
 
-        return allGiftItems.value.filter((item: GiftItem) => {
+        return giftItems.value.filter((item: GiftItem) => {
             return (
                 item.recipientId == currentUserId &&
                 item.groups.findIndex((g) => Group[g] === currentGroupId) !== -1
@@ -49,18 +40,6 @@ export const useGiftItemStore = defineStore("gift-item", () => {
         });
     });
 
-    function saveAllGiftItems(payload: GiftItem[]) {
-        const ids = payload.map((giftItem) => giftItem.id);
-        const entities = payload.reduce(
-            (entities: Record<string, GiftItem>, giftItem: GiftItem) => {
-                return { ...entities, [giftItem.id]: giftItem };
-            },
-            {}
-        );
-
-        itemIds.value = ids;
-        itemEntities.value = entities;
-    }
     function savePurchased({
         id,
         purchased,
@@ -68,52 +47,33 @@ export const useGiftItemStore = defineStore("gift-item", () => {
         id: string;
         purchased: boolean;
     }) {
-        itemEntities.value[id].purchased = purchased;
+        const i = giftItems.value.findIndex((i) => i.id === id);
+        if (i != -1) giftItems.value[i].purchased = purchased;
     }
     function saveNewItem(item: GiftItem) {
-        itemIds.value = [...itemIds.value, item.id];
-        itemEntities.value = {
-            ...itemEntities.value,
-            [item.id]: item,
-        };
+        giftItems.value = [...giftItems.value, item];
     }
     function saveRemoveItem(id: string) {
-        const index = itemIds.value.indexOf(id);
-        if (index != -1) itemIds.value.splice(index, 1);
-
-        delete itemEntities.value[id];
+        const i = giftItems.value.findIndex((i) => i.id === id);
+        if (i != -1) giftItems.value.splice(i, 1);
     }
 
     async function loadGiftItems() {
         const data = await $fetch("/api/gift-item/all-items");
-        saveAllGiftItems(data);
+        giftItems.value = data;
     }
     async function togglePurchased(payload: {
         item: GiftItem;
         purchased: boolean;
     }) {
-        // FIXME: see if it needs to be shown as purchased before actually doing it
-        savePurchased({
-            id: payload.item.id,
-            purchased: payload.purchased,
-        });
-
-        try {
-            const data = await $fetch("/api/gift-item/update-purchased", {
-                method: "PUT",
-                query: {
-                    id: payload.item.id,
-                    purchased: payload.purchased,
-                },
-            });
-            savePurchased(data);
-        } catch (e) {
-            console.error(e);
-            savePurchased({
+        const data = await $fetch("/api/gift-item/update-purchased", {
+            method: "PUT",
+            query: {
                 id: payload.item.id,
-                purchased: !payload.purchased,
-            });
-        }
+                purchased: payload.purchased,
+            },
+        });
+        savePurchased(data);
     }
     async function addItem(item: NewGiftItem) {
         const tempId = "randomid";
@@ -121,40 +81,25 @@ export const useGiftItemStore = defineStore("gift-item", () => {
             id: tempId,
             ...item,
         };
-        // FIXME: see if it needs to be shown as added before actually doing it
-
-        try {
-            const data = await $fetch("/api/gift-item/create-item", {
-                method: "POST",
-                body: item,
-            });
-            saveNewItem(data);
-        } catch (e) {
-            console.error(e);
-        }
-
-        saveRemoveItem(tempId);
+        const data = await $fetch("/api/gift-item/create-item", {
+            method: "POST",
+            body: item,
+        });
+        saveNewItem(data);
     }
     async function removeItem(id: string) {
-        try {
-            const data = await $fetch("/api/gift-item/delete-item", {
-                method: "DELETE",
-                query: {
-                    id,
-                },
-            });
-            saveRemoveItem(data.id);
-        } catch (e) {
-            console.error(e);
-        }
+        const data = await $fetch("/api/gift-item/delete-item", {
+            method: "DELETE",
+            query: {
+                id,
+            },
+        });
+        saveRemoveItem(data.id);
     }
 
     return {
-        allGiftItems,
-        selectedGiftItem,
         overviewList,
         wishList,
-        selectedId,
         loadGiftItems,
         togglePurchased,
         addItem,
