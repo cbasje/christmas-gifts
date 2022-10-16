@@ -8,14 +8,13 @@ const router = useRouter();
 const password = ref("");
 
 const submitForm = () => {
-    userStore
-        .signIn(password.value)
-        .then(() => {
-            router.push("/");
-        })
-        .catch(() => {
-            alert("Signing in was not succesful!");
-        });
+    try {
+        userStore.signIn(password.value);
+        router.push("/");
+    } catch (error) {
+        console.error(error);
+        alert("Signing in was not succesful!");
+    }
 };
 
 definePageMeta({

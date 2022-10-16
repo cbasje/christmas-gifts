@@ -53,8 +53,9 @@ const submitForm = async () => {
     try {
         giftItemStore.addItem(newItem);
         resetForm();
-    } catch (e) {
-        console.error(e);
+    } catch (error) {
+        console.error(error);
+        alert("Adding item was not succesful!");
     } finally {
         closeModal();
     }
