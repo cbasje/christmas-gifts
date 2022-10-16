@@ -12,6 +12,7 @@ import {
     RadioGroupOption,
 } from "@headlessui/vue";
 import { PhList, PhX } from "phosphor-vue";
+import { Group } from "@prisma/client";
 import { useGiftItemStore } from "~~/stores/gift-item";
 import { useUserStore } from "~~/stores/user";
 
@@ -26,22 +27,8 @@ const navigation = [
 const updateGroup = (id: string) => {
     userStore.saveCurrentGroupId(id);
 };
-// 		...mapMutations('users', {
-// 			signOut: 'signOut',
-// 			saveGroupUser: 'saveCurrentGroupId',
-// 		}),
-// 		...mapMutations('giftItem', {
-// 			saveGroupItem: 'saveCurrentGroupId',
-// 		}),
-// 	},
-// 	computed: {
-// 		...mapGetters('users', {
-// 			currentUser: 'getCurrentUser',
-// 			currentGroup: 'getCurrentGroup',
-// 			groups: 'getGroupEntities',
-// 		}),
-// 	},
-// });
+const capitalizeGroupName = ([first, ...rest]: string): string =>
+    `${first.toUpperCase()}${rest.join("").toLowerCase()}`;
 </script>
 
 <template>
@@ -136,7 +123,7 @@ const updateGroup = (id: string) => {
                                     >
                                         <RadioGroup
                                             :model-value="
-                                                userStore.currentGroup.id
+                                                userStore.currentGroupId
                                             "
                                             @update:modelValue="
                                                 (id) => updateGroup(id)
@@ -150,10 +137,11 @@ const updateGroup = (id: string) => {
                                             >
                                                 <RadioGroupOption
                                                     v-slot="{ checked }"
-                                                    v-for="group in userStore
-                                                        .currentUser.groups"
-                                                    :key="group.id"
-                                                    :value="group.id"
+                                                    v-for="group in Object.keys(
+                                                        Group
+                                                    )"
+                                                    :key="group"
+                                                    :value="group"
                                                     class="flex-grow"
                                                 >
                                                     <li
@@ -164,7 +152,11 @@ const updateGroup = (id: string) => {
                                                             'w-full h-full cursor-pointer inline-flex justify-center py-1 px-2.5 text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500',
                                                         ]"
                                                     >
-                                                        {{ group.name }}
+                                                        {{
+                                                            capitalizeGroupName(
+                                                                Group[group]
+                                                            )
+                                                        }}
                                                     </li>
                                                 </RadioGroupOption>
                                             </ul>

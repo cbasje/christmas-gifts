@@ -32,7 +32,7 @@ export const useGiftItemStore = defineStore("gift-item", () => {
         return allGiftItems.value.filter((item: GiftItemWithGroups) => {
             return (
                 item.recipientId != currentUserId &&
-                item.groups.findIndex((g) => g.id == currentGroupId) !== -1
+                item.groups.findIndex((g) => Group[g] === currentGroupId) !== -1
             );
         });
     });
@@ -48,7 +48,7 @@ export const useGiftItemStore = defineStore("gift-item", () => {
         return allGiftItems.value.filter((item: GiftItemWithGroups) => {
             return (
                 item.recipientId == currentUserId &&
-                item.groups.findIndex((g) => g.id == currentGroupId) !== -1
+                item.groups.findIndex((g) => Group[g] === currentGroupId) !== -1
             );
         });
     });
