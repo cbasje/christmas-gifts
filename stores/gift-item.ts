@@ -1,4 +1,4 @@
-import { GiftItem, Group, User } from "~~/lib/types";
+import { EditGiftItem, GiftItem, Group, User } from "~~/lib/types";
 import { defineStore } from "pinia";
 import { NewGiftItem } from "~~/lib/types";
 import { useUserStore } from "./user";
@@ -53,6 +53,10 @@ export const useGiftItemStore = defineStore("gift-item", () => {
     function saveNewItem(item: GiftItem) {
         giftItems.value = [...giftItems.value, item];
     }
+    function saveEditItem(item: GiftItem) {
+        const i = giftItems.value.findIndex((i) => i.id === item.id);
+        if (i != -1) giftItems.value[i] = item;
+    }
     function saveRemoveItem(id: string) {
         const i = giftItems.value.findIndex((i) => i.id === id);
         if (i != -1) giftItems.value.splice(i, 1);
@@ -87,6 +91,13 @@ export const useGiftItemStore = defineStore("gift-item", () => {
         });
         saveNewItem(data);
     }
+    async function editItem(item: EditGiftItem) {
+        const data = await $fetch("/api/gift-item/edit-item", {
+            method: "PUT",
+            body: item,
+        });
+        saveEditItem(data);
+    }
     async function removeItem(id: string) {
         const data = await $fetch("/api/gift-item/delete-item", {
             method: "DELETE",
@@ -103,6 +114,7 @@ export const useGiftItemStore = defineStore("gift-item", () => {
         loadGiftItems,
         togglePurchased,
         addItem,
+        editItem,
         removeItem,
     };
 });

@@ -1,13 +1,18 @@
 <script lang="ts" setup>
-import { PhPlus } from "phosphor-vue";
 import { useGiftItemStore } from "~~/stores/gift-item";
 import { useUserStore } from "~~/stores/user";
-import { Group, NewGiftItem } from "~~/lib/types";
+import { EditGiftItem, GiftItem, Group } from "~~/lib/types";
 import { EditFormData } from "./AddModal.vue";
 
 const giftItemStore = useGiftItemStore();
 const userStore = useUserStore();
 const online = useOnline();
+
+interface Props {
+    item: GiftItem;
+}
+
+const props = defineProps<Props>();
 
 const isOpen = ref(false);
 
@@ -18,17 +23,26 @@ const openModal = () => {
     isOpen.value = true;
 };
 
-const formData = {
+const formData = reactive<EditFormData>({
     id: "",
     name: "",
     price: "",
     notes: "",
     link: "",
     groups: [Group[userStore.currentGroupId]],
+});
+const setForm = (data: EditFormData) => {
+    formData.id = data.id;
+    formData.name = data.name;
+    formData.price = data.price;
+    formData.notes = data.notes;
+    formData.groups = data.groups;
+    formData.link = data.link;
 };
 
 const submitForm = async (data: EditFormData) => {
-    const newItem: NewGiftItem = {
+    const item: EditGiftItem = {
+        id: data.id,
         name: data.name,
         price: data.price,
         notes: data.notes,
@@ -41,7 +55,7 @@ const submitForm = async (data: EditFormData) => {
     try {
         if (!online.value) throw new Error("Not online");
 
-        giftItemStore.addItem(newItem);
+        giftItemStore.editItem(item);
 
         closeModal();
     } catch (error) {
@@ -49,21 +63,21 @@ const submitForm = async (data: EditFormData) => {
         alert(`Adding item was not successful! Reason: ${error.message}`);
     }
 };
+
+const editItem = () => {
+    setForm(props.item);
+
+    openModal();
+};
 </script>
 
 <template>
-    <div class="fixed bottom-6 right-6">
-        <button
-            type="button"
-            @click="openModal"
-            class="flex justify-center items-center w-16 h-16 drop-shadow-md text-sm font-medium text-white bg-primary-600 rounded-full hover:bg-primary-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-        >
-            <ph-plus
-                weight="bold"
-                class="h-6 w-6 text-white group-hover:text-primary-400"
-            />
-        </button>
-    </div>
+    <a
+        class="cursor-pointer font-normal text-primary-500 hover:text-primary-600"
+        @click="editItem()"
+    >
+        <ph-pencil weight="bold" class="h-6 w-6" />
+    </a>
 
     <AddModal
         v-model:isOpen="isOpen"

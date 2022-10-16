@@ -29,10 +29,11 @@ const emits = defineEmits<{
 <template>
     <div
         :class="[
-            'grid grid-cols-table-4 group border-b border-gray-200',
+            'grid group border-b border-gray-200',
             item.purchased && item.recipientId != userStore.currentUserId
                 ? 'opacity-30'
                 : '',
+            allowEdit ? 'grid-cols-table-5' : 'grid-cols-table-4',
         ]"
     >
         <div
@@ -99,37 +100,17 @@ const emits = defineEmits<{
                 />
             </Switch>
         </div>
-        <!-- FIXME -->
-        <!-- <div
-			v-if="allowEdit"
-			class="
-				flex
-				justify-center
-				items-center
-				px-6
-				py-4
-				whitespace-nowrap
-				text-right text-sm
-				font-medium
-			"
-		>
-			<a
-				class="cursor-pointer font-normal text-primary-500 hover:text-primary-600"
-				@click="emits('editItem', item)"
-			>
-				<ph-pencil weight="bold" class="h-6 w-6" />
-			</a>
-		</div> -->
         <div
             v-if="allowEdit"
             class="flex justify-center items-center px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
         >
-            <a
-                class="cursor-pointer font-normal text-red-500 hover:text-red-600"
-                @click="emits('removeItem', item)"
-            >
-                <ph-trash weight="bold" class="h-6 w-6" />
-            </a>
+            <EditButton :item="item" />
+        </div>
+        <div
+            v-if="allowEdit"
+            class="flex justify-center items-center px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+        >
+            <RemoveButton :item="item" />
         </div>
     </div>
 </template>

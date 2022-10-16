@@ -1,27 +1,10 @@
 <script lang="ts" setup>
 import { PhSpinnerGap } from "phosphor-vue";
-import { GiftItem } from "~~/lib/types";
 import { useGiftItemStore } from "~~/stores/gift-item";
 
 const giftItemStore = useGiftItemStore();
 
 const isLoading = ref(true);
-
-const editItem = (item: GiftItem) => {
-    alert(item.name);
-};
-const removeItem = async (item: GiftItem) => {
-    const value: boolean = confirm("Are you sure?");
-
-    if (value) {
-        try {
-            await giftItemStore.removeItem(item.id);
-        } catch (error) {
-            console.error(error);
-            alert("Removing item was not successful");
-        }
-    }
-};
 
 onMounted(async () => {
     try {
@@ -64,8 +47,6 @@ definePageMeta({
                         :key="item.id"
                         :item="item"
                         :allow-edit="true"
-                        @editItem="editItem"
-                        @removeItem="removeItem"
                     />
                 </template>
             </Table>

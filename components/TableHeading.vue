@@ -38,7 +38,7 @@ const props = withDefaults(defineProps<Props>(), {
 
     <div
         :class="[
-            'grid grid-cols-table-4',
+            'grid grid-cols-table-5',
             group != null
                 ? `bg-${group.user.name.toLowerCase()}-50`
                 : 'bg-gray-50',
@@ -84,9 +84,8 @@ const props = withDefaults(defineProps<Props>(), {
         >
             Purchased?
         </div>
-        <!-- FIXME -->
-        <!-- <div v-if="allowEdit" scope="col" class="relative px-6 py-3">
-				<span class="sr-only">Edit</span>
-			</div> -->
+        <div v-if="allowEdit" scope="col" class="relative px-6 py-3">
+            <span class="sr-only">Edit</span>
+        </div>
     </div>
 </template>

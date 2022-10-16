@@ -8,9 +8,8 @@ export type GiftItem = PrismaGiftItem;
 export type NewGiftItem = Omit<
     PrismaGiftItem,
     "id" | "createdAt" | "updatedAt"
-> & {
-    groups: Group[];
-};
+>;
+export type EditGiftItem = Omit<PrismaGiftItem, "createdAt" | "updatedAt">;
 
 export type User = PrismaUser;
 export type NewUser = Omit<PrismaUser, "id" | "createdAt" | "updatedAt"> & {
