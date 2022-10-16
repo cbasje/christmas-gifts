@@ -1,8 +1,6 @@
 <template>
     <div>
-        <nav>
-            <Navigation />
-        </nav>
+        <Navigation />
 
         <main class="p-3">
             <slot />
