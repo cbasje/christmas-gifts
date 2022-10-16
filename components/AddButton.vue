@@ -69,11 +69,11 @@ const capitalizeGroupName = ([first, ...rest]: string): string =>
         <button
             type="button"
             @click="openModal"
-            class="flex justify-center items-center w-16 h-16 drop-shadow-md text-sm font-medium text-white bg-cyan-600 rounded-full hover:bg-cyan-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+            class="flex justify-center items-center w-16 h-16 drop-shadow-md text-sm font-medium text-white bg-primary-600 rounded-full hover:bg-primary-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
         >
             <ph-plus
                 weight="bold"
-                class="h-6 w-6 text-white group-hover:text-cyan-400"
+                class="h-6 w-6 text-white group-hover:text-primary-400"
             />
         </button>
     </div>
@@ -136,7 +136,7 @@ const capitalizeGroupName = ([first, ...rest]: string): string =>
                                     autocomplete="name"
                                     validation="required"
                                     label-class="block text-sm font-medium text-gray-700"
-                                    input-class="mt-1 focus:ring-cyan-500 focus:border-cyan-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                    input-class="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                                     message-class="mt-1 block w-full text-sm text-red-400"
                                 />
                                 <FormKit
@@ -146,7 +146,7 @@ const capitalizeGroupName = ([first, ...rest]: string): string =>
                                     autocomplete="transaction-amount"
                                     validation="number"
                                     label-class="block text-sm font-medium text-gray-700"
-                                    input-class="mt-1 focus:ring-cyan-500 focus:border-cyan-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                    input-class="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                                     message-class="mt-1 block w-full text-sm text-red-400"
                                 />
                                 <FormKit
@@ -156,7 +156,7 @@ const capitalizeGroupName = ([first, ...rest]: string): string =>
                                     rows="3"
                                     placeholder="Type here more information about the item..."
                                     label-class="block text-sm font-medium text-gray-700"
-                                    input-class="shadow-sm focus:ring-cyan-500 focus:border-cyan-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
+                                    input-class="shadow-sm focus:ring-primary-500 focus:border-primary-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
                                     message-class="mt-1 block w-full text-sm text-red-400"
                                 />
                                 <FormKit
@@ -166,7 +166,7 @@ const capitalizeGroupName = ([first, ...rest]: string): string =>
                                     placeholder="www.example.com..."
                                     validation="url"
                                     label-class="block text-sm font-medium text-gray-700"
-                                    input-class="mt-1 focus:ring-cyan-500 focus:border-cyan-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
+                                    input-class="mt-1 focus:ring-primary-500 focus:border-primary-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
                                     message-class="mt-1 block w-full text-sm text-red-400"
                                 />
                                 <template
@@ -182,7 +182,7 @@ const capitalizeGroupName = ([first, ...rest]: string): string =>
                                         validation="required"
                                         help="Select all that apply by holding command (macOS) or control (PC)."
                                         label-class="block text-sm font-medium text-gray-700"
-                                        input-class="shadow-sm focus:ring-cyan-500 focus:border-cyan-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
+                                        input-class="shadow-sm focus:ring-primary-500 focus:border-primary-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
                                         help-class="mt-1 block w-full text-sm text-gray-500"
                                         :options="
                                             Object.keys(Group).map((g) => ({
@@ -198,7 +198,7 @@ const capitalizeGroupName = ([first, ...rest]: string): string =>
                                     type="submit"
                                     label="Add item"
                                     wrapper-class="text-right"
-                                    input-class="inline-flex justify-center px-4 py-2 text-sm font-medium text-cyan-900 bg-cyan-100 rounded-md hover:bg-cyan-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+                                    input-class="inline-flex justify-center px-4 py-2 text-sm font-medium text-primary-900 bg-primary-100 rounded-md hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
                                 />
                             </FormKit>
                         </div>

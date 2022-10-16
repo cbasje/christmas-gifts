@@ -133,7 +133,7 @@ const capitalizeGroupName = ([first, ...rest]: string): string =>
                                                 Selected family
                                             </RadioGroupLabel>
                                             <ul
-                                                class="flex p-1 space-x-1 bg-cyan-900/[0.1] rounded-lg"
+                                                class="flex p-1 space-x-1 bg-primary-900/[0.1] rounded-lg"
                                             >
                                                 <RadioGroupOption
                                                     v-slot="{ checked }"
@@ -147,9 +147,9 @@ const capitalizeGroupName = ([first, ...rest]: string): string =>
                                                     <li
                                                         :class="[
                                                             checked
-                                                                ? 'text-white bg-cyan-600'
-                                                                : 'text-cyan-700 bg-transparent hover:bg-white/[0.5] hover:text-cyan-600',
-                                                            'w-full h-full cursor-pointer inline-flex justify-center py-1 px-2.5 text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500',
+                                                                ? 'text-white bg-primary-600'
+                                                                : 'text-primary-700 bg-transparent hover:bg-white/[0.5] hover:text-primary-600',
+                                                            'w-full h-full cursor-pointer inline-flex justify-center py-1 px-2.5 text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500',
                                                         ]"
                                                     >
                                                         {{

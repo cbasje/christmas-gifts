@@ -60,7 +60,7 @@ const emits = defineEmits<{
                 :href="item.link"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="px-6 py-4 whitespace-nowrap overflow-hidden overflow-ellipsis text-sm underline cursor-pointer font-normal text-cyan-500 hover:text-cyan-600"
+                class="px-6 py-4 whitespace-nowrap overflow-hidden overflow-ellipsis text-sm underline cursor-pointer font-normal text-primary-500 hover:text-primary-600"
             >
                 {{ item.link }}
             </a>
@@ -114,7 +114,7 @@ const emits = defineEmits<{
 			"
 		>
 			<a
-				class="cursor-pointer font-normal text-cyan-500 hover:text-cyan-600"
+				class="cursor-pointer font-normal text-primary-500 hover:text-primary-600"
 				@click="emits('editItem', item)"
 			>
 				<ph-pencil weight="bold" class="h-6 w-6" />

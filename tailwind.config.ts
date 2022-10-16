@@ -25,7 +25,7 @@ export default <Config>{
             white: colors.white,
             green: colors.emerald,
             red: colors.rose,
-            cyan: colors.cyan,
+            primary: colors.green,
         },
         minWidth: {
             0: "0",

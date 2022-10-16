@@ -27,6 +27,6 @@ onMounted(async () => {
 
 <style>
 .prose a {
-    @apply cursor-pointer font-normal text-cyan-500 hover:text-cyan-600;
+    @apply cursor-pointer font-normal text-primary-500 hover:text-primary-600;
 }
 </style>
