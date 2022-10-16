@@ -7,6 +7,7 @@ import {
     DialogTitle,
 } from "@headlessui/vue";
 import { PhPlus, PhImage } from "phosphor-vue";
+import { Group } from "@prisma/client";
 
 import { useGiftItemStore } from "~~/stores/gift-item";
 import { useUserStore } from "~~/stores/user";
@@ -44,7 +45,7 @@ const submitForm = async () => {
         price: formData.price,
         notes: formData.notes,
         recipientId: userStore.currentUserId,
-        groups: formData.groups,
+        groups: formData.groups.map((g) => Group[g]),
         link: formData.link,
         purchased: false,
     };
@@ -58,6 +59,9 @@ const submitForm = async () => {
         closeModal();
     }
 };
+
+const capitalizeGroupName = ([first, ...rest]: string): string =>
+    `${first.toUpperCase()}${rest.join("").toLowerCase()}`;
 </script>
 
 <template>
@@ -181,9 +185,11 @@ const submitForm = async () => {
                                         input-class="shadow-sm focus:ring-cyan-500 focus:border-cyan-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
                                         help-class="mt-1 block w-full text-sm text-gray-500"
                                         :options="
-                                            userStore.allGroups.map((g) => ({
-                                                label: g.name,
-                                                value: g.id,
+                                            Object.keys(Group).map((g) => ({
+                                                label: capitalizeGroupName(
+                                                    Group[g]
+                                                ),
+                                                value: g,
                                             }))
                                         "
                                     />

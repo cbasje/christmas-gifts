@@ -5,7 +5,6 @@ const users = useUserStore();
 
 onMounted(() => {
     users.loadUsers();
-    users.loadGroups();
 });
 </script>
 

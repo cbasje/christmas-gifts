@@ -31,11 +31,7 @@ model User {
   groups    Group[]
 }
 
-model Group {
-  id        String     @id @default(uuid())
-  createdAt DateTime?  @default(now())
-  updatedAt DateTime?  @updatedAt
-  name      String     @unique
-  users     User[]
-  item      GiftItem[]
+enum Group {
+  BENJAMINS
+  HAUGEN
 }

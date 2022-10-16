@@ -7,12 +7,12 @@ export default <Config>{
     safelist: [
         {
             pattern:
-                /bg-(amani|charis|george|jeanne|mika|sebas|tori|will|boudewijn|ingrid|simon)-(50|200)/,
+                /bg-(amani|charis|george|jeanne|mika|sebas|tori|will|boudewijn|ingrid|simon|pien)-(50|200)/,
             variants: ["hover"],
         },
         {
             pattern:
-                /text-(amani|charis|george|jeanne|mika|sebas|tori|will|boudewijn|ingrid|simon)-(900)/,
+                /text-(amani|charis|george|jeanne|mika|sebas|tori|will|boudewijn|ingrid|simon|pien)-(900)/,
             variants: ["hover"],
         },
     ],
@@ -185,6 +185,19 @@ export default <Config>{
                     700: "#054AB1",
                     800: "#03337A",
                     900: "#021C44",
+                },
+                pien: {
+                    DEFAULT: "#18BFFF",
+                    50: "#f3fcff",
+                    100: "#e8f9ff",
+                    200: "#c5efff",
+                    300: "#a3e5ff",
+                    400: "#5dd2ff",
+                    500: "#18BFFF",
+                    600: "#16ace6",
+                    700: "#128fbf",
+                    800: "#0e7399",
+                    900: "#0c5e7d",
                 },
             },
         },

@@ -2,7 +2,7 @@
 const slots = useSlots();
 
 const hasSubtitle = computed(() => {
-    return slots.subtitle;
+    return !!slots.subtitle;
 });
 </script>
 

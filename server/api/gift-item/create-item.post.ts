@@ -7,17 +7,6 @@ export default defineEventHandler(async (event) => {
     if (!body.name || !body.groups) throw new Error("Not enough data");
 
     return await prisma.giftItem.create({
-        data: {
-            ...body,
-
-            groups: {
-                connect: body.groups.map((groupId) => ({
-                    id: groupId,
-                })),
-            },
-        },
-        include: {
-            groups: true,
-        },
+        data: body,
     });
 });

@@ -10,13 +10,17 @@ const password = ref("");
 const submitForm = () => {
     userStore
         .signIn(password.value)
-        .then((id: string) => {
+        .then(() => {
             router.push("/");
         })
         .catch(() => {
             alert("Signing in was not succesful!");
         });
 };
+
+definePageMeta({
+    middleware: ["auth-query"],
+});
 </script>
 
 <template>

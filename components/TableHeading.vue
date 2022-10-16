@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Group } from "~~/pages/Overview.vue";
+import { Group } from "~~/pages/index.vue";
 
 export interface Props {
     group?: Group;
