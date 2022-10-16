@@ -1,9 +1,25 @@
-import { GiftItem, Group, User } from "@prisma/client";
+import {
+    GiftItem as PrismaGiftItem,
+    Group as PrismaGroup,
+    User as PrismaUser,
+} from "@prisma/client";
 
-export type NewGiftItem = Omit<GiftItem, "id" | "createdAt" | "updatedAt"> & {
+export type GiftItem = PrismaGiftItem;
+export type NewGiftItem = Omit<
+    PrismaGiftItem,
+    "id" | "createdAt" | "updatedAt"
+> & {
     groups: Group[];
 };
-export type NewUser = Omit<User, "id" | "createdAt" | "updatedAt"> & {
+
+export type User = PrismaUser;
+export type NewUser = Omit<PrismaUser, "id" | "createdAt" | "updatedAt"> & {
     groups: Group[];
 };
+
+export const Group: { [k in PrismaGroup]: k } = {
+    BENJAMINS: "BENJAMINS",
+    HAUGEN: "HAUGEN",
+} as const;
+export type Group = PrismaGroup;
 export type NewGroup = Omit<Group, "id" | "createdAt" | "updatedAt">;

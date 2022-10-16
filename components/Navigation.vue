@@ -12,7 +12,7 @@ import {
     RadioGroupOption,
 } from "@headlessui/vue";
 import { PhList, PhX } from "phosphor-vue";
-import { Group } from "@prisma/client";
+import { Group } from "~~/lib/types";
 import { useGiftItemStore } from "~~/stores/gift-item";
 import { useUserStore } from "~~/stores/user";
 

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { GiftItem } from "@prisma/client";
+import { GiftItem } from "~~/lib/types";
 import { Switch } from "@headlessui/vue";
 import { PhPencil, PhTrash } from "phosphor-vue";
 import { useUserStore } from "~~/stores/user";

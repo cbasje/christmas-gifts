@@ -1,15 +1,11 @@
-import { GiftItem, Group } from "@prisma/client";
+import { GiftItem, Group } from "~~/lib/types";
 import { defineStore } from "pinia";
 import { NewGiftItem } from "~~/lib/types";
 import { useUserStore } from "./user";
 
-type GiftItemWithGroups = GiftItem & {
-    groups?: Group[];
-};
-
 export const useGiftItemStore = defineStore("gift-item", () => {
     const itemIds = ref<string[]>([]);
-    const itemEntities = ref<Record<string, GiftItemWithGroups>>({});
+    const itemEntities = ref<Record<string, GiftItem>>({});
     const selectedId = ref<string | null>(null);
 
     const allGiftItems = computed(() => {
@@ -29,7 +25,7 @@ export const useGiftItemStore = defineStore("gift-item", () => {
             return [];
         }
 
-        return allGiftItems.value.filter((item: GiftItemWithGroups) => {
+        return allGiftItems.value.filter((item: GiftItem) => {
             return (
                 item.recipientId != currentUserId &&
                 item.groups.findIndex((g) => Group[g] === currentGroupId) !== -1
@@ -45,7 +41,7 @@ export const useGiftItemStore = defineStore("gift-item", () => {
             return [];
         }
 
-        return allGiftItems.value.filter((item: GiftItemWithGroups) => {
+        return allGiftItems.value.filter((item: GiftItem) => {
             return (
                 item.recipientId == currentUserId &&
                 item.groups.findIndex((g) => Group[g] === currentGroupId) !== -1
@@ -53,13 +49,10 @@ export const useGiftItemStore = defineStore("gift-item", () => {
         });
     });
 
-    function saveAllGiftItems(payload: GiftItemWithGroups[]) {
+    function saveAllGiftItems(payload: GiftItem[]) {
         const ids = payload.map((giftItem) => giftItem.id);
         const entities = payload.reduce(
-            (
-                entities: Record<string, GiftItemWithGroups>,
-                giftItem: GiftItemWithGroups
-            ) => {
+            (entities: Record<string, GiftItem>, giftItem: GiftItem) => {
                 return { ...entities, [giftItem.id]: giftItem };
             },
             {}
@@ -77,7 +70,7 @@ export const useGiftItemStore = defineStore("gift-item", () => {
     }) {
         itemEntities.value[id].purchased = purchased;
     }
-    function saveNewItem(item: GiftItemWithGroups) {
+    function saveNewItem(item: GiftItem) {
         itemIds.value = [...itemIds.value, item.id];
         itemEntities.value = {
             ...itemEntities.value,

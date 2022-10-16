@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { PhSpinnerGap } from "phosphor-vue";
-import { GiftItem } from "@prisma/client";
+import { GiftItem } from "~~/lib/types";
 import { useGiftItemStore } from "~~/stores/gift-item";
 
 const giftItemStore = useGiftItemStore();

@@ -7,7 +7,7 @@ import {
     DialogTitle,
 } from "@headlessui/vue";
 import { PhPlus, PhImage } from "phosphor-vue";
-import { Group } from "@prisma/client";
+import { Group } from "~~/lib/types";
 
 import { useGiftItemStore } from "~~/stores/gift-item";
 import { useUserStore } from "~~/stores/user";

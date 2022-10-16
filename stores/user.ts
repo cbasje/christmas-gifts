@@ -1,7 +1,5 @@
-import { Group, User } from "@prisma/client";
+import { Group, User } from "~~/lib/types";
 import { defineStore } from "pinia";
-
-type UserWithGroup = User & { groups: Group[] };
 
 export const useUserStore = defineStore("user", () => {
     const curDate = new Date();
@@ -16,7 +14,7 @@ export const useUserStore = defineStore("user", () => {
     });
 
     const userIds = ref<string[]>([]);
-    const userEntities = ref<Record<string, UserWithGroup>>({});
+    const userEntities = ref<Record<string, User>>({});
 
     const allUsers = computed(() => {
         return userIds.value.map((id: string) => userEntities.value[id]);
@@ -28,10 +26,10 @@ export const useUserStore = defineStore("user", () => {
         );
     });
 
-    function saveAllUsers(payload: UserWithGroup[]) {
+    function saveAllUsers(payload: User[]) {
         const ids = payload.map((user) => user.id);
         const entities = payload.reduce(
-            (entities: Record<string, UserWithGroup>, user: UserWithGroup) => {
+            (entities: Record<string, User>, user: User) => {
                 return { ...entities, [user.id]: user };
             },
             {}
