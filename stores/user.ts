@@ -56,33 +56,13 @@ export const useUserStore = defineStore("user", () => {
         saveAllUsers(data);
     }
     async function signIn(password: string) {
-        return new Promise<string>((resolve, reject) => {
-            const result = userIds.value.find((id: string) => {
-                return userEntities.value[id].password == password;
-            });
-            if (result != undefined) {
-                saveCurrentUserId(result);
-
-                const groups = userEntities.value[result].groups;
-                if (groups) saveCurrentGroupId(groups[0].id);
-
-                resolve(result);
-            } else reject();
+        const data = await $fetch("/api/user/sign-in", {
+            method: "POST",
+            body: { password },
         });
-    }
-    async function setGroupId(name: string) {
-        return new Promise<string>((resolve, reject) => {
-            const result = groupIds.value.find((id: string) => {
-                return (
-                    groupEntities.value[id].name.toUpperCase() ===
-                    name.toUpperCase()
-                );
-            });
-            if (result != undefined) {
-                saveCurrentGroupId(result);
-                resolve(result);
-            } else reject(new Error("Not able to find the group."));
-        });
+
+        saveCurrentUserId(data.id);
+        saveCurrentGroupId(data.groups[0]);
     }
 
     return {
