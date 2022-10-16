@@ -1,10 +1,10 @@
 {
-    "name": "Christmas Gift",
+    "name": "Christmas Gifts",
     "short_name": "Christmas",
     "description": "Christmas gifts tracker for Benjamins & Haugens.",
     "author": "Sebastiaan Benjamins",
     "orientation": "portrait-primary",
-    "display": "standalone",
+    "display": "fullscreen",
     "lang": "en-US",
     "id": "/",
     "start_url": "/",
