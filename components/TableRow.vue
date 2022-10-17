@@ -24,6 +24,44 @@ const emits = defineEmits<{
     (e: "editItem", value: GiftItem): void;
     (e: "removeItem", value: GiftItem): void;
 }>();
+
+const formatPrice = (priceString: string) => {
+    const regex = /(?<code>(?:[$€])?)(?<price>\d+(?:[,\.]\d+)?)/g;
+    const matches = [...priceString.matchAll(regex)];
+    const [_, currencyCode, price] = matches[0];
+
+    const sekFormatter = new Intl.NumberFormat("nl-NL", {
+        style: "currency",
+        currency: "SEK",
+        maximumFractionDigits: 2,
+    });
+    const eurFormatter = new Intl.NumberFormat("nl-NL", {
+        style: "currency",
+        currency: "EUR",
+        maximumFractionDigits: 2,
+    });
+    const usdFormatter = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+        maximumFractionDigits: 2,
+    });
+    const defaultFormatter = new Intl.NumberFormat("default", {
+        style: "decimal",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    });
+
+    switch (currencyCode) {
+        case "SEK":
+            return sekFormatter.format(Number(price));
+        case "€":
+            return eurFormatter.format(Number(price));
+        case "$":
+            return usdFormatter.format(Number(price));
+        default:
+            return defaultFormatter.format(Number(price));
+    }
+};
 </script>
 
 <template>

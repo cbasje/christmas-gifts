@@ -46,9 +46,12 @@ const setForm = (data: EditFormData) => {
 const capitalizeGroupName = ([first, ...rest]: string): string =>
     `${first.toUpperCase()}${rest.join("").toLowerCase()}`;
 
-watch(props, () => {
-    if (props.isOpen) setForm(props.formData);
-});
+watch(
+    () => props.isOpen,
+    (isOpen) => {
+        if (isOpen) setForm(props.formData);
+    }
+);
 </script>
 
 <template>
@@ -118,7 +121,13 @@ watch(props, () => {
                                     label="Price"
                                     v-model="formData.price"
                                     autocomplete="transaction-amount"
-                                    validation="number"
+                                    :validation="[
+                                        ['matches', /(?:[$€])?\d+(?:[,.]\d+)?/],
+                                    ]"
+                                    :validation-messages="{
+                                        matches:
+                                            'Price must consist of numbers with currency codes.',
+                                    }"
                                     label-class="block text-sm font-medium text-gray-700"
                                     input-class="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                                     message-class="mt-1 block w-full text-sm text-red-400"
