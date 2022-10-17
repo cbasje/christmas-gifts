@@ -3,9 +3,12 @@ import { useGiftItemStore } from "~~/stores/gift-item";
 import { useUserStore } from "~~/stores/user";
 import { EditGiftItem, GiftItem, Group } from "~~/lib/types";
 import { EditFormData } from "./AddModal.vue";
+import { useToast } from "vue-toastification";
 
 const giftItemStore = useGiftItemStore();
 const userStore = useUserStore();
+
+const toast = useToast();
 const online = useOnline();
 
 interface Props {
@@ -60,7 +63,9 @@ const submitForm = async (data: EditFormData) => {
         closeModal();
     } catch (error) {
         console.error(error);
-        alert(`Adding item was not successful! Reason: ${error.message}`);
+        toast.error(
+            `Editing item was not successful! Reason: ${error.message}`
+        );
     }
 };
 

@@ -1,17 +1,25 @@
 <script lang="ts" setup>
 import { PhSpinnerGap } from "phosphor-vue";
+import { useToast } from "vue-toastification";
 import { useGiftItemStore } from "~~/stores/gift-item";
 
 const giftItemStore = useGiftItemStore();
+
+const toast = useToast();
+const online = useOnline();
 
 const isLoading = ref(true);
 
 onMounted(async () => {
     try {
+        if (!online.value) throw new Error("Not online");
+
         await giftItemStore.loadGiftItems();
     } catch (error) {
         console.error(error);
-        alert("Loading items was not successful");
+        toast.error(
+            `Loading items was not successful! Reason: ${error.message}`
+        );
     } finally {
         isLoading.value = false;
     }

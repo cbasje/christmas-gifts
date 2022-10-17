@@ -1,15 +1,23 @@
 <script lang="ts" setup>
 import { useUserStore } from "@/stores/user";
+import { useToast } from "vue-toastification";
 
 const userStore = useUserStore();
+
 const router = useRouter();
+const toast = useToast();
+const online = useOnline();
 
 onMounted(async () => {
     try {
+        if (!online.value) throw new Error("Not online");
+
         await userStore.loadCurrentUser();
     } catch (error) {
         console.error(error);
-        alert("Loading user was not successful!");
+        toast.error(
+            `Loading user was not successful! Reason: ${error.message}`
+        );
 
         router.push("/login");
     }

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { PhSpinnerGap } from "phosphor-vue";
+import { useToast } from "vue-toastification";
 import { GiftItem, User } from "~~/lib/types";
 import { GiftItemWithRecipient, useGiftItemStore } from "~~/stores/gift-item";
 
@@ -12,6 +13,9 @@ export type Grouped = Record<string, Group>;
 
 const giftItemStore = useGiftItemStore();
 
+const toast = useToast();
+const online = useOnline();
+
 const isLoading = ref(true);
 
 const switchPurchased = async (payload: {
@@ -19,10 +23,14 @@ const switchPurchased = async (payload: {
     purchased: boolean;
 }) => {
     try {
+        if (!online.value) throw new Error("Not online");
+
         await giftItemStore.togglePurchased(payload);
     } catch (error) {
         console.error(error);
-        alert("Saving purchase status was not successful!");
+        toast.error(
+            `Saving purchase status was not successful! Reason: ${error.message}`
+        );
     }
 };
 const sortObj = (obj: Grouped) => {
@@ -40,7 +48,6 @@ const sortObj = (obj: Grouped) => {
     });
 };
 
-// FIXME: can prisma do this?
 const groups = computed(() => {
     const items = giftItemStore.overviewList;
 
@@ -68,10 +75,14 @@ const groups = computed(() => {
 
 onMounted(async () => {
     try {
+        if (!online.value) throw new Error("Not online");
+
         await giftItemStore.loadGiftItems();
     } catch (error) {
         console.error(error);
-        alert("Loading items was not successful");
+        toast.error(
+            `Loading items was not successful! Reason: ${error.message}`
+        );
     } finally {
         isLoading.value = false;
     }

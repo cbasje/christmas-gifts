@@ -1,10 +1,12 @@
 <script lang="ts" setup>
 import { useUserStore } from "~~/stores/user";
 import { PhLockSimple } from "phosphor-vue";
+import { useToast } from "vue-toastification";
 
 const userStore = useUserStore();
 
 const online = useOnline();
+const toast = useToast();
 
 const password = ref("");
 
@@ -15,7 +17,7 @@ const submitForm = () => {
         userStore.signIn(password.value);
     } catch (error) {
         console.error(error);
-        alert(`Signing in was not successful! Reason: ${error.message}`);
+        toast.error(`Signing in was not successful! Reason: ${error.message}`);
     }
 };
 

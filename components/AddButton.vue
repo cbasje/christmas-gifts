@@ -4,9 +4,12 @@ import { useGiftItemStore } from "~~/stores/gift-item";
 import { useUserStore } from "~~/stores/user";
 import { Group, NewGiftItem } from "~~/lib/types";
 import { EditFormData } from "./AddModal.vue";
+import { useToast } from "vue-toastification";
 
 const giftItemStore = useGiftItemStore();
 const userStore = useUserStore();
+
+const toast = useToast();
 const online = useOnline();
 
 const isOpen = ref(false);
@@ -46,7 +49,7 @@ const submitForm = async (data: EditFormData) => {
         closeModal();
     } catch (error) {
         console.error(error);
-        alert(`Adding item was not successful! Reason: ${error.message}`);
+        toast.error(`Adding item was not successful! Reason: ${error.message}`);
     }
 };
 </script>

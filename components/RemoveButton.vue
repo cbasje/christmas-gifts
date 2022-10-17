@@ -1,8 +1,12 @@
 <script lang="ts" setup>
 import { useGiftItemStore } from "~~/stores/gift-item";
 import { GiftItem } from "~~/lib/types";
+import { useToast } from "vue-toastification";
 
 const giftItemStore = useGiftItemStore();
+
+const toast = useToast();
+const online = useOnline();
 
 interface Props {
     item: GiftItem;
@@ -15,10 +19,14 @@ const removeItem = async () => {
 
     if (value) {
         try {
+            if (!online.value) throw new Error("Not online");
+
             await giftItemStore.removeItem(props.item.id);
         } catch (error) {
             console.error(error);
-            alert("Removing item was not successful");
+            toast.error(
+                `Removing item was not successful! Reason: ${error.message}`
+            );
         }
     }
 };

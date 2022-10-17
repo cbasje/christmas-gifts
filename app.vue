@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-gray-100 dark:bg-gray-900 h-screen overflow-scroll">
+    <Body class="bg-gray-100 dark:bg-gray-900 h-screen overflow-scroll">
         <Head>
             <Title>Christmas Gifts</Title>
             <Meta
@@ -21,5 +21,5 @@
         </Head>
 
         <NuxtPage />
-    </div>
+    </Body>
 </template>
