@@ -26,9 +26,9 @@ const emits = defineEmits<{
 }>();
 
 const formatPrice = (priceString: string) => {
-    const regex = /(?<code>(?:[$€])?)(?<price>\d+(?:[,\.]\d+)?)/g;
-    const matches = [...priceString.matchAll(regex)];
-    const [_, currencyCode, price] = matches[0];
+    const defaultReturn = "-";
+
+    if (!priceString) return defaultReturn;
 
     const sekFormatter = new Intl.NumberFormat("nl-NL", {
         style: "currency",
@@ -50,6 +50,13 @@ const formatPrice = (priceString: string) => {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
     });
+
+    const regex = /(?<code>(?:[$€])?)(?<price>\d+(?:[,\.]\d+)?)/g;
+    const matches = [...priceString.matchAll(regex)];
+
+    if (!matches || !matches.length) return defaultReturn;
+
+    const [_, currencyCode, price] = matches[0];
 
     switch (currencyCode) {
         case "SEK":
