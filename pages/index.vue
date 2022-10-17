@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { PhSpinnerGap } from "phosphor-vue";
-import { useToast } from "vue-toastification";
+import { useToast } from "vue-toastification/dist/index.mjs";
+
 import { GiftItem, User } from "~~/lib/types";
 import { GiftItemWithRecipient, useGiftItemStore } from "~~/stores/gift-item";
 

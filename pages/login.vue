@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useUserStore } from "~~/stores/user";
 import { PhLockSimple } from "phosphor-vue";
-import { useToast } from "vue-toastification";
+import { useToast } from "vue-toastification/dist/index.mjs";
 
 const userStore = useUserStore();
 

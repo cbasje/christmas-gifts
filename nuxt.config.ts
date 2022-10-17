@@ -6,4 +6,5 @@ export default defineNuxtConfig({
         "@vueuse/nuxt",
         "@formkit/nuxt",
     ],
+    css: ["vue-toastification/dist/index.css"],
 });

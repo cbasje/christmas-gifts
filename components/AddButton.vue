@@ -4,7 +4,7 @@ import { useGiftItemStore } from "~~/stores/gift-item";
 import { useUserStore } from "~~/stores/user";
 import { Group, NewGiftItem } from "~~/lib/types";
 import { EditFormData } from "./EditModal.vue";
-import { useToast } from "vue-toastification";
+import { useToast } from "vue-toastification/dist/index.mjs";
 
 const giftItemStore = useGiftItemStore();
 const userStore = useUserStore();

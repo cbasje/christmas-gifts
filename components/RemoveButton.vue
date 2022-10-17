@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useGiftItemStore } from "~~/stores/gift-item";
 import { GiftItem } from "~~/lib/types";
-import { useToast } from "vue-toastification";
+import { useToast } from "vue-toastification/dist/index.mjs";
 
 const giftItemStore = useGiftItemStore();
 
