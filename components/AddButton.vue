@@ -3,7 +3,7 @@ import { PhPlus } from "phosphor-vue";
 import { useGiftItemStore } from "~~/stores/gift-item";
 import { useUserStore } from "~~/stores/user";
 import { Group, NewGiftItem } from "~~/lib/types";
-import { EditFormData } from "./AddModal.vue";
+import { EditFormData } from "./EditModal.vue";
 import { useToast } from "vue-toastification";
 
 const giftItemStore = useGiftItemStore();
@@ -68,7 +68,9 @@ const submitForm = async (data: EditFormData) => {
         </button>
     </div>
 
-    <AddModal
+    <EditModal
+        title="Create new item"
+        submitLabel="Create"
         v-model:isOpen="isOpen"
         :formData="formData"
         :showGroups="

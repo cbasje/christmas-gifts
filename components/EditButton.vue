@@ -2,7 +2,7 @@
 import { useGiftItemStore } from "~~/stores/gift-item";
 import { useUserStore } from "~~/stores/user";
 import { EditGiftItem, GiftItem, Group } from "~~/lib/types";
-import { EditFormData } from "./AddModal.vue";
+import { EditFormData } from "./EditModal.vue";
 import { useToast } from "vue-toastification";
 
 const giftItemStore = useGiftItemStore();
@@ -84,7 +84,9 @@ const editItem = () => {
         <ph-pencil weight="bold" class="h-6 w-6" />
     </a>
 
-    <AddModal
+    <EditModal
+        :title="`Edit '${item.name}'`"
+        submitLabel="Edit item"
         v-model:isOpen="isOpen"
         :formData="formData"
         :showGroups="

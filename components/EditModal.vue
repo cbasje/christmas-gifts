@@ -26,10 +26,14 @@ interface Props {
     isOpen: boolean;
     formData: EditFormData;
     showGroups: boolean;
+    title: string;
+    submitLabel: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
     isOpen: false,
+    title: "Add a wish list item",
+    submitLabel: "Add item",
 });
 
 const emits = defineEmits<{
@@ -96,7 +100,7 @@ watch(
                                 as="h3"
                                 class="text-lg font-medium leading-6 text-gray-900 mb-2"
                             >
-                                Add a wish list item
+                                {{ title }}
                             </DialogTitle>
                             <FormKit
                                 type="form"
@@ -175,7 +179,7 @@ watch(
                                 </template>
                                 <FormKit
                                     type="submit"
-                                    label="Add item"
+                                    :label="submitLabel"
                                     wrapper-class="text-right"
                                     input-class="inline-flex justify-center px-4 py-2 text-sm font-medium text-primary-900 bg-primary-100 rounded-md hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
                                 />
