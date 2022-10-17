@@ -39,8 +39,12 @@ export default <Config>{
         },
         extend: {
             gridTemplateColumns: {
-                "table-4": "4fr 2fr 2fr 2fr",
-                "table-5": "4fr 2fr 2fr 2fr 1fr",
+                "table-4":
+                    "minmax(50vw, 4fr) repeat(2, minmax(10vw, 2fr)) minmax(5vw, 1fr)",
+                "table-5":
+                    "minmax(40vw, 4fr) minmax(7vw, 2fr) minmax(13px, 3fr) repeat(2, minmax(5vw, 1fr))",
+                "table-5-sm":
+                    "minmax(60vw, 4fr) minmax(96px, 2fr) minmax(128px, 3fr) repeat(2, minmax(64px, 1fr))",
             },
             colors: {
                 amani: {

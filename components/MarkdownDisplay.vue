@@ -22,10 +22,19 @@ onMounted(async () => {
 </script>
 
 <template>
-    <p class="prose prose-sm" v-html="html" />
+    <p
+        class="prose prose-sm h-auto sm:max-h-[1.4rem] sm:group-hover:max-h-[inherit]"
+        v-html="html"
+    />
 </template>
 
 <style>
+.prose :first-child {
+    @apply whitespace-normal sm:truncate sm:group-hover:whitespace-normal;
+}
+.prose :not(:first-child) {
+    @apply sm:hidden sm:group-hover:block;
+}
 .prose a {
     @apply cursor-pointer font-normal text-primary-500 hover:text-primary-600;
 }

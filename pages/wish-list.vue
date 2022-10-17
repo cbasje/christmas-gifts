@@ -34,12 +34,12 @@ definePageMeta({
 
         <div
             v-if="giftItemStore.wishList != null || !isLoading"
-            class="overflow-scroll container mx-auto"
+            class="overflow-scroll container mt-5 mx-auto"
             aria-label="Table"
         >
             <Table>
                 <template #heading>
-                    <TableHeading />
+                    <TableHeading :allow-edit="true" />
                 </template>
                 <template #body>
                     <TableRow

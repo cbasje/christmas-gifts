@@ -95,7 +95,7 @@ definePageMeta({
 
         <div
             v-if="groups != null || !isLoading"
-            class="overflow-scroll container mx-auto"
+            class="overflow-scroll container mt-5 mx-auto"
             aria-label="Table"
         >
             <Table v-for="group in groups" :key="group.user.id">

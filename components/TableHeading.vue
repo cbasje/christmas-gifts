@@ -38,15 +38,18 @@ const props = withDefaults(defineProps<Props>(), {
 
     <div
         :class="[
-            'grid grid-cols-table-5',
+            'grid',
             group != null
                 ? `bg-${group.user.name.toLowerCase()}-50`
                 : 'bg-gray-50',
+            allowEdit
+                ? 'grid-cols-table-5-sm sm:grid-cols-table-5'
+                : 'grid-cols-table-4',
         ]"
     >
         <div
             scope="col"
-            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-1/2 sm:w-full"
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
         >
             Item
         </div>
@@ -86,6 +89,9 @@ const props = withDefaults(defineProps<Props>(), {
         </div>
         <div v-if="allowEdit" scope="col" class="relative px-6 py-3">
             <span class="sr-only">Edit</span>
+        </div>
+        <div v-if="allowEdit" scope="col" class="relative px-6 py-3">
+            <span class="sr-only">Delete</span>
         </div>
     </div>
 </template>

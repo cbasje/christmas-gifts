@@ -54,8 +54,8 @@ export const useGiftItemStore = defineStore("gift-item", () => {
         giftItems.value = [...giftItems.value, item];
     }
     function saveEditItem(item: GiftItem) {
-        const i = giftItems.value.findIndex((i) => i.id === item.id);
-        if (i != -1) giftItems.value[i] = item;
+        saveRemoveItem(item.id);
+        saveNewItem(item);
     }
     function saveRemoveItem(id: string) {
         const i = giftItems.value.findIndex((i) => i.id === id);

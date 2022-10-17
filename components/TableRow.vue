@@ -29,31 +29,26 @@ const emits = defineEmits<{
 <template>
     <div
         :class="[
-            'grid group border-b border-gray-200',
+            'group grid border-b border-gray-200',
             item.purchased && item.recipientId != userStore.currentUserId
                 ? 'opacity-30'
                 : '',
-            allowEdit ? 'grid-cols-table-5' : 'grid-cols-table-4',
+            allowEdit
+                ? 'grid-cols-table-5-sm sm:grid-cols-table-5'
+                : 'grid-cols-table-4',
         ]"
     >
-        <div
-            class="flex flex-col justify-center px-6 py-4 min-h-4rem min-w-1/2 sm:w-full"
-        >
+        <div class="flex flex-col justify-center px-6 py-4 min-h-4rem">
             <h3 class="text-sm font-medium text-gray-900">
                 {{ item.name }}
             </h3>
-            <MarkdownDisplay
-                v-if="item.notes"
-                class="min-w-full text-gray-500 whitespace-normal sm:whitespace-nowrap group-hover:whitespace-normal overflow-hidden overflow-ellipsis"
-            >
+            <MarkdownDisplay v-if="item.notes" class="min-w-full text-gray-500">
                 {{ item.notes }}
             </MarkdownDisplay>
         </div>
         <div class="flex items-center min-w-full">
-            <span
-                class="px-6 py-4 whitespace-nowrap overflow-hidden overflow-ellipsis text-sm text-gray-500"
-            >
-                {{ new Intl.NumberFormat().format(Number(item.price)) }}
+            <span class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                {{ formatPrice(item.price) }}
             </span>
         </div>
         <div class="flex items-center min-w-full">
