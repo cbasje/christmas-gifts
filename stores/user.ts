@@ -13,8 +13,38 @@ export const useUserStore = defineStore("user", () => {
         default: null,
     });
 
-    const currentUser = ref<User>(null);
+    const userIds = ref<string[]>([]);
+    const userEntities = ref<Record<string, User>>({});
 
+    const allUsers = computed(() => {
+        return userIds.value.map((id: string) => userEntities.value[id]);
+    });
+    const currentUser = computed(() => {
+        return (
+            (currentUserId.value && userEntities.value[currentUserId.value]) ||
+            null
+        );
+    });
+
+    function saveAllUsers(payload: User[]) {
+        const ids = payload.map((user) => user.id);
+        const entities = payload.reduce(
+            (entities: Record<string, User>, user: User) => {
+                return { ...entities, [user.id]: user };
+            },
+            {}
+        );
+
+        userIds.value = ids;
+        userEntities.value = entities;
+    }
+    function saveNewUser(user: User) {
+        userIds.value = [...userIds.value, user.id];
+        userEntities.value = {
+            ...userEntities.value,
+            [user.id]: user,
+        };
+    }
     function saveCurrentUserId(id: string) {
         currentUserId.value = id;
     }
@@ -22,12 +52,16 @@ export const useUserStore = defineStore("user", () => {
         currentGroupId.value = id;
     }
 
+    async function loadUsers() {
+        const data = await $fetch("/api/user/all-users");
+        saveAllUsers(data);
+    }
     async function loadCurrentUser(id: string = currentUserId.value) {
         const data = await $fetch("/api/user/user", {
             query: { id },
         });
 
-        currentUser.value = data;
+        saveNewUser(data);
     }
     async function signOut() {
         currentUserId.value = null;
@@ -57,6 +91,7 @@ export const useUserStore = defineStore("user", () => {
         currentGroupId,
         saveCurrentUserId,
         saveCurrentGroupId,
+        loadUsers,
         loadCurrentUser,
         signIn,
         signOut,

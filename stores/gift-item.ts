@@ -5,8 +5,12 @@ import { useUserStore } from "./user";
 
 export type GiftItemWithRecipient = GiftItem & { recipient?: User };
 export const useGiftItemStore = defineStore("gift-item", () => {
-    const giftItems = ref<GiftItemWithRecipient[]>([]);
+    const itemIds = ref<string[]>([]);
+    const itemEntities = ref<Record<string, GiftItemWithRecipient>>({});
 
+    const allGiftItems = computed(() => {
+        return itemIds.value.map((id: string) => itemEntities.value[id]);
+    });
     const overviewList = computed(() => {
         const userStore = useUserStore();
         const currentUserId = userStore.currentUserId;
@@ -16,7 +20,7 @@ export const useGiftItemStore = defineStore("gift-item", () => {
             return null;
         }
 
-        return giftItems.value.filter((item: GiftItem) => {
+        return allGiftItems.value.filter((item: GiftItemWithRecipient) => {
             return (
                 item.recipientId != currentUserId &&
                 item.groups.findIndex((g) => Group[g] === currentGroupId) !== -1
@@ -32,7 +36,7 @@ export const useGiftItemStore = defineStore("gift-item", () => {
             return null;
         }
 
-        return giftItems.value.filter((item: GiftItem) => {
+        return allGiftItems.value.filter((item: GiftItemWithRecipient) => {
             return (
                 item.recipientId == currentUserId &&
                 item.groups.findIndex((g) => Group[g] === currentGroupId) !== -1
@@ -40,6 +44,21 @@ export const useGiftItemStore = defineStore("gift-item", () => {
         });
     });
 
+    function saveAllGiftItems(payload: GiftItemWithRecipient[]) {
+        const ids = payload.map((giftItem) => giftItem.id);
+        const entities = payload.reduce(
+            (
+                entities: Record<string, GiftItemWithRecipient>,
+                giftItem: GiftItemWithRecipient
+            ) => {
+                return { ...entities, [giftItem.id]: giftItem };
+            },
+            {}
+        );
+
+        itemIds.value = ids;
+        itemEntities.value = entities;
+    }
     function savePurchased({
         id,
         purchased,
@@ -47,24 +66,28 @@ export const useGiftItemStore = defineStore("gift-item", () => {
         id: string;
         purchased: boolean;
     }) {
-        const i = giftItems.value.findIndex((i) => i.id === id);
-        if (i != -1) giftItems.value[i].purchased = purchased;
+        itemEntities.value[id].purchased = purchased;
     }
     function saveNewItem(item: GiftItem) {
-        giftItems.value = [...giftItems.value, item];
+        itemIds.value = [...itemIds.value, item.id];
+        itemEntities.value = {
+            ...itemEntities.value,
+            [item.id]: item,
+        };
     }
     function saveEditItem(item: GiftItem) {
-        saveRemoveItem(item.id);
-        saveNewItem(item);
+        itemEntities.value[item.id] = item;
     }
     function saveRemoveItem(id: string) {
-        const i = giftItems.value.findIndex((i) => i.id === id);
-        if (i != -1) giftItems.value.splice(i, 1);
+        const index = itemIds.value.indexOf(id);
+        if (index != -1) itemIds.value.splice(index, 1);
+
+        delete itemEntities.value[id];
     }
 
     async function loadGiftItems() {
         const data = await $fetch("/api/gift-item/all-items");
-        giftItems.value = data;
+        saveAllGiftItems(data);
     }
     async function togglePurchased(payload: {
         item: GiftItem;
