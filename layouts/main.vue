@@ -28,7 +28,7 @@ onMounted(async () => {
     <div>
         <Navigation />
 
-        <main class="p-3">
+        <main class="p-3 sm:flex sm:flex-col sm:items-center">
             <slot />
         </main>
 

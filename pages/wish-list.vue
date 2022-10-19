@@ -41,25 +41,11 @@ definePageMeta({
             </template>
         </Header>
 
-        <div
-            v-if="giftItemStore.wishList != null || !isLoading"
-            class="overflow-scroll container mt-5 mx-auto"
-            aria-label="Table"
-        >
-            <Table>
-                <template #heading>
-                    <TableHeading :allow-edit="true" />
-                </template>
-                <template #body>
-                    <TableRow
-                        v-for="item in giftItemStore.wishList"
-                        :key="item.id"
-                        :item="item"
-                        :allow-edit="true"
-                    />
-                </template>
-            </Table>
-        </div>
+        <template v-if="giftItemStore.wishList != null || !isLoading">
+            <TableContainer>
+                <Table :items="giftItemStore.wishList" :allow-edit="true" />
+            </TableContainer>
+        </template>
 
         <ph-spinner-gap
             v-else

@@ -1,50 +1,44 @@
 <script lang="ts" setup>
-import { Group } from "~~/pages/index.vue";
-
 export interface Props {
-    group?: Group;
+    title?: string;
     allowPurchased?: boolean;
     allowEdit?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-    group: null,
+    title: null,
     allowPurchased: false,
     allowEdit: false,
 });
 </script>
 
 <template>
-    <div
-        v-if="group != null"
+    <a
+        v-if="title != null"
         :class="[
-            'px-6 py-3 text-left whitespace-nowrap',
-            group != null
-                ? `bg-${group.user.name.toLowerCase()}-50`
-                : 'bg-gray-50',
+            'px-6 py-3 flex justify-between items-center whitespace-nowrap cursor-pointer',
+            title != null ? `bg-${title.toLowerCase()}-50` : 'bg-gray-50',
         ]"
         aria-label="Table Header"
     >
         <span
             :class="[
                 'px-3 inline-flex text-md font-medium rounded-full',
-                `bg-${group.user.name.toLowerCase()}-200`,
-                `text-${group.user.name.toLowerCase()}-900`,
+                `bg-${title.toLowerCase()}-200`,
+                `text-${title.toLowerCase()}-900`,
             ]"
         >
-            {{ group.user.name }}
+            {{ title }}
         </span>
-    </div>
+    </a>
 
     <div
         :class="[
             'grid',
-            group != null
-                ? `bg-${group.user.name.toLowerCase()}-50`
-                : 'bg-gray-50',
+            title != null ? `bg-${title.toLowerCase()}-50` : 'bg-gray-50',
             allowEdit
                 ? 'grid-cols-table-5-sm sm:grid-cols-table-5'
-                : 'grid-cols-table-4',
+                : 'grid-cols-table-4-sm sm:grid-cols-table-4',
         ]"
     >
         <div

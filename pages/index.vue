@@ -105,26 +105,19 @@ definePageMeta({
             </template>
         </Header>
 
-        <div
-            v-if="groups != null || !isLoading"
-            class="overflow-scroll container mt-5 mx-auto"
-            aria-label="Table"
-        >
-            <Table v-for="group in groups" :key="group.user.id">
-                <template #heading>
-                    <TableHeading :group="group" :allow-purchased="true" />
-                </template>
-                <template #body>
-                    <TableRow
-                        v-for="item in group.items"
-                        :key="item.id"
-                        :item="item"
+        <template v-if="groups != null || !isLoading">
+            <TableContainer>
+                <template v-for="group in groups" :key="group.user.id">
+                    <Table
+                        :title="group.user.name ?? null"
+                        :items="group.items"
                         :allow-purchased="true"
+                        is-collapsable
                         @switchPurchased="switchPurchased"
                     />
                 </template>
-            </Table>
-        </div>
+            </TableContainer>
+        </template>
 
         <ph-spinner-gap
             v-else

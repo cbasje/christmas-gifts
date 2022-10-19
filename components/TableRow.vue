@@ -80,7 +80,7 @@ const formatPrice = (priceString: string) => {
                 : '',
             allowEdit
                 ? 'grid-cols-table-5-sm sm:grid-cols-table-5'
-                : 'grid-cols-table-4',
+                : 'grid-cols-table-4-sm sm:grid-cols-table-4',
         ]"
     >
         <div class="flex flex-col justify-center px-6 py-4 min-h-4rem">
