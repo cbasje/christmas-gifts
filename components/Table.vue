@@ -15,11 +15,18 @@ const props = withDefaults(defineProps<Props>(), {
     allowEdit: false,
     isCollapsable: false,
 });
+
+const emits = defineEmits<{
+    (
+        e: "switchPurchased",
+        payload: { item: GiftItem; purchased: boolean }
+    ): void;
+}>();
 </script>
 
 <template>
     <div
-        class="w-min sm:w-full shadow bg-white rounded-lg overflow-hidden"
+        class="w-min sm:w-full shadow hover:shadow-lg bg-white dark:bg-gray-800 rounded-lg overflow-hidden"
         aria-label="Table"
     >
         <TableHeading
@@ -34,7 +41,7 @@ const props = withDefaults(defineProps<Props>(), {
             :item="item"
             :allow-purchased="allowPurchased"
             :allow-edit="allowEdit"
+            @switchPurchased="(ev) => emits('switchPurchased', ev)"
         />
-        <!-- @switchPurchased="switchPurchased" -->
     </div>
 </template>

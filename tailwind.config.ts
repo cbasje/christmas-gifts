@@ -7,13 +7,13 @@ export default <Config>{
     safelist: [
         {
             pattern:
-                /bg-(amani|charis|george|jeanne|mika|sebas|tori|will|boudewijn|ingrid|simon|pien)-(50|200)/,
-            variants: ["hover"],
+                /bg-(amani|charis|george|jeanne|mika|sebas|tori|will|boudewijn|ingrid|simon|pien)-(50|200|600|800)/,
+            variants: ["dark"],
         },
         {
             pattern:
-                /text-(amani|charis|george|jeanne|mika|sebas|tori|will|boudewijn|ingrid|simon|pien)-(900)/,
-            variants: ["hover"],
+                /text-(amani|charis|george|jeanne|mika|sebas|tori|will|boudewijn|ingrid|simon|pien)-(50|800|900)/,
+            variants: ["dark"],
         },
     ],
     darkMode: "media",

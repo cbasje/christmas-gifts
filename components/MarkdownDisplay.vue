@@ -36,6 +36,6 @@ onMounted(async () => {
     @apply sm:hidden sm:group-hover:block;
 }
 .prose a {
-    @apply cursor-pointer font-normal text-primary-500 hover:text-primary-600;
+    @apply cursor-pointer font-normal  text-primary-500 dark:text-primary-600 hover:text-primary-700 dark:hover:text-primary-800;
 }
 </style>

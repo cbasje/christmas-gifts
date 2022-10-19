@@ -78,7 +78,7 @@ const editItem = () => {
 
 <template>
     <a
-        class="cursor-pointer font-normal text-primary-500 hover:text-primary-600"
+        class="cursor-pointer font-normal text-primary-500 dark:text-primary-600 hover:text-primary-700 dark:hover:text-primary-800"
         @click="editItem()"
     >
         <ph-pencil weight="bold" class="h-6 w-6" />

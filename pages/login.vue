@@ -36,7 +36,7 @@ definePageMeta({
             </h2>
         </div>
         <form class="mt-8 space-y-6" @submit.prevent="submitForm">
-            <div class="rounded-md shadow-sm -space-y-px">
+            <div class="rounded-md shadow -space-y-px">
                 <div>
                     <label for="password" class="sr-only">Password</label>
                     <input

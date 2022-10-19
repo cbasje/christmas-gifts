@@ -59,11 +59,11 @@ const submitForm = async (data: EditFormData) => {
         <button
             type="button"
             @click="openModal"
-            class="flex justify-center items-center w-16 h-16 drop-shadow-md text-sm font-medium text-white bg-primary-600 rounded-full hover:bg-primary-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+            class="group flex justify-center items-center w-16 h-16 drop-shadow-md rounded-full text-sm font-medium text-white bg-primary-600 dark:bg-primary-700 hover:bg-primary-800 dark:hover:bg-primary-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
         >
             <ph-plus
                 weight="bold"
-                class="h-6 w-6 text-white group-hover:text-primary-400"
+                class="h-6 w-6 text-white group-hover:text-gray-300"
             />
         </button>
     </div>

@@ -74,9 +74,9 @@ const formatPrice = (priceString: string) => {
 <template>
     <div
         :class="[
-            'group grid border-b border-gray-200',
+            'group grid border-b border-gray-200 dark:border-gray-700',
             item.purchased && item.recipientId != userStore.currentUserId
-                ? 'opacity-30'
+                ? 'opacity-30 line-through decoration-2 decoration-current'
                 : '',
             allowEdit
                 ? 'grid-cols-table-5-sm sm:grid-cols-table-5'
@@ -84,15 +84,20 @@ const formatPrice = (priceString: string) => {
         ]"
     >
         <div class="flex flex-col justify-center px-6 py-4 min-h-4rem">
-            <h3 class="text-sm font-medium text-gray-900">
+            <h3 class="text-sm font-medium text-gray-900 dark:text-gray-100">
                 {{ item.name }}
             </h3>
-            <MarkdownDisplay v-if="item.notes" class="min-w-full text-gray-500">
+            <MarkdownDisplay
+                v-if="item.notes"
+                class="min-w-full text-gray-500 dark:text-gray-400"
+            >
                 {{ item.notes }}
             </MarkdownDisplay>
         </div>
         <div class="flex items-center min-w-full">
-            <span class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            <span
+                class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400"
+            >
                 {{ formatPrice(item.price) }}
             </span>
         </div>
@@ -101,7 +106,7 @@ const formatPrice = (priceString: string) => {
                 :href="item.link"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="px-6 py-4 whitespace-nowrap overflow-hidden overflow-ellipsis text-sm underline cursor-pointer font-normal text-primary-500 hover:text-primary-600"
+                class="px-6 py-4 whitespace-nowrap overflow-hidden overflow-ellipsis text-sm underline cursor-pointer font-normal text-primary-500 hover:text-primary-700"
             >
                 {{ item.link }}
             </a>
@@ -130,13 +135,17 @@ const formatPrice = (priceString: string) => {
                             purchased: evt,
                         })
                 "
-                :class="item.purchased ? 'bg-green-500' : 'bg-gray-200'"
+                :class="
+                    item.purchased
+                        ? 'bg-green-500'
+                        : 'bg-gray-200 dark:bg-gray-400'
+                "
                 class="relative inline-flex items-center h-6 rounded-full w-11"
             >
                 <span class="sr-only">Item purchased</span>
                 <span
                     :class="item.purchased ? 'translate-x-6' : 'translate-x-1'"
-                    class="inline-block w-4 h-4 transform bg-white rounded-full"
+                    class="inline-block w-4 h-4 transform bg-white dark:bg-gray-100 rounded-full"
                 />
             </Switch>
         </div>
