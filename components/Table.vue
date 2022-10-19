@@ -22,6 +22,8 @@ const emits = defineEmits<{
         payload: { item: GiftItem; purchased: boolean }
     ): void;
 }>();
+
+const isCollapsed = ref(!props.isCollapsable);
 </script>
 
 <template>
@@ -33,9 +35,12 @@ const emits = defineEmits<{
             :title="title"
             :allow-purchased="allowPurchased"
             :allow-edit="allowEdit"
+            :is-collapsable="isCollapsable"
+            v-model:is-collapsed="isCollapsed"
         />
 
         <TableRow
+            v-show="isCollapsed"
             v-for="item in items"
             :key="item.id"
             :item="item"

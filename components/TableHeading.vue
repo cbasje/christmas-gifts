@@ -3,24 +3,37 @@ export interface Props {
     title?: string;
     allowPurchased?: boolean;
     allowEdit?: boolean;
+    isCollapsable?: boolean;
+    isCollapsed?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
     title: null,
     allowPurchased: false,
     allowEdit: false,
+    isCollapsable: false,
+    isCollapsed: true,
 });
+
+const emits = defineEmits<{
+    (e: "update:isCollapsed", value: boolean): void;
+}>();
+
+const toggleCollapsed = () => {
+    emits("update:isCollapsed", !props.isCollapsed);
+};
 </script>
 
 <template>
     <a
         v-if="title != null"
         :class="[
-            'px-6 py-3 flex justify-between items-center whitespace-nowrap cursor-pointer',
+            'px-6 py-3 flex justify-between items-center whitespace-nowrap cursor-pointer select-none',
             title != null
                 ? `bg-${title.toLowerCase()}-50 dark:bg-${title.toLowerCase()}-800`
                 : 'bg-gray-50 dark:bg-gray-700',
         ]"
+        @click="toggleCollapsed"
         aria-label="Table Header"
     >
         <span
@@ -32,9 +45,20 @@ const props = withDefaults(defineProps<Props>(), {
         >
             {{ title }}
         </span>
+
+        <ph-caret-down
+            v-if="isCollapsable"
+            weight="bold"
+            :class="[
+                'transition-transform duration-200',
+                `text-${title.toLowerCase()}-800 dark:text-${title.toLowerCase()}-50`,
+                isCollapsed ? '-rotate-180' : 'rotate-0',
+            ]"
+        />
     </a>
 
     <div
+        v-show="isCollapsed"
         :class="[
             'grid',
             title != null
