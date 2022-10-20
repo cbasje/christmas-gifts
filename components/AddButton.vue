@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { PhPlus } from "phosphor-vue";
 import { useGiftItemStore } from "~~/stores/gift-item";
 import { useUserStore } from "~~/stores/user";
 import { Group, NewGiftItem } from "~~/lib/types";
@@ -61,8 +60,8 @@ const submitForm = async (data: EditFormData) => {
             @click="openModal"
             class="group flex justify-center items-center w-16 h-16 drop-shadow-md rounded-full text-sm font-medium text-white bg-primary-600 dark:bg-primary-700 hover:bg-primary-800 dark:hover:bg-primary-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
         >
-            <ph-plus
-                weight="bold"
+            <Icon
+                name="ph:plus-bold"
                 class="h-6 w-6 text-white group-hover:text-gray-300"
             />
         </button>

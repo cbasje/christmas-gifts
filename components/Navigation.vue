@@ -11,7 +11,6 @@ import {
     RadioGroupLabel,
     RadioGroupOption,
 } from "@headlessui/vue";
-import { PhList, PhX } from "phosphor-vue";
 import { Group } from "~~/lib/types";
 import { useUserStore } from "~~/stores/user";
 
@@ -41,12 +40,13 @@ const capitalizeGroupName = ([first, ...rest]: string): string =>
                         class="inline-flex items-center justify-center p-2 rounded-md text-gray-600 dark:text-gray-400 hover:text-black hover:bg-gray-300 dark:hover:text-white dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-black dark:focus:ring-white"
                     >
                         <span class="sr-only">Open main menu</span>
-                        <ph-list
+
+                        <Icon
                             v-if="!open"
-                            weight="bold"
+                            name="ph:list-bold"
                             class="block h-6 w-6"
                         />
-                        <ph-x v-else weight="bold" class="block h-6 w-6" />
+                        <Icon v-else name="ph:x-bold" class="block h-6 w-6" />
                     </DisclosureButton>
                 </div>
                 <div
@@ -184,7 +184,7 @@ const capitalizeGroupName = ([first, ...rest]: string): string =>
                     <NuxtLink
                         :to="item.href"
                         class="block text-gray-700 dark:text-gray-300 hover:bg-gray-300 hover:text-black dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md text-sm font-semibold"
-                        exact-active-class="bg-gray-100 dark:bg-gray-900 dark:text-black dark:text-white"
+                        exact-active-class="bg-gray-100 dark:bg-gray-900 text-black dark:text-white"
                         :aria-current="item.current ? 'page' : undefined"
                     >
                         {{ item.name }}

@@ -28,7 +28,10 @@ const isCollapsed = ref(!props.isCollapsable);
 
 <template>
     <div
-        class="w-min sm:w-full shadow hover:shadow-lg bg-white dark:bg-gray-800 rounded-lg overflow-hidden"
+        :class="[
+            !isCollapsed ? 'w-full' : 'w-min sm:w-full',
+            'shadow hover:shadow-lg bg-white dark:bg-gray-800 rounded-lg overflow-hidden',
+        ]"
         aria-label="Table"
     >
         <TableHeading

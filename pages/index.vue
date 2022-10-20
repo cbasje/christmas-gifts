@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { PhSpinnerGap } from "phosphor-vue";
 import { useToast } from "vue-toastification/dist/index.mjs";
 
 import { GiftItem, User } from "~~/lib/types";
@@ -119,9 +118,9 @@ definePageMeta({
             </TableContainer>
         </template>
 
-        <ph-spinner-gap
+        <Icon
             v-else
-            weight="bold"
+            name="spinner-gap-bold"
             class="animate-spin text-gray-900 dark:text-gray-100"
         />
     </NuxtLayout>

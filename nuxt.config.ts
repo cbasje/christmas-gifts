@@ -5,6 +5,7 @@ export default defineNuxtConfig({
         "@nuxtjs/tailwindcss",
         "@vueuse/nuxt",
         "@formkit/nuxt",
+        "nuxt-icon",
     ],
     css: ["vue-toastification/dist/index.css"],
 });

@@ -38,9 +38,9 @@ const toggleCollapsed = () => {
     >
         <Badge :title="title" />
 
-        <ph-caret-down
+        <Icon
             v-if="isCollapsable"
-            weight="bold"
+            name="ph:caret-down-bold"
             :class="[
                 'transition-transform duration-200',
                 `text-${title.toLowerCase()}-800 dark:text-${title.toLowerCase()}-50`,

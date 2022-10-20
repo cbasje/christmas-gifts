@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { useUserStore } from "~~/stores/user";
-import { PhLockSimple } from "phosphor-vue";
 import { useToast } from "vue-toastification/dist/index.mjs";
 
 const userStore = useUserStore();
@@ -60,8 +59,8 @@ definePageMeta({
                     <span
                         class="absolute left-0 inset-y-0 flex items-center pl-3"
                     >
-                        <ph-lock-simple
-                            weight="bold"
+                        <Icon
+                            name="ph:lock-simple-bold"
                             class="h-5 w-5 text-primary-400 group-hover:text-primary-300"
                         />
                     </span>

@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { GiftItem } from "~~/lib/types";
 import { Switch } from "@headlessui/vue";
-import { PhPencil, PhTrash } from "phosphor-vue";
 import { useUserStore } from "~~/stores/user";
 
 export interface Props {

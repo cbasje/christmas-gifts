@@ -81,7 +81,7 @@ const editItem = () => {
         class="cursor-pointer font-normal text-primary-500 dark:text-primary-600 hover:text-primary-700 dark:hover:text-primary-800"
         @click="editItem()"
     >
-        <ph-pencil weight="bold" class="h-6 w-6" />
+        <Icon name="ph:pencil-bold" class="h-6 w-6" />
     </a>
 
     <EditModal
