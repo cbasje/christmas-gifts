@@ -13,10 +13,8 @@ import {
 } from "@headlessui/vue";
 import { PhList, PhX } from "phosphor-vue";
 import { Group } from "~~/lib/types";
-import { useGiftItemStore } from "~~/stores/gift-item";
 import { useUserStore } from "~~/stores/user";
 
-const giftItemStore = useGiftItemStore();
 const userStore = useUserStore();
 
 const navigation = [
@@ -64,7 +62,7 @@ const capitalizeGroupName = ([first, ...rest]: string): string =>
                                 :key="item.name"
                                 :to="item.href"
                                 class="text-gray-700 dark:text-gray-300 hover:bg-gray-300 hover:text-black dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md text-sm font-semibold"
-                                exact-active-class="bg-gray-100 dark:bg-gray-900 dark:text-black dark:text-white"
+                                exact-active-class="bg-gray-100 dark:bg-gray-900 text-black dark:text-white"
                                 :aria-current="
                                     item.current ? 'page' : undefined
                                 "
@@ -88,15 +86,7 @@ const capitalizeGroupName = ([first, ...rest]: string): string =>
                                 class="flex text-md font-medium rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-black dark:focus:ring-offset-gray-800 dark:focus:ring-white"
                             >
                                 <span class="sr-only">Open user menu</span>
-                                <div
-                                    :class="[
-                                        'px-3 inline-flex rounded-full',
-                                        `bg-${userStore.currentUser.name.toLowerCase()}-200`,
-                                        `text-${userStore.currentUser.name.toLowerCase()}-900`,
-                                    ]"
-                                >
-                                    {{ userStore.currentUser.name }}
-                                </div>
+                                <Badge :title="userStore.currentUser.name" />
                             </MenuButton>
                         </div>
                         <transition
@@ -109,7 +99,7 @@ const capitalizeGroupName = ([first, ...rest]: string): string =>
                         >
                             <MenuItems
                                 as="ul"
-                                class="origin-top-right absolute right-0 mt-2 w-64 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                class="origin-top-right absolute right-0 mt-2 w-64 rounded-md shadow-lg py-1 bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 focus:outline-none"
                             >
                                 <MenuItem
                                     as="li"
@@ -119,7 +109,7 @@ const capitalizeGroupName = ([first, ...rest]: string): string =>
                                     "
                                 >
                                     <div
-                                        class="block px-3 py-1.5 text-sm text-gray-700"
+                                        class="block px-3 py-1.5 text-sm text-gray-700 dark:text-gray-200"
                                     >
                                         <RadioGroup
                                             :model-value="
@@ -133,7 +123,7 @@ const capitalizeGroupName = ([first, ...rest]: string): string =>
                                                 Selected family
                                             </RadioGroupLabel>
                                             <ul
-                                                class="flex p-1 space-x-1 bg-primary-900/[0.1] rounded-lg"
+                                                class="flex p-1 space-x-1 bg-primary-900/[0.1] dark:bg-primary-50/[0.1] rounded-lg"
                                             >
                                                 <RadioGroupOption
                                                     v-slot="{ checked }"
@@ -148,7 +138,7 @@ const capitalizeGroupName = ([first, ...rest]: string): string =>
                                                         :class="[
                                                             checked
                                                                 ? 'text-white bg-primary-600'
-                                                                : 'text-primary-700 bg-transparent hover:bg-white/[0.5] hover:text-primary-600',
+                                                                : 'text-primary-700 dark:text-primary-600 bg-transparent hover:bg-white/[0.5] dark:hover:bg-gray-500/[0.5] hover:text-primary-600 dark:hover:text-primary-500',
                                                             'w-full h-full cursor-pointer inline-flex justify-center py-1 px-2.5 text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500',
                                                         ]"
                                                     >
@@ -167,8 +157,10 @@ const capitalizeGroupName = ([first, ...rest]: string): string =>
                                     <NuxtLink
                                         to="/login"
                                         :class="[
-                                            active ? 'bg-gray-100' : '',
-                                            'block px-4 py-2 text-sm text-gray-700',
+                                            active
+                                                ? 'bg-gray-100 dark:bg-gray-700'
+                                                : '',
+                                            'block px-4 py-2 text-sm text-gray-700 dark:text-gray-200',
                                         ]"
                                         @click="userStore.signOut"
                                     >
