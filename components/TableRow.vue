@@ -86,7 +86,7 @@ const formatLink = (linkString: string) => {
 <template>
     <div
         :class="[
-            'group grid border-b border-gray-200 dark:border-gray-700',
+            'group grid last:border-none border-b border-gray-200 dark:border-gray-700',
             item.purchased && item.recipientId != userStore.currentUserId
                 ? 'opacity-30 line-through decoration-2 decoration-current'
                 : '',
