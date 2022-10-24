@@ -39,10 +39,10 @@ export default <Config>{
         },
         extend: {
             gridTemplateColumns: {
-                "table-4": "minmax(50vw, 4fr) repeat(3, minmax(10vw, 2fr))",
+                "table-4": "minmax(50%, 4fr) repeat(3, minmax(7%, 1fr))",
                 "table-4-sm": "minmax(60vw, 4fr) repeat(3, minmax(128px, 3fr))",
                 "table-5":
-                    "minmax(40vw, 4fr) minmax(7vw, 2fr) minmax(13px, 3fr) repeat(2, minmax(5vw, 1fr))",
+                    "minmax(50%, 4fr) minmax(7%, 2fr) minmax(13%, 3fr) repeat(2, minmax(5%, 1fr))",
                 "table-5-sm":
                     "minmax(60vw, 4fr) minmax(96px, 2fr) minmax(128px, 3fr) repeat(2, minmax(64px, 1fr))",
             },

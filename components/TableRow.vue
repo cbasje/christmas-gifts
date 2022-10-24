@@ -68,6 +68,18 @@ const formatPrice = (priceString: string) => {
             return defaultFormatter.format(Number(price));
     }
 };
+const formatLink = (linkString: string) => {
+    if (!linkString) return "";
+
+    const regex = /\b(?:http(?:s)?:\/\/)?((?:\w+\.)?\w+\.[\w\/\.\-_]*)/g;
+    const matches = [...linkString.matchAll(regex)];
+
+    if (!matches || !matches.length) return linkString;
+
+    const [_, extractedLink] = matches[0];
+
+    return extractedLink.replace("www.", "");
+};
 </script>
 
 <template>
@@ -102,12 +114,13 @@ const formatPrice = (priceString: string) => {
         </div>
         <div class="flex items-center min-w-full">
             <a
+                v-if="item.link"
                 :href="item.link"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="px-6 py-4 whitespace-nowrap overflow-hidden overflow-ellipsis text-sm underline cursor-pointer font-normal text-primary-500 hover:text-primary-700"
             >
-                {{ item.link }}
+                {{ formatLink(item.link) }}
             </a>
         </div>
         <!-- FIXME -->
