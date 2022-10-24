@@ -85,8 +85,8 @@ const editItem = () => {
     </a>
 
     <EditModal
-        :title="`Edit '${item.name}'`"
-        submitLabel="Edit item"
+        :title="$t('editModal.edit.title', { item: item.name })"
+        :submitLabel="$t('editModal.edit.submit')"
         v-model:isOpen="isOpen"
         :formData="formData"
         :showGroups="

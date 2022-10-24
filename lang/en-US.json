@@ -1,0 +1,37 @@
+{
+    "title": "Gift tracker",
+    "pages": {
+        "overview": {
+            "title": "Overview",
+            "description": "This is the overview of all the gifts. Here you can find information/links and let everyone know you bought an item!"
+        },
+        "wishList": {
+            "title": "Wish list",
+            "description": "This is your own wish list. You can add, remove or edit items."
+        }
+    },
+    "item": {
+        "name": "Name",
+        "notes": "Notes",
+        "price": "Price",
+        "link": "Link",
+        "groups": "Groups"
+    },
+    "table": {
+        "purchased": "Purchased?",
+        "edit": "Edit",
+        "remove": "Delete"
+    },
+    "editModal": {
+        "create": {
+            "title": "Create new item",
+            "submit": "Create"
+        },
+        "edit": {
+            "title": "Edit '{item}'",
+            "submit": "Confirm"
+        }
+    },
+    "signIn": "Sign in",
+    "signOut": "Sign out"
+}

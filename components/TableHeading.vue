@@ -65,19 +65,19 @@ const toggleCollapsed = () => {
             scope="col"
             class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
         >
-            Item
+            {{ $t("item.name") }} + {{ $t("item.notes") }}
         </div>
         <div
             scope="col"
             class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
         >
-            Price
+            {{ $t("item.price") }}
         </div>
         <div
             scope="col"
             class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
         >
-            Link
+            {{ $t("item.link") }}
         </div>
         <!-- FIXME -->
         <!-- <div
@@ -99,13 +99,17 @@ const toggleCollapsed = () => {
             scope="col"
             class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
         >
-            Purchased?
+            {{ $t("table.purchased") }}
         </div>
         <div v-if="allowEdit" scope="col" class="relative px-6 py-3">
-            <span class="sr-only">Edit</span>
+            <span class="sr-only">
+                {{ $t("table.edit") }}
+            </span>
         </div>
         <div v-if="allowEdit" scope="col" class="relative px-6 py-3">
-            <span class="sr-only">Delete</span>
+            <span class="sr-only">
+                {{ $t("table.remove") }}
+            </span>
         </div>
     </div>
 </template>

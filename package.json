@@ -14,6 +14,7 @@
     "dependencies": {
         "@formkit/nuxt": "^1.0.0-beta.11",
         "@headlessui/vue": "^1.7.3",
+        "@nuxtjs/i18n": "^8.0.0-beta.1",
         "@pinia/nuxt": "^0.4.3",
         "@prisma/client": "4.4.0",
         "nuxt": "^3.0.0-rc.11",

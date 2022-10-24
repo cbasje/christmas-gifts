@@ -1,7 +1,7 @@
 <template>
     <Body class="bg-gray-100 dark:bg-gray-900 h-screen overflow-scroll">
         <Head>
-            <Title>Christmas Gifts</Title>
+            <Title>{{ $t("title") }}</Title>
             <Meta
                 name="description"
                 content="Christmas gifts tracker for Benjamins & Haugens"

@@ -96,11 +96,10 @@ definePageMeta({
 <template>
     <NuxtLayout name="main">
         <Header>
-            Gift Tracker
+            {{ $t("pages.overview.title") }}
 
             <template #subtitle>
-                This is the overview of all the gifts. Please let everyone know
-                if you have bought an item!
+                {{ $t("pages.overview.description") }}
             </template>
         </Header>
 

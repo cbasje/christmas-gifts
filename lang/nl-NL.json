@@ -1,0 +1,37 @@
+{
+    "title": "Kerstcadeautracker",
+    "pages": {
+        "overview": {
+            "title": "Overzicht",
+            "description": "Dit is een overzicht van alle cadeau's. Op deze manier kun je informatie/links vinden en aan iedereen laten weten dat je iets hebt gekocht!"
+        },
+        "wishList": {
+            "title": "Verlanglijst",
+            "description": "Dit is jouw eigen verlanglijst. Je kunt items toevoegen, verwijderen of aanpassen."
+        }
+    },
+    "item": {
+        "name": "Naam",
+        "notes": "Notities",
+        "price": "Prijs",
+        "link": "Link",
+        "groups": "Groepen"
+    },
+    "table": {
+        "purchased": "Gekocht?",
+        "edit": "Aanpassen",
+        "remove": "Verwijderen"
+    },
+    "editModal": {
+        "create": {
+            "title": "Voeg nieuw item toe",
+            "submit": "Toevoegen"
+        },
+        "edit": {
+            "title": "Pas '{item}' aan",
+            "submit": "Bevestigen"
+        }
+    },
+    "signIn": "Log in",
+    "signOut": "Log uit"
+}

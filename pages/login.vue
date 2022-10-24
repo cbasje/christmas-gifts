@@ -64,7 +64,7 @@ definePageMeta({
                             class="h-5 w-5 text-primary-400 group-hover:text-primary-300"
                         />
                     </span>
-                    Sign in
+                    {{ $t("signIn") }}
                 </button>
             </div>
         </form>

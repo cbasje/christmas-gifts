@@ -15,10 +15,12 @@ import { Group } from "~~/lib/types";
 import { useUserStore } from "~~/stores/user";
 
 const userStore = useUserStore();
+const localePath = useLocalePath();
+const { t } = useI18n();
 
 const navigation = [
-    { name: "Overview", href: "/", current: true },
-    { name: "Wish list", href: "/wish-list", current: false },
+    { name: t("pages.overview.title"), href: "/", current: true },
+    { name: t("pages.wishList.title"), href: "/wish-list", current: false },
 ];
 
 const updateGroup = (id: string) => {
@@ -60,7 +62,7 @@ const capitalizeGroupName = ([first, ...rest]: string): string =>
                             <NuxtLink
                                 v-for="item in navigation"
                                 :key="item.name"
-                                :to="item.href"
+                                :to="localePath(item.href)"
                                 class="text-gray-700 dark:text-gray-300 hover:bg-gray-300 hover:text-black dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md text-sm font-semibold"
                                 exact-active-class="bg-gray-100 dark:bg-gray-900 text-black dark:text-white"
                                 :aria-current="
@@ -155,7 +157,7 @@ const capitalizeGroupName = ([first, ...rest]: string): string =>
                                 </MenuItem>
                                 <MenuItem v-slot="{ active }">
                                     <NuxtLink
-                                        to="/login"
+                                        :to="localePath('/login')"
                                         :class="[
                                             active
                                                 ? 'bg-gray-100 dark:bg-gray-700'
@@ -164,7 +166,7 @@ const capitalizeGroupName = ([first, ...rest]: string): string =>
                                         ]"
                                         @click="userStore.signOut"
                                     >
-                                        Sign out
+                                        {{ $t("signOut") }}
                                     </NuxtLink>
                                 </MenuItem>
                             </MenuItems>
@@ -182,7 +184,7 @@ const capitalizeGroupName = ([first, ...rest]: string): string =>
                     class="w-full text-left"
                 >
                     <NuxtLink
-                        :to="item.href"
+                        :to="localePath(item.href)"
                         class="block text-gray-700 dark:text-gray-300 hover:bg-gray-300 hover:text-black dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md text-sm font-semibold"
                         exact-active-class="bg-gray-100 dark:bg-gray-900 text-black dark:text-white"
                         :aria-current="item.current ? 'page' : undefined"

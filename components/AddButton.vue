@@ -68,8 +68,8 @@ const submitForm = async (data: EditFormData) => {
     </div>
 
     <EditModal
-        title="Create new item"
-        submitLabel="Create"
+        :title="$t('editModal.create.title')"
+        :submitLabel="$t('editModal.create.submit')"
         v-model:isOpen="isOpen"
         :formData="formData"
         :showGroups="

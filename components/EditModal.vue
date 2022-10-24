@@ -112,7 +112,7 @@ watch(
                             >
                                 <FormKit
                                     type="text"
-                                    label="Name"
+                                    :label="$t('item.name')"
                                     v-model="formData.name"
                                     autocomplete="name"
                                     validation="required"
@@ -122,7 +122,7 @@ watch(
                                 />
                                 <FormKit
                                     type="text"
-                                    label="Price"
+                                    :label="$t('item.price')"
                                     v-model="formData.price"
                                     autocomplete="transaction-amount"
                                     :validation="[
@@ -138,7 +138,7 @@ watch(
                                 />
                                 <FormKit
                                     type="textarea"
-                                    label="Notes"
+                                    :label="$t('item.notes')"
                                     v-model="formData.notes"
                                     rows="3"
                                     placeholder="Type here more information about the item..."
@@ -148,7 +148,7 @@ watch(
                                 />
                                 <FormKit
                                     type="url"
-                                    label="Link"
+                                    :label="$t('item.link')"
                                     v-model="formData.link"
                                     placeholder="www.example.com..."
                                     validation="url"
@@ -161,7 +161,7 @@ watch(
                                         v-model="formData.groups"
                                         type="select"
                                         multiple
-                                        label="Groups"
+                                        :label="$t('item.groups')"
                                         validation="required"
                                         help="Select all that apply by holding command (macOS) or control (PC)."
                                         label-class="block text-sm font-medium text-gray-700"

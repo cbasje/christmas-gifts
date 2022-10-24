@@ -33,10 +33,10 @@ definePageMeta({
 <template>
     <NuxtLayout name="main">
         <Header>
-            Wish list
+            {{ $t("pages.wishList.title") }}
 
             <template #subtitle>
-                This is your own wish list. You can add, remove or edit items.
+                {{ $t("pages.wishList.description") }}
             </template>
         </Header>
 
