@@ -11,6 +11,8 @@ export default defineNuxtConfig({
     css: ["vue-toastification/dist/index.css"],
 
     i18n: {
+        strategy: "prefix_except_default",
+        defaultLocale: "en",
         locales: [
             { code: "en", file: "en.json" },
             { code: "nl", file: "nl.json" },
