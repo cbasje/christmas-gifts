@@ -56,16 +56,17 @@ const formatPrice = (priceString: string) => {
     if (!matches || !matches.length) return defaultReturn;
 
     const [_, currencyCode, price] = matches[0];
+    const priceNumber = Number(price.replace(",", "."));
 
     switch (currencyCode) {
         case "SEK":
-            return sekFormatter.format(Number(price));
+            return sekFormatter.format(priceNumber);
         case "€":
-            return eurFormatter.format(Number(price));
+            return eurFormatter.format(priceNumber);
         case "$":
-            return usdFormatter.format(Number(price));
+            return usdFormatter.format(priceNumber);
         default:
-            return defaultFormatter.format(Number(price));
+            return defaultFormatter.format(priceNumber);
     }
 };
 const formatLink = (linkString: string) => {
