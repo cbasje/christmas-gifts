@@ -126,7 +126,10 @@ watch(
                                     v-model="formData.price"
                                     autocomplete="transaction-amount"
                                     :validation="[
-                                        ['matches', /(?:[$€])?\d+(?:[,.]\d+)?/],
+                                        [
+                                            'matches',
+                                            /(?:[$€])?\s?\d+(?:[,.]\d+)?/,
+                                        ],
                                     ]"
                                     :validation-messages="{
                                         matches:

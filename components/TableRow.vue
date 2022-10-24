@@ -50,7 +50,7 @@ const formatPrice = (priceString: string) => {
         maximumFractionDigits: 2,
     });
 
-    const regex = /(?<code>(?:[$€])?)(?<price>\d+(?:[,\.]\d+)?)/g;
+    const regex = /(?<code>(?:[$€])?)\s?(?<price>\d+(?:[,\.]\d+)?)/g;
     const matches = [...priceString.matchAll(regex)];
 
     if (!matches || !matches.length) return defaultReturn;

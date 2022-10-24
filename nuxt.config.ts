@@ -23,7 +23,7 @@ export default defineNuxtConfig({
             legacy: false,
             locale: "en",
             fallbackLocale: {
-                se: ["nl"],
+                sv: ["nl"],
                 no: ["nl"],
                 default: ["en"],
             },

@@ -1,5 +1,6 @@
 <template>
     <Body class="bg-gray-100 dark:bg-gray-900 h-screen overflow-scroll">
+        <Html :lang="$i18n.locale" class="h-full" />
         <Head>
             <Title>{{ $t("title") }}</Title>
             <Meta
@@ -8,7 +9,7 @@
             />
             <Meta
                 name="theme-color"
-                content="white"
+                content="#FFFFFF"
                 media="(prefers-color-scheme: light)"
             />
             <Meta
