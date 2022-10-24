@@ -1,9 +1,8 @@
-import { Group, User } from "~~/lib/types";
 import { defineStore } from "pinia";
+import { User } from "~~/lib/types";
 
 export const useUserStore = defineStore("user", () => {
     const curDate = new Date();
-    const localePath = useLocalePath();
 
     const currentUserId = useCookie("user", {
         expires: new Date(curDate.getFullYear() + 1, 0, 0),
@@ -64,12 +63,9 @@ export const useUserStore = defineStore("user", () => {
 
         saveNewUser(data);
     }
-    async function signOut() {
+    function signOut() {
         currentUserId.value = null;
         currentGroupId.value = null;
-
-        const router = useRouter();
-        await router.push(localePath("/login"));
     }
     async function signIn(password: string) {
         const data = await $fetch("/api/user/sign-in", {
@@ -81,9 +77,6 @@ export const useUserStore = defineStore("user", () => {
         saveCurrentGroupId(data.groups[0]);
 
         await loadCurrentUser();
-
-        const router = useRouter();
-        await router.push(localePath("/"));
     }
 
     return {

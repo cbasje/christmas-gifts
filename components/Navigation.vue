@@ -15,6 +15,8 @@ import { Group } from "~~/lib/types";
 import { useUserStore } from "~~/stores/user";
 
 const userStore = useUserStore();
+
+const router = useRouter();
 const localePath = useLocalePath();
 const { t } = useI18n();
 
@@ -22,6 +24,11 @@ const navigation = [
     { name: t("pages.overview.title"), href: "/", current: true },
     { name: t("pages.wishList.title"), href: "/wish-list", current: false },
 ];
+
+const signOut = async () => {
+    userStore.signOut();
+    await router.push(localePath("/login"));
+};
 
 const updateGroup = (id: string) => {
     userStore.saveCurrentGroupId(id);
@@ -164,7 +171,7 @@ const capitalizeGroupName = ([first, ...rest]: string): string =>
                                                 : '',
                                             'block px-4 py-2 text-sm text-gray-700 dark:text-gray-200',
                                         ]"
-                                        @click="userStore.signOut"
+                                        @click="signOut"
                                     >
                                         {{ $t("signOut") }}
                                     </NuxtLink>

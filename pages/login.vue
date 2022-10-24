@@ -6,14 +6,17 @@ const userStore = useUserStore();
 
 const online = useOnline();
 const toast = useToast();
+const localePath = useLocalePath();
+const router = useRouter();
 
 const password = ref("");
 
-const submitForm = () => {
+const submitForm = async () => {
     try {
         if (!online.value) throw new Error("Not online");
 
-        userStore.signIn(password.value);
+        await userStore.signIn(password.value);
+        await router.push(localePath("/"));
     } catch (error) {
         console.error(error);
         toast.error(`Signing in was not successful! Reason: ${error.message}`);
