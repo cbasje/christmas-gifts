@@ -1,6 +1,14 @@
 <script lang="ts" setup>
 const slots = useSlots();
 
+interface Props {
+    padding?: boolean;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+    padding: true,
+});
+
 const hasSubtitle = computed(() => {
     return !!slots.subtitle;
 });
@@ -8,7 +16,10 @@ const hasSubtitle = computed(() => {
 
 <template>
     <header
-        class="max-w-3xl md:max-w-7xl mx-auto px-2 py-5 sm:px-6 lg:px-8 w-full"
+        :class="[
+            'max-w-3xl md:max-w-7xl mx-auto w-full',
+            padding ? 'px-2 py-5 sm:px-6 lg:px-8' : '',
+        ]"
     >
         <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">
             <slot />

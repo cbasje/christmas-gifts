@@ -7,6 +7,7 @@ const userStore = useUserStore();
 const router = useRouter();
 const toast = useToast();
 const online = useOnline();
+const localePath = useLocalePath();
 
 onMounted(async () => {
     try {
@@ -19,7 +20,7 @@ onMounted(async () => {
             `Loading user was not successful! Reason: ${error.message}`
         );
 
-        router.push("/login");
+        router.push(localePath("/login"));
     }
 });
 </script>

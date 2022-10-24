@@ -1,6 +1,12 @@
 {
     "title": "Gift tracker",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
     "pages": {
+        "login": {
+            "title": "Login",
+            "description": "Please enter your password."
+        },
         "overview": {
             "title": "Overview",
             "description": "This is the overview of all the gifts. Here you can find information/links and let everyone know you bought an item!"
@@ -9,6 +15,9 @@
             "title": "Wish list",
             "description": "This is your own wish list. You can add, remove or edit items."
         }
+    },
+    "user": {
+        "password": "Password"
     },
     "item": {
         "name": "Name",
@@ -31,7 +40,5 @@
             "title": "Edit '{item}'",
             "submit": "Confirm"
         }
-    },
-    "signIn": "Sign in",
-    "signOut": "Sign out"
+    }
 }

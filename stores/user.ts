@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 
 export const useUserStore = defineStore("user", () => {
     const curDate = new Date();
+    const localePath = useLocalePath();
 
     const currentUserId = useCookie("user", {
         expires: new Date(curDate.getFullYear() + 1, 0, 0),
@@ -68,7 +69,7 @@ export const useUserStore = defineStore("user", () => {
         currentGroupId.value = null;
 
         const router = useRouter();
-        await router.push("/login");
+        await router.push(localePath("/login"));
     }
     async function signIn(password: string) {
         const data = await $fetch("/api/user/sign-in", {
@@ -82,7 +83,7 @@ export const useUserStore = defineStore("user", () => {
         await loadCurrentUser();
 
         const router = useRouter();
-        router.push("/");
+        await router.push(localePath("/"));
     }
 
     return {

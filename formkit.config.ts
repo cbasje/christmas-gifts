@@ -27,5 +27,6 @@ function addAsteriskPlugin(node) {
 }
 
 export default {
+    iconLoaderUrl: (iconName) => `https://api.iconify.design/${iconName}.svg`,
     plugins: [addAsteriskPlugin],
 };

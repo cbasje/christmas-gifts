@@ -1,6 +1,12 @@
 {
     "title": "Kerstcadeautracker",
+    "signIn": "Inloggen",
+    "signOut": "Uitloggen",
     "pages": {
+        "login": {
+            "title": "Inloggen",
+            "description": "Voer alstublieft uw wachtwoord in."
+        },
         "overview": {
             "title": "Overzicht",
             "description": "Dit is een overzicht van alle cadeau's. Op deze manier kun je informatie/links vinden en aan iedereen laten weten dat je iets hebt gekocht!"
@@ -9,6 +15,9 @@
             "title": "Verlanglijst",
             "description": "Dit is jouw eigen verlanglijst. Je kunt items toevoegen, verwijderen of aanpassen."
         }
+    },
+    "user": {
+        "password": "Wachtwoord"
     },
     "item": {
         "name": "Naam",
@@ -31,7 +40,5 @@
             "title": "Pas '{item}' aan",
             "submit": "Bevestigen"
         }
-    },
-    "signIn": "Log in",
-    "signOut": "Log uit"
+    }
 }
