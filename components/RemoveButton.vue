@@ -23,7 +23,7 @@ const removeItem = async () => {
 
             await giftItemStore.removeItem(props.item.id);
 
-            toast.successful(`Removed '${props.item.name}' successfully!`);
+            toast.success(`Removed '${props.item.name}' successfully!`);
         } catch (error) {
             console.error(error);
             toast.error(

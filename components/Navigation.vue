@@ -12,8 +12,10 @@ import {
     RadioGroupOption,
 } from "@headlessui/vue";
 import { Group } from "~~/lib/types";
+import { useGiftItemStore } from "~~/stores/gift-item";
 import { useUserStore } from "~~/stores/user";
 
+const giftItemStore = useGiftItemStore();
 const userStore = useUserStore();
 
 const router = useRouter();
@@ -32,6 +34,9 @@ const signOut = async () => {
 
 const updateGroup = (id: string) => {
     userStore.saveCurrentGroupId(id);
+
+    userStore.loadUsers();
+    giftItemStore.loadGiftItems();
 };
 const capitalizeGroupName = ([first, ...rest]: string): string =>
     `${first.toUpperCase()}${rest.join("").toLowerCase()}`;

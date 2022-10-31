@@ -3,32 +3,16 @@ import { defineStore } from "pinia";
 import { NewGiftItem } from "~~/lib/types";
 import { useUserStore } from "./user";
 
-export type GiftItemWithRecipient = GiftItem & { recipient?: User };
 export const useGiftItemStore = defineStore("gift-item", () => {
+    const userStore = useUserStore();
+
     const itemIds = ref<string[]>([]);
-    const itemEntities = ref<Record<string, GiftItemWithRecipient>>({});
+    const itemEntities = ref<Record<string, GiftItem>>({});
 
     const allGiftItems = computed(() => {
         return itemIds.value.map((id: string) => itemEntities.value[id]);
     });
-    const overviewList = computed(() => {
-        const userStore = useUserStore();
-        const currentUserId = userStore.currentUserId;
-        const currentGroupId = userStore.currentGroupId;
-
-        if (!currentUserId || !currentGroupId) {
-            return null;
-        }
-
-        return allGiftItems.value.filter((item: GiftItemWithRecipient) => {
-            return (
-                item.recipientId != currentUserId &&
-                item.groups.findIndex((g) => Group[g] === currentGroupId) !== -1
-            );
-        });
-    });
     const wishList = computed(() => {
-        const userStore = useUserStore();
         const currentUserId = userStore.currentUserId;
         const currentGroupId = userStore.currentGroupId;
 
@@ -36,7 +20,7 @@ export const useGiftItemStore = defineStore("gift-item", () => {
             return null;
         }
 
-        return allGiftItems.value.filter((item: GiftItemWithRecipient) => {
+        return allGiftItems.value.filter((item: GiftItem) => {
             return (
                 item.recipientId == currentUserId &&
                 item.groups.findIndex((g) => Group[g] === currentGroupId) !== -1
@@ -44,13 +28,10 @@ export const useGiftItemStore = defineStore("gift-item", () => {
         });
     });
 
-    function saveAllGiftItems(payload: GiftItemWithRecipient[]) {
+    function saveGiftItems(payload: GiftItem[]) {
         const ids = payload.map((giftItem) => giftItem.id);
         const entities = payload.reduce(
-            (
-                entities: Record<string, GiftItemWithRecipient>,
-                giftItem: GiftItemWithRecipient
-            ) => {
+            (entities: Record<string, GiftItem>, giftItem: GiftItem) => {
                 return { ...entities, [giftItem.id]: giftItem };
             },
             {}
@@ -86,8 +67,21 @@ export const useGiftItemStore = defineStore("gift-item", () => {
     }
 
     async function loadGiftItems() {
-        const data = await $fetch("/api/gift-item/all-items");
-        saveAllGiftItems(data);
+        const data = await $fetch("/api/gift-item/all-items", {
+            query: {
+                group: userStore.currentGroupId,
+            },
+        });
+        saveGiftItems(data);
+    }
+    async function loadWishList() {
+        const data = await $fetch("/api/gift-item/wish-list", {
+            query: {
+                id: userStore.currentUserId,
+                group: userStore.currentGroupId,
+            },
+        });
+        saveGiftItems(data);
     }
     async function togglePurchased(payload: {
         item: GiftItem;
@@ -132,9 +126,10 @@ export const useGiftItemStore = defineStore("gift-item", () => {
     }
 
     return {
-        overviewList,
+        itemEntities,
         wishList,
         loadGiftItems,
+        loadWishList,
         togglePurchased,
         addItem,
         editItem,

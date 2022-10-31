@@ -29,8 +29,11 @@ const isCollapsed = ref(!props.isCollapsable);
 <template>
     <div
         :class="[
-            !isCollapsed ? 'w-full' : 'w-min sm:w-full',
             'shadow hover:shadow-lg bg-white dark:bg-gray-800 rounded-lg overflow-hidden',
+            !isCollapsed ? 'w-full' : 'w-min sm:w-full',
+            items.length === 0 || items.every((item) => item.purchased)
+                ? 'opacity-30'
+                : '',
         ]"
         aria-label="Table"
     >
@@ -42,14 +45,16 @@ const isCollapsed = ref(!props.isCollapsable);
             v-model:is-collapsed="isCollapsed"
         />
 
-        <TableRow
-            v-show="isCollapsed"
-            v-for="item in items"
-            :key="item.id"
-            :item="item"
-            :allow-purchased="allowPurchased"
-            :allow-edit="allowEdit"
-            @switchPurchased="(ev) => emits('switchPurchased', ev)"
-        />
+        <template v-if="items.length > 0">
+            <TableRow
+                v-show="isCollapsed"
+                v-for="item in items"
+                :key="item.id"
+                :item="item"
+                :allow-purchased="allowPurchased"
+                :allow-edit="allowEdit"
+                @switchPurchased="(ev) => emits('switchPurchased', ev)"
+            />
+        </template>
     </div>
 </template>

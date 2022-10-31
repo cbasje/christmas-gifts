@@ -1,22 +1,46 @@
 <script lang="ts" setup>
 import { useToast } from "vue-toastification/dist/index.mjs";
 
-import { GiftItem, User } from "~~/lib/types";
-import { GiftItemWithRecipient, useGiftItemStore } from "~~/stores/gift-item";
-
-export interface Group {
-    user: User;
-    items: GiftItem[];
-}
-
-export type Grouped = Record<string, Group>;
+import { GiftItem, Group, User } from "~~/lib/types";
+import { useGiftItemStore } from "~~/stores/gift-item";
+import { useUserStore } from "~~/stores/user";
 
 const giftItemStore = useGiftItemStore();
+const userStore = useUserStore();
 
 const toast = useToast();
 const online = useOnline();
 
 const isLoading = ref(true);
+
+const sortByName = (a: User, b: User) => {
+    var nameA = a.name.toUpperCase();
+    var nameB = b.name.toUpperCase();
+
+    if (nameA < nameB) return -1;
+    if (nameA > nameB) return 1;
+
+    // names must be equal
+    return 0;
+};
+
+const userList = computed(() => {
+    const currentUserId = userStore.currentUserId;
+    const currentGroupId = userStore.currentGroupId;
+
+    if (!currentUserId || !currentGroupId) {
+        return null;
+    }
+
+    return userStore.allUsers
+        .filter((user: User) => {
+            return (
+                user.id != currentUserId &&
+                user.groups.some((g) => Group[g] === currentGroupId)
+            );
+        })
+        .sort(sortByName);
+});
 
 const switchPurchased = async (payload: {
     item: GiftItem;
@@ -27,7 +51,7 @@ const switchPurchased = async (payload: {
 
         await giftItemStore.togglePurchased(payload);
 
-        toast.successful(
+        toast.success(
             `Changed purchase status of '${payload.item.name}' successfully!`
         );
     } catch (error) {
@@ -37,55 +61,17 @@ const switchPurchased = async (payload: {
         );
     }
 };
-const sortObj = (obj: Grouped) => {
-    return Object.keys(obj).sort((a, b) => {
-        if (!obj[a].user || !obj[b].user) return 0;
-
-        var nameA = obj[a].user.name.toUpperCase();
-        var nameB = obj[b].user.name.toUpperCase();
-
-        if (nameA < nameB) return -1;
-        if (nameA > nameB) return 1;
-
-        // names must be equal
-        return 0;
-    });
-};
-
-const groups = computed(() => {
-    const items = giftItemStore.overviewList;
-
-    if (!items) {
-        return null;
-    }
-
-    const grouped: Grouped = items.reduce(
-        (groups: Grouped, item: GiftItemWithRecipient) => {
-            const key = item.recipientId;
-            if (!groups[key]) {
-                groups[key] = {
-                    user: item.recipient,
-                    items: [],
-                };
-            }
-            groups[key].items.push(item);
-            return groups;
-        },
-        {}
-    );
-
-    return sortObj(grouped).map((key: string) => grouped[key]);
-});
 
 onMounted(async () => {
     try {
         if (!online.value) throw new Error("Not online");
 
+        await userStore.loadUsers();
         await giftItemStore.loadGiftItems();
     } catch (error) {
         console.error(error);
         toast.error(
-            `Loading items was not successful! Reason: ${error.message}`
+            `Loading data was not successful! Reason: ${error.message}`
         );
     } finally {
         isLoading.value = false;
@@ -107,12 +93,19 @@ definePageMeta({
             </template>
         </Header>
 
-        <template v-if="groups != null || !isLoading">
+        <template v-if="userList != null || !isLoading">
             <TableContainer>
-                <template v-for="group in groups" :key="group.user.id">
+                <template v-for="user in userList" :key="user.id">
                     <Table
-                        :title="group.user.name ?? null"
-                        :items="group.items"
+                        :title="user.name ?? null"
+                        :items="
+                            user.items
+                                .map(
+                                    (item) =>
+                                        giftItemStore.itemEntities[item.id]
+                                )
+                                .filter((item) => item != undefined)
+                        "
                         :allow-purchased="true"
                         is-collapsable
                         @switchPurchased="switchPurchased"

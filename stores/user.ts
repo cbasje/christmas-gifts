@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
-import { User } from "~~/lib/types";
+import { GiftItem, User } from "~~/lib/types";
 
+export type UserWithItemIds = User & { items?: Pick<GiftItem, "id">[] };
 export const useUserStore = defineStore("user", () => {
     const curDate = new Date();
 
@@ -14,7 +15,7 @@ export const useUserStore = defineStore("user", () => {
     });
 
     const userIds = ref<string[]>([]);
-    const userEntities = ref<Record<string, User>>({});
+    const userEntities = ref<Record<string, UserWithItemIds>>({});
 
     const allUsers = computed(() => {
         return userIds.value.map((id: string) => userEntities.value[id]);
@@ -53,7 +54,11 @@ export const useUserStore = defineStore("user", () => {
     }
 
     async function loadUsers() {
-        const data = await $fetch("/api/user/all-users");
+        const data = await $fetch("/api/user/all-users", {
+            query: {
+                group: currentGroupId.value,
+            },
+        });
         saveAllUsers(data);
     }
     async function loadCurrentUser(id: string = currentUserId.value) {
@@ -80,6 +85,7 @@ export const useUserStore = defineStore("user", () => {
     }
 
     return {
+        allUsers,
         currentUser,
         currentUserId,
         currentGroupId,

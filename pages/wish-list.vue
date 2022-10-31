@@ -14,11 +14,11 @@ onMounted(async () => {
     try {
         if (!online.value) throw new Error("Not online");
 
-        await giftItemStore.loadGiftItems();
+        await giftItemStore.loadWishList();
     } catch (error) {
         console.error(error);
         toast.error(
-            `Loading items was not successful! Reason: ${error.message}`
+            `Loading your wish list was not successful! Reason: ${error.message}`
         );
     } finally {
         isLoading.value = false;

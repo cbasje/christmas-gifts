@@ -60,7 +60,7 @@ const submitForm = async (data: EditFormData) => {
 
         giftItemStore.editItem(item);
 
-        toast.successful(`Edited '${item.name}' successfully!`);
+        toast.success(`Edited '${item.name}' successfully!`);
         closeModal();
     } catch (error) {
         console.error(error);
