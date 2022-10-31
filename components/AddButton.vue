@@ -45,6 +45,9 @@ const submitForm = async (data: EditFormData) => {
 
         giftItemStore.addItem(newItem);
 
+        toast.successful(
+            `Added '${newItem.name}' to your wishlist successfully!`
+        );
         closeModal();
     } catch (error) {
         console.error(error);

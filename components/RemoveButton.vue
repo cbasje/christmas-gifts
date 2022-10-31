@@ -22,6 +22,8 @@ const removeItem = async () => {
             if (!online.value) throw new Error("Not online");
 
             await giftItemStore.removeItem(props.item.id);
+
+            toast.successful(`Removed '${props.item.name}' successfully!`);
         } catch (error) {
             console.error(error);
             toast.error(

@@ -26,6 +26,10 @@ const switchPurchased = async (payload: {
         if (!online.value) throw new Error("Not online");
 
         await giftItemStore.togglePurchased(payload);
+
+        toast.successful(
+            `Changed purchase status of '${payload.item.name}' successfully!`
+        );
     } catch (error) {
         console.error(error);
         toast.error(
