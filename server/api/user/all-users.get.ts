@@ -5,6 +5,8 @@ export default defineEventHandler(async (event) => {
     const query = useQuery(event);
     const group = String(query.group) as Group;
 
+    if (!group) throw new Error("No 'group' given");
+
     return await prisma.user.findMany({
         include: {
             items: {

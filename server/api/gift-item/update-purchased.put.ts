@@ -5,6 +5,8 @@ export default defineEventHandler(async (event) => {
     const id = String(query.id);
     const purchased = String(query.purchased);
 
+    if (!id || !purchased) throw new Error("Not enough data");
+
     return await prisma.giftItem.update({
         where: {
             id,

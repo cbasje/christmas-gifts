@@ -6,6 +6,8 @@ export default defineEventHandler(async (event) => {
     const id = String(query.id);
     const group = String(query.group) as Group;
 
+    if (!id || !group) throw new Error("Not enough data");
+
     return await prisma.giftItem.findMany({
         where: {
             AND: {
