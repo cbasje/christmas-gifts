@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import { GiftItem } from "~~/lib/types";
+import { Color, GiftItem } from "~~/lib/types";
 
 export interface Props {
     items: GiftItem[];
     title?: string;
+    headerColor?: Color;
     allowPurchased?: boolean;
     allowEdit?: boolean;
     isCollapsable?: boolean;
@@ -11,6 +12,7 @@ export interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
     title: null,
+    headerColour: "gray",
     allowPurchased: false,
     allowEdit: false,
     isCollapsable: false,
@@ -39,6 +41,7 @@ const isCollapsed = ref(!props.isCollapsable);
     >
         <TableHeading
             :title="title"
+            :header-color="headerColor ?? 'gray'"
             :allow-purchased="allowPurchased"
             :allow-edit="allowEdit"
             :is-collapsable="isCollapsable"

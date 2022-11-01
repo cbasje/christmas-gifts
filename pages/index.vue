@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useToast } from "vue-toastification/dist/index.mjs";
 
-import { GiftItem, Group, User } from "~~/lib/types";
+import { Color, GiftItem, Group, User } from "~~/lib/types";
 import { useGiftItemStore } from "~~/stores/gift-item";
 import { useUserStore } from "~~/stores/user";
 
@@ -12,6 +12,16 @@ const toast = useToast();
 const online = useOnline();
 
 const isLoading = ref(true);
+const headerColors: Color[] = [
+    "pink",
+    "purple",
+    "indigo",
+    "sky",
+    "teal",
+    "green",
+    "yellow",
+    "orange",
+];
 
 const sortByName = (a: User, b: User) => {
     var nameA = a.name.toUpperCase();
@@ -95,9 +105,10 @@ definePageMeta({
 
         <template v-if="userList != null || !isLoading">
             <TableContainer>
-                <template v-for="user in userList" :key="user.id">
+                <template v-for="(user, index) in userList" :key="user.id">
                     <Table
                         :title="user.name ?? null"
+                        :header-color="headerColors[index]"
                         :items="
                             user.items
                                 .map(

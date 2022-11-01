@@ -150,7 +150,7 @@ const formatLink = (linkString: string) => {
                 "
                 :class="
                     item.purchased
-                        ? 'bg-green-500'
+                        ? 'bg-success-500'
                         : 'bg-gray-200 dark:bg-gray-400'
                 "
                 class="relative inline-flex items-center h-6 rounded-full w-11"

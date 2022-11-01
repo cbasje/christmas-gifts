@@ -36,7 +36,7 @@ const removeItem = async () => {
 
 <template>
     <a
-        class="cursor-pointer font-normal text-red-500 dark:text-red-600 hover:text-red-700 dark:hover:text-red-800"
+        class="cursor-pointer font-normal text-danger-500 dark:text-danger-600 hover:text-danger-700 dark:hover:text-danger-800"
         @click="() => removeItem()"
     >
         <Icon name="ph:trash-bold" class="h-6 w-6" />

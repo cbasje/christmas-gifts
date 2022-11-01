@@ -55,7 +55,7 @@ definePageMeta({
                 validation="required"
                 label-class="sr-only"
                 input-class="rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
-                message-class="mt-1 block w-full text-sm text-red-400"
+                message-class="mt-1 block w-full text-sm text-danger-400"
             />
             <FormKit
                 type="submit"

@@ -1,6 +1,9 @@
 <script lang="ts" setup>
+import { Color } from "~~/lib/types";
+
 const props = defineProps<{
     title: string;
+    color: Color;
 }>();
 </script>
 
@@ -8,8 +11,8 @@ const props = defineProps<{
     <span
         :class="[
             'px-3 inline-flex text-md font-medium rounded-full',
-            `bg-${title.toLowerCase()}-200 dark:bg-${title.toLowerCase()}-600`,
-            `text-${title.toLowerCase()}-900 dark:text-white`,
+            `bg-${color}-300 dark:bg-${color}-600`,
+            `text-${color}-900 dark:text-white`,
         ]"
     >
         {{ title }}

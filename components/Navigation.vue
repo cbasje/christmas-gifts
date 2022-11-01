@@ -100,7 +100,10 @@ const capitalizeGroupName = ([first, ...rest]: string): string =>
                                 class="flex text-md font-medium rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-black dark:focus:ring-offset-gray-800 dark:focus:ring-white"
                             >
                                 <span class="sr-only">Open user menu</span>
-                                <Badge :title="userStore.currentUser.name" />
+                                <Badge
+                                    :title="userStore.currentUser.name"
+                                    color="primary"
+                                />
                             </MenuButton>
                         </div>
                         <transition

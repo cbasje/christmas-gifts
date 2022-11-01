@@ -22,3 +22,15 @@ export const Group: { [k in PrismaGroup]: k } = {
 } as const;
 export type Group = PrismaGroup;
 export type NewGroup = Omit<Group, "id" | "createdAt" | "updatedAt">;
+
+export type Color =
+    | "pink"
+    | "purple"
+    | "indigo"
+    | "sky"
+    | "teal"
+    | "green"
+    | "yellow"
+    | "orange"
+    | "gray"
+    | "primary";

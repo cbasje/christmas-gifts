@@ -1,6 +1,9 @@
 <script lang="ts" setup>
+import { Color } from "~~/lib/types";
+
 export interface Props {
     title?: string;
+    headerColor: Color;
     allowPurchased?: boolean;
     allowEdit?: boolean;
     isCollapsable?: boolean;
@@ -29,21 +32,19 @@ const toggleCollapsed = () => {
         v-if="title != null"
         :class="[
             'px-6 py-3 flex justify-between items-center whitespace-nowrap cursor-pointer select-none',
-            title != null
-                ? `bg-${title.toLowerCase()}-50 dark:bg-${title.toLowerCase()}-800`
-                : 'bg-gray-50 dark:bg-gray-700',
+            `bg-${headerColor}-100 dark:bg-${headerColor}-900`,
         ]"
         @click="toggleCollapsed"
         aria-label="Table Header"
     >
-        <Badge :title="title" />
+        <Badge :title="title" :color="headerColor" />
 
         <Icon
             v-if="isCollapsable"
             name="ph:caret-down-bold"
             :class="[
                 'transition-transform duration-200',
-                `text-${title.toLowerCase()}-800 dark:text-${title.toLowerCase()}-50`,
+                `text-${headerColor}-800 dark:text-${headerColor}-50`,
                 isCollapsed ? '-rotate-180' : 'rotate-0',
             ]"
         />
@@ -53,9 +54,7 @@ const toggleCollapsed = () => {
         v-show="isCollapsed"
         :class="[
             'grid',
-            title != null
-                ? `bg-${title.toLowerCase()}-50 dark:bg-${title.toLowerCase()}-800`
-                : 'bg-gray-50 dark:bg-gray-700',
+            `bg-${headerColor}-50 dark:bg-${headerColor}-800`,
             allowEdit
                 ? 'grid-cols-table-5-sm sm:grid-cols-table-5'
                 : 'grid-cols-table-4-sm sm:grid-cols-table-4',
