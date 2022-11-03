@@ -32,7 +32,9 @@ const toggleCollapsed = () => {
         v-if="title != null"
         :class="[
             'px-6 py-3 flex justify-between items-center whitespace-nowrap cursor-pointer select-none',
-            `bg-${headerColor}-100 dark:bg-${headerColor}-900`,
+            headerColor != 'gray'
+                ? `bg-${headerColor}-100 dark:bg-${headerColor}-900`
+                : 'bg-gray-200 dark:bg-gray-700',
         ]"
         @click="toggleCollapsed"
         aria-label="Table Header"
@@ -43,8 +45,7 @@ const toggleCollapsed = () => {
             v-if="isCollapsable"
             name="ph:caret-down-bold"
             :class="[
-                'transition-transform duration-200',
-                `text-${headerColor}-800 dark:text-${headerColor}-50`,
+                'transition-transform duration-200 text-gray-600 dark:text-gray-300',
                 isCollapsed ? '-rotate-180' : 'rotate-0',
             ]"
         />
@@ -53,8 +54,10 @@ const toggleCollapsed = () => {
     <div
         v-show="isCollapsed"
         :class="[
-            'grid',
-            `bg-${headerColor}-50 dark:bg-${headerColor}-800`,
+            'grid text-gray-600 dark:text-gray-300',
+            headerColor != 'gray'
+                ? `bg-${headerColor}-100 dark:bg-${headerColor}-900`
+                : 'bg-gray-200 dark:bg-gray-700',
             allowEdit
                 ? 'grid-cols-table-5-sm sm:grid-cols-table-5'
                 : 'grid-cols-table-4-sm sm:grid-cols-table-4',
@@ -62,41 +65,33 @@ const toggleCollapsed = () => {
     >
         <div
             scope="col"
-            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+            class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
         >
             {{ $t("item.name") }} + {{ $t("item.notes") }}
         </div>
         <div
             scope="col"
-            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+            class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
         >
             {{ $t("item.price") }}
         </div>
         <div
             scope="col"
-            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+            class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
         >
             {{ $t("item.link") }}
         </div>
         <!-- FIXME -->
         <!-- <div
 				scope="col"
-				class="
-					px-6
-					py-3
-					text-left text-xs
-					font-medium
-					text-gray-500
-					uppercase
-					tracking-wider
-				"
+				class=""
 			>
 				Picture
 			</div> -->
         <div
             v-if="allowPurchased"
             scope="col"
-            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+            class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
         >
             {{ $t("table.purchased") }}
         </div>
