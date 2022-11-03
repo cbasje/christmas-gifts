@@ -22,11 +22,6 @@ export default defineNuxtConfig({
         vueI18n: {
             legacy: false,
             locale: "en",
-            fallbackLocale: {
-                sv: ["nl"],
-                no: ["nl"],
-                default: ["en"],
-            },
         },
     },
 });
