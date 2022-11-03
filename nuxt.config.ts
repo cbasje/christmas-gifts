@@ -14,14 +14,24 @@ export default defineNuxtConfig({
         strategy: "prefix_except_default",
         defaultLocale: "en",
         locales: [
-            { code: "en", file: "en.json" },
-            { code: "nl", file: "nl.json" },
+            { code: "en", iso: "en", file: "en.json" },
+            { code: "nl", iso: "nl", file: "nl.json" },
         ],
         lazy: true,
         langDir: "lang/",
         vueI18n: {
             legacy: false,
             locale: "en",
+            fallbackLocale: {
+                sv: ["nl"],
+                no: ["nl"],
+                default: ["en", "nl"],
+            },
+        },
+        detectBrowserLanguage: {
+            useCookie: true,
+            cookieKey: "i18n_redirected",
+            redirectOn: "root", // recommended
         },
     },
 });
