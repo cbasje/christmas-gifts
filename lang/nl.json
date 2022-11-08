@@ -21,7 +21,7 @@
     },
     "item": {
         "name": "Naam",
-        "notes": "Notities",
+        "notes": "Opmerkingen",
         "price": "Prijs",
         "link": "Link",
         "groups": "Groepen"
