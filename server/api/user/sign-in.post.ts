@@ -2,7 +2,7 @@ import { User } from "~~/lib/types";
 import prisma from "~~/lib/prisma";
 
 export default defineEventHandler(async (event) => {
-    const body: Pick<User, "password"> = await useBody(event);
+    const body: Pick<User, "password"> = await readBody(event);
 
     if (!body.password) throw new Error("Not enough data");
 

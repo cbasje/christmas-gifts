@@ -1,9 +1,11 @@
 import prisma from "~~/lib/prisma";
 
 export default defineEventHandler(async (event) => {
-    const query = useQuery(event);
+    const query = getQuery(event);
     const id = String(query.id);
     const purchased = String(query.purchased);
+
+    const giftedById = getCookie(event, "user");
 
     if (!id || !purchased) throw new Error("Not enough data");
 
@@ -13,6 +15,7 @@ export default defineEventHandler(async (event) => {
         },
         data: {
             purchased: purchased === "true",
+            giftedById,
         },
         select: {
             id: true,

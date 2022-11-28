@@ -2,7 +2,7 @@ import prisma from "~~/lib/prisma";
 import { Group } from "~~/lib/types";
 
 export default defineEventHandler(async (event) => {
-    const query = useQuery(event);
+    const query = getQuery(event);
     const id = String(query.id);
     const group = String(query.group) as Group;
 

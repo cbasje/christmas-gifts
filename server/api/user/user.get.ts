@@ -1,7 +1,7 @@
 import prisma from "~~/lib/prisma";
 
 export default defineEventHandler(async (event) => {
-    const query = useQuery(event);
+    const query = getQuery(event);
     const id = String(query.id);
 
     if (!id) throw new Error("No 'id' given");
