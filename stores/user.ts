@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { GiftItem, User } from "~~/lib/types";
+import { GiftItem, Group, User } from "~~/lib/types";
 
 export type UserWithItemIds = User & { items?: Pick<GiftItem, "id">[] };
 export const useUserStore = defineStore("user", () => {
@@ -8,7 +8,7 @@ export const useUserStore = defineStore("user", () => {
     const currentUserId = useCookie("user", {
         expires: new Date(curDate.getFullYear() + 1, 0, 0),
     });
-    const currentGroupId = useCookie("group", {
+    const currentGroupId = useCookie<Group>("group", {
         expires: new Date(curDate.getFullYear() + 1, 0, 0),
     });
 
@@ -47,7 +47,7 @@ export const useUserStore = defineStore("user", () => {
     function saveCurrentUserId(id: string) {
         currentUserId.value = id;
     }
-    function saveCurrentGroupId(id: string) {
+    function saveCurrentGroupId(id: Group) {
         currentGroupId.value = id;
     }
 

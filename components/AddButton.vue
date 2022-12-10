@@ -28,7 +28,7 @@ const formData = {
     price: "",
     notes: "",
     link: "",
-    groups: [Group[userStore.currentGroupId]],
+    groups: userStore.currentGroupId ? [Group[userStore.currentGroupId]] : [],
 };
 
 const submitForm = async (data: EditFormData) => {

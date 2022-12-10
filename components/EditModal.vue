@@ -8,7 +8,7 @@ import {
 } from "@headlessui/vue";
 import { GiftItem, Group } from "~~/lib/types";
 
-export type EditFormData = Pick<
+export type EditFormData = { [key: string]: any } & Pick<
     GiftItem,
     "id" | "name" | "price" | "notes" | "link" | "groups"
 >;
@@ -173,7 +173,7 @@ watch(
                                         :options="
                                             Object.keys(Group).map((g) => ({
                                                 label: capitalizeGroupName(
-                                                    Group[g]
+                                                    Group[g as Group]
                                                 ),
                                                 value: g,
                                             }))

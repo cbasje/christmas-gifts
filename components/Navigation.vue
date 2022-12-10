@@ -32,7 +32,7 @@ const signOut = async () => {
     await router.push(localePath("/login"));
 };
 
-const updateGroup = (id: string) => {
+const updateGroup = (id: Group) => {
     userStore.saveCurrentGroupId(id);
 
     userStore.loadUsers();
@@ -122,7 +122,9 @@ const capitalizeGroupName = ([first, ...rest]: string): string =>
                                     as="li"
                                     v-slot="{ active }"
                                     v-if="
-                                        userStore.currentUser.groups.length > 1
+                                        userStore.currentUser.groups.length >
+                                            1 &&
+                                        userStore.currentGroupId != null
                                     "
                                 >
                                     <div
@@ -161,7 +163,9 @@ const capitalizeGroupName = ([first, ...rest]: string): string =>
                                                     >
                                                         {{
                                                             capitalizeGroupName(
-                                                                Group[group]
+                                                                Group[
+                                                                    group as Group
+                                                                ]
                                                             )
                                                         }}
                                                     </li>

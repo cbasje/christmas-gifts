@@ -1,6 +1,5 @@
-import { EditGiftItem, GiftItem, Group, User } from "~~/lib/types";
 import { defineStore } from "pinia";
-import { NewGiftItem } from "~~/lib/types";
+import { EditGiftItem, GiftItem, Group, NewGiftItem } from "~~/lib/types";
 import { useUserStore } from "./user";
 
 export const useGiftItemStore = defineStore("gift-item", () => {
@@ -47,6 +46,7 @@ export const useGiftItemStore = defineStore("gift-item", () => {
         id: string;
         purchased: boolean;
     }) {
+        // @ts-expect-error
         itemEntities.value[id].purchased = purchased;
     }
     function saveNewItem(item: GiftItem) {

@@ -10,12 +10,17 @@ const slots = useSlots();
 const html = ref("");
 
 onMounted(async () => {
+    const defaultSlot = slots.default ? slots.default() : undefined;
+
+    if (!defaultSlot || defaultSlot.length === 0 || !defaultSlot[0].children)
+        return;
+
     const markdownToHtml = await remark()
         .use(remarkParse)
         .use(remarkRehype)
         .use(rehypeSanitize)
         .use(rehypeStringify)
-        .process(slots.default()[0].children.toString());
+        .process(defaultSlot[0].children.toString());
 
     html.value = markdownToHtml.value.toString();
 });

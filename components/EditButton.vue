@@ -34,7 +34,7 @@ const formData = reactive<EditFormData>({
     price: "",
     notes: "",
     link: "",
-    groups: [Group[userStore.currentGroupId]],
+    groups: userStore.currentGroupId ? [Group[userStore.currentGroupId]] : [],
 });
 const setForm = (data: EditFormData) => {
     formData.id = data.id;

@@ -35,7 +35,7 @@ const isCollapsed = ref(!props.isCollapsable);
             !isCollapsed ? 'w-full' : 'w-min sm:w-full',
             items === null ||
             items.length === 0 ||
-            items.every((item) => item.purchased)
+            items.every((item) => 'purchased' in item && item.purchased)
                 ? 'opacity-30'
                 : '',
         ]"

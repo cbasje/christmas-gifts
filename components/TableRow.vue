@@ -87,7 +87,9 @@ const formatLink = (linkString: string | null) => {
     <div
         :class="[
             'group grid last:border-none border-b border-gray-200 dark:border-gray-700',
-            item.purchased && item.recipientId != userStore.currentUserId
+            'purchased' in item &&
+            item.purchased &&
+            item.recipientId != userStore.currentUserId
                 ? 'opacity-30 line-through decoration-2 decoration-current'
                 : '',
             allowEdit
@@ -136,7 +138,7 @@ const formatLink = (linkString: string | null) => {
 			</div>
 		</div> -->
         <div
-            v-if="allowPurchased"
+            v-if="'purchased' in item && allowPurchased"
             class="flex justify-center items-center px-6 py-3"
         >
             <Switch
