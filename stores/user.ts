@@ -7,11 +7,9 @@ export const useUserStore = defineStore("user", () => {
 
     const currentUserId = useCookie("user", {
         expires: new Date(curDate.getFullYear() + 1, 0, 0),
-        default: null,
     });
     const currentGroupId = useCookie("group", {
         expires: new Date(curDate.getFullYear() + 1, 0, 0),
-        default: null,
     });
 
     const userIds = ref<string[]>([]);
