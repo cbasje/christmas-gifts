@@ -15,11 +15,12 @@ export default defineEventHandler(async (event) => {
         },
         data: {
             purchased: purchased === "true",
-            giftedById,
+            giftedById: purchased === "true" ? giftedById : null,
         },
         select: {
             id: true,
             purchased: true,
+            giftedById: true,
         },
     });
 });

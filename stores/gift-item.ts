@@ -1,5 +1,11 @@
 import { defineStore } from "pinia";
-import { EditGiftItem, GiftItem, Group, NewGiftItem } from "~~/lib/types";
+import {
+    EditGiftItem,
+    GiftItem,
+    Group,
+    NewGiftItem,
+    OverviewGiftItem,
+} from "~~/lib/types";
 import { useUserStore } from "./user";
 
 export const useGiftItemStore = defineStore("gift-item", () => {
@@ -41,13 +47,14 @@ export const useGiftItemStore = defineStore("gift-item", () => {
     }
     function savePurchased({
         id,
+        giftedById,
         purchased,
-    }: {
-        id: string;
-        purchased: boolean;
-    }) {
-        // @ts-expect-error
-        itemEntities.value[id].purchased = purchased;
+    }: Pick<OverviewGiftItem, "id" | "giftedById" | "purchased">) {
+        itemEntities.value[id] = {
+            ...itemEntities.value[id],
+            giftedById,
+            purchased,
+        };
     }
     function saveNewItem(item: GiftItem) {
         itemIds.value = [...itemIds.value, item.id];
