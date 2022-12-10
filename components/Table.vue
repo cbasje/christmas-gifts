@@ -2,7 +2,7 @@
 import { Color, GiftItem } from "~~/lib/types";
 
 export interface Props {
-    items: GiftItem[];
+    items: GiftItem[] | null;
     title?: string;
     headerColor?: Color;
     allowPurchased?: boolean;
@@ -11,7 +11,7 @@ export interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-    title: null,
+    title: undefined,
     headerColour: "gray",
     allowPurchased: false,
     allowEdit: false,
@@ -33,7 +33,9 @@ const isCollapsed = ref(!props.isCollapsable);
         :class="[
             'shadow hover:shadow-lg bg-white dark:bg-gray-800 rounded-lg overflow-hidden',
             !isCollapsed ? 'w-full' : 'w-min sm:w-full',
-            items.length === 0 || items.every((item) => item.purchased)
+            items === null ||
+            items.length === 0 ||
+            items.every((item) => item.purchased)
                 ? 'opacity-30'
                 : '',
         ]"
@@ -48,7 +50,7 @@ const isCollapsed = ref(!props.isCollapsable);
             v-model:is-collapsed="isCollapsed"
         />
 
-        <template v-if="items.length > 0">
+        <template v-if="items === null || items.length > 0">
             <TableRow
                 v-show="isCollapsed"
                 v-for="item in items"
@@ -56,7 +58,7 @@ const isCollapsed = ref(!props.isCollapsable);
                 :item="item"
                 :allow-purchased="allowPurchased"
                 :allow-edit="allowEdit"
-                @switchPurchased="(ev) => emits('switchPurchased', ev)"
+                @switchPurchased="(ev:any) => emits('switchPurchased', ev)"
             />
         </template>
     </div>

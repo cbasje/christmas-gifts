@@ -17,9 +17,11 @@ const submitForm = async () => {
 
         await userStore.signIn(password.value);
         await router.push(localePath("/"));
-    } catch (error) {
-        console.error(error);
-        toast.error(`Signing in was not successful! Reason: ${error.message}`);
+    } catch (e) {
+        if (e instanceof Error) {
+            console.error(e);
+            toast.error(`Signing in was not successful! Reason: ${e.message}`);
+        }
     }
 };
 

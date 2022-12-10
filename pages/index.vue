@@ -64,11 +64,13 @@ const switchPurchased = async (payload: {
         toast.success(
             `Changed purchase status of '${payload.item.name}' successfully!`
         );
-    } catch (error) {
-        console.error(error);
-        toast.error(
-            `Saving purchase status was not successful! Reason: ${error.message}`
-        );
+    } catch (e) {
+        if (e instanceof Error) {
+            console.error(e);
+            toast.error(
+                `Saving purchase status was not successful! Reason: ${e.message}`
+            );
+        }
     }
 };
 
@@ -78,11 +80,13 @@ onMounted(async () => {
 
         await userStore.loadUsers();
         await giftItemStore.loadGiftItems();
-    } catch (error) {
-        console.error(error);
-        toast.error(
-            `Loading data was not successful! Reason: ${error.message}`
-        );
+    } catch (e) {
+        if (e instanceof Error) {
+            console.error(e);
+            toast.error(
+                `Loading data was not successful! Reason: ${e.message}`
+            );
+        }
     } finally {
         isLoading.value = false;
     }
@@ -111,11 +115,11 @@ definePageMeta({
                         :header-color="headerColors[index]"
                         :items="
                             user.items
-                                .map(
+                                ?.map(
                                     (item) =>
                                         giftItemStore.itemEntities[item.id]
                                 )
-                                .filter((item) => item != undefined)
+                                .filter((item) => item != undefined) ?? null
                         "
                         :allow-purchased="true"
                         is-collapsable

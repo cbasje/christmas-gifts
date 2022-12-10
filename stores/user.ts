@@ -59,10 +59,14 @@ export const useUserStore = defineStore("user", () => {
         });
         saveAllUsers(data);
     }
-    async function loadCurrentUser(id: string = currentUserId.value) {
+    async function loadCurrentUser(id = currentUserId.value) {
+        if (!id) throw new Error("No 'id' given");
+
         const data = await $fetch("/api/user/user", {
             query: { id },
         });
+
+        if (data === null) throw new Error("No user found");
 
         saveNewUser(data);
     }
@@ -75,6 +79,8 @@ export const useUserStore = defineStore("user", () => {
             method: "POST",
             body: { password },
         });
+
+        if (data === null) throw new Error("No user found");
 
         saveCurrentUserId(data.id);
         saveCurrentGroupId(data.groups[0]);

@@ -15,11 +15,13 @@ onMounted(async () => {
         if (!online.value) throw new Error("Not online");
 
         await giftItemStore.loadWishList();
-    } catch (error) {
-        console.error(error);
-        toast.error(
-            `Loading your wish list was not successful! Reason: ${error.message}`
-        );
+    } catch (e: unknown) {
+        if (e instanceof Error) {
+            console.error(e);
+            toast.error(
+                `Loading your wish list was not successful! Reason: ${e.message}`
+            );
+        }
     } finally {
         isLoading.value = false;
     }

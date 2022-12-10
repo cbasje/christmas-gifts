@@ -24,7 +24,7 @@ const emits = defineEmits<{
     (e: "removeItem", value: GiftItem): void;
 }>();
 
-const formatPrice = (priceString: string) => {
+const formatPrice = (priceString: string | null) => {
     const defaultReturn = "-";
 
     if (!priceString) return defaultReturn;
@@ -69,7 +69,7 @@ const formatPrice = (priceString: string) => {
             return defaultFormatter.format(priceNumber);
     }
 };
-const formatLink = (linkString: string) => {
+const formatLink = (linkString: string | null) => {
     if (!linkString) return "";
 
     const regex = /\b(?:http(?:s)?:\/\/)?((?:\w+\.)?\w+\.[\w\/\.\-_]*)/g;
