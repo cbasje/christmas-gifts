@@ -8,6 +8,8 @@ import { useToast } from "vue-toastification/dist/index.mjs";
 const giftItemStore = useGiftItemStore();
 const userStore = useUserStore();
 
+const router = useRouter();
+const localePath = useLocalePath();
 const toast = useToast();
 const online = useOnline();
 
@@ -44,29 +46,36 @@ const setForm = (data: EditFormData) => {
 };
 
 const submitForm = async (data: EditFormData) => {
-    const item: EditGiftItem = {
-        id: data.id,
-        name: data.name,
-        price: data.price,
-        notes: data.notes,
-        recipientId: userStore.currentUserId,
-        groups: data.groups.map((g) => Group[g]),
-        link: data.link,
-        purchased: false,
-    };
-
     try {
+        if (userStore.currentUserId === null) {
+            await router.push(localePath("/login"));
+            throw new Error("Not logged in correctly");
+        }
+
+        const item: EditGiftItem = {
+            id: data.id,
+            name: data.name,
+            price: data.price,
+            notes: data.notes,
+            recipientId: userStore.currentUserId,
+            groups: data.groups.map((g) => Group[g]),
+            link: data.link,
+            purchased: false,
+        };
+
         if (!online.value) throw new Error("Not online");
 
         giftItemStore.editItem(item);
 
         toast.success(`Edited '${item.name}' successfully!`);
         closeModal();
-    } catch (error) {
-        console.error(error);
-        toast.error(
-            `Editing item was not successful! Reason: ${error.message}`
-        );
+    } catch (e) {
+        if (e instanceof Error) {
+            console.error(e);
+            toast.error(
+                `Editing item was not successful! Reason: ${e.message}`
+            );
+        }
     }
 };
 

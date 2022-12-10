@@ -1,11 +1,10 @@
-import { joinURL } from "ufo";
 import { useUserStore } from "~~/stores/user";
 
 export default defineNuxtPlugin((nuxtApp) => {
     addRouteMiddleware(
         "route-prefix",
         (to, from) => {
-            const locale = useBrowserLocale();
+            const locale = useBrowserLocale() ?? "en";
             const localePath = usePath();
 
             if (to.path === "en") {
@@ -18,10 +17,10 @@ export default defineNuxtPlugin((nuxtApp) => {
     );
 
     addRouteMiddleware("auth", async (to, from) => {
-        const locale = useBrowserLocale();
+        const locale = useBrowserLocale() ?? "en";
         const localePath = usePath();
 
-        const userId = useCookie("user", { default: null });
+        const userId = useCookie("user");
 
         if (!userId.value) {
             return navigateTo(localePath.fromLocale(locale, "/login"));
@@ -29,7 +28,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     });
 
     addRouteMiddleware("auth-query", async (to, from) => {
-        const locale = useBrowserLocale();
+        const locale = useBrowserLocale() ?? "en";
         const password = to.query.password;
 
         if (password != undefined && typeof password == "string") {
@@ -40,10 +39,13 @@ export default defineNuxtPlugin((nuxtApp) => {
                 await userStore.signIn(password);
 
                 return navigateTo(localePath.fromLocale(locale, "/"));
-            } catch (error) {
-                console.error(
-                    `🚨 Error in automatically signing in with password query! Reason: ${error}`
-                );
+            } catch (e) {
+                if (e instanceof Error) {
+                    console.error(e);
+                    console.error(
+                        `🚨 Error in automatically signing in with password query! Reason: ${e}`
+                    );
+                }
             }
         }
     });

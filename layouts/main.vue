@@ -14,11 +14,13 @@ onMounted(async () => {
         if (!online.value) throw new Error("Not online");
 
         await userStore.loadCurrentUser();
-    } catch (error) {
-        console.error(error);
-        toast.error(
-            `Loading user was not successful! Reason: ${error.message}`
-        );
+    } catch (e) {
+        if (e instanceof Error) {
+            console.error(e);
+            toast.error(
+                `Loading user was not successful! Reason: ${e.message}`
+            );
+        }
 
         router.push(localePath("/login"));
     }

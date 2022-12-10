@@ -8,6 +8,8 @@ import { useToast } from "vue-toastification/dist/index.mjs";
 const giftItemStore = useGiftItemStore();
 const userStore = useUserStore();
 
+const router = useRouter();
+const localePath = useLocalePath();
 const toast = useToast();
 const online = useOnline();
 
@@ -30,26 +32,33 @@ const formData = {
 };
 
 const submitForm = async (data: EditFormData) => {
-    const newItem: NewGiftItem = {
-        name: data.name,
-        price: data.price,
-        notes: data.notes,
-        recipientId: userStore.currentUserId,
-        groups: data.groups.map((g) => Group[g]),
-        link: data.link,
-        purchased: false,
-    };
-
     try {
+        if (userStore.currentUserId === null) {
+            await router.push(localePath("/login"));
+            throw new Error("Not logged in correctly");
+        }
+
+        const newItem: NewGiftItem = {
+            name: data.name,
+            price: data.price,
+            notes: data.notes,
+            recipientId: userStore.currentUserId,
+            groups: data.groups.map((g) => Group[g]),
+            link: data.link,
+            purchased: false,
+        };
+
         if (!online.value) throw new Error("Not online");
 
         giftItemStore.addItem(newItem);
 
         toast.success(`Added '${newItem.name}' to your wishlist successfully!`);
         closeModal();
-    } catch (error) {
-        console.error(error);
-        toast.error(`Adding item was not successful! Reason: ${error.message}`);
+    } catch (e) {
+        if (e instanceof Error) {
+            console.error(e);
+            toast.error(`Adding item was not successful! Reason: ${e.message}`);
+        }
     }
 };
 </script>

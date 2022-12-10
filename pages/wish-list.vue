@@ -15,7 +15,7 @@ onMounted(async () => {
         if (!online.value) throw new Error("Not online");
 
         await giftItemStore.loadWishList();
-    } catch (e: unknown) {
+    } catch (e) {
         if (e instanceof Error) {
             console.error(e);
             toast.error(
