@@ -5,12 +5,19 @@ export default defineEventHandler(async (event) => {
     const query = getQuery(event);
     const group = String(query.group) as Group;
 
-    if (!group) throw new Error("No 'group' given");
+    const userId = getCookie(event, "user");
+
+    if (!userId || !group) throw new Error("Not enough data");
 
     return await prisma.giftItem.findMany({
         where: {
-            groups: {
-                has: group,
+            AND: {
+                NOT: {
+                    recipientId: userId,
+                },
+                groups: {
+                    has: group,
+                },
             },
         },
     });

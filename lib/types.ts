@@ -4,12 +4,20 @@ import {
     User as PrismaUser,
 } from "@prisma/client";
 
-export type GiftItem = PrismaGiftItem;
+export type OverviewGiftItem = Omit<PrismaGiftItem, "createdAt" | "updatedAt">;
+export type WishListGiftItem = Omit<
+    PrismaGiftItem,
+    "createdAt" | "updatedAt" | "giftedById" | "purchased"
+>;
+export type GiftItem = OverviewGiftItem | WishListGiftItem;
 export type NewGiftItem = Omit<
     PrismaGiftItem,
-    "id" | "createdAt" | "updatedAt"
+    "id" | "createdAt" | "updatedAt" | "giftedById"
 >;
-export type EditGiftItem = Omit<PrismaGiftItem, "createdAt" | "updatedAt">;
+export type EditGiftItem = Omit<
+    PrismaGiftItem,
+    "createdAt" | "updatedAt" | "giftedById"
+>;
 
 export type User = PrismaUser;
 export type NewUser = Omit<PrismaUser, "id" | "createdAt" | "updatedAt"> & {

@@ -3,15 +3,25 @@ import { Group } from "~~/lib/types";
 
 export default defineEventHandler(async (event) => {
     const query = getQuery(event);
-    const id = String(query.id);
     const group = String(query.group) as Group;
 
-    if (!id || !group) throw new Error("Not enough data");
+    const userId = getCookie(event, "user");
+
+    if (!userId || !group) throw new Error("Not enough data");
 
     return await prisma.giftItem.findMany({
+        select: {
+            id: true,
+            name: true,
+            price: true,
+            notes: true,
+            recipientId: true,
+            link: true,
+            groups: true,
+        },
         where: {
             AND: {
-                recipientId: id,
+                recipientId: userId,
                 groups: {
                     has: group,
                 },
