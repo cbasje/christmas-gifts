@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useToast } from "vue-toastification/dist/index.mjs";
+import { Switch } from "@headlessui/vue";
 
 import { Color, GiftItem, Group, User } from "~~/lib/types";
 import { useGiftItemStore } from "~~/stores/gift-item";
@@ -12,6 +13,7 @@ const toast = useToast();
 const online = useOnline();
 
 const isLoading = ref(true);
+const showPartner = ref(false);
 const headerColors: Color[] = [
     "pink",
     "purple",
@@ -49,6 +51,8 @@ const sortByName = (a: User, b: User) => {
 };
 
 const filterItems = (item: GiftItem) => {
+    const currentGroupId = userStore.currentGroupId;
+
     const isUndefined = item === undefined;
     if (isUndefined) return false;
 
@@ -57,9 +61,14 @@ const filterItems = (item: GiftItem) => {
         "giftedById" in item &&
         item.giftedById != null &&
         (item.giftedById === userStore.currentUserId ||
-            item.giftedById === userStore.currentUser?.partnerId);
+            (showPartner.value &&
+                item.giftedById === userStore.currentUser?.partnerId));
 
-    return isIdea && isGiftedByCurrentUser;
+    const isCurrentGroup = item.groups?.some(
+        (g) => Group[g] === currentGroupId
+    );
+
+    return isIdea && isGiftedByCurrentUser && isCurrentGroup;
 };
 
 const userList = computed(() => {
@@ -136,6 +145,25 @@ definePageMeta({
                 {{ $t("pages.ideas.description") }}
             </template>
         </Header>
+
+        <div class="container w-full flex justify-end gap-3 px-3">
+            <span class="text-gray-500"> Show partner's gifts </span>
+            <Switch
+                v-model="showPartner"
+                :class="
+                    showPartner
+                        ? 'bg-success-500'
+                        : 'bg-gray-200 dark:bg-gray-400'
+                "
+                class="relative inline-flex items-center h-6 rounded-full w-11"
+            >
+                <span class="sr-only">Show partner</span>
+                <span
+                    :class="showPartner ? 'translate-x-6' : 'translate-x-1'"
+                    class="inline-block w-4 h-4 transform bg-white dark:bg-gray-100 rounded-full"
+                />
+            </Switch>
+        </div>
 
         <template v-if="userList != null || !isLoading">
             <TableContainer>
