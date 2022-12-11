@@ -10,6 +10,7 @@ export interface Props {
     isCollapsable?: boolean;
     hasStrikethrough?: boolean;
     hasSummary?: boolean;
+    showBgColor?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -20,6 +21,7 @@ const props = withDefaults(defineProps<Props>(), {
     isCollapsable: false,
     hasStrikethrough: false,
     hasSummary: false,
+    showBgColor: true,
 });
 
 const emits = defineEmits<{
@@ -51,6 +53,7 @@ const sum = (arr: number[]): number => arr.reduce((a, b) => a + b, 0);
         <TableHeading
             :title="title"
             :header-color="headerColor ?? 'gray'"
+            :show-bg-color="showBgColor"
             :allow-purchased="allowPurchased"
             :allow-edit="allowEdit"
             :is-collapsable="isCollapsable"

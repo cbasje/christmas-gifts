@@ -9,6 +9,7 @@ export interface Props {
     isCollapsable?: boolean;
     isCollapsed?: boolean;
     hasSummary?: boolean;
+    showBgColor?: boolean;
     summaryNumber?: number;
 }
 
@@ -18,6 +19,7 @@ const props = withDefaults(defineProps<Props>(), {
     isCollapsable: false,
     isCollapsed: true,
     hasSummary: false,
+    showBgColor: true,
     summaryNumber: 0,
 });
 
@@ -49,7 +51,7 @@ const formatPrice = (priceNumber: number) => {
         v-if="title != null"
         :class="[
             'px-6 py-3 flex justify-between items-center whitespace-nowrap cursor-pointer select-none',
-            headerColor != 'gray'
+            headerColor != 'gray' && showBgColor
                 ? `bg-${headerColor}-100 dark:bg-${headerColor}-900`
                 : 'bg-gray-200 dark:bg-gray-700',
         ]"
@@ -78,7 +80,7 @@ const formatPrice = (priceNumber: number) => {
         v-show="isCollapsed"
         :class="[
             'grid text-gray-600 dark:text-gray-300',
-            headerColor != 'gray'
+            headerColor != 'gray' && showBgColor
                 ? `bg-${headerColor}-100 dark:bg-${headerColor}-900`
                 : 'bg-gray-200 dark:bg-gray-700',
             allowEdit
