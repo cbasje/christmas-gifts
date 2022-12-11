@@ -34,6 +34,19 @@ const emits = defineEmits<{
 const isCollapsed = ref(!props.isCollapsable);
 
 const sum = (arr: number[]): number => arr.reduce((a, b) => a + b, 0);
+const getPriceNumber = (priceString: string | null): number => {
+    if (!priceString) return 0;
+
+    const regex = /(?<code>(?:[$€])?)\s?(?<price>\d+(?:[,\.]\d+)?)/g;
+    const matches = [...priceString.matchAll(regex)];
+
+    if (!matches || !matches.length) return 0;
+
+    const [_, _code, price] = matches[0];
+    const priceNumber = price.replace(",", ".");
+
+    return Number(priceNumber) ?? 0;
+};
 </script>
 
 <template>
@@ -58,7 +71,9 @@ const sum = (arr: number[]): number => arr.reduce((a, b) => a + b, 0);
             :allow-edit="allowEdit"
             :is-collapsable="isCollapsable"
             :has-summary="hasSummary"
-            :summary-number="sum(items?.map((i) => Number(i.price)) ?? [])"
+            :summary-number="
+                sum(items?.map((i) => getPriceNumber(i.price)) ?? [])
+            "
             v-model:is-collapsed="isCollapsed"
         />
 

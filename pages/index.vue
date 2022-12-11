@@ -23,45 +23,6 @@ const headerColors: Color[] = [
     "orange",
 ];
 
-const sortByName = (a: User, b: User) => {
-    var nameA = a.name.toUpperCase();
-    var nameB = b.name.toUpperCase();
-
-    if (nameA < nameB) return -1;
-    if (nameA > nameB) return 1;
-
-    // names must be equal
-    return 0;
-};
-
-const filterItems = (item: GiftItem) => {
-    const isUndefined = item === undefined;
-    if (isUndefined) return false;
-
-    const isNotIdea = !item.idea;
-    return isNotIdea;
-};
-
-const userList = computed(() => {
-    const currentUserId = userStore.currentUserId;
-    const currentGroupId = userStore.currentGroupId;
-
-    if (!currentUserId || !currentGroupId) {
-        return null;
-    }
-
-    return userStore.allUsers
-        .filter((user: User) => {
-            const isRecipientNotCurrentUser = user.id != currentUserId;
-            const isCurrentGroup = user.groups.some(
-                (g) => Group[g] === currentGroupId
-            );
-
-            return isRecipientNotCurrentUser && isCurrentGroup;
-        })
-        .sort(sortByName);
-});
-
 const switchPurchased = async (payload: {
     item: GiftItem;
     purchased: boolean;
@@ -117,20 +78,16 @@ definePageMeta({
             </template>
         </Header>
 
-        <template v-if="userList != null || !isLoading">
+        <template v-if="giftItemStore.overviewList != null || !isLoading">
             <TableContainer>
-                <template v-for="(user, index) in userList" :key="user.id">
+                <template
+                    v-for="(items, key, index) in giftItemStore.overviewList"
+                    :key="key"
+                >
                     <Table
-                        :title="user.name ?? null"
+                        :title="userStore.userEntities[key].name ?? null"
                         :header-color="headerColors[index]"
-                        :items="
-                            user.items
-                                ?.map(
-                                    (item) =>
-                                        giftItemStore.itemEntities[item.id]
-                                )
-                                .filter(filterItems) ?? null
-                        "
+                        :items="items"
                         :allow-purchased="true"
                         is-collapsable
                         has-strikethrough

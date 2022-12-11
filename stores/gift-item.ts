@@ -6,7 +6,7 @@ import {
     NewGiftItem,
     OverviewGiftItem,
 } from "~~/lib/types";
-import { useUserStore } from "./user";
+import { UserWithItemIds, useUserStore } from "./user";
 
 export const useGiftItemStore = defineStore("gift-item", () => {
     const userStore = useUserStore();
@@ -16,6 +16,53 @@ export const useGiftItemStore = defineStore("gift-item", () => {
 
     const allGiftItems = computed(() => {
         return itemIds.value.map((id: string) => itemEntities.value[id]);
+    });
+
+    const sortByName = (a: UserWithItemIds, b: UserWithItemIds) => {
+        var nameA = a.name.toUpperCase();
+        var nameB = b.name.toUpperCase();
+
+        if (nameA < nameB) return -1;
+        if (nameA > nameB) return 1;
+
+        // names must be equal
+        return 0;
+    };
+    const groupBy = <T extends Record<string, any>, K extends keyof T>(
+        arr: T[],
+        key: K
+    ): Record<string, T[]> => {
+        return arr.reduce(
+            (acc, item) => (
+                (acc[item[key]] = [...(acc[item[key]] || []), item]), acc
+            ),
+            {} as Record<string, T[]>
+        );
+    };
+
+    const overviewList = computed(() => {
+        const currentUserId = userStore.currentUserId;
+        const currentGroupId = userStore.currentGroupId;
+
+        if (!currentUserId || !currentGroupId) {
+            return null;
+        }
+
+        const filterItems = (item: GiftItem) => {
+            const isUndefined = item === undefined;
+            if (isUndefined) return false;
+
+            const isNotIdea = !item.idea;
+
+            const isRecipientNotCurrentUser = item.recipientId != currentUserId;
+            const isCurrentGroup = item.groups?.some(
+                (g) => Group[g] === currentGroupId
+            );
+
+            return isNotIdea && isRecipientNotCurrentUser && isCurrentGroup;
+        };
+
+        return groupBy(allGiftItems.value.filter(filterItems), "recipientId");
     });
     const wishList = computed(() => {
         const currentUserId = userStore.currentUserId;
@@ -35,6 +82,30 @@ export const useGiftItemStore = defineStore("gift-item", () => {
 
             return isRecipientCurrentUser && isCurrentGroup && isNotIdea;
         });
+    });
+    const ideaList = computed(() => {
+        const currentUserId = userStore.currentUserId;
+        const currentGroupId = userStore.currentGroupId;
+
+        if (!currentUserId || !currentGroupId) {
+            return null;
+        }
+
+        const filterItems = (item: GiftItem) => {
+            const isUndefined = item === undefined;
+            if (isUndefined) return false;
+
+            const isIdea = "idea" in item && item.idea;
+
+            const isRecipientNotCurrentUser = item.recipientId != currentUserId;
+            const isCurrentGroup = item.groups?.some(
+                (g) => Group[g] === currentGroupId
+            );
+
+            return isIdea && isRecipientNotCurrentUser && isCurrentGroup;
+        };
+
+        return groupBy(allGiftItems.value.filter(filterItems), "recipientId");
     });
 
     function saveGiftItems(payload: GiftItem[]) {
@@ -132,7 +203,9 @@ export const useGiftItemStore = defineStore("gift-item", () => {
     return {
         itemEntities,
         allGiftItems,
+        overviewList,
         wishList,
+        ideaList,
         loadGiftItems,
         loadWishList,
         togglePurchased,

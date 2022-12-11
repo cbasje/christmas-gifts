@@ -25,38 +25,7 @@ const headerColors: Color[] = [
     "orange",
 ];
 
-const getPriceNumber = (priceString: string | null) => {
-    if (!priceString) return "0";
-
-    const regex = /(?<code>(?:[$€])?)\s?(?<price>\d+(?:[,\.]\d+)?)/g;
-    const matches = [...priceString.matchAll(regex)];
-
-    if (!matches || !matches.length) return "0";
-
-    const [_, _code, price] = matches[0];
-    const priceNumber = price.replace(",", ".");
-
-    return priceNumber ?? "0";
-};
-
-const sortByName = (a: User, b: User) => {
-    var nameA = a.name.toUpperCase();
-    var nameB = b.name.toUpperCase();
-
-    if (nameA < nameB) return -1;
-    if (nameA > nameB) return 1;
-
-    // names must be equal
-    return 0;
-};
-
 const filterItems = (item: GiftItem) => {
-    const currentGroupId = userStore.currentGroupId;
-
-    const isUndefined = item === undefined;
-    if (isUndefined) return false;
-
-    const isIdea = "idea" in item && item.idea;
     const isGiftedByCurrentUser =
         "giftedById" in item &&
         item.giftedById != null &&
@@ -64,32 +33,8 @@ const filterItems = (item: GiftItem) => {
             (showPartner.value &&
                 item.giftedById === userStore.currentUser?.partnerId));
 
-    const isCurrentGroup = item.groups?.some(
-        (g) => Group[g] === currentGroupId
-    );
-
-    return isIdea && isGiftedByCurrentUser && isCurrentGroup;
+    return isGiftedByCurrentUser;
 };
-
-const userList = computed(() => {
-    const currentUserId = userStore.currentUserId;
-    const currentGroupId = userStore.currentGroupId;
-
-    if (!currentUserId || !currentGroupId) {
-        return null;
-    }
-
-    return userStore.allUsers
-        .filter((user: User) => {
-            const isRecipientNotCurrentUser = user.id != currentUserId;
-            const isCurrentGroup = user.groups.some(
-                (g) => Group[g] === currentGroupId
-            );
-
-            return isRecipientNotCurrentUser && isCurrentGroup;
-        })
-        .sort(sortByName);
-});
 
 const switchPurchased = async (payload: {
     item: GiftItem;
@@ -165,23 +110,17 @@ definePageMeta({
             </Switch>
         </div>
 
-        <template v-if="userList != null || !isLoading">
+        <template v-if="giftItemStore.ideaList != null || !isLoading">
             <TableContainer>
-                <template v-for="(user, index) in userList" :key="user.id">
+                <template
+                    v-for="(items, key, index) in giftItemStore.ideaList"
+                    :key="key"
+                >
                     <Table
-                        :title="user.name ?? null"
+                        :title="userStore.userEntities[key].name ?? null"
                         :header-color="headerColors[index]"
-                        :items="
-                            user.items
-                                ?.map((item) => ({
-                                    ...giftItemStore.itemEntities[item.id],
-                                    price: getPriceNumber(
-                                        giftItemStore.itemEntities[item.id]
-                                            ?.price
-                                    ),
-                                }))
-                                .filter(filterItems) ?? null
-                        "
+                        :show-bg-color="false"
+                        :items="items.filter(filterItems) ?? null"
                         allow-purchased
                         allow-edit
                         is-collapsable
