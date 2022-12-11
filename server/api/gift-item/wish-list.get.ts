@@ -17,6 +17,7 @@ export default defineEventHandler(async (event) => {
             notes: true,
             recipientId: true,
             link: true,
+            idea: true,
             groups: true,
         },
         where: {

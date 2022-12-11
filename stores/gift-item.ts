@@ -26,10 +26,14 @@ export const useGiftItemStore = defineStore("gift-item", () => {
         }
 
         return allGiftItems.value.filter((item: GiftItem) => {
-            return (
-                item.recipientId == currentUserId &&
-                item.groups.findIndex((g) => Group[g] === currentGroupId) !== -1
+            const isRecipientCurrentUser = item.recipientId == currentUserId;
+            const isCurrentGroup = item.groups.some(
+                (g) => Group[g] === currentGroupId
             );
+
+            const isNotIdea = !item.idea;
+
+            return isRecipientCurrentUser && isCurrentGroup && isNotIdea;
         });
     });
 
@@ -74,11 +78,7 @@ export const useGiftItemStore = defineStore("gift-item", () => {
     }
 
     async function loadGiftItems() {
-        const data = await $fetch("/api/gift-item/all-items", {
-            query: {
-                group: userStore.currentGroupId,
-            },
-        });
+        const data = await $fetch("/api/gift-item/all-items");
         saveGiftItems(data);
     }
     async function loadWishList() {
@@ -99,16 +99,12 @@ export const useGiftItemStore = defineStore("gift-item", () => {
             query: {
                 id: payload.item.id,
                 purchased: payload.purchased,
+                isIdea: payload.item.idea,
             },
         });
         savePurchased(data);
     }
     async function addItem(item: NewGiftItem) {
-        const tempId = "randomid";
-        const tempItem: NewGiftItem & { id: string } = {
-            id: tempId,
-            ...item,
-        };
         const data = await $fetch("/api/gift-item/create-item", {
             method: "POST",
             body: item,
@@ -134,6 +130,7 @@ export const useGiftItemStore = defineStore("gift-item", () => {
 
     return {
         itemEntities,
+        allGiftItems,
         wishList,
         loadGiftItems,
         loadWishList,

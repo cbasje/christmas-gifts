@@ -7,6 +7,7 @@ export interface Props {
     item: GiftItem;
     allowPurchased?: boolean;
     allowEdit?: boolean;
+    hasStrikethrough?: boolean;
 }
 
 const userStore = useUserStore();
@@ -14,6 +15,7 @@ const userStore = useUserStore();
 const props = withDefaults(defineProps<Props>(), {
     allowPurchased: false,
     allowEdit: false,
+    hasStrikethrough: false,
 });
 const emits = defineEmits<{
     (
@@ -89,11 +91,14 @@ const formatLink = (linkString: string | null) => {
             'group grid last:border-none border-b border-gray-200 dark:border-gray-700',
             'purchased' in item &&
             item.purchased &&
+            hasStrikethrough &&
             item.recipientId != userStore.currentUserId
                 ? 'opacity-30 line-through decoration-2 decoration-current'
                 : '',
             allowEdit
-                ? 'grid-cols-table-5-sm sm:grid-cols-table-5'
+                ? allowPurchased
+                    ? 'grid-cols-table-7-sm sm:grid-cols-table-7'
+                    : 'grid-cols-table-5-sm sm:grid-cols-table-5'
                 : 'grid-cols-table-4-sm sm:grid-cols-table-4',
         ]"
     >

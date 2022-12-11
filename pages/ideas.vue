@@ -23,6 +23,20 @@ const headerColors: Color[] = [
     "orange",
 ];
 
+const getPriceNumber = (priceString: string | null) => {
+    if (!priceString) return "0";
+
+    const regex = /(?<code>(?:[$€])?)\s?(?<price>\d+(?:[,\.]\d+)?)/g;
+    const matches = [...priceString.matchAll(regex)];
+
+    if (!matches || !matches.length) return "0";
+
+    const [_, _code, price] = matches[0];
+    const priceNumber = price.replace(",", ".");
+
+    return priceNumber ?? "0";
+};
+
 const sortByName = (a: User, b: User) => {
     var nameA = a.name.toUpperCase();
     var nameB = b.name.toUpperCase();
@@ -38,8 +52,14 @@ const filterItems = (item: GiftItem) => {
     const isUndefined = item === undefined;
     if (isUndefined) return false;
 
-    const isNotIdea = !item.idea;
-    return isNotIdea;
+    const isIdea = "idea" in item && item.idea;
+    const isGiftedByCurrentUser =
+        "giftedById" in item &&
+        item.giftedById != null &&
+        (item.giftedById === userStore.currentUserId ||
+            item.giftedById === userStore.currentUser?.partnerId);
+
+    return isIdea && isGiftedByCurrentUser;
 };
 
 const userList = computed(() => {
@@ -110,10 +130,10 @@ definePageMeta({
 <template>
     <NuxtLayout name="main">
         <Header>
-            {{ $t("pages.overview.title") }}
+            {{ $t("pages.ideas.title") }}
 
             <template #subtitle>
-                {{ $t("pages.overview.description") }}
+                {{ $t("pages.ideas.description") }}
             </template>
         </Header>
 
@@ -125,15 +145,18 @@ definePageMeta({
                         :header-color="headerColors[index]"
                         :items="
                             user.items
-                                ?.map(
-                                    (item) =>
+                                ?.map((item) => ({
+                                    ...giftItemStore.itemEntities[item.id],
+                                    price: getPriceNumber(
                                         giftItemStore.itemEntities[item.id]
-                                )
+                                            ?.price
+                                    ),
+                                }))
                                 .filter(filterItems) ?? null
                         "
-                        :allow-purchased="true"
+                        allow-purchased
                         is-collapsable
-                        has-strikethrough
+                        has-summary
                         @switchPurchased="switchPurchased"
                     />
                 </template>
@@ -145,5 +168,7 @@ definePageMeta({
             name="spinner-gap-bold"
             class="animate-spin text-gray-900 dark:text-gray-100"
         />
+
+        <AddIdeaButton />
     </NuxtLayout>
 </template>

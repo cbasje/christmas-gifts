@@ -8,6 +8,8 @@ export interface Props {
     allowPurchased?: boolean;
     allowEdit?: boolean;
     isCollapsable?: boolean;
+    hasStrikethrough?: boolean;
+    hasSummary?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -16,6 +18,8 @@ const props = withDefaults(defineProps<Props>(), {
     allowPurchased: false,
     allowEdit: false,
     isCollapsable: false,
+    hasStrikethrough: false,
+    hasSummary: false,
 });
 
 const emits = defineEmits<{
@@ -26,6 +30,8 @@ const emits = defineEmits<{
 }>();
 
 const isCollapsed = ref(!props.isCollapsable);
+
+const sum = (arr: number[]): number => arr.reduce((a, b) => a + b, 0);
 </script>
 
 <template>
@@ -35,7 +41,8 @@ const isCollapsed = ref(!props.isCollapsable);
             !isCollapsed ? 'w-full' : 'w-min sm:w-full',
             items === null ||
             items.length === 0 ||
-            items.every((item) => 'purchased' in item && item.purchased)
+            (items.every((item) => 'purchased' in item && item.purchased) &&
+                hasStrikethrough)
                 ? 'opacity-30'
                 : '',
         ]"
@@ -47,6 +54,8 @@ const isCollapsed = ref(!props.isCollapsable);
             :allow-purchased="allowPurchased"
             :allow-edit="allowEdit"
             :is-collapsable="isCollapsable"
+            :has-summary="hasSummary"
+            :summary-number="sum(items?.map((i) => Number(i.price)) ?? [])"
             v-model:is-collapsed="isCollapsed"
         />
 
@@ -58,6 +67,7 @@ const isCollapsed = ref(!props.isCollapsable);
                 :item="item"
                 :allow-purchased="allowPurchased"
                 :allow-edit="allowEdit"
+                :has-strikethrough="hasStrikethrough"
                 @switchPurchased="(ev:any) => emits('switchPurchased', ev)"
             />
         </template>

@@ -9,11 +9,15 @@
         },
         "overview": {
             "title": "Overview",
-            "description": "This is the overview of all the gifts. Here you can find information/links and let everyone know you bought an item!"
+            "description": "This is an overview of all wish lists. Here you can find information/links and let everyone know you bought an item!"
         },
         "wishList": {
-            "title": "Wish list",
+            "title": "My wish list",
             "description": "This is your own wish list. You can add, remove or edit items."
+        },
+        "ideas": {
+            "title": "Ideas",
+            "description": "This is an overview where you can track all your ideas for gifts. If you tick something off in the overview page, it will also automatically be added here!"
         }
     },
     "user": {
@@ -24,7 +28,9 @@
         "notes": "Notes",
         "price": "Price",
         "link": "Link",
-        "groups": "Groups"
+        "recipient": "Recipient",
+        "groups": "Groups",
+        "ideaLink": "Link idea to..."
     },
     "table": {
         "purchased": "Purchased?",

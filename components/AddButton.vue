@@ -22,13 +22,16 @@ const openModal = () => {
     isOpen.value = true;
 };
 
-const formData = {
+const formData: EditFormData = {
     id: "",
     name: "",
     price: "",
     notes: "",
     link: "",
+    recipientId: userStore.currentUserId ?? "",
     groups: userStore.currentGroupId ? [Group[userStore.currentGroupId]] : [],
+    idea: false,
+    ideaLinkId: null,
 };
 
 const submitForm = async (data: EditFormData) => {
@@ -42,10 +45,11 @@ const submitForm = async (data: EditFormData) => {
             name: data.name,
             price: data.price,
             notes: data.notes,
-            recipientId: userStore.currentUserId,
+            recipientId: data.recipientId,
             groups: data.groups.map((g) => Group[g]),
             link: data.link,
             purchased: false,
+            idea: false,
         };
 
         if (!online.value) throw new Error("Not online");

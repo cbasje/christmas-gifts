@@ -9,11 +9,15 @@
         },
         "overview": {
             "title": "Overzicht",
-            "description": "Dit is een overzicht van alle cadeau's. Op deze manier kun je informatie/links vinden en aan iedereen laten weten dat je iets hebt gekocht!"
+            "description": "Dit is een overzicht van alle verlanglijsten. Op deze manier kun je informatie/links vinden en aan iedereen laten weten dat je iets hebt gekocht!"
         },
         "wishList": {
-            "title": "Verlanglijst",
+            "title": "Mijn verlanglijst",
             "description": "Dit is jouw eigen verlanglijst. Je kunt items toevoegen, verwijderen of aanpassen."
+        },
+        "ideas": {
+            "title": "Ideën",
+            "description": "Dit is een overzicht waar je alle ideeën voor cadeau's kunt neerzetten. Als je iets afvinkt op de overzichtpagina verschijnt het hier ook automatisch!"
         }
     },
     "user": {
@@ -24,7 +28,9 @@
         "notes": "Opmerkingen",
         "price": "Prijs",
         "link": "Link",
-        "groups": "Groepen"
+        "recipient": "Ontvanger",
+        "groups": "Groepen",
+        "ideaLink": "Link idee aan..."
     },
     "table": {
         "purchased": "Gekocht?",

@@ -20,6 +20,10 @@ model GiftItem {
   giftedById  String?
   link        String?
   purchased   Boolean   @default(false)
+  idea        Boolean   @default(false)
+  ideaLink    GiftItem? @relation("IdeaLink", fields: [ideaLinkId], references: [id])
+  ideaLinkId  String?   @unique
+  ideaLink2   GiftItem? @relation("IdeaLink")
   groups      Group[]
 }
 
@@ -31,6 +35,9 @@ model User {
   password     String
   items        GiftItem[] @relation("ReceivingItems")
   giftingItems GiftItem[] @relation("GiftingItems")
+  partner      User?      @relation("Partner", fields: [partnerId], references: [id])
+  partnerId    String?    @unique
+  partner2     User?      @relation("Partner")
   groups       Group[]
 }
 

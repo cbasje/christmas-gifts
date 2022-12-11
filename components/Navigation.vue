@@ -25,6 +25,7 @@ const { t } = useI18n();
 const navigation = [
     { name: t("pages.overview.title"), href: "/", current: true },
     { name: t("pages.wishList.title"), href: "/wish-list", current: false },
+    { name: t("pages.ideas.title"), href: "/ideas", current: false },
 ];
 
 const signOut = async () => {

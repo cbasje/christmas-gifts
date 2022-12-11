@@ -6,12 +6,25 @@ import {
     DialogOverlay,
     DialogTitle,
 } from "@headlessui/vue";
-import { GiftItem, Group } from "~~/lib/types";
+import { GiftItem, Group, User } from "~~/lib/types";
+import { useGiftItemStore } from "~~/stores/gift-item";
+import { useUserStore } from "~~/stores/user";
 
 export type EditFormData = { [key: string]: any } & Pick<
     GiftItem,
-    "id" | "name" | "price" | "notes" | "link" | "groups"
+    | "id"
+    | "name"
+    | "price"
+    | "notes"
+    | "link"
+    | "recipientId"
+    | "groups"
+    | "idea"
+    | "ideaLinkId"
 >;
+
+const userStore = useUserStore();
+const giftItemStore = useGiftItemStore();
 
 const formData = reactive<EditFormData>({
     id: "",
@@ -19,7 +32,10 @@ const formData = reactive<EditFormData>({
     price: "",
     notes: "",
     link: "",
+    recipientId: "",
     groups: [],
+    idea: false,
+    ideaLinkId: null,
 });
 
 interface Props {
@@ -49,6 +65,46 @@ const setForm = (data: EditFormData) => {
 
 const capitalizeGroupName = ([first, ...rest]: string): string =>
     `${first.toUpperCase()}${rest.join("").toLowerCase()}`;
+
+const userList = computed(() => {
+    const currentUserId = userStore.currentUserId;
+    const currentGroupId = userStore.currentGroupId;
+
+    if (!currentUserId || !currentGroupId) {
+        return null;
+    }
+
+    return userStore.allUsers
+        .filter((user: User) => {
+            const isRecipientNotCurrentUser = user.id != currentUserId;
+            const isCurrentGroup = user.groups.some((g) =>
+                formData.groups.includes(Group[g])
+            );
+
+            return isRecipientNotCurrentUser && isCurrentGroup;
+        })
+        .map((u) => ({
+            label: u.name,
+            value: u.id,
+        }));
+});
+
+const itemList = computed(() => {
+    if (!formData.idea) return [];
+
+    return giftItemStore.allGiftItems
+        .filter((item: GiftItem) => {
+            const isRecipientSelectedUser =
+                item.recipientId === formData.recipientId;
+            const isNotIdea = !item.idea;
+
+            return isRecipientSelectedUser && isNotIdea;
+        })
+        .map((i) => ({
+            label: `${userStore.userEntities[i.recipientId]?.name} - ${i.name}`,
+            value: i.id,
+        }));
+});
 
 watch(
     () => props.isOpen,
@@ -118,7 +174,7 @@ watch(
                                     validation="required"
                                     label-class="block text-sm font-medium text-gray-700"
                                     input-class="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                    message-class="mt-1 block w-full text-sm text-red-400"
+                                    message-class="mt-1 block w-full text-sm text-danger-400"
                                 />
                                 <FormKit
                                     type="text"
@@ -137,7 +193,7 @@ watch(
                                     }"
                                     label-class="block text-sm font-medium text-gray-700"
                                     input-class="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                    message-class="mt-1 block w-full text-sm text-red-400"
+                                    message-class="mt-1 block w-full text-sm text-danger-400"
                                 />
                                 <FormKit
                                     type="textarea"
@@ -147,7 +203,7 @@ watch(
                                     placeholder="Type here more information about the item..."
                                     label-class="block text-sm font-medium text-gray-700"
                                     input-class="shadow-sm focus:ring-primary-500 focus:border-primary-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
-                                    message-class="mt-1 block w-full text-sm text-red-400"
+                                    message-class="mt-1 block w-full text-sm text-danger-400"
                                 />
                                 <FormKit
                                     type="url"
@@ -157,8 +213,44 @@ watch(
                                     validation="url"
                                     label-class="block text-sm font-medium text-gray-700"
                                     input-class="mt-1 focus:ring-primary-500 focus:border-primary-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
-                                    message-class="mt-1 block w-full text-sm text-red-400"
+                                    message-class="mt-1 block w-full text-sm text-danger-400"
                                 />
+                                <template v-if="formData.idea">
+                                    <FormKit
+                                        v-model="formData.recipientId"
+                                        type="select"
+                                        :label="$t('item.recipient')"
+                                        validation="required"
+                                        label-class="block text-sm font-medium text-gray-700"
+                                        input-class="shadow-sm focus:ring-primary-500 focus:border-primary-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
+                                        help-class="mt-1 block w-full text-sm text-gray-500"
+                                        message-class="mt-1 block w-full text-sm text-danger-400"
+                                        :options="[
+                                            {
+                                                label: '-',
+                                                value: null,
+                                            },
+                                            ...(userList ?? []),
+                                        ]"
+                                    />
+                                </template>
+                                <template v-if="formData.idea">
+                                    <FormKit
+                                        v-model="formData.ideaLinkId"
+                                        type="select"
+                                        :label="$t('item.ideaLink')"
+                                        label-class="block text-sm font-medium text-gray-700"
+                                        input-class="shadow-sm focus:ring-primary-500 focus:border-primary-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
+                                        help-class="mt-1 block w-full text-sm text-gray-500"
+                                        :options="[
+                                            {
+                                                label: '-',
+                                                value: undefined,
+                                            },
+                                            ...itemList,
+                                        ]"
+                                    />
+                                </template>
                                 <template v-if="showGroups">
                                     <FormKit
                                         v-model="formData.groups"
@@ -170,6 +262,7 @@ watch(
                                         label-class="block text-sm font-medium text-gray-700"
                                         input-class="shadow-sm focus:ring-primary-500 focus:border-primary-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
                                         help-class="mt-1 block w-full text-sm text-gray-500"
+                                        message-class="mt-1 block w-full text-sm text-danger-400"
                                         :options="
                                             Object.keys(Group).map((g) => ({
                                                 label: capitalizeGroupName(

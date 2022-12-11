@@ -8,6 +8,8 @@ export interface Props {
     allowEdit?: boolean;
     isCollapsable?: boolean;
     isCollapsed?: boolean;
+    hasSummary?: boolean;
+    summaryNumber?: number;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -15,6 +17,8 @@ const props = withDefaults(defineProps<Props>(), {
     allowEdit: false,
     isCollapsable: false,
     isCollapsed: true,
+    hasSummary: false,
+    summaryNumber: 0,
 });
 
 const emits = defineEmits<{
@@ -23,6 +27,20 @@ const emits = defineEmits<{
 
 const toggleCollapsed = () => {
     emits("update:isCollapsed", !props.isCollapsed);
+};
+
+const formatPrice = (priceNumber: number) => {
+    const defaultReturn = "-";
+
+    if (!priceNumber) return defaultReturn;
+
+    const defaultFormatter = new Intl.NumberFormat("default", {
+        style: "currency",
+        currency: "EUR",
+        maximumFractionDigits: 2,
+    });
+
+    return defaultFormatter.format(priceNumber);
 };
 </script>
 
@@ -40,14 +58,20 @@ const toggleCollapsed = () => {
     >
         <Badge :title="title" :color="headerColor" />
 
-        <Icon
-            v-if="isCollapsable"
-            name="ph:caret-down-bold"
-            :class="[
-                'transition-transform duration-200 text-gray-600 dark:text-gray-300',
-                isCollapsed ? '-rotate-180' : 'rotate-0',
-            ]"
-        />
+        <div class="flex gap-3 items-center text-gray-600 dark:text-gray-300">
+            <span v-if="hasSummary" class="text-sm">
+                <span class="uppercase text-xs opacity-75">sum</span>
+                {{ formatPrice(summaryNumber) }}
+            </span>
+            <Icon
+                v-if="isCollapsable"
+                name="ph:caret-down-bold"
+                :class="[
+                    'transition-transform duration-200',
+                    isCollapsed ? '-rotate-180' : 'rotate-0',
+                ]"
+            />
+        </div>
     </a>
 
     <div
@@ -58,7 +82,9 @@ const toggleCollapsed = () => {
                 ? `bg-${headerColor}-100 dark:bg-${headerColor}-900`
                 : 'bg-gray-200 dark:bg-gray-700',
             allowEdit
-                ? 'grid-cols-table-5-sm sm:grid-cols-table-5'
+                ? allowPurchased
+                    ? 'grid-cols-table-7-sm sm:grid-cols-table-7'
+                    : 'grid-cols-table-5-sm sm:grid-cols-table-5'
                 : 'grid-cols-table-4-sm sm:grid-cols-table-4',
         ]"
     >

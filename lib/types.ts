@@ -12,7 +12,7 @@ export type WishListGiftItem = Omit<
 export type GiftItem = OverviewGiftItem | WishListGiftItem;
 export type NewGiftItem = Omit<
     PrismaGiftItem,
-    "id" | "createdAt" | "updatedAt" | "giftedById"
+    "id" | "createdAt" | "updatedAt"
 >;
 export type EditGiftItem = Omit<
     PrismaGiftItem,

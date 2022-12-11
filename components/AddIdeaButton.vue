@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useGiftItemStore } from "~~/stores/gift-item";
 import { useUserStore } from "~~/stores/user";
-import { EditGiftItem, GiftItem, Group } from "~~/lib/types";
+import { Group, NewGiftItem } from "~~/lib/types";
 import { EditFormData } from "./EditModal.vue";
 import { useToast } from "vue-toastification/dist/index.mjs";
 
@@ -22,30 +22,16 @@ const openModal = () => {
     isOpen.value = true;
 };
 
-interface Props {
-    item: GiftItem;
-    isIdea?: boolean;
-}
-
-const props = withDefaults(defineProps<Props>(), {
-    isIdea: false,
-});
-
-const formData = reactive<EditFormData>({
+const formData: EditFormData = {
     id: "",
     name: "",
     price: "",
     notes: "",
     link: "",
-    recipientId: userStore.currentUserId ?? "",
+    recipientId: "",
     groups: userStore.currentGroupId ? [Group[userStore.currentGroupId]] : [],
-    idea: props.isIdea,
+    idea: true,
     ideaLinkId: null,
-});
-const setForm = (data: EditFormData) => {
-    for (const key in formData) {
-        formData[key] = data[key];
-    }
 };
 
 const submitForm = async (data: EditFormData) => {
@@ -55,53 +41,53 @@ const submitForm = async (data: EditFormData) => {
             throw new Error("Not logged in correctly");
         }
 
-        const item: EditGiftItem = {
-            id: data.id,
+        const newItem: NewGiftItem = {
             name: data.name,
             price: data.price,
             notes: data.notes,
             recipientId: data.recipientId,
+            giftedById: userStore.currentUserId,
             groups: data.groups.map((g) => Group[g]),
             link: data.link,
             purchased: false,
-            idea: props.isIdea,
+            idea: true,
             ideaLinkId: data.ideaLinkId,
         };
 
         if (!online.value) throw new Error("Not online");
 
-        giftItemStore.editItem(item);
+        giftItemStore.addItem(newItem);
 
-        toast.success(`Edited '${item.name}' successfully!`);
+        toast.success(
+            `Added '${newItem.name}' to your idea list successfully!`
+        );
         closeModal();
     } catch (e) {
         if (e instanceof Error) {
             console.error(e);
-            toast.error(
-                `Editing item was not successful! Reason: ${e.message}`
-            );
+            toast.error(`Adding item was not successful! Reason: ${e.message}`);
         }
     }
-};
-
-const editItem = () => {
-    setForm(props.item as unknown as EditFormData); // FIXME: this is kinda ugly
-
-    openModal();
 };
 </script>
 
 <template>
-    <a
-        class="cursor-pointer font-normal text-primary-500 dark:text-primary-600 hover:text-primary-700 dark:hover:text-primary-800"
-        @click="editItem()"
-    >
-        <Icon name="ph:pencil-bold" class="h-6 w-6" />
-    </a>
+    <div class="fixed bottom-6 right-6">
+        <button
+            type="button"
+            @click="openModal"
+            class="group flex justify-center items-center w-16 h-16 drop-shadow-md rounded-full text-sm font-medium text-white bg-primary-600 dark:bg-primary-700 hover:bg-primary-800 dark:hover:bg-primary-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+        >
+            <Icon
+                name="ph:plus-bold"
+                class="h-6 w-6 text-white group-hover:text-gray-300"
+            />
+        </button>
+    </div>
 
     <EditModal
-        :title="$t('editModal.edit.title', { item: item.name })"
-        :submitLabel="$t('editModal.edit.submit')"
+        :title="$t('editModal.create.title')"
+        :submitLabel="$t('editModal.create.submit')"
         v-model:isOpen="isOpen"
         :formData="formData"
         :showGroups="

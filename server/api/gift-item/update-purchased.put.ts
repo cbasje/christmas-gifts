@@ -4,6 +4,7 @@ export default defineEventHandler(async (event) => {
     const query = getQuery(event);
     const id = String(query.id);
     const purchased = String(query.purchased);
+    const isIdea = String(query.isIdea);
 
     const giftedById = getCookie(event, "user");
 
@@ -15,7 +16,21 @@ export default defineEventHandler(async (event) => {
         },
         data: {
             purchased: purchased === "true",
-            giftedById: purchased === "true" ? giftedById : null,
+            giftedBy:
+                purchased === "true" || isIdea === "true"
+                    ? {
+                          connect: {
+                              id: giftedById,
+                          },
+                      }
+                    : {
+                          disconnect: true,
+                      },
+            ideaLink: {
+                update: {
+                    purchased: purchased === "true",
+                },
+            },
         },
         select: {
             id: true,

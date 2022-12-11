@@ -52,11 +52,7 @@ export const useUserStore = defineStore("user", () => {
     }
 
     async function loadUsers() {
-        const data = await $fetch("/api/user/all-users", {
-            query: {
-                group: currentGroupId.value,
-            },
-        });
+        const data = await $fetch("/api/user/all-users");
         saveAllUsers(data);
     }
     async function loadCurrentUser(id = currentUserId.value) {
@@ -89,6 +85,7 @@ export const useUserStore = defineStore("user", () => {
     }
 
     return {
+        userEntities,
         allUsers,
         currentUser,
         currentUserId,
