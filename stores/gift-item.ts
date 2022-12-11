@@ -100,6 +100,7 @@ export const useGiftItemStore = defineStore("gift-item", () => {
                 id: payload.item.id,
                 purchased: payload.purchased,
                 isIdea: payload.item.idea,
+                hasIdeaLink: payload.item.ideaLinkId != null,
             },
         });
         savePurchased(data);
