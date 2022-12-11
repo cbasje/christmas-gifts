@@ -11,7 +11,6 @@ export interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-    title: "Table",
     allowPurchased: false,
     allowEdit: false,
     isCollapsable: false,
