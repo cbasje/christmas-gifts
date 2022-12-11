@@ -239,6 +239,7 @@ watch(
                                         v-model="formData.ideaLinkId"
                                         type="select"
                                         :label="$t('item.ideaLink')"
+                                        help="First select a recipient."
                                         label-class="block text-sm font-medium text-gray-700"
                                         input-class="shadow-sm focus:ring-primary-500 focus:border-primary-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
                                         help-class="mt-1 block w-full text-sm text-gray-500"

@@ -54,6 +54,10 @@ export default <Config>{
                     "minmax(50%, 4fr) minmax(7%, 2fr) minmax(13%, 3fr) repeat(2, minmax(5%, 1fr))",
                 "table-5-sm":
                     "minmax(60vw, 4fr) minmax(96px, 2fr) minmax(128px, 3fr) repeat(2, minmax(64px, 1fr))",
+                "table-7":
+                    "minmax(30%, 3fr) minmax(7%, 2fr) minmax(13%, 3fr) minmax(7%, 2fr) repeat(2, minmax(5%, 1fr))",
+                "table-7-sm":
+                    "minmax(40vw, 3fr) minmax(96px, 2fr) minmax(128px, 3fr) minmax(96px, 2fr) repeat(2, minmax(64px, 1fr))",
             },
         },
     },

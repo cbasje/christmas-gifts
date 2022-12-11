@@ -24,12 +24,9 @@ const openModal = () => {
 
 interface Props {
     item: GiftItem;
-    isIdea?: boolean;
 }
 
-const props = withDefaults(defineProps<Props>(), {
-    isIdea: false,
-});
+const props = defineProps<Props>();
 
 const formData = reactive<EditFormData>({
     id: "",
@@ -39,7 +36,7 @@ const formData = reactive<EditFormData>({
     link: "",
     recipientId: userStore.currentUserId ?? "",
     groups: userStore.currentGroupId ? [Group[userStore.currentGroupId]] : [],
-    idea: props.isIdea,
+    idea: false,
     ideaLinkId: null,
 });
 const setForm = (data: EditFormData) => {
@@ -64,7 +61,7 @@ const submitForm = async (data: EditFormData) => {
             groups: data.groups.map((g) => Group[g]),
             link: data.link,
             purchased: false,
-            idea: props.isIdea,
+            idea: data.idea,
             ideaLinkId: data.ideaLinkId,
         };
 

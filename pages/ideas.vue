@@ -155,6 +155,7 @@ definePageMeta({
                                 .filter(filterItems) ?? null
                         "
                         allow-purchased
+                        allow-edit
                         is-collapsable
                         has-summary
                         @switchPurchased="switchPurchased"
