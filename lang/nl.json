@@ -16,8 +16,9 @@
             "description": "Dit is jouw eigen verlanglijst. Je kunt items toevoegen, verwijderen of aanpassen."
         },
         "ideas": {
-            "title": "Ideën",
-            "description": "Dit is een overzicht waar je alle ideeën voor cadeau's kunt neerzetten. Als je iets afvinkt op de overzichtpagina verschijnt het hier ook automatisch!"
+            "title": "Ideeën",
+            "description": "Dit is een overzicht waar je alle ideeën voor cadeau's kunt neerzetten. Als je iets afvinkt op de overzichtpagina verschijnt het hier ook automatisch!",
+            "showPartner": "Laat partner's ideeën zien"
         }
     },
     "user": {

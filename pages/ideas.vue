@@ -92,7 +92,9 @@ definePageMeta({
         </Header>
 
         <div class="container w-full flex justify-end gap-3 px-3">
-            <span class="text-gray-500"> Show partner's gifts </span>
+            <span class="text-gray-500">{{
+                $t("pages.ideas.showPartner")
+            }}</span>
             <Switch
                 v-model="showPartner"
                 :class="
