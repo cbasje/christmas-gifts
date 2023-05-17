@@ -9,6 +9,9 @@ export default defineNuxtConfig({
         "@nuxtjs/i18n",
     ],
     css: ["vue-toastification/dist/index.css"],
+    nitro: {
+        preset: "netlify",
+    },
 
     i18n: {
         strategy: "prefix_except_default",
