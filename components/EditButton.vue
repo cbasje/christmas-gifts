@@ -82,7 +82,7 @@ const submitForm = async (data: EditFormData) => {
 };
 
 const editItem = () => {
-    setForm(props.item as unknown as EditFormData); // FIXME: this is kinda ugly
+    setForm(props.item satisfies EditFormData);
 
     openModal();
 };
@@ -100,7 +100,7 @@ const editItem = () => {
         :title="$t('editModal.edit.title', { item: item.name })"
         :submitLabel="$t('editModal.edit.submit')"
         v-model:isOpen="isOpen"
-        :formData="formData"
+        :data="formData"
         :showGroups="
             userStore.currentUser != null &&
             userStore.currentUser.groups.length > 1

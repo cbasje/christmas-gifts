@@ -89,7 +89,7 @@ const submitForm = async (data: EditFormData) => {
         :title="$t('editModal.create.title')"
         :submitLabel="$t('editModal.create.submit')"
         v-model:isOpen="isOpen"
-        :formData="formData"
+        :data="formData"
         :showGroups="
             userStore.currentUser != null &&
             userStore.currentUser.groups.length > 1

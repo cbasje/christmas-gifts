@@ -26,21 +26,9 @@ export type EditFormData = { [key: string]: any } & Pick<
 const userStore = useUserStore();
 const giftItemStore = useGiftItemStore();
 
-const formData = reactive<EditFormData>({
-    id: "",
-    name: "",
-    price: "",
-    notes: "",
-    link: "",
-    recipientId: "",
-    groups: [],
-    idea: false,
-    ideaLinkId: null,
-});
-
 interface Props {
     isOpen: boolean;
-    formData: EditFormData;
+    data: EditFormData;
     showGroups: boolean;
     title: string;
     submitLabel: string;
@@ -57,11 +45,15 @@ const emits = defineEmits<{
     (e: "submitForm", data: EditFormData): void;
 }>();
 
-const setForm = (data: EditFormData) => {
-    for (const key in formData) {
-        formData[key] = data[key];
-    }
-};
+const { state: formData, update: updateFormData } = useImmer<EditFormData>(
+    props.data
+);
+
+function updateData(key: string, value: any) {
+    updateFormData((items: EditFormData) => {
+        items[key] = value;
+    });
+}
 
 const capitalizeGroupName = ([first, ...rest]: string): string =>
     `${first.toUpperCase()}${rest.join("").toLowerCase()}`;
@@ -78,7 +70,7 @@ const userList = computed(() => {
         .filter((user: User) => {
             const isRecipientNotCurrentUser = user.id != currentUserId;
             const isCurrentGroup = user.groups.some((g) =>
-                formData.groups.includes(Group[g])
+                formData.value.groups.includes(Group[g])
             );
 
             return isRecipientNotCurrentUser && isCurrentGroup;
@@ -90,12 +82,12 @@ const userList = computed(() => {
 });
 
 const itemList = computed(() => {
-    if (!formData.idea) return [];
+    if (!formData.value.idea) return [];
 
     return giftItemStore.allGiftItems
         .filter((item: GiftItem) => {
             const isRecipientSelectedUser =
-                item.recipientId === formData.recipientId;
+                item.recipientId === formData.value.recipientId;
             const isNotIdea = !item.idea;
 
             return isRecipientSelectedUser && isNotIdea;
@@ -106,12 +98,9 @@ const itemList = computed(() => {
         }));
 });
 
-watch(
-    () => props.isOpen,
-    (isOpen) => {
-        if (isOpen) setForm(props.formData);
-    }
-);
+const submitForm = () => {
+    emits("submitForm", formData.value);
+};
 </script>
 
 <template>
@@ -162,14 +151,17 @@ watch(
                                 type="form"
                                 id="newItemForm"
                                 submit-label="Add item"
-                                @submit="emits('submitForm', formData)"
+                                @submit="submitForm"
                                 form-class="space-y-6 py-6"
                                 :actions="false"
                             >
                                 <FormKit
                                     type="text"
                                     :label="$t('item.name')"
-                                    v-model="formData.name"
+                                    :value="formData.name"
+                                    @input="
+                                        (value) => updateData('name', value)
+                                    "
                                     autocomplete="name"
                                     validation="required"
                                     label-class="block text-sm font-medium text-gray-700"
@@ -179,7 +171,10 @@ watch(
                                 <FormKit
                                     type="text"
                                     :label="$t('item.price')"
-                                    v-model="formData.price"
+                                    :value="formData.price"
+                                    @input="
+                                        (value) => updateData('price', value)
+                                    "
                                     autocomplete="transaction-amount"
                                     :validation="[
                                         [
@@ -198,7 +193,10 @@ watch(
                                 <FormKit
                                     type="textarea"
                                     :label="$t('item.notes')"
-                                    v-model="formData.notes"
+                                    :value="formData.notes"
+                                    @input="
+                                        (value) => updateData('notes', value)
+                                    "
                                     rows="3"
                                     placeholder="Type here more information about the item..."
                                     label-class="block text-sm font-medium text-gray-700"
@@ -208,7 +206,10 @@ watch(
                                 <FormKit
                                     type="url"
                                     :label="$t('item.link')"
-                                    v-model="formData.link"
+                                    :value="formData.link"
+                                    @input="
+                                        (value) => updateData('link', value)
+                                    "
                                     placeholder="www.example.com..."
                                     validation="url"
                                     label-class="block text-sm font-medium text-gray-700"
@@ -217,7 +218,11 @@ watch(
                                 />
                                 <template v-if="formData.idea">
                                     <FormKit
-                                        v-model="formData.recipientId"
+                                        :value="formData.recipientId"
+                                        @input="
+                                            (value) =>
+                                                updateData('recipientId', value)
+                                        "
                                         type="select"
                                         :label="$t('item.recipient')"
                                         validation="required"
@@ -236,7 +241,11 @@ watch(
                                 </template>
                                 <template v-if="formData.idea">
                                     <FormKit
-                                        v-model="formData.ideaLinkId"
+                                        :value="formData.ideaLinkId"
+                                        @input="
+                                            (value) =>
+                                                updateData('ideaLinkId', value)
+                                        "
                                         type="select"
                                         :label="$t('item.ideaLink')"
                                         help="First select a recipient."
@@ -254,7 +263,11 @@ watch(
                                 </template>
                                 <template v-if="showGroups">
                                     <FormKit
-                                        v-model="formData.groups"
+                                        :value="formData.groups"
+                                        @input="
+                                            (value) =>
+                                                updateData('groups', value)
+                                        "
                                         type="select"
                                         multiple
                                         :label="$t('item.groups')"
