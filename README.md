@@ -1,33 +1,22 @@
-# A webapp to track Christmas gifts
+# christmas-gifts
 
-## Tools
+A webapp to track Christmas gifts for my family and in-laws.
 
--   [Nuxt 3](https://v3.nuxtjs.org)
--   Pinia
--   Prisma
--   Supabase
--   Tailwind CSS
--   Vercel
--   Phosphor Icons
--   Remark + Rehype
--   FormKit
+![A screen recording of the homepage of the website. It shows the interaction with the element that looks like a rotary phone](assets/screengrab.gif)
 
-## Commands
+## Stack
 
-Install dependencies:
+-   Framework: [Nuxt 3](https://nuxt.com/)
+-   Deployment: [Vercel](https://vercel.com)
+-   Styling: [TailwindCSS](https://tailwindcss.com/)
+-   Icons: [Phosphor Icons](https://phosphoricons.com/)
+-   Database: [Supabase](https://supabase.com/)
+-   ORM: [Prisma](https://prisma.io)
 
-```bash
-yarn install
-```
+## Development
 
-Development server on [localhost:3000](http://localhost:3000):
-
-```bash
-yarn dev
-```
-
-Build the application for production:
-
-```bash
-yarn build
-```
+| Command      | Action                                      |
+| :----------- | :------------------------------------------ |
+| `yarn`       | Installs dependencies                       |
+| `yarn dev`   | Starts local dev server at `localhost:3000` |
+| `yarn build` | Builds production site to `./dist/`         |
