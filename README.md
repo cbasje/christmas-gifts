@@ -2,7 +2,7 @@
 
 A webapp to track Christmas gifts for my family and in-laws.
 
-![A screen recording of the homepage of the website. It shows the interaction with the element that looks like a rotary phone](assets/screengrab.gif)
+![A screen recording of the homepage of the website. It shows the interaction with the various elements.](assets/screengrab.gif)
 
 ## Stack
 
