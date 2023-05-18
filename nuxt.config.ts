@@ -1,15 +1,19 @@
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
     modules: [
+        "nuxt-icon",
+        "nuxt-svgo",
         "@pinia/nuxt",
         "@nuxtjs/tailwindcss",
         "@vueuse/nuxt",
         "@formkit/nuxt",
-        "nuxt-icon",
         "@nuxtjs/i18n",
     ],
     css: ["vue-toastification/dist/index.css"],
 
+    svgo: {
+        defaultImport: "component",
+    },
     i18n: {
         strategy: "prefix_except_default",
         defaultLocale: "en",
