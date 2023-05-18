@@ -1,4 +1,5 @@
 import { Config } from "tailwindcss";
+import plugin from "tailwindcss/plugin";
 
 const colors = require("tailwindcss/colors");
 
@@ -35,6 +36,9 @@ export default <Config>{
             green: colors.green,
             yellow: colors.yellow,
             orange: colors.orange,
+        },
+        fontFamily: {
+            sans: ["Atkinson Hyperlegible", "sans-serif"],
         },
         minWidth: {
             0: "0",
