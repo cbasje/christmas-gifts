@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useUserStore } from "@/stores/user";
 import { useToast } from "vue-toastification/dist/index.mjs";
-import "@/styles/main.css";
+import "@/assets/styles/main.css";
 
 const userStore = useUserStore();
 
