@@ -1,15 +1,25 @@
+import { getServerSession } from "#auth";
 import prisma from "~~/lib/prisma";
 import { Group } from "~~/lib/types";
 
 export default defineEventHandler(async (event) => {
-    const userId = getCookie(event, "user");
+    const session = await getServerSession(event);
+    const query = getQuery(event);
 
-    if (!userId) throw new Error("Not enough data");
+    const userId = session?.uid;
+    const group = String(query.group) as Group;
+
+    if (!userId || !group) throw new Error("Not enough data");
 
     return await prisma.giftItem.findMany({
         where: {
-            NOT: {
-                recipientId: userId,
+            AND: {
+                NOT: {
+                    recipientId: userId,
+                },
+                groups: {
+                    has: group,
+                },
             },
         },
     });

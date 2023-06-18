@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { useToast } from "vue-toastification/dist/index.mjs";
 import { Switch } from "@headlessui/vue";
+import { useToast } from "vue-toastification/dist/index.mjs";
 
-import { Color, GiftItem, Group, User } from "~~/lib/types";
+import { Color, GiftItem } from "~~/lib/types";
 import { useGiftItemStore } from "~~/stores/gift-item";
 import { useUserStore } from "~~/stores/user";
 
@@ -75,10 +75,6 @@ onMounted(async () => {
         isLoading.value = false;
     }
 });
-
-definePageMeta({
-    middleware: ["auth"],
-});
 </script>
 
 <template>
@@ -135,7 +131,7 @@ definePageMeta({
 
         <Icon
             v-else
-            name="spinner-gap-bold"
+            name="ph:spinner-gap-bold"
             class="animate-spin text-gray-900 dark:text-gray-100"
         />
 

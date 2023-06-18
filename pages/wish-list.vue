@@ -26,10 +26,6 @@ onMounted(async () => {
         isLoading.value = false;
     }
 });
-
-definePageMeta({
-    middleware: ["auth"],
-});
 </script>
 
 <template>
@@ -50,7 +46,7 @@ definePageMeta({
 
         <Icon
             v-else
-            name="spinner-gap-bold"
+            name="ph:spinner-gap-bold"
             class="animate-spin text-gray-900 dark:text-gray-100"
         />
 

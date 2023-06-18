@@ -12,6 +12,10 @@ export default defineNuxtConfig({
     ],
     css: ["vue-toastification/dist/index.css"],
 
+    runtimeConfig: {
+        secret: process.env.NUXT_SECRET,
+    },
+
     svgo: {
         defaultImport: "component",
     },
@@ -27,5 +31,7 @@ export default defineNuxtConfig({
         vueI18n: "./i18n.config.ts",
     },
 
-    auth: {},
+    auth: {
+        globalAppMiddleware: true,
+    },
 });

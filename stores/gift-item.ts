@@ -10,6 +10,7 @@ import { UserWithItemIds, useUserStore } from "./user";
 
 export const useGiftItemStore = defineStore("gift-item", () => {
     const userStore = useUserStore();
+    const { data: authData } = useAuth();
 
     const itemIds = ref<string[]>([]);
     const itemEntities = ref<Record<string, GiftItem>>({});
@@ -19,8 +20,10 @@ export const useGiftItemStore = defineStore("gift-item", () => {
     });
 
     const sortByName = (a: UserWithItemIds, b: UserWithItemIds) => {
-        var nameA = a.name.toUpperCase();
-        var nameB = b.name.toUpperCase();
+        const nameA = a.name?.toUpperCase();
+        const nameB = b.name?.toUpperCase();
+
+        if (!nameA || !nameB) return 0;
 
         if (nameA < nameB) return -1;
         if (nameA > nameB) return 1;
@@ -149,14 +152,21 @@ export const useGiftItemStore = defineStore("gift-item", () => {
     }
 
     async function loadGiftItems() {
-        const data = await $fetch("/api/gift-item/all-items");
+        const group = userStore.currentGroupId;
+
+        const data = await $fetch("/api/gift-item/all-items", {
+            query: {
+                group,
+            },
+        });
         saveGiftItems(data);
     }
     async function loadWishList() {
+        const group = userStore.currentGroupId;
+
         const data = await $fetch("/api/gift-item/wish-list", {
             query: {
-                id: userStore.currentUserId,
-                group: userStore.currentGroupId,
+                group,
             },
         });
         saveGiftItems(data);

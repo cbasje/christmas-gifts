@@ -1,13 +1,9 @@
 <script lang="ts" setup>
-import { useUserStore } from "~~/stores/user";
 import { useToast } from "vue-toastification/dist/index.mjs";
-
-const userStore = useUserStore();
 
 const online = useOnline();
 const toast = useToast();
-const localePath = useLocalePath();
-const router = useRouter();
+const { signIn } = useAuth();
 
 const password = ref("");
 
@@ -15,8 +11,17 @@ const submitForm = async () => {
     try {
         if (!online.value) throw new Error("Not online");
 
-        await userStore.signIn(password.value);
-        await router.push(localePath("/"));
+        const { error, url } = await signIn("password", {
+            password: password.value,
+            redirect: false,
+            callbackUrl: "/",
+        });
+
+        if (error) {
+            throw new Error("A mistake while entering your credentials");
+        } else {
+            return navigateTo(url, { external: true });
+        }
     } catch (e) {
         if (e instanceof Error) {
             console.error(e);
@@ -25,8 +30,15 @@ const submitForm = async () => {
     }
 };
 
+// FIXME:
+// definePageMeta({
+//     middleware: ["auth-query"],
+// });
 definePageMeta({
-    middleware: ["auth-query"],
+    auth: {
+        unauthenticatedOnly: true,
+        navigateAuthenticatedTo: "/",
+    },
 });
 </script>
 

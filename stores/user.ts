@@ -3,14 +3,16 @@ import { GiftItem, Group, User } from "~~/lib/types";
 
 export type UserWithItemIds = User & { items?: Pick<GiftItem, "id">[] };
 export const useUserStore = defineStore("user", () => {
-    const curDate = new Date();
+    const { data: authData } = useAuth();
 
-    const currentUserId = useCookie("user", {
+    const curDate = new Date();
+    const groupId = useCookie<Group>("group", {
         expires: new Date(curDate.getFullYear() + 1, 0, 0),
     });
-    const currentGroupId = useCookie<Group>("group", {
-        expires: new Date(curDate.getFullYear() + 1, 0, 0),
-    });
+    const currentUserId = computed(() => authData.value?.id);
+    const currentGroupId = computed(
+        () => groupId.value ?? authData.value?.groups[0]
+    );
 
     const userIds = ref<string[]>([]);
     const userEntities = ref<Record<string, UserWithItemIds>>({});
@@ -20,7 +22,7 @@ export const useUserStore = defineStore("user", () => {
     });
     const currentUser = computed(() => {
         return (
-            (currentUserId.value && userEntities.value[currentUserId.value]) ||
+            (authData.value?.uid && userEntities.value[authData.value?.uid]) ||
             null
         );
     });
@@ -44,44 +46,13 @@ export const useUserStore = defineStore("user", () => {
             [user.id]: user,
         };
     }
-    function saveCurrentUserId(id: string) {
-        currentUserId.value = id;
-    }
     function saveCurrentGroupId(id: Group) {
-        currentGroupId.value = id;
+        groupId.value = id;
     }
 
     async function loadUsers() {
         const data = await $fetch("/api/user/all-users");
         saveAllUsers(data);
-    }
-    async function loadCurrentUser(id = currentUserId.value) {
-        if (!id) throw new Error("No 'id' given");
-
-        const data = await $fetch("/api/user/user", {
-            query: { id },
-        });
-
-        if (data === null) throw new Error("No user found");
-
-        saveNewUser(data);
-    }
-    function signOut() {
-        currentUserId.value = null;
-        currentGroupId.value = null;
-    }
-    async function signIn(password: string) {
-        const data = await $fetch("/api/user/sign-in", {
-            method: "POST",
-            body: { password },
-        });
-
-        if (data === null) throw new Error("No user found");
-
-        saveCurrentUserId(data.id);
-        saveCurrentGroupId(data.groups[0]);
-
-        await loadCurrentUser();
     }
 
     return {
@@ -90,11 +61,7 @@ export const useUserStore = defineStore("user", () => {
         currentUser,
         currentUserId,
         currentGroupId,
-        saveCurrentUserId,
         saveCurrentGroupId,
         loadUsers,
-        loadCurrentUser,
-        signIn,
-        signOut,
     };
 });

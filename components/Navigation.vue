@@ -21,6 +21,7 @@ const userStore = useUserStore();
 const router = useRouter();
 const localePath = useLocalePath();
 const { t } = useI18n();
+const { signOut } = useAuth();
 
 const navigation = [
     { name: t("pages.overview.title"), href: "/", current: true },
@@ -28,11 +29,6 @@ const navigation = [
     { name: t("pages.ideas.title"), href: "/ideas", current: false },
     { name: t("pages.size-chart.title"), href: "/size-chart", current: false },
 ];
-
-const signOut = async () => {
-    userStore.signOut();
-    await router.push(localePath("/login"));
-};
 
 const updateGroup = (id: Group) => {
     userStore.saveCurrentGroupId(id);
