@@ -1,8 +1,7 @@
 import { PrismaClient } from "@prisma/client";
-import { User } from "~/lib/types";
 const prisma = new PrismaClient();
 
-const users: Partial<User>[] = [
+const users = [
     { name: "Amani", password: "amani12", groups: ["HAUGEN"] },
     { name: "Boudewijn", password: "boudewijn12", groups: ["BENJAMINS"] },
     { name: "Charis", password: "charis23", groups: ["HAUGEN"] },
@@ -28,8 +27,8 @@ async function main() {
                 await prisma.user.upsert({
                     where: { name: u.name },
                     create: {
-                        name: u.name!,
-                        password: u.password!,
+                        name: u.name,
+                        password: u.password,
                         groups: u.groups,
                     },
                     update: { password: u.password, groups: u.groups },
