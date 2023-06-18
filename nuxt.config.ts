@@ -8,6 +8,7 @@ export default defineNuxtConfig({
         "@vueuse/nuxt",
         "@formkit/nuxt",
         "@nuxtjs/i18n",
+        "@sidebase/nuxt-auth",
     ],
     css: ["vue-toastification/dist/index.css"],
 
@@ -25,4 +26,6 @@ export default defineNuxtConfig({
         langDir: "lang/",
         vueI18n: "./i18n.config.ts",
     },
+
+    auth: {},
 });
