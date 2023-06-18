@@ -30,6 +30,15 @@ async function main() {
                         name: u.name,
                         password: u.password,
                         groups: u.groups,
+                        partner: u.partner
+                            ? {
+                                  connect: {
+                                      where: {
+                                          name: u.partner,
+                                      },
+                                  },
+                              }
+                            : undefined,
                     },
                     update: { password: u.password, groups: u.groups },
                 })
