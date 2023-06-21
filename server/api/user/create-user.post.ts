@@ -1,7 +1,8 @@
+import { defineAuthResponseHandler } from "~/server/utils/handler";
 import prisma from "~~/lib/prisma";
 import { NewUser } from "~~/lib/types";
 
-export default defineEventHandler(async (event) => {
+export default defineAuthResponseHandler(async (event) => {
     const body: NewUser = await readBody(event);
 
     if (!body.name || !body.password || !body.groups)

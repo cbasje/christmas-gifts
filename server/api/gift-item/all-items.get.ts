@@ -1,8 +1,9 @@
 import { getServerSession } from "#auth";
+import { defineAuthResponseHandler } from "~/server/utils/handler";
 import prisma from "~~/lib/prisma";
 import { Group, MySession } from "~~/lib/types";
 
-export default defineEventHandler(async (event) => {
+export default defineAuthResponseHandler(async (event) => {
     const session = await getServerSession(event);
     const query = getQuery(event);
 

@@ -1,6 +1,7 @@
+import { defineAuthResponseHandler } from "~/server/utils/handler";
 import prisma from "~~/lib/prisma";
 
-export default defineEventHandler(async (event) => {
+export default defineAuthResponseHandler(async (event) => {
     const query = getQuery(event);
     const id = String(query.id);
 

@@ -1,7 +1,8 @@
-import { User } from "~~/lib/types";
+import { defineAuthResponseHandler } from "~/server/utils/handler";
 import prisma from "~~/lib/prisma";
+import { User } from "~~/lib/types";
 
-export default defineEventHandler(async (event) => {
+export default defineAuthResponseHandler(async (event) => {
     const body: Pick<User, "password"> = await readBody(event);
 
     if (!body.password) throw new Error("Not enough data");

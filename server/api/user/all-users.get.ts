@@ -1,6 +1,7 @@
+import { defineAuthResponseHandler } from "~/server/utils/handler";
 import prisma from "~~/lib/prisma";
 
-export default defineEventHandler(async (event) => {
+export default defineAuthResponseHandler(async () => {
     return await prisma.user.findMany({
         select: {
             id: true,
