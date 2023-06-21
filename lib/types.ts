@@ -3,6 +3,7 @@ import {
     Group as PrismaGroup,
     User as PrismaUser,
 } from "@prisma/client";
+import { Session } from "next-auth";
 
 export type OverviewGiftItem = Omit<PrismaGiftItem, "createdAt" | "updatedAt">;
 export type WishListGiftItem = Omit<
@@ -42,3 +43,5 @@ export type Color =
     | "orange"
     | "gray"
     | "primary";
+
+export type MySession = (Session & { user: Partial<User> }) | undefined;

@@ -10,7 +10,6 @@ import { UserWithItemIds, useUserStore } from "./user";
 
 export const useGiftItemStore = defineStore("gift-item", () => {
     const userStore = useUserStore();
-    const { data: authData } = useAuth();
 
     const itemIds = ref<string[]>([]);
     const itemEntities = ref<Record<string, GiftItem>>({});

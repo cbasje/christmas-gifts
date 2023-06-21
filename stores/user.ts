@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { GiftItem, Group, User } from "~~/lib/types";
+import { GiftItem, Group, MySession, User } from "~~/lib/types";
 
 export type UserWithItemIds = User & { items?: Pick<GiftItem, "id">[] };
 export const useUserStore = defineStore("user", () => {
@@ -9,9 +9,11 @@ export const useUserStore = defineStore("user", () => {
     const groupId = useCookie<Group>("group", {
         expires: new Date(curDate.getFullYear() + 1, 0, 0),
     });
-    const currentUserId = computed(() => authData.value?.id);
+    const currentUserId = computed(
+        () => (authData.value as MySession)?.user.id
+    );
     const currentGroupId = computed(
-        () => groupId.value ?? authData.value?.groups[0]
+        () => groupId.value ?? (authData.value as MySession)?.user.groups![0]
     );
 
     const userIds = ref<string[]>([]);
@@ -22,7 +24,10 @@ export const useUserStore = defineStore("user", () => {
     });
     const currentUser = computed(() => {
         return (
-            (authData.value?.uid && userEntities.value[authData.value?.uid]) ||
+            ((authData.value as MySession)?.user.id &&
+                userEntities.value[
+                    (authData.value as MySession)?.user.id ?? ""
+                ]) ||
             null
         );
     });

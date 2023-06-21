@@ -2,7 +2,11 @@ import prisma from "~~/lib/prisma";
 
 export default defineEventHandler(async (event) => {
     return await prisma.user.findMany({
-        include: {
+        select: {
+            id: true,
+            name: true,
+            partnerId: true,
+            groups: true,
             items: {
                 select: { id: true },
             },
