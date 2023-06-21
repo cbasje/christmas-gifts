@@ -16,17 +16,6 @@ export default defineNuxtPlugin((nuxtApp) => {
         { global: true }
     );
 
-    addRouteMiddleware("auth", async (to, from) => {
-        const locale = useBrowserLocale() ?? "en";
-        const localePath = usePath();
-
-        const userId = useCookie("user");
-
-        if (!userId.value) {
-            return navigateTo(localePath.fromLocale(locale, "/login"));
-        }
-    });
-
     addRouteMiddleware("auth-query", async (to, from) => {
         const locale = useBrowserLocale() ?? "en";
         const password = to.query.password;
