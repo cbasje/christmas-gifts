@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { useToast } from "vue-toastification/dist/index.mjs";
 
+const route = useRoute();
 const online = useOnline();
 const toast = useToast();
 const { signIn } = useAuth();
@@ -11,17 +12,16 @@ const submitForm = async () => {
     try {
         if (!online.value) throw new Error("Not online");
 
-        const { error, url } = await signIn("password", {
+        await signIn("password", {
             password: password.value,
-            redirect: false,
-            callbackUrl: "/",
+            callbackUrl: (route.query["callbackUrl"] as string) ?? "/",
         });
 
-        if (error) {
-            throw new Error("A mistake while entering your credentials");
-        } else {
-            return navigateTo(url, { external: true });
-        }
+        // if (error) {
+        //     throw new Error("A mistake while entering your credentials");
+        // } else {
+        //     return navigateTo(url, { external: true });
+        // }
     } catch (e) {
         if (e instanceof Error) {
             console.error(e);

@@ -21,7 +21,7 @@ const userStore = useUserStore();
 const router = useRouter();
 const localePath = useLocalePath();
 const { t } = useI18n();
-const { signOut } = useAuth();
+const { signOut: authSignOut } = useAuth();
 
 const navigation = [
     { name: t("pages.overview.title"), href: "/", current: true },
@@ -35,9 +35,16 @@ const updateGroup = (id: Group) => {
 
     userStore.loadUsers();
     giftItemStore.loadGiftItems();
+    giftItemStore.loadWishList();
 };
 const capitalizeGroupName = ([first, ...rest]: string): string =>
     `${first.toUpperCase()}${rest.join("").toLowerCase()}`;
+
+const signOut = async () => {
+    // :to="localePath('/login')"
+    await authSignOut();
+    router.push("/login");
+};
 </script>
 
 <template>
@@ -174,14 +181,13 @@ const capitalizeGroupName = ([first, ...rest]: string): string =>
                                 </MenuItem>
                                 <MenuItem v-slot="{ active }">
                                     <NuxtLink
-                                        :to="localePath('/login')"
                                         :class="[
                                             active
                                                 ? 'bg-gray-100 dark:bg-gray-700'
                                                 : '',
                                             'block px-4 py-2 text-sm text-gray-700 dark:text-gray-200',
                                         ]"
-                                        @click="async () => await signOut()"
+                                        @click="signOut"
                                     >
                                         {{ $t("signOut") }}
                                     </NuxtLink>

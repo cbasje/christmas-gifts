@@ -7,6 +7,8 @@ import SizeChart from "~/assets/SizeChart.svg";
 import SegmentedControl from "~/components/SegmentedControl.vue";
 
 const selectedTab = ref(0);
+
+definePageMeta({ middleware: "auth" });
 </script>
 
 <template>

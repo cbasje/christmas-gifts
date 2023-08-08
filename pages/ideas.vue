@@ -75,6 +75,8 @@ onMounted(async () => {
         isLoading.value = false;
     }
 });
+
+definePageMeta({ middleware: "auth" });
 </script>
 
 <template>

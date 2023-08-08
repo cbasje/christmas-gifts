@@ -32,7 +32,7 @@ export default defineNuxtConfig({
     },
 
     auth: {
-        globalAppMiddleware: true,
+        // globalAppMiddleware: true,
         // provider: {
         //     type: 'local'
         // }

@@ -10,6 +10,7 @@ const userStore = useUserStore();
 
 const toast = useToast();
 const online = useOnline();
+const { data } = useAuth();
 
 const isLoading = ref(true);
 const headerColors: Color[] = [
@@ -62,6 +63,8 @@ onMounted(async () => {
         isLoading.value = false;
     }
 });
+
+definePageMeta({ middleware: "auth" });
 </script>
 
 <template>
