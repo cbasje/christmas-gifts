@@ -5,16 +5,12 @@
 	import type { LayoutServerData } from './$types';
 	import Footer from './Footer.svelte';
 	import Navigation from './Navigation.svelte';
-	import { pwaInfo } from 'virtual:pwa-info';
 
 	export let data: LayoutServerData;
-
-	$: webManifestLink = pwaInfo ? pwaInfo.webManifest.linkTag : '';
 </script>
 
 <svelte:head>
 	<title>{$t('common.title')}</title>
-	{@html webManifestLink}
 </svelte:head>
 
 <div>
