@@ -39,7 +39,6 @@
 				allowPurchased
 				allowEdit
 				isCollapsable
-				hasSummary
 			/>
 		{/each}
 	</TableContainer>
