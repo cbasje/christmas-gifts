@@ -6,17 +6,17 @@ A webapp to track Christmas gifts for my family and in-laws.
 
 ## Stack
 
--   Framework: [Nuxt 3](https://nuxt.com/)
+-   Framework: [SvelteKit](https://kit.svelte.dev/)
 -   Deployment: [Vercel](https://vercel.com)
 -   Styling: [TailwindCSS](https://tailwindcss.com/)
--   Icons: [Phosphor Icons](https://phosphoricons.com/)
+-   Icons: [Iconify](https://iconify.com/)
 -   Database: [Supabase](https://supabase.com/)
 -   ORM: [Prisma](https://prisma.io)
 
 ## Development
 
-| Command      | Action                                      |
-| :----------- | :------------------------------------------ |
-| `yarn`       | Installs dependencies                       |
-| `yarn dev`   | Starts local dev server at `localhost:3000` |
-| `yarn build` | Builds production site to `./dist/`         |
+| Command       | Action                                      |
+| :------------ | :------------------------------------------ |
+| `bun install` | Installs dependencies                       |
+| `bun dev`     | Starts local dev server at `localhost:5173` |
+| `bun build`   | Builds production site                      |

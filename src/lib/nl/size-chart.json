@@ -1,0 +1,20 @@
+{
+	"title": "Maattabel",
+	"description": "Geef hier je maten aan!",
+	"submit": "Opslaan",
+	"areas": {
+		"simple": {
+			"top": "Top",
+			"bottom": "Onder",
+			"shoe": "Schoenmaat"
+		},
+		"advanced": {
+			"head": "Hoofd",
+			"sleeve": "Mouw",
+			"chest": "Borst",
+			"waist": "Taille",
+			"hip": "Heup",
+			"inseam": "Binnenbeenlengte"
+		}
+	}
+}

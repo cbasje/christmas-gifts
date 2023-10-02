@@ -1,0 +1,16 @@
+{
+	"title": "Size chart",
+	"description": "Let everyone know your size!",
+	"submit": "Save",
+	"areas": {
+		"simple": { "top": "Top", "bottom": "Onder", "shoe": "Shoe size" },
+		"advanced": {
+			"head": "Hoofd",
+			"sleeve": "Sleeve",
+			"chest": "Chest",
+			"waist": "Waist",
+			"hip": "Hip",
+			"inseam": "Inseam"
+		}
+	}
+}
