@@ -1,0 +1,41 @@
+{
+	"title": "Gift tracker",
+	"signIn": "Sign in",
+	"signOut": "Sign out",
+	"signUp": "Sign up",
+	"user": {
+		"username": "Username",
+		"password": "Password"
+	},
+	"item": {
+		"name": "Name",
+		"notes": "Notes",
+		"price": "Price",
+		"link": "Link",
+		"recipient": "Recipient",
+		"groups": "Groups",
+		"ideaLink": "Link idea to..."
+	},
+	"table": {
+		"purchased": "Purchased?",
+		"actions": "Actions"
+	},
+	"navigation": {
+		"overview": "Overview",
+		"wishList": "My wish list",
+		"ideas": "Ideas",
+		"sizeChart": "Size chart"
+	},
+	"editModal": {
+		"create": {
+			"title": "Create new item",
+			"submit": "Create",
+			"cancel": "Cancel"
+		},
+		"edit": {
+			"title": "Edit '{{item}}'",
+			"submit": "Save",
+			"cancel": "Cancel"
+		}
+	}
+}

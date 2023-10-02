@@ -1,0 +1,41 @@
+{
+	"title": "Kerstcadeautracker",
+	"signIn": "Inloggen",
+	"signOut": "Uitloggen",
+	"signUp": "Aanmelden",
+	"user": {
+		"username": "Gebruikersnaam",
+		"password": "Wachtwoord"
+	},
+	"item": {
+		"name": "Naam",
+		"notes": "Opmerkingen",
+		"price": "Prijs",
+		"link": "Link",
+		"recipient": "Ontvanger",
+		"groups": "Groepen",
+		"ideaLink": "Link idee aan..."
+	},
+	"table": {
+		"purchased": "Gekocht?",
+		"actions": "Acties"
+	},
+	"navigation": {
+		"overview": "Overzicht",
+		"wishList": "Mijn verlanglijst",
+		"ideas": "Ideeën",
+		"sizeChart": "Maattabel"
+	},
+	"editModal": {
+		"create": {
+			"title": "Voeg nieuw item toe",
+			"submit": "Toevoegen",
+			"cancel": "Annuleren"
+		},
+		"edit": {
+			"title": "Pas '{{item}}' aan",
+			"submit": "Opslaan",
+			"cancel": "Annuleren"
+		}
+	}
+}
