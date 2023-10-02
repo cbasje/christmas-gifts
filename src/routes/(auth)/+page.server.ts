@@ -1,18 +1,15 @@
 import prisma from '$lib/prisma';
 import { auth } from '$lib/server/lucia';
-import type { Group } from '$lib/types';
+import { groupBy } from '$lib/utils/group-by';
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { groupBy } from '$lib/utils/group-by';
 
-export const load = (async ({ locals, cookies }) => {
-	const session = await locals.auth.validate();
-	const currentGroupId = cookies.get('group_id') as Group | undefined;
-	if (!session || !currentGroupId) throw redirect(302, '/login');
+export const load = (async ({ parent }) => {
+	const { user, currentGroupId } = await parent();
 
 	const overviewList = await prisma.giftItem.findMany({
 		where: {
-			recipientId: { not: session.user.id },
+			recipientId: { not: user.id },
 			groups: {
 				has: currentGroupId
 			},
@@ -33,7 +30,7 @@ export const load = (async ({ locals, cookies }) => {
 	});
 
 	return {
-		user: session.user,
+		user,
 		overviewList: groupBy(overviewList, 'recipientId')
 	};
 }) satisfies PageServerLoad;

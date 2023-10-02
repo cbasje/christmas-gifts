@@ -21,23 +21,15 @@ const schema = z.object({
 	})
 });
 
-export const load = (async ({ locals }) => {
-	const session = await locals.auth.validate();
-	if (!session) throw redirect(302, '/login');
+export const load = (async ({ parent }) => {
+	const { user } = await parent();
 
-	const user = await prisma.user.findUnique({
-		where: { id: session.user.id },
-		select: {
-			sizes: true
-		}
-	});
 	if (!user) throw error(404, 'Not found');
-
 	const form = await superValidate(user.sizes as Record<string, string> | null, schema);
 
 	return {
 		form,
-		user: session.user
+		user
 	};
 }) satisfies PageServerLoad;
 

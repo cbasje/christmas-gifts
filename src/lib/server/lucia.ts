@@ -16,7 +16,8 @@ export const auth = lucia({
 			name: data.name,
 			username: data.username,
 			partnerId: data.partnerId,
-			groups: data.groups
+			groups: data.groups,
+			sizes: data.sizes
 		};
 	}
 });

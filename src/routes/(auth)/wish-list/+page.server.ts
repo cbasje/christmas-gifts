@@ -26,14 +26,12 @@ const schema = z.object({
 	groups: z.nativeEnum(Group).array()
 });
 
-export const load = (async ({ locals, cookies }) => {
-	const session = await locals.auth.validate();
-	const currentGroupId = cookies.get('group_id') as Group | undefined;
-	if (!session || !currentGroupId) throw redirect(302, '/login');
+export const load = (async ({ parent }) => {
+	const { user, currentGroupId } = await parent();
 
 	const wishList = await prisma.giftItem.findMany({
 		where: {
-			recipientId: session.user.id,
+			recipientId: user.id,
 			groups: {
 				has: currentGroupId
 			},
@@ -56,7 +54,7 @@ export const load = (async ({ locals, cookies }) => {
 
 	const schemaWithDefaults = schema.merge(
 		z.object({
-			recipientId: z.string().default(session.user.id),
+			recipientId: z.string().default(user.id),
 			groups: z.nativeEnum(Group).array().default([currentGroupId])
 		})
 	);
@@ -64,7 +62,7 @@ export const load = (async ({ locals, cookies }) => {
 
 	return {
 		formData,
-		currentUserGroups: session.user.groups,
+		currentUserGroups: user.groups,
 		wishList,
 		isDevelopment: NODE_ENV === 'development'
 	};
