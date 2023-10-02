@@ -1,5 +1,5 @@
 import { auth } from '$lib/server/lucia';
-import { error, fail, redirect } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import { LuciaError } from 'lucia';
 import { setError, superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
@@ -10,35 +10,9 @@ const schema = z.object({
 	password: z.string().nonempty().min(6).max(255)
 });
 
-export const load = (async ({ locals, cookies, url }) => {
+export const load = (async ({ locals }) => {
 	const session = await locals.auth.validate();
 	if (session) throw redirect(302, '/');
-
-	const userId = url.searchParams.get('user_id');
-	if (userId) {
-		try {
-			const user = await auth.getUser(userId);
-			const session = await auth.createSession({
-				userId: userId,
-				attributes: {}
-			});
-
-			locals.auth.setSession(session); // set session cookie
-			cookies.set('group_id', user.groups[0], {
-				path: '/',
-				httpOnly: true,
-				sameSite: 'strict',
-				secure: true,
-				maxAge: 60 * 60 * 24 * 365 // one year
-			}); // set group cookie
-		} catch (e) {
-			console.error(e);
-			throw error(500);
-		}
-
-		// redirect to /
-		throw redirect(302, '/');
-	}
 
 	const form = superValidate(schema);
 
