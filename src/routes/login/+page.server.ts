@@ -11,8 +11,8 @@ const schema = z.object({
 });
 
 export const load = (async ({ locals, cookies, url }) => {
-	const session = await locals.auth.validate();
-	if (session) throw redirect(302, '/');
+	// const session = await locals.auth.validate();
+	// if (session) throw redirect(302, '/');
 
 	console.log('🎄 ----------------------🎄');
 	console.log('🎄 ~ load:', url.searchParams);
