@@ -1,5 +1,5 @@
 import { auth } from '$lib/server/lucia';
-import { fail, redirect } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 import { LuciaError } from 'lucia';
 import { setError, superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
@@ -31,12 +31,13 @@ export const load = (async ({ locals, cookies, url }) => {
 				secure: true,
 				maxAge: 60 * 60 * 24 * 365 // one year
 			}); // set group cookie
-
-			// redirect to /
-			throw redirect(302, '/');
 		} catch (e) {
 			console.error(e);
+			throw error(500);
 		}
+
+		// redirect to /
+		throw redirect(302, '/');
 	}
 
 	const form = superValidate(schema);
