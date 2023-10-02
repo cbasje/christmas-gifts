@@ -43,7 +43,7 @@
 				{#if isCollapsable}
 					<Icon
 						icon="lucide:chevron-down"
-						class="transition-transform duration-200 {isCollapsed
+						class="transition-transform duration-200 {!isCollapsed
 							? '-rotate-180'
 							: 'rotate-0'}"
 						width={24}

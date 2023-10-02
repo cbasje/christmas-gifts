@@ -10,6 +10,7 @@
 	import type { PageData as OverviewData } from '../../routes/(auth)/$types';
 	import type { PageData as IdeasData } from '../../routes/(auth)/ideas/$types';
 	import type { PageData as WishData } from '../../routes/(auth)/wish-list/$types';
+	import MarkdownDisplay from '$lib/components/MarkdownDisplay.svelte';
 
 	type EditGiftItem = (IdeasData['ideaList'][string] | WishData['wishList'])[number];
 	type GiftItem = EditGiftItem | OverviewData['overviewList'][string][number];
@@ -71,7 +72,9 @@
 			{item.notes}
 		</MarkdownDisplay> -->
 		{#if item.notes}
-			<p class="min-w-full text-gray-500 dark:text-gray-400">{item.notes}</p>
+			<MarkdownDisplay class="min-w-full text-gray-500 dark:text-gray-400">
+				<p>{item.notes}</p>
+			</MarkdownDisplay>
 		{/if}
 	</td>
 	<td>
@@ -85,7 +88,7 @@
 				href={item.link}
 				target="_blank"
 				rel="noopener noreferrer"
-				class="cursor-pointer overflow-hidden overflow-ellipsis whitespace-nowrap px-6 py-4 text-sm font-normal text-primary-500 underline hover:text-primary-700"
+				class="inline-block w-full cursor-pointer overflow-hidden overflow-ellipsis whitespace-nowrap px-6 py-4 text-sm font-normal text-primary-500 underline hover:text-primary-700"
 			>
 				{formatLink(item.link)}
 			</a>
