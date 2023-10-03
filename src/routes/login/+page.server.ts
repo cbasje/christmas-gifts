@@ -20,20 +20,12 @@ export const load = (async ({ locals, cookies, url }) => {
 	const userId = url.searchParams.get('user_id');
 	if (userId) {
 		try {
-			const user = await auth.getUser(userId);
 			const session = await auth.createSession({
 				userId: userId,
 				attributes: {}
 			});
 
 			locals.auth.setSession(session); // set session cookie
-			cookies.set('group_id', user.groups[0], {
-				path: '/',
-				httpOnly: true,
-				sameSite: 'strict',
-				secure: true,
-				maxAge: 60 * 60 * 24 * 365 // one year
-			}); // set group cookie
 		} catch (e) {
 			console.error(e);
 			throw error(500);

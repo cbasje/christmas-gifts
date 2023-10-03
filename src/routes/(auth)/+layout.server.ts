@@ -8,10 +8,10 @@ export const load = (async ({ locals, cookies }) => {
 	console.log('🎄 ----------------------------🎄');
 	console.log('🎄 ~ load ~ cookies:', session, currentGroupId);
 	console.log('🎄 ----------------------------🎄');
-	if (!session || !currentGroupId) throw redirect(302, '/login');
+	if (!session) throw redirect(302, '/login');
 
 	return {
 		user: session.user,
-		currentGroupId
+		currentGroupId: currentGroupId ?? session.user.groups[0]
 	};
 }) satisfies LayoutServerLoad;
