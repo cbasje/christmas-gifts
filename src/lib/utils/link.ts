@@ -5,8 +5,7 @@ export const formatLink = (linkString: string | null) => {
 	const matches = [...linkString.matchAll(regex)];
 
 	if (!matches || !matches.length) return linkString;
-
-	const [_, extractedLink] = matches[0];
+	const extractedLink = matches[0][1];
 
 	return extractedLink.replace('www.', '');
 };

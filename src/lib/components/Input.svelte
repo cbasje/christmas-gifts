@@ -9,7 +9,7 @@
 	};
 
 	const dispatch = createEventDispatcher<{
-		input: { value: any };
+		input: { value: string };
 	}>();
 
 	const id = 'form-input-' + crypto.randomUUID();

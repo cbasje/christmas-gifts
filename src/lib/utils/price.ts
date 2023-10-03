@@ -8,8 +8,9 @@ export const getPriceNumber = (priceString: string | null): number => {
 	const matches = [...priceString.matchAll(priceRegex)];
 
 	if (!matches || !matches.length) return 0;
+	// const code = matches[0][1];
+	const price = matches[0][2];
 
-	const [_, _code, price] = matches[0];
 	const priceNumber = price.replace(',', '.');
 
 	return Number(priceNumber) ?? 0;

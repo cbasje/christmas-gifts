@@ -1,12 +1,12 @@
 <script lang="ts">
 	import AddButton from '$lib/components/AddButton.svelte';
 	import { t } from '$lib/translations';
-	import type { Color, GiftItem } from '$lib/types';
+	import type { Color } from '$lib/types';
 	import { createSwitch, melt } from '@melt-ui/svelte';
 	import Header from '../Header.svelte';
 	import Table from '../Table.svelte';
 	import TableContainer from '../TableContainer.svelte';
-	import type { ActionData, PageData } from './$types';
+	import type { PageData } from './$types';
 
 	const headerColors: Color[] = [
 		'pink',

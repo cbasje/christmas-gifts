@@ -1,4 +1,3 @@
-import { NODE_ENV } from '$env/static/private';
 import prisma from '$lib/prisma';
 import { auth } from '$lib/server/lucia';
 import { Group } from '@prisma/client';
@@ -63,8 +62,7 @@ export const load = (async ({ parent }) => {
 	return {
 		formData,
 		currentUserGroups: user.groups,
-		wishList,
-		isDevelopment: NODE_ENV === 'development'
+		wishList
 	};
 }) satisfies PageServerLoad;
 

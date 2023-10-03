@@ -71,10 +71,13 @@
 			label={$t('sizeChart.areas.simple.top')}
 			bind:value={$form.simple.top}
 			placeholder="S, M, L, etc."
+			messages={$errors.simple?.top}
+			aria-invalid={$errors.simple?.top ? 'true' : undefined}
 			outer-class="md:absolute right-[68.07%] top-[33.13%] md:w-[17ch] md:-translate-y-10"
 			label-class="block text-sm font-medium text-gray-700 dark:text-gray-300"
 			input-class="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
 			message-class="mt-1 block w-full text-sm text-danger-400"
+			{...$constraints.simple?.top}
 		/>
 		<Input
 			type="text"
@@ -82,10 +85,13 @@
 			label={$t('sizeChart.areas.simple.bottom')}
 			bind:value={$form.simple.bottom}
 			placeholder="W33 L36, etc."
+			messages={$errors.simple?.bottom}
+			aria-invalid={$errors.simple?.bottom ? 'true' : undefined}
 			outer-class="md:absolute right-[68.07%] top-[65.86%] md:w-[17ch] md:-translate-y-10"
 			label-class="block text-sm font-medium text-gray-70 dark:text-gray-300"
 			input-class="mt-1 focus:ring-primary-500 focus:border-primary-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
 			message-class="mt-1 block w-full text-sm text-danger-400"
+			{...$constraints.simple?.bottom}
 		/>
 		<!-- FIXME:  -->
 		<!-- <Input
@@ -98,6 +104,7 @@
 			label-class="block text-sm font-medium text-gray-70 dark:text-gray-300"
 			input-class="mt-1 focus:ring-primary-500 focus:border-primary-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
 			message-class="mt-1 block w-full text-sm text-danger-400"
+			{...$constraints.simple.shoe}
 		/> -->
 	</div>
 
@@ -112,10 +119,13 @@
 			label={$t('sizeChart.areas.advanced.head')}
 			bind:value={$form.advanced.head}
 			placeholder="17 inch, etc."
+			messages={$errors.advanced?.head}
+			aria-invalid={$errors.advanced?.head ? 'true' : undefined}
 			outer-class="md:absolute right-[68.07%] top-[14.26%] md:w-[17ch] md:-translate-y-10"
 			label-class="block text-sm font-medium text-gray-700 dark:text-gray-300"
 			input-class="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
 			message-class="mt-1 block w-full text-sm text-danger-400"
+			{...$constraints.advanced?.head}
 		/>
 		<Input
 			type="text"
@@ -123,10 +133,13 @@
 			label={$t('sizeChart.areas.advanced.sleeve')}
 			bind:value={$form.advanced.sleeve}
 			placeholder="XL, 37 cm, etc."
+			messages={$errors.advanced?.sleeve}
+			aria-invalid={$errors.advanced?.sleeve ? 'true' : undefined}
 			outer-class="md:absolute right-[68.07%] top-[54.02%] md:w-[17ch] md:-translate-y-10"
 			label-class="block text-sm font-medium text-gray-70 dark:text-gray-300"
 			input-class="mt-1 focus:ring-primary-500 focus:border-primary-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
 			message-class="mt-1 block w-full text-sm text-danger-400"
+			{...$constraints.advanced?.sleeve}
 		/>
 		<Input
 			type="text"
@@ -134,10 +147,13 @@
 			label={$t('sizeChart.areas.advanced.chest')}
 			bind:value={$form.advanced.chest}
 			placeholder="239 mm, etc."
+			messages={$errors.advanced?.chest}
+			aria-invalid={$errors.advanced?.chest ? 'true' : undefined}
 			outer-class="md:absolute left-[68.47%] top-[32.53%] md:w-[17ch] md:-translate-y-10"
 			label-class="block text-sm font-medium text-gray-700 dark:text-gray-300"
 			input-class="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
 			message-class="mt-1 block w-full text-sm text-danger-400"
+			{...$constraints.advanced?.chest}
 		/>
 		<Input
 			type="text"
@@ -145,10 +161,13 @@
 			label={$t('sizeChart.areas.advanced.waist')}
 			bind:value={$form.advanced.waist}
 			placeholder="M, 0.5 m, 0.02 mile, etc."
+			messages={$errors.advanced?.waist}
+			aria-invalid={$errors.advanced?.waist ? 'true' : undefined}
 			outer-class="md:absolute left-[68.47%] top-[41.77%] md:w-[17ch] md:-translate-y-10"
 			label-class="block text-sm font-medium text-gray-70 dark:text-gray-300"
 			input-class="mt-1 focus:ring-primary-500 focus:border-primary-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
 			message-class="mt-1 block w-full text-sm text-danger-400"
+			{...$constraints.advanced?.waist}
 		/>
 		<Input
 			type="text"
@@ -156,10 +175,13 @@
 			label={$t('sizeChart.areas.advanced.hip')}
 			bind:value={$form.advanced.hip}
 			placeholder="2 baguettes, etc."
+			messages={$errors.advanced?.hip}
+			aria-invalid={$errors.advanced?.hip ? 'true' : undefined}
 			outer-class="md:absolute left-[68.47%] top-[49.40%] md:w-[17ch] md:-translate-y-10"
 			label-class="block text-sm font-medium text-gray-700 dark:text-gray-300"
 			input-class="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
 			message-class="mt-1 block w-full text-sm text-danger-400"
+			{...$constraints.advanced?.hip}
 		/>
 		<Input
 			type="text"
@@ -167,10 +189,13 @@
 			label={$t('sizeChart.areas.advanced.inseam')}
 			bind:value={$form.advanced.inseam}
 			placeholder="0.5 Sebastiaan, etc."
+			messages={$errors.advanced?.inseam}
+			aria-invalid={$errors.advanced?.inseam ? 'true' : undefined}
 			outer-class="md:absolute left-[68.47%] top-[84.94%] md:w-[17ch] md:-translate-y-10"
 			label-class="block text-sm font-medium text-gray-70 dark:text-gray-300"
 			input-class="mt-1 focus:ring-primary-500 focus:border-primary-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
 			message-class="mt-1 block w-full text-sm text-danger-400"
+			{...$constraints.advanced?.inseam}
 		/>
 	</div>
 </form>

@@ -1,4 +1,3 @@
-import { NODE_ENV } from '$env/static/private';
 import prisma from '$lib/prisma';
 import { auth } from '$lib/server/lucia';
 import { groupBy } from '$lib/utils/group-by';
@@ -90,8 +89,7 @@ export const load = (async ({ parent }) => {
 		formData,
 		currentUserGroups: user.groups,
 		ideaList: groupBy(ideaList, 'recipientId'),
-		users,
-		isDevelopment: NODE_ENV === 'development'
+		users
 	};
 }) satisfies PageServerLoad;
 

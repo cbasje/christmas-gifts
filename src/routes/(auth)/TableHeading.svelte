@@ -1,10 +1,9 @@
 <script lang="ts">
 	import { t } from '$lib/translations';
 	import type { Color } from '$lib/types';
-	import Icon from '@iconify/svelte';
-	import { createEventDispatcher } from 'svelte';
-	import Badge from './Badge.svelte';
 	import { formatPrice } from '$lib/utils/price';
+	import Icon from '@iconify/svelte';
+	import Badge from './Badge.svelte';
 
 	export let title = '';
 	export let headerColor: Color;

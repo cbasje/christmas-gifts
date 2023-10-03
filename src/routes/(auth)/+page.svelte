@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { t } from '$lib/translations';
-	import type { Color, GiftItem } from '$lib/types';
+	import type { Color } from '$lib/types';
 	import type { PageData } from './$types';
 	import Header from './Header.svelte';
 	import Table from './Table.svelte';

@@ -26,7 +26,7 @@
 	export let allowPurchased = false;
 	export let allowEdit = false;
 
-	const switchPurchased: CreateSwitchProps['onCheckedChange'] = ({ curr, next }) => {
+	const switchPurchased: CreateSwitchProps['onCheckedChange'] = ({ next }) => {
 		const formData = new FormData();
 		formData.set('id', item.id);
 		formData.set('purchased', String(next));

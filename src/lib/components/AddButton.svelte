@@ -36,7 +36,7 @@
 
 	const { form, enhance, constraints, errors } = superForm(formData, {
 		resetForm: true,
-		onResult: ({ result, formEl, cancel }) => {
+		onResult: ({ result }) => {
 			if ('data' in result && result.data?.form?.valid && 'newItem' in result.data) {
 				open.set(false);
 				toast.success(
@@ -53,7 +53,7 @@
 		}
 	});
 
-	const onRecipientChange = async (e: CustomEvent<{ value: any }>) => {
+	const onRecipientChange = async (e: CustomEvent<{ value: string }>) => {
 		const url = new URL($page.url);
 		url.searchParams.set('recipientId', String(e.detail.value));
 
@@ -98,9 +98,9 @@
 			<h3 use:melt={$title} class="mb-2 text-lg font-medium leading-6 text-gray-900">
 				{$t('common.editModal.create.title')}
 			</h3>
-			<!-- <p use:melt={$description} class="text-zinc-600 mb-5 mt-2 leading-normal">
+			<p use:melt={$description} class="text-zinc-600 mb-5 mt-2 leading-normal">
 				{$t('common.editModal.create.description')}
-			</p> -->
+			</p>
 
 			<form class="space-y-6" method="POST" action="?/newItem" use:enhance>
 				<Input type="hidden" name="idea" value={$form.idea} />

@@ -33,7 +33,7 @@
 	const { form, enhance, constraints, errors, reset } = superForm(formData, {
 		id: item?.id,
 		resetForm: true,
-		onResult: ({ result, formEl, cancel }) => {
+		onResult: ({ result }) => {
 			if ('data' in result && result.data?.form?.valid && 'editedItem' in result.data) {
 				open.set(false);
 				toast.success(`Updated ${result.data.editedItem.name} successfully!`);
@@ -46,7 +46,7 @@
 		}
 	});
 
-	const handleOpenChange: CreateDialogProps['onOpenChange'] = ({ curr, next }) => {
+	const handleOpenChange: CreateDialogProps['onOpenChange'] = ({ next }) => {
 		if (next === true && item !== undefined) {
 			form.set({
 				id: item.id,
@@ -74,7 +74,7 @@
 		onOpenChange: handleOpenChange
 	});
 
-	const onRecipientChange = async (e: CustomEvent<{ value: any }>) => {
+	const onRecipientChange = async (e: CustomEvent<{ value: string }>) => {
 		const url = new URL($page.url);
 		url.searchParams.set('recipientId', String(e.detail.value));
 
@@ -120,11 +120,11 @@
 			use:melt={$content}
 		>
 			<h3 use:melt={$title} class="mb-2 text-lg font-medium leading-6 text-gray-900">
-				{$t('common.editModal.edit.title', { item: item?.name })}
+				{$t('common.editModal.edit.title', { item: item?.name ?? '' })}
 			</h3>
-			<!-- <p use:melt={$description} class="text-zinc-600 mb-5 mt-2 leading-normal">
+			<p use:melt={$description} class="text-zinc-600 mb-5 mt-2 leading-normal">
 				{$t('common.editModal.edit.description')}
-			</p> -->
+			</p>
 
 			<form class="space-y-6" method="POST" action="?/editItem" use:enhance>
 				<Input type="hidden" name="id" value={$form.id} />

@@ -1,6 +1,10 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
+	import { invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { t } from '$lib/translations';
+	import { Groups } from '$lib/types';
+	import { capitaliseString } from '$lib/utils/capitalise';
 	import Icon from '@iconify/svelte';
 	import {
 		createCollapsible,
@@ -12,10 +16,6 @@
 	import { fly, slide } from 'svelte/transition';
 	import type { LayoutServerData } from './$types';
 	import Badge from './Badge.svelte';
-	import { enhance } from '$app/forms';
-	import { invalidateAll } from '$app/navigation';
-	import { Groups } from '$lib/types';
-	import { capitaliseString } from '$lib/utils/capitalise';
 
 	// FIXME: const localePath = useLocalePath();
 	export let user: LayoutServerData['user'];
@@ -36,7 +36,7 @@
 			fetch($page.url.origin + '/group', {
 				method: 'PATCH',
 				body: formData
-			}).then((v) => {
+			}).then(() => {
 				invalidateAll();
 			});
 
@@ -55,8 +55,7 @@
 	} = createCollapsible();
 
 	const {
-		elements: { trigger: triggerMenu, menu, item: menuItem },
-		states: { open: isDropdownOpen }
+		elements: { trigger: triggerMenu, menu, item: menuItem }
 	} = createDropdownMenu();
 
 	const {
