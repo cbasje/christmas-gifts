@@ -10,19 +10,16 @@ const schema = z.object({
 	password: z.string().nonempty().min(6).max(255)
 });
 
-export const load = (async ({ locals, cookies, url }) => {
-	// const session = await locals.auth.validate();
-	// if (session) throw redirect(302, '/');
-
-	console.log('🎄 ----------------------🎄');
-	console.log('🎄 ~ load:', url.searchParams);
-	console.log('🎄 ----------------------🎄');
+export const load = (async ({ locals, url }) => {
 	const userId = url.searchParams.get('user_id');
 	if (userId) {
 		try {
+			const user = await auth.getUser(userId);
 			const session = await auth.createSession({
 				userId: userId,
-				attributes: {}
+				attributes: {
+					group: user.groups[0]
+				}
 			});
 
 			locals.auth.setSession(session); // set session cookie
@@ -43,7 +40,7 @@ export const load = (async ({ locals, cookies, url }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({ request, locals, cookies }) => {
+	default: async ({ request, locals }) => {
 		const form = await superValidate(request, schema);
 
 		if (!form.valid) {
@@ -62,17 +59,13 @@ export const actions = {
 			const user = await auth.getUser(key.userId);
 			const session = await auth.createSession({
 				userId: key.userId,
-				attributes: {}
+				attributes: {
+					group: user.groups[0]
+				}
 			});
 
-			locals.auth.setSession(session); // set session cookie
-			cookies.set('group_id', user.groups[0], {
-				path: '/',
-				httpOnly: true,
-				sameSite: 'strict',
-				secure: true,
-				maxAge: 60 * 60 * 24 * 365 // one year
-			}); // set group cookie
+			// Set auth cookie
+			locals.auth.setSession(session);
 		} catch (e) {
 			console.error(e);
 			if (e instanceof LuciaError && e.message === 'AUTH_INVALID_KEY_ID') {

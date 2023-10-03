@@ -101,10 +101,9 @@ export const actions = {
 		locals.auth.setSession(null); // remove cookie
 		throw redirect(302, '/login'); // redirect to login page
 	},
-	newItem: async ({ request, locals, cookies }) => {
+	newItem: async ({ request, locals }) => {
 		const session = await locals.auth.validate();
-		const currentGroupId = cookies.get('group_id') as Group | undefined;
-		if (!session || !currentGroupId) throw redirect(302, '/login');
+		if (!session) throw redirect(302, '/login');
 
 		const form = await superValidate(request, schema);
 
@@ -129,10 +128,9 @@ export const actions = {
 			return fail(500, { form });
 		}
 	},
-	editItem: async ({ request, locals, cookies }) => {
+	editItem: async ({ request, locals }) => {
 		const session = await locals.auth.validate();
-		const currentGroupId = cookies.get('group_id') as Group | undefined;
-		if (!session || !currentGroupId) throw redirect(302, '/login');
+		if (!session) throw redirect(302, '/login');
 
 		const form = await superValidate(request, schema);
 

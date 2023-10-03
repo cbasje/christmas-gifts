@@ -23,7 +23,7 @@ export const load = (async ({ locals }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({ request, locals, cookies }) => {
+	default: async ({ request, locals }) => {
 		const form = await superValidate(request, schema);
 
 		if (!form.valid) {
@@ -47,17 +47,13 @@ export const actions = {
 			});
 			const session = await auth.createSession({
 				userId: user.userId,
-				attributes: {}
+				attributes: {
+					group: user.groups[0]
+				}
 			});
 
-			locals.auth.setSession(session); // set session cookie
-			cookies.set('group_id', user.groups[0], {
-				path: '/',
-				httpOnly: true,
-				sameSite: 'strict',
-				secure: true,
-				maxAge: 60 * 60 * 24 * 365 // one year
-			}); // set group cookie
+			// Set auth cookie
+			locals.auth.setSession(session);
 		} catch (e) {
 			console.error(e);
 			if (e instanceof LuciaError && e.message === 'AUTH_DUPLICATE_KEY_ID') {

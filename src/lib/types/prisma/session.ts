@@ -1,11 +1,13 @@
 import * as z from 'zod';
+import { Group } from '@prisma/client';
 import { type CompleteUser, RelatedUserSchema } from './index';
 
 export const SessionSchema = z.object({
 	id: z.string(),
 	user_id: z.string(),
 	active_expires: z.bigint(),
-	idle_expires: z.bigint()
+	idle_expires: z.bigint(),
+	group: z.nativeEnum(Group).nullish()
 });
 
 export interface CompleteSession extends z.infer<typeof SessionSchema> {

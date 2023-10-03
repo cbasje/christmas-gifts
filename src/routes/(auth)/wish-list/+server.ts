@@ -1,12 +1,10 @@
 import prisma from '$lib/prisma';
-import type { Group } from '$lib/types';
 import { error, json, redirect } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
-export const DELETE = (async ({ request, locals, cookies }) => {
+export const DELETE = (async ({ request, locals }) => {
 	const session = await locals.auth.validate();
-	const currentGroupId = cookies.get('group_id') as Group | undefined;
-	if (!session || !currentGroupId) throw redirect(302, '/login');
+	if (!session) throw redirect(302, '/login');
 
 	const form = await request.formData();
 	const id = form.get('id');

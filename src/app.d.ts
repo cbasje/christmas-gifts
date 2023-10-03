@@ -1,6 +1,6 @@
 // See https://kit.svelte.dev/docs/types#app
 
-import type { User } from '$lib/types';
+import type { User, Group } from '$lib/types';
 
 // for information about these interfaces
 declare global {
@@ -19,7 +19,9 @@ declare global {
 	namespace Lucia {
 		type Auth = import('$lib/server/lucia').Auth;
 		type DatabaseUserAttributes = Omit<User, 'id' | 'createdAt' | 'updatedAt'>;
-		type DatabaseSessionAttributes = Record<string, never>;
+		type DatabaseSessionAttributes = {
+			group: Group;
+		};
 	}
 }
 

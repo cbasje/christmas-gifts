@@ -65,6 +65,8 @@ model Session {
   idle_expires   BigInt
   user           User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
+  group Group?
+
   @@index([user_id])
 }
 

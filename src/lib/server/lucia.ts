@@ -19,6 +19,15 @@ export const auth = lucia({
 			groups: data.groups,
 			sizes: data.sizes
 		};
+	},
+	getSessionAttributes: (data) => {
+		return {
+			group: data.group
+		};
+	},
+	sessionExpiresIn: {
+		activePeriod: 60 * 60 * 24 * 7 * 1000, // one week
+		idlePeriod: 60 * 60 * 24 * 182.5 * 1000 // one half year
 	}
 });
 

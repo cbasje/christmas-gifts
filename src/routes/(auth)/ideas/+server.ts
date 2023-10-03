@@ -1,12 +1,10 @@
 import prisma from '$lib/prisma';
-import type { Group } from '$lib/types';
 import { error, json, redirect } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
-export const GET = (async ({ url, locals, cookies }) => {
+export const GET = (async ({ url, locals }) => {
 	const session = await locals.auth.validate();
-	const currentGroupId = cookies.get('group_id') as Group | undefined;
-	if (!session || !currentGroupId) throw redirect(302, '/login');
+	if (!session) throw redirect(302, '/login');
 
 	const recipientId = url.searchParams.get('recipientId');
 
@@ -19,7 +17,7 @@ export const GET = (async ({ url, locals, cookies }) => {
 			where: {
 				recipientId,
 				groups: {
-					has: currentGroupId
+					has: session.group
 				},
 				idea: false
 			},
@@ -39,10 +37,9 @@ export const GET = (async ({ url, locals, cookies }) => {
 	}
 }) satisfies RequestHandler;
 
-export const PATCH = (async ({ request, locals, cookies }) => {
+export const PATCH = (async ({ request, locals }) => {
 	const session = await locals.auth.validate();
-	const currentGroupId = cookies.get('group_id') as Group | undefined;
-	if (!session || !currentGroupId) throw redirect(302, '/login');
+	if (!session) throw redirect(302, '/login');
 
 	const form = await request.formData();
 	const id = form.get('id');
@@ -87,10 +84,9 @@ export const PATCH = (async ({ request, locals, cookies }) => {
 	}
 }) satisfies RequestHandler;
 
-export const DELETE = (async ({ request, locals, cookies }) => {
+export const DELETE = (async ({ request, locals }) => {
 	const session = await locals.auth.validate();
-	const currentGroupId = cookies.get('group_id') as Group | undefined;
-	if (!session || !currentGroupId) throw redirect(302, '/login');
+	if (!session) throw redirect(302, '/login');
 
 	const form = await request.formData();
 	const id = form.get('id');
