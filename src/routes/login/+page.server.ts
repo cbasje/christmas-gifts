@@ -10,8 +10,8 @@ const schema = z.object({
 	password: z.string().nonempty().min(6).max(255)
 });
 
-export const load = (async ({ locals, url }) => {
-	const userId = url.searchParams.get('user_id');
+export const load = (async ({ locals, url, cookies }) => {
+	const userId = url.searchParams.get('user_id') ?? cookies.get('user');
 	if (userId) {
 		try {
 			const user = await auth.getUser(userId);
