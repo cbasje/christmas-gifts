@@ -29,11 +29,13 @@
 	"editModal": {
 		"create": {
 			"title": "Voeg nieuw item toe",
+			"description": "Maak hier een nieuw item aan! Alleen dingen met een rode ster zijn verplicht.",
 			"submit": "Toevoegen",
 			"cancel": "Annuleren"
 		},
 		"edit": {
 			"title": "Pas '{{item}}' aan",
+			"description": "Je kunt alles van dit item bewerken en alles blijft gekoppeld!",
 			"submit": "Opslaan",
 			"cancel": "Annuleren"
 		}

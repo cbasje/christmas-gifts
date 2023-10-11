@@ -95,10 +95,10 @@
 			}}
 			use:melt={$content}
 		>
-			<h3 use:melt={$title} class="mb-2 text-lg font-medium leading-6 text-gray-900">
+			<h3 use:melt={$title} class="text-lg font-semibold leading-6 text-gray-900">
 				{$t('common.editModal.create.title')}
 			</h3>
-			<p use:melt={$description} class="text-zinc-600 mb-5 mt-2 leading-normal">
+			<p use:melt={$description} class="text-base leading-normal text-gray-500">
 				{$t('common.editModal.create.description')}
 			</p>
 

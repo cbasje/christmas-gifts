@@ -29,11 +29,13 @@
 	"editModal": {
 		"create": {
 			"title": "Create new item",
+			"description": "Create a new item here! Only things with a red star are required.",
 			"submit": "Create",
 			"cancel": "Cancel"
 		},
 		"edit": {
 			"title": "Edit '{{item}}'",
+			"description": "You can edit everything on this item and everything will stay linked!",
 			"submit": "Save",
 			"cancel": "Cancel"
 		}
