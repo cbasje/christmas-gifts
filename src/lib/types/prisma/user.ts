@@ -23,6 +23,7 @@ export const UserSchema = z.object({
 	username: z.string(),
 	partnerId: z.string().nullish(),
 	groups: z.nativeEnum(Group).array(),
+	hue: z.number().int().min(0).max(360),
 	sizes: jsonSchema,
 	createdAt: z.date().nullish(),
 	updatedAt: z.date().nullish()

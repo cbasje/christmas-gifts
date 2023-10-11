@@ -48,6 +48,7 @@ model User {
   partnerId    String?    @unique
   partner2     User?      @relation("Partner")
   groups       Group[]
+  hue          Int        @default(145) /// @zod.min(0).max(360)
 
   sizes Json?
 

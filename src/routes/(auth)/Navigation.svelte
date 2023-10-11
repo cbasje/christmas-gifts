@@ -16,6 +16,8 @@
 	import { fly, slide } from 'svelte/transition';
 	import type { LayoutServerData } from './$types';
 	import Badge from './Badge.svelte';
+	import { string } from 'zod';
+	import { getColorString } from '$lib/utils/user';
 
 	// FIXME: const localePath = useLocalePath();
 	export let user: LayoutServerData['user'];

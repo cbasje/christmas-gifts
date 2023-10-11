@@ -18,7 +18,7 @@
 	</svelte:fragment>
 </Header>
 
-<form class="mt-8 space-y-6" method="POST" use:enhance>
+<form class="mt-8 flex flex-col gap-2" method="POST" use:enhance>
 	<Input
 		name="username"
 		type="text"
@@ -51,6 +51,7 @@
 		type="submit"
 		label={$t('common.signUp')}
 		icon="lucide:lock"
+		outer-class="mt-4"
 		icon-class="h-4 w-4 text-primary-400 group-hover:text-primary-300 [&>svg]:w-full [&>svg]:h-full"
 		input-class="group relative w-full flex justify-center item-center gap-3 py-2 px-4 border border-primary-700 text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
 	/>
