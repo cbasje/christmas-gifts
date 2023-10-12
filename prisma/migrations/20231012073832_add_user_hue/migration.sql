@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN     "hue" INTEGER NOT NULL DEFAULT 145;
