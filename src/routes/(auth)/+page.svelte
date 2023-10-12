@@ -25,7 +25,6 @@
 				headerHue={items.at(0)?.recipient.hue ?? undefined}
 				{items}
 				allowPurchased
-				allowEdit
 				isCollapsable
 			/>
 		{/each}
