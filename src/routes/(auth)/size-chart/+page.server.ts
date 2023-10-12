@@ -2,7 +2,7 @@ import { auth } from '$lib/server/lucia';
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { superValidate } from 'sveltekit-superforms/server';
-import prisma from '$lib/prisma';
+import prisma from '$lib/server/prisma';
 import { z } from 'zod';
 
 const schema = z.object({

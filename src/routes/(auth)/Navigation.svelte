@@ -67,6 +67,21 @@
 		defaultValue: currentGroupId,
 		onValueChange: handleRadioChange
 	});
+
+	const ids = {
+		Boudewijn: 350,
+		Pien: 320,
+		Amani: 350,
+		Charis: 320,
+		Mika: 260,
+		Sebastiaan: 240,
+		George: 180,
+		Jeanne: 160,
+		Ingrid: 100,
+		Simon: 80,
+		Tori: 100,
+		Will: 80
+	};
 </script>
 
 <nav use:melt={$collapsibleRoot} class="bg-white dark:bg-gray-800">

@@ -1,4 +1,4 @@
-import prisma from '$lib/prisma';
+import prisma from '$lib/server/prisma';
 import { auth } from '$lib/server/lucia';
 import { Group } from '@prisma/client';
 import { fail, redirect } from '@sveltejs/kit';
