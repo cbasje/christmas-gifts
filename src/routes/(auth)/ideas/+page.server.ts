@@ -31,6 +31,7 @@ export const load = (async ({ parent }) => {
 
 	const [ideaList, users] = await prisma.$transaction([
 		prisma.giftItem.findMany({
+			orderBy: { recipient: { hue: 'desc' } },
 			where: {
 				recipientId: {
 					not: user.id

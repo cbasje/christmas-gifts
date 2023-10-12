@@ -8,6 +8,7 @@ export const load = (async ({ parent }) => {
 	const { user, currentGroupId } = await parent();
 
 	const overviewList = await prisma.giftItem.findMany({
+		orderBy: { recipient: { hue: 'desc' } },
 		where: {
 			recipientId: { not: user.id },
 			groups: {
