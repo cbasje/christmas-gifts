@@ -30,7 +30,7 @@
 	};
 	let linkItems: LinkItem[] = [];
 
-	const { form, enhance, constraints, errors, reset } = superForm(formData, {
+	const { form, enhance, constraints, errors, reset, tainted } = superForm(formData, {
 		id: item?.id,
 		resetForm: true,
 		onResult: ({ result }) => {
@@ -48,18 +48,21 @@
 
 	const handleOpenChange: CreateDialogProps['onOpenChange'] = ({ next }) => {
 		if (next === true && item !== undefined) {
-			form.set({
-				id: item.id,
-				name: item.name,
-				price: item.price,
-				notes: item.notes,
-				recipientId: item.recipientId,
-				giftedById: item.giftedById,
-				link: item.link,
-				idea: item.idea,
-				ideaLinkId: item.ideaLinkId,
-				groups: item.groups
-			});
+			form.set(
+				{
+					id: item.id,
+					name: item.name,
+					price: item.price,
+					notes: item.notes,
+					recipientId: item.recipientId,
+					giftedById: item.giftedById,
+					link: item.link,
+					idea: item.idea,
+					ideaLinkId: item.ideaLinkId,
+					groups: item.groups
+				},
+				{ taint: false }
+			);
 		} else if (next === false) {
 			reset();
 		}
@@ -97,17 +100,6 @@
 >
 	<Icon icon="lucide:pencil" width={24} height={24} />
 </button>
-<!-- <button
-	class="cursor-pointer font-normal text-primary-500 hover:text-primary-700 dark:text-primary-600 dark:hover:text-primary-800"
-	id="-2x_sp3ZnF"
-	aria-haspopup="dialog"
-	aria-expanded="false"
-	aria-controls="3_U5rwQRpP"
-	type="button"
-	data-melt-dialog-trigger=""
->
-	asd
-</button> -->
 
 <div use:melt={$portalled} class="absolute">
 	{#if $open}
@@ -258,6 +250,7 @@
 					<button
 						type="submit"
 						class="inline-flex justify-center rounded-md bg-primary-100 px-4 py-2 text-sm font-medium text-primary-900 hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+						disabled={$tainted === undefined}
 					>
 						{$t('common.editModal.edit.submit')}
 					</button>
