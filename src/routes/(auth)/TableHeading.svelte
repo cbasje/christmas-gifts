@@ -1,12 +1,11 @@
 <script lang="ts">
 	import { t } from '$lib/translations';
-	import type { Color } from '$lib/types';
 	import { formatPrice } from '$lib/utils/price';
 	import Icon from '@iconify/svelte';
 	import Badge from './Badge.svelte';
 
 	export let title = '';
-	export let headerColor: Color;
+	export let headerHue: number | undefined;
 	export let allowPurchased = false;
 	export let allowEdit = false;
 	export let isCollapsable = false;
@@ -23,14 +22,14 @@
 {#if title}
 	<caption>
 		<button
-			class="flex w-full cursor-pointer select-none items-center justify-between whitespace-nowrap px-6 py-3 {headerColor !=
-				'gray' && showBgColor
-				? `bg-${headerColor}-100 dark:bg-${headerColor}-900`
+			class="flex w-full cursor-pointer select-none items-center justify-between whitespace-nowrap px-6 py-3 {showBgColor
+				? `show-bg-color`
 				: 'bg-gray-200 dark:bg-gray-700'}"
+			style="--color-hue: {headerHue}"
 			on:click={toggleCollapsed}
 			aria-label="Table Header"
 		>
-			<Badge {title} color={headerColor} />
+			<Badge {title} hue={headerHue ?? 145} />
 
 			<div class="flex items-center gap-3 text-gray-600 dark:text-gray-300">
 				{#if hasSummary}
@@ -60,10 +59,10 @@
 				'table-5-sm':
 					'minmax(60vw, 4fr) minmax(96px, 2fr) minmax(128px, 3fr) repeat(2, minmax(64px, 1fr))', -->
 	<tr
-		class=" text-gray-600 dark:text-gray-300 {isCollapsed && title && 'hidden'} {headerColor !=
-			'gray' && showBgColor
-			? `bg-${headerColor}-100 dark:bg-${headerColor}-900`
+		class=" text-gray-600 dark:text-gray-300 {isCollapsed && title && 'hidden'} {showBgColor
+			? `show-bg-color`
 			: 'bg-gray-200 dark:bg-gray-700'}"
+		style="--color-hue: {headerHue}"
 	>
 		<th scope="col" class="w-[60vw] sm:w-[40%]">
 			{$t('common.item.name')} + {$t('common.item.notes')}
@@ -98,5 +97,15 @@
 <style lang="postcss">
 	th {
 		@apply relative px-6 py-3 text-left text-xs font-medium uppercase tracking-wider;
+	}
+	.show-bg-color {
+		color: var(--color-12);
+		background-color: var(--color-1);
+	}
+	@media (prefers-color-scheme: dark) {
+		.show-bg-color {
+			color: var(--color-1);
+			background-color: var(--color-12);
+		}
 	}
 </style>

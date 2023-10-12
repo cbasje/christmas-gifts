@@ -24,7 +24,10 @@ export const load = (async ({ parent }) => {
 			purchased: true,
 			recipientId: true,
 			recipient: {
-				select: { name: true }
+				select: {
+					name: true,
+					hue: true
+				}
 			}
 		}
 	});

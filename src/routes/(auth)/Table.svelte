@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { Color } from '$lib/types';
 	import { getPriceNumber, sum } from '$lib/utils/price';
 	import type { PageData as OverviewData } from '../../routes/(auth)/$types';
 	import type { PageData as IdeasData } from '../../routes/(auth)/ideas/$types';
@@ -14,7 +13,7 @@
 	export let pageData: IdeasData | WishData | undefined = undefined;
 
 	export let title: string | undefined = undefined;
-	export let headerColor: Color = 'gray';
+	export let headerHue: number | undefined = undefined;
 	export let allowPurchased = false;
 	export let allowEdit = false;
 	export let isCollapsable = false;
@@ -32,7 +31,7 @@
 >
 	<TableHeading
 		{title}
-		headerColor={headerColor ?? 'gray'}
+		{headerHue}
 		{showBgColor}
 		{allowPurchased}
 		{allowEdit}

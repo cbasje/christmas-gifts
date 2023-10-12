@@ -128,7 +128,7 @@
 							class="text-md flex rounded-full font-medium focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-white dark:focus:ring-offset-gray-800"
 						>
 							<span class="sr-only">Open user menu</span>
-							<Badge title={user.name ?? ''} color="primary" />
+							<Badge title={user.name ?? ''} hue={user.hue} />
 						</button>
 					</div>
 					<ul

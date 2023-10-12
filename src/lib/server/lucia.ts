@@ -15,7 +15,8 @@ export const auth = lucia({
 			username: data.username,
 			partnerId: data.partnerId,
 			groups: data.groups,
-			sizes: data.sizes
+			sizes: data.sizes,
+			hue: data.hue
 		};
 	},
 	getSessionAttributes: (data) => {

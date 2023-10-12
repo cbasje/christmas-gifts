@@ -54,7 +54,10 @@ export const load = (async ({ parent }) => {
 				ideaLinkId: true,
 				groups: true,
 				recipient: {
-					select: { name: true }
+					select: {
+						name: true,
+						hue: true
+					}
 				}
 			}
 		}),

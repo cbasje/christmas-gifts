@@ -17,18 +17,6 @@ export type NewUser = Omit<PrismaUser, 'id' | 'createdAt' | 'updatedAt'> & {
 export const Groups = ['BENJAMINS', 'HAUGEN'] as const;
 export type Group = (typeof Groups)[number];
 
-export type Color =
-	| 'pink'
-	| 'purple'
-	| 'indigo'
-	| 'sky'
-	| 'teal'
-	| 'green'
-	| 'yellow'
-	| 'orange'
-	| 'gray'
-	| 'primary';
-
 export interface Sizes extends Prisma.JsonObject {
 	simple?: {
 		top?: string;

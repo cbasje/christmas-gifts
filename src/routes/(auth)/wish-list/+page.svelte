@@ -19,7 +19,7 @@
 
 {#if data.wishList}
 	<TableContainer>
-		<Table items={data.wishList} allowEdit={true} pageData={data} />
+		<Table items={data.wishList} allowEdit={true} pageData={data} showBgColor={false} />
 	</TableContainer>
 {/if}
 

@@ -1,21 +1,9 @@
 <script lang="ts">
 	import { t } from '$lib/translations';
-	import type { Color } from '$lib/types';
 	import type { PageData } from './$types';
 	import Header from './Header.svelte';
 	import Table from './Table.svelte';
 	import TableContainer from './TableContainer.svelte';
-
-	const headerColors: Color[] = [
-		'pink',
-		'purple',
-		'indigo',
-		'sky',
-		'teal',
-		'green',
-		'yellow',
-		'orange'
-	];
 
 	export let data: PageData;
 </script>
@@ -30,11 +18,11 @@
 
 {#if data.overviewList}
 	<TableContainer>
-		{#each Object.keys(data.overviewList) as id, index (id)}
+		{#each Object.keys(data.overviewList) as id (id)}
 			{@const items = data.overviewList[id]}
 			<Table
 				title={items.at(0)?.recipient.name ?? undefined}
-				headerColor={headerColors[index]}
+				headerHue={items.at(0)?.recipient.hue ?? undefined}
 				{items}
 				allowPurchased
 				allowEdit

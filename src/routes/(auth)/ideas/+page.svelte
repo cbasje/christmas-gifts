@@ -1,23 +1,11 @@
 <script lang="ts">
 	import AddButton from '$lib/components/AddButton.svelte';
 	import { t } from '$lib/translations';
-	import type { Color } from '$lib/types';
 	import { createSwitch, melt } from '@melt-ui/svelte';
 	import Header from '../Header.svelte';
 	import Table from '../Table.svelte';
 	import TableContainer from '../TableContainer.svelte';
 	import type { PageData } from './$types';
-
-	const headerColors: Color[] = [
-		'pink',
-		'purple',
-		'indigo',
-		'sky',
-		'teal',
-		'green',
-		'yellow',
-		'orange'
-	];
 
 	export let data: PageData;
 
@@ -60,7 +48,7 @@
 			{@const items = data.ideaList[id]}
 			<Table
 				title={items.at(0)?.recipient.name ?? undefined}
-				headerColor={headerColors[index]}
+				headerHue={items.at(0)?.recipient.hue ?? undefined}
 				showBgColor={false}
 				items={items.filter(
 					(item) =>
