@@ -1,33 +1,11 @@
 <script lang="ts">
-	// import { remark } from "remark";
-	// import remarkParse from "remark-parse";
-	// import remarkRehype from "remark-rehype";
-	// // import rehypeFormat from "rehype-format";
-	// import rehypeSanitize from "rehype-sanitize";
-	// import rehypeStringify from "rehype-stringify";
+	import SvelteMarkdown from 'svelte-markdown';
 
-	// const slots = useSlots();
-	// const html = ref("");
-
-	// onMounted(async () => {
-	//     const defaultSlot = slots.default ? slots.default() : undefined;
-
-	//     if (!defaultSlot || defaultSlot.length === 0 || !defaultSlot[0].children)
-	//         return;
-
-	//     const markdownToHtml = await remark()
-	//         .use(remarkParse)
-	//         .use(remarkRehype)
-	//         .use(rehypeSanitize)
-	//         .use(rehypeStringify)
-	//         .process(defaultSlot[0].children.toString());
-
-	//     html.value = markdownToHtml.value.toString();
-	// });
+	export let source: string;
 </script>
 
 <section class="{$$props.class} prose prose-sm h-auto">
-	<slot />
+	<SvelteMarkdown {source} />
 </section>
 
 <style lang="postcss">

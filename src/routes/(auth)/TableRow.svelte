@@ -68,13 +68,11 @@
 		<h3 class="text-sm font-medium text-gray-900 dark:text-gray-100">
 			{item.name}
 		</h3>
-		<!-- FIXME: <MarkdownDisplay v-if="item.notes" class="min-w-full text-gray-500 dark:text-gray-400">
-			{item.notes}
-		</MarkdownDisplay> -->
 		{#if item.notes}
-			<MarkdownDisplay class="min-w-full text-gray-500 dark:text-gray-400">
-				<p>{item.notes}</p>
-			</MarkdownDisplay>
+			<MarkdownDisplay
+				source={item.notes}
+				class="min-w-full text-gray-500 dark:text-gray-400"
+			></MarkdownDisplay>
 		{/if}
 	</td>
 	<td>

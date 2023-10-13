@@ -22,6 +22,7 @@
 		"@sveltejs/adapter-vercel": "^3.0.3",
 		"lucia": "^2.4.2",
 		"svelte-french-toast": "^1.2.0",
+		"svelte-markdown": "^0.4.0",
 		"sveltekit-i18n": "^2.4.2"
 	},
 	"devDependencies": {
