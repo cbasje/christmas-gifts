@@ -94,18 +94,20 @@
 			{...$constraints.simple?.bottom}
 		/>
 		<!-- FIXME:  -->
-		<!-- <Input
-		type="text"
-		name="show"
-		label={$t('sizeChart.areas.simple.shoe')}
-		bind:value={$form.simple.shoe}
+		<Input
+			type="text"
+			name="show"
+			label={$t('sizeChart.areas.simple.shoe')}
+			bind:value={$form.simple.shoe}
 			placeholder="One big foot"
-			outer-class="md:absolute right-[68.07%] top-[65.86%] md:w-[17ch] md:-translate-y-10"
+			messages={$errors.simple?.bottom}
+			aria-invalid={$errors.simple?.bottom ? 'true' : undefined}
+			outer-class="md:absolute right-[68.07%] top-[87.34%] md:w-[17ch] md:-translate-y-10"
 			label-class="block text-sm font-medium text-gray-70 dark:text-gray-300"
 			input-class="mt-1 focus:ring-primary-500 focus:border-primary-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
 			message-class="mt-1 block w-full text-sm text-danger-400"
-			{...$constraints.simple.shoe}
-		/> -->
+			{...$constraints.simple?.shoe}
+		/>
 	</div>
 
 	<div use:melt={$content('Advanced')} class="relative mx-auto w-full max-w-4xl">
