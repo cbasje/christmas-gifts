@@ -52,10 +52,6 @@
 {/if}
 
 <thead>
-	<!-- 'table-5':
-					'minmax(50%, 4fr) minmax(7%, 2fr) minmax(13%, 3fr) repeat(2, minmax(5%, 1fr))',
-				'table-5-sm':
-					'minmax(60vw, 4fr) minmax(96px, 2fr) minmax(128px, 3fr) repeat(2, minmax(64px, 1fr))', -->
 	<tr
 		class=" text-gray-600 dark:text-gray-300 {isCollapsed && title && 'hidden'} {showBgColor
 			? `show-bg-color`
