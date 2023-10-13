@@ -21,12 +21,15 @@
 	export let user: LayoutServerData['user'];
 	export let currentGroupId: LayoutServerData['currentGroupId'];
 
-	const mainMenuNavigation = [
-		{ name: 'common.navigation.overview', href: '/' },
-		{ name: 'common.navigation.wishList', href: '/wish-list' },
-		{ name: 'common.navigation.ideas', href: '/ideas' }
+	type NavigationItem = { name: string; href: string; icon: string };
+	const mainMenuNavigation: NavigationItem[] = [
+		{ name: 'common.navigation.overview', href: '/', icon: 'lucide:home' },
+		{ name: 'common.navigation.wishList', href: '/wish-list', icon: 'lucide:list-checks' },
+		{ name: 'common.navigation.ideas', href: '/ideas', icon: 'lucide:clipboard-list' }
 	];
-	const subMenuNavigation = [{ name: 'common.navigation.sizeChart', href: '/size-chart' }];
+	const subMenuNavigation: NavigationItem[] = [
+		{ name: 'common.navigation.sizeChart', href: '/size-chart', icon: 'lucide:person-standing' }
+	];
 
 	const handleRadioChange: CreateRadioGroupProps['onValueChange'] = ({ curr, next }) => {
 		if (curr !== next) {
@@ -78,24 +81,25 @@
 					<span class="sr-only">Open main menu</span>
 
 					{#if $isCollapsibleOpen}
-						<Icon icon="lucide:x" class="block" width={24} height={24} />
+						<Icon icon="lucide:x" class="block h-6 w-6" />
 					{:else}
-						<Icon icon="lucide:align-left" class="block" width={24} height={24} />
+						<Icon icon="lucide:align-left" class="block h-6 w-6" />
 					{/if}
 				</button>
 			</div>
 			<div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
 				<div class="hidden sm:block">
-					<div class="flex space-x-4">
+					<div class="flex flex-row gap-4">
 						{#each mainMenuNavigation as item (item.href)}
 							{@const isCurrent = $page.url.pathname === item.href}
 							<a
 								href={item.href}
-								class="rounded-md px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-300 hover:text-black dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white {isCurrent &&
+								class="flex flex-row items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-300 hover:text-black dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white {isCurrent &&
 									'bg-gray-100 text-black dark:bg-gray-900 dark:text-white'}"
 								aria-current={isCurrent ? 'page' : undefined}
 							>
-								{$t(item.name)}
+								<Icon icon={item.icon} class="block h-4 w-4" />
+								<span>{$t(item.name)}</span>
 							</a>
 						{/each}
 					</div>
@@ -151,7 +155,7 @@
 							<li use:melt={$menuItem}>
 								<a
 									href={item.href}
-									class="block rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300 hover:text-black dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white {isCurrent &&
+									class="flex flex-row items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300 hover:text-black dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white {isCurrent &&
 										'bg-gray-100 text-black dark:bg-gray-900 dark:text-white'}"
 									aria-current={isCurrent ? 'page' : undefined}
 								>
@@ -163,10 +167,13 @@
 							<form method="post" action="?/logout" use:enhance>
 								<button
 									type="submit"
-									class="flex w-full cursor-pointer flex-row justify-between rounded-md px-3 py-2 text-left text-sm font-medium text-danger-800 hover:bg-gray-300 hover:text-danger-900 dark:text-danger-300 dark:hover:bg-gray-700 dark:hover:text-danger-100"
+									class="flex w-full cursor-pointer flex-row-reverse items-center justify-between rounded-md px-3 py-2 text-left text-sm font-medium text-danger-800 hover:bg-gray-300 hover:text-danger-900 dark:text-danger-300 dark:hover:bg-gray-700 dark:hover:text-danger-100"
 								>
+									<Icon
+										icon="lucide:arrow-up-right-from-circle"
+										class="block h-4 w-4"
+									/>
 									<span>{$t('common.signOut')}</span>
-									<Icon icon="lucide:arrow-up-right-from-circle" />
 								</button>
 							</form>
 						</li>
@@ -184,11 +191,12 @@
 					<button use:melt={$triggerCollapsible} class="w-full text-left">
 						<a
 							href={item.href}
-							class="block rounded-md px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-300 hover:text-black dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white {isCurrent &&
+							class="flex flex-row items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-300 hover:text-black dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white {isCurrent &&
 								'bg-gray-100 text-black dark:bg-gray-900 dark:text-white'}"
 							aria-current={isCurrent ? 'page' : undefined}
 						>
-							{$t(item.name)}
+							<Icon icon={item.icon} class="block h-4 w-4" />
+							<span>{$t(item.name)}</span>
 						</a>
 					</button>
 				{/each}
@@ -196,3 +204,9 @@
 		</div>
 	{/if}
 </nav>
+
+<style lang="postcss">
+	:global(.iconify + span) {
+		translate: 0 0.1rem;
+	}
+</style>

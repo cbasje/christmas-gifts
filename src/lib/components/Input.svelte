@@ -68,7 +68,7 @@
 						aria-describedby={helpId ?? messageId}
 					>
 						{#if icon}
-							<Icon {icon} class={$$props['icon-class']} />
+							<Icon {icon} class={$$props['icon-class'] ?? 'block h-4 w-4'} />
 						{/if}
 						{label}
 					</button>

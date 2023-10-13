@@ -38,5 +38,5 @@
 	class="cursor-pointer font-normal text-danger-500 hover:text-danger-700 dark:text-danger-600 dark:hover:text-danger-800"
 	on:click={removeItem}
 >
-	<Icon icon="lucide:trash-2" width={24} height={24} />
+	<Icon icon="lucide:trash-2" class="block h-6 w-6" />
 </button>

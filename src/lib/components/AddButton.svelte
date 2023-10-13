@@ -76,12 +76,7 @@
 		use:melt={$trigger}
 		class="group flex h-16 w-16 items-center justify-center rounded-full bg-primary-600 text-sm font-medium text-white drop-shadow-md hover:bg-primary-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 dark:bg-primary-700 dark:hover:bg-primary-900"
 	>
-		<Icon
-			icon="lucide:plus"
-			class=" text-white group-hover:text-gray-300"
-			width={32}
-			height={32}
-		/>
+		<Icon icon="lucide:plus" class="block h-8 w-8 text-white group-hover:text-gray-300" />
 	</button>
 </div>
 
