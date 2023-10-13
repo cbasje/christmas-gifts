@@ -16,19 +16,17 @@
 	import { fly, slide } from 'svelte/transition';
 	import type { LayoutServerData } from './$types';
 	import Badge from './Badge.svelte';
-	import { string } from 'zod';
-	import { getColorString } from '$lib/utils/user';
 
 	// FIXME: const localePath = useLocalePath();
 	export let user: LayoutServerData['user'];
 	export let currentGroupId: LayoutServerData['currentGroupId'];
 
-	const navigation = [
-		{ name: 'common.navigation.overview', href: '/', current: true },
-		{ name: 'common.navigation.wishList', href: '/wish-list', current: false },
-		{ name: 'common.navigation.ideas', href: '/ideas', current: false },
-		{ name: 'common.navigation.sizeChart', href: '/size-chart', current: false }
+	const mainMenuNavigation = [
+		{ name: 'common.navigation.overview', href: '/' },
+		{ name: 'common.navigation.wishList', href: '/wish-list' },
+		{ name: 'common.navigation.ideas', href: '/ideas' }
 	];
+	const subMenuNavigation = [{ name: 'common.navigation.sizeChart', href: '/size-chart' }];
 
 	const handleRadioChange: CreateRadioGroupProps['onValueChange'] = ({ curr, next }) => {
 		if (curr !== next) {
@@ -89,7 +87,7 @@
 			<div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
 				<div class="hidden sm:block">
 					<div class="flex space-x-4">
-						{#each navigation as item (item.href)}
+						{#each mainMenuNavigation as item (item.href)}
 							{@const isCurrent = $page.url.pathname === item.href}
 							<a
 								href={item.href}
@@ -119,12 +117,12 @@
 					<ul
 						use:melt={$menu}
 						transition:fly={{ duration: 150, y: -10 }}
-						class="absolute right-0 mt-2 w-64 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-gray-800"
+						class="absolute right-0 flex w-64 origin-top-right flex-col gap-1 rounded-md bg-white p-2 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-gray-800"
 					>
 						{#if user.groups.length > 1}
 							<li
 								use:melt={$menuItem}
-								class="block px-3 py-1.5 text-sm text-gray-700 dark:text-gray-200"
+								class="mb-2 block px-1 text-sm text-gray-700 dark:text-gray-200"
 							>
 								<ul
 									use:melt={$radioRoot}
@@ -148,13 +146,28 @@
 								</ul>
 							</li>
 						{/if}
+						{#each subMenuNavigation as item (item.href)}
+							{@const isCurrent = $page.url.pathname === item.href}
+							<li use:melt={$menuItem}>
+								<a
+									href={item.href}
+									class="block rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300 hover:text-black dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white {isCurrent &&
+										'bg-gray-100 text-black dark:bg-gray-900 dark:text-white'}"
+									aria-current={isCurrent ? 'page' : undefined}
+								>
+									{$t(item.name)}
+								</a>
+							</li>
+						{/each}
 						<li use:melt={$menuItem}>
 							<form method="post" action="?/logout" use:enhance>
-								<input
+								<button
 									type="submit"
-									value={$t('common.signOut')}
-									class="block w-full cursor-pointer px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 hover:dark:bg-gray-700"
-								/>
+									class="flex w-full cursor-pointer flex-row justify-between rounded-md px-3 py-2 text-left text-sm font-medium text-danger-800 hover:bg-gray-300 hover:text-danger-900 dark:text-danger-300 dark:hover:bg-gray-700 dark:hover:text-danger-100"
+								>
+									<span>{$t('common.signOut')}</span>
+									<Icon icon="lucide:arrow-up-right-from-circle" />
+								</button>
 							</form>
 						</li>
 					</ul>
@@ -166,7 +179,7 @@
 	{#if $isCollapsibleOpen}
 		<div use:melt={$collapsibleContent} transition:slide class="sm:hidden">
 			<div class="space-y-1 px-2 pb-3 pt-2">
-				{#each navigation as item (item.href)}
+				{#each mainMenuNavigation as item (item.href)}
 					{@const isCurrent = $page.url.pathname === item.href}
 					<button use:melt={$triggerCollapsible} class="w-full text-left">
 						<a
