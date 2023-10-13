@@ -39,7 +39,7 @@
 		label={$t('common.user.password')}
 		bind:value={$form.password}
 		placeholder={$t('common.user.password')}
-		autocomplete="current-password"
+		autocomplete="new-password"
 		messages={$errors.password}
 		aria-invalid={$errors.password ? 'true' : undefined}
 		label-class="sr-only"
