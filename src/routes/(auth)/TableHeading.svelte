@@ -98,6 +98,7 @@
 	th {
 		@apply relative px-6 py-3 text-left text-xs font-medium uppercase tracking-wider;
 	}
+
 	.show-bg-color {
 		color: var(--color-12);
 		background-color: var(--color-1);

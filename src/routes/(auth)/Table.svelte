@@ -63,4 +63,9 @@
 	.table {
 		table-layout: fixed;
 	}
+	@media (max-width: 640px) {
+		.table {
+			width: max(calc(100vw - 1.5rem), 100%);
+		}
+	}
 </style>
