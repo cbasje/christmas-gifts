@@ -74,12 +74,12 @@
                     Picture
                 </th> -->
 		{#if allowPurchased}
-			<th scope="col" class="w-[8rem] sm:w-[15%]">
+			<th scope="col" class="w-[8rem] sm:w-[10%]">
 				{$t('common.table.purchased')}
 			</th>
 		{/if}
 		{#if allowEdit}
-			<th scope="col" class="w-[8rem] sm:w-[15%]">
+			<th scope="col" class="w-[8rem] sm:w-[10%]">
 				<span class="sr-only">
 					{$t('common.table.actions')}
 				</span>

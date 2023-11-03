@@ -39,9 +39,9 @@
 			<Input
 				type="submit"
 				label={$t('sizeChart.submit')}
-				icon="lucide:save"
+				icon="solar:diskette-line-duotone"
 				outer-class="self-end"
-				icon-class="h-4 w-4 text-primary-400 group-hover:text-primary-300 [&>svg]:w-full [&>svg]:h-full"
+				icon-class="h-4 w-4"
 				input-class="group relative flex justify-center item-center gap-3 py-2 px-4 border border-primary-700 text-sm font-medium rounded-md text-white bg-primary-600 enabled:hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
 				disabled={$tainted === undefined}
 			/>

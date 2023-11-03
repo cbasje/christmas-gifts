@@ -50,9 +50,9 @@
 	<Input
 		type="submit"
 		label={$t('common.signUp')}
-		icon="lucide:lock"
+		icon="solar:shield-keyhole-minimalistic-line-duotone"
 		outer-class="mt-4"
-		icon-class="h-4 w-4 text-primary-400 group-hover:text-primary-300 [&>svg]:w-full [&>svg]:h-full"
+		icon-class="h-4 w-4"
 		input-class="group relative w-full flex justify-center item-center gap-3 py-2 px-4 border border-primary-700 text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
 	/>
 </form>

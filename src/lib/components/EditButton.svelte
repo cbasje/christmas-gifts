@@ -98,7 +98,7 @@
 	use:melt={$trigger}
 	class="cursor-pointer font-normal text-primary-500 hover:text-primary-700 dark:text-primary-600 dark:hover:text-primary-800"
 >
-	<Icon icon="lucide:pencil" class="block h-6 w-6" />
+	<Icon icon="solar:pen-line-duotone" class="block h-6 w-6" />
 </button>
 
 <div use:melt={$portalled} class="absolute">
