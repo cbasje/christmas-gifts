@@ -39,8 +39,7 @@ export const load = (async ({ parent }) => {
 				groups: {
 					has: currentGroupId
 				},
-				// OR: [{ idea: true }, { giftedById: session.user.id }]
-				idea: true
+				OR: [{ idea: true }, { giftedById: user.id }]
 			},
 			select: {
 				id: true,
