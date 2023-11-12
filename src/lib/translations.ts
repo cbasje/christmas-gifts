@@ -39,6 +39,12 @@ const config: Config = {
 		},
 		{
 			locale: 'en',
+			key: 'users',
+			routes: ['/users'],
+			loader: async () => (await import('./en/users.json')).default
+		},
+		{
+			locale: 'en',
 			key: 'sizeChart',
 			routes: ['/size-chart'],
 			loader: async () => (await import('./en/size-chart.json')).default
@@ -77,6 +83,12 @@ const config: Config = {
 			key: 'ideas',
 			routes: ['/ideas'],
 			loader: async () => (await import('./nl/ideas.json')).default
+		},
+		{
+			locale: 'nl',
+			key: 'users',
+			routes: ['/users'],
+			loader: async () => (await import('./nl/users.json')).default
 		},
 		{
 			locale: 'nl',

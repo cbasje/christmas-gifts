@@ -33,6 +33,11 @@
 			name: 'common.navigation.ideas',
 			href: '/ideas',
 			icon: 'solar:clipboard-list-line-duotone'
+		},
+		{
+			name: 'common.navigation.users',
+			href: '/users',
+			icon: 'solar:users-group-rounded-line-duotone'
 		}
 	];
 	const subMenuNavigation: NavigationItem[] = [
