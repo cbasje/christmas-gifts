@@ -58,7 +58,8 @@
 			: 'bg-gray-200 dark:bg-gray-700'}"
 		style="--color-hue: {headerHue}"
 	>
-		<th scope="col" class="w-[60vw] sm:w-[40%]">
+		<th scope="col" class="w-36">{$t('common.item.pic')}</th>
+		<th scope="col">
 			{$t('common.item.name')} + {$t('common.item.notes')}
 		</th>
 		<th scope="col" class="w-[6rem] sm:w-[10%]">
@@ -67,12 +68,6 @@
 		<th scope="col" class="w-[10rem] sm:w-[20%]">
 			{$t('common.item.link')}
 		</th>
-		<!-- TODO -->
-		<!-- <th
-                    class=""
-                >
-                    Picture
-                </th> -->
 		{#if allowPurchased}
 			<th scope="col" class="w-[8rem] sm:w-[10%]">
 				{$t('common.table.purchased')}

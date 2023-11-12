@@ -15,6 +15,7 @@ export const GiftItemSchema = z.object({
 	recipientId: z.string(),
 	giftedById: z.string().nullish(),
 	link: z.string().url().nullish(),
+	pic: z.string().nullish(),
 	purchased: z.boolean(),
 	idea: z.boolean(),
 	ideaLinkId: z.string().nullish(),

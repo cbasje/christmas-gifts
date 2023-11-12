@@ -23,6 +23,7 @@ model GiftItem {
   giftedBy    User?   @relation("GiftingItems", fields: [giftedById], references: [id])
   giftedById  String?
   link        String? /// @zod.url()
+  pic         String?
   purchased   Boolean @default(false)
   idea        Boolean @default(false)
   ideaLinkId  String? @unique

@@ -1,5 +1,7 @@
-import prisma from '$lib/server/prisma';
 import { auth } from '$lib/server/lucia';
+import prisma from '$lib/server/prisma';
+import supabase from '$lib/server/supabase';
+import { uploadFile } from '$lib/utils/file';
 import { groupBy } from '$lib/utils/group-by';
 import { Group } from '@prisma/client';
 import { fail, redirect } from '@sveltejs/kit';
@@ -20,6 +22,7 @@ const schema = z.object({
 	recipientId: z.string(),
 	giftedById: z.string().nullish(),
 	link: z.string().url().nullish(),
+	pic: z.string().url().nullish(),
 	// purchased: z.boolean(),
 	idea: z.boolean().default(true),
 	ideaLinkId: z.string().nullish(),
@@ -47,6 +50,7 @@ export const load = (async ({ parent }) => {
 				price: true,
 				notes: true,
 				link: true,
+				pic: true,
 				purchased: true,
 				recipientId: true,
 				giftedById: true,
@@ -91,7 +95,17 @@ export const load = (async ({ parent }) => {
 	return {
 		formData,
 		currentUserGroups: user.groups,
-		ideaList: groupBy(ideaList, 'recipientId'),
+		ideaList: groupBy(
+			ideaList.map((i) =>
+				i.pic
+					? {
+							...i,
+							pic: supabase.storage.from('files').getPublicUrl(i.pic).data.publicUrl
+					  }
+					: i
+			),
+			'recipientId'
+		),
 		users
 	};
 }) satisfies PageServerLoad;
@@ -108,7 +122,8 @@ export const actions = {
 		const session = await locals.auth.validate();
 		if (!session) throw redirect(302, '/login');
 
-		const form = await superValidate(request, schema);
+		const formData = await request.formData();
+		const form = await superValidate(formData, schema);
 
 		// Convenient validation check:
 		if (!form.valid) {
@@ -116,8 +131,15 @@ export const actions = {
 		}
 
 		try {
+			const id = crypto.randomUUID();
+
+			const file = formData.get('pic');
+			const pic = await uploadFile(id, file);
+
 			const newItem = await prisma.giftItem.create({
 				data: {
+					id,
+					pic,
 					...form.data
 				},
 				select: {

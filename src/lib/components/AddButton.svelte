@@ -27,6 +27,9 @@
 	};
 	let linkItems: LinkItem[] = [];
 
+	const authorizedExtensions = ['.jpg', '.jpeg', '.png', '.webp'];
+	let files: string;
+
 	const {
 		elements: { trigger, overlay, content, title, description, close, portalled },
 		states: { open }
@@ -154,6 +157,15 @@
 					message-class="mt-1 block w-full text-sm text-danger-400"
 					{...$constraints.link}
 				/>
+				<Input
+					type="file"
+					name="pic"
+					label={$t('common.item.pic')}
+					bind:value={files}
+					accept={authorizedExtensions.join(',')}
+					label-class="block text-sm font-medium text-gray-700"
+					input-class="text-transparent"
+				/>
 				{#if $form.idea}
 					<Input
 						type="select"
@@ -238,3 +250,13 @@
 		</div>
 	{/if}
 </div>
+
+<style lang="postcss">
+	:global(input[type='file']) {
+		overflow: visible;
+
+		&::-webkit-file-upload-button {
+			@apply inline-flex justify-center overflow-visible rounded-md border-none bg-transparent px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+		}
+	}
+</style>
