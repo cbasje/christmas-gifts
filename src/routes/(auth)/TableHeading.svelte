@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { t } from '$lib/translations';
-	import { formatPrice } from '$lib/utils/price';
 	import Icon from '@iconify/svelte';
 	import Badge from './Badge.svelte';
 
@@ -10,9 +9,7 @@
 	export let allowEdit = false;
 	export let isCollapsable = false;
 	export let isCollapsed = true;
-	export let hasSummary = false;
 	export let showBgColor = true;
-	export let summaryNumber = 0;
 
 	const toggleCollapsed = () => {
 		isCollapsed = !isCollapsed;
@@ -32,12 +29,7 @@
 			<Badge {title} hue={headerHue ?? 145} />
 
 			<div class="flex items-center gap-3 text-gray-600 dark:text-gray-300">
-				{#if hasSummary}
-					<span class="text-sm">
-						<span class="text-xs uppercase opacity-75">sum</span>
-						{formatPrice(summaryNumber)}
-					</span>
-				{/if}
+				<slot name="summary" />
 				{#if isCollapsable}
 					<Icon
 						icon="lucide:chevron-down"
