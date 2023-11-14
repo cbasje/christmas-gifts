@@ -1,20 +1,15 @@
 import supabase from '$lib/server/supabase';
-import { fail } from '@sveltejs/kit';
-import { writeFileSync } from 'node:fs';
 
-export const uploadFile = async (id: string, file: FormDataEntryValue | null) => {
-	if (!(file instanceof File) || !file.name || file.name === 'undefined') {
-		return fail(400, {
-			error: true,
-			message: 'No file provided'
-		});
-	}
+export const isFile = (input: FormDataEntryValue | null) => {
+	return input instanceof File && input.name && input.name !== 'undefined';
+};
 
+export const uploadFile = async (id: string, file: File) => {
 	// Write the file to the static folder
 	// writeFileSync(`static/${file.name}`, Buffer.from(await file.arrayBuffer()));
 
-	const filename = `${id}.${file.name.split('.').at(-1)}`;
-	const { data, error } = await supabase.storage.from('files').upload(filename, file, {
+	// const filename = `${id}.${file.name.split('.').at(-1)}`;
+	const { data, error } = await supabase.storage.from('files').upload(id, file, {
 		upsert: true
 	});
 	if (error) {

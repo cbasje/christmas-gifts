@@ -5,13 +5,13 @@
 	import { capitaliseString } from '$lib/utils/capitalise';
 	import Icon from '@iconify/svelte';
 	import { createDialog, melt, type CreateDialogProps } from '@melt-ui/svelte';
+	import toast from 'svelte-french-toast';
 	import { scale } from 'svelte/transition';
 	import { superForm } from 'sveltekit-superforms/client';
-	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 	import type { PageData as IdeasData } from '../../routes/(auth)/ideas/$types';
 	import type { PageData as WishData } from '../../routes/(auth)/wish-list/$types';
+	import DropzoneArea from './DropzoneArea.svelte';
 	import Input from './Input.svelte';
-	import toast from 'svelte-french-toast';
 
 	// const localePath = useLocalePath();
 	export let formData: IdeasData['formData'] | WishData['formData'];
@@ -180,6 +180,9 @@
 					message-class="mt-1 block w-full text-sm text-danger-400"
 					{...$constraints.link}
 				/>
+
+				<DropzoneArea name="pic" />
+
 				{#if $form.idea}
 					<Input
 						type="select"
