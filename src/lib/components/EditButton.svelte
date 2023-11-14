@@ -90,8 +90,6 @@
 			linkItems = [...responseJson];
 		}
 	};
-
-	$: showDebug = $page.url.searchParams.get('d') === 'true';
 </script>
 
 <button
@@ -118,7 +116,13 @@
 				{$t('common.editModal.edit.description')}
 			</p>
 
-			<form class="space-y-6" method="POST" action="?/editItem" use:enhance>
+			<form
+				class="space-y-6"
+				method="POST"
+				action="?/editItem"
+				enctype="multipart/form-data"
+				use:enhance
+			>
 				<Input type="hidden" name="id" value={$form.id} />
 				<Input type="hidden" name="idea" value={$form.idea} />
 				<Input type="hidden" name="giftedById" value={$form.giftedById} />
@@ -256,7 +260,6 @@
 					</button>
 				</div>
 			</form>
-			<SuperDebug display={showDebug} data={form} />
 		</div>
 	{/if}
 </div>

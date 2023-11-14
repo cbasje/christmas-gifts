@@ -1,5 +1,7 @@
-import prisma from '$lib/server/prisma';
 import { auth } from '$lib/server/lucia';
+import prisma from '$lib/server/prisma';
+import supabase from '$lib/server/supabase';
+import { uploadFile } from '$lib/utils/file';
 import { Group } from '@prisma/client';
 import { fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
@@ -7,7 +9,7 @@ import { z } from 'zod';
 import type { Actions, PageServerLoad } from './$types';
 
 const schema = z.object({
-	id: z.string().uuid().optional(),
+	id: z.string().uuid(),
 	name: z.string(),
 	price: z
 		.string()
@@ -19,6 +21,7 @@ const schema = z.object({
 	recipientId: z.string(),
 	giftedById: z.string().nullish(),
 	link: z.string().url().nullish(),
+	pic: z.string().url().nullish(),
 	// purchased: z.boolean(),
 	idea: z.boolean().default(false),
 	ideaLinkId: z.string().nullish(),
@@ -42,6 +45,7 @@ export const load = (async ({ parent }) => {
 			price: true,
 			notes: true,
 			link: true,
+			pic: true,
 			purchased: false,
 			recipientId: true,
 			giftedById: true,
@@ -62,7 +66,14 @@ export const load = (async ({ parent }) => {
 	return {
 		formData,
 		currentUserGroups: user.groups,
-		wishList
+		wishList: wishList.map((i) =>
+			i.pic
+				? {
+						...i,
+						pic: supabase.storage.from('files').getPublicUrl(i.pic).data.publicUrl
+				  }
+				: i
+		)
 	};
 }) satisfies PageServerLoad;
 
@@ -78,7 +89,8 @@ export const actions = {
 		const session = await locals.auth.validate();
 		if (!session) throw redirect(302, '/login');
 
-		const form = await superValidate(request, schema);
+		const formData = await request.formData();
+		const form = await superValidate(formData, schema);
 
 		// Convenient validation check:
 		if (!form.valid) {
@@ -86,9 +98,13 @@ export const actions = {
 		}
 
 		try {
+			const file = formData.get('pic');
+			const pic = await uploadFile(form.data.id, file);
+
 			const newItem = await prisma.giftItem.create({
 				data: {
-					...form.data
+					...form.data,
+					pic: pic.toString()
 				},
 				select: {
 					name: true

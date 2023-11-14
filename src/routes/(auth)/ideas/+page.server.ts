@@ -1,5 +1,7 @@
-import prisma from '$lib/server/prisma';
 import { auth } from '$lib/server/lucia';
+import prisma from '$lib/server/prisma';
+import supabase from '$lib/server/supabase';
+import { uploadFile } from '$lib/utils/file';
 import { groupBy } from '$lib/utils/group-by';
 import { Group } from '@prisma/client';
 import { fail, redirect } from '@sveltejs/kit';
@@ -8,7 +10,7 @@ import { z } from 'zod';
 import type { Actions, PageServerLoad } from './$types';
 
 const schema = z.object({
-	id: z.string().uuid().optional(),
+	id: z.string().uuid(),
 	name: z.string(),
 	price: z
 		.string()
@@ -20,6 +22,7 @@ const schema = z.object({
 	recipientId: z.string(),
 	giftedById: z.string().nullish(),
 	link: z.string().url().nullish(),
+	pic: z.string().url().nullish(),
 	// purchased: z.boolean(),
 	idea: z.boolean().default(true),
 	ideaLinkId: z.string().nullish(),
@@ -39,8 +42,7 @@ export const load = (async ({ parent }) => {
 				groups: {
 					has: currentGroupId
 				},
-				// OR: [{ idea: true }, { giftedById: session.user.id }]
-				idea: true
+				OR: [{ idea: true }, { giftedById: user.id }]
 			},
 			select: {
 				id: true,
@@ -48,6 +50,7 @@ export const load = (async ({ parent }) => {
 				price: true,
 				notes: true,
 				link: true,
+				pic: true,
 				purchased: true,
 				recipientId: true,
 				giftedById: true,
@@ -92,7 +95,17 @@ export const load = (async ({ parent }) => {
 	return {
 		formData,
 		currentUserGroups: user.groups,
-		ideaList: groupBy(ideaList, 'recipientId'),
+		ideaList: groupBy(
+			ideaList.map((i) =>
+				i.pic
+					? {
+							...i,
+							pic: supabase.storage.from('files').getPublicUrl(i.pic).data.publicUrl
+					  }
+					: i
+			),
+			'recipientId'
+		),
 		users
 	};
 }) satisfies PageServerLoad;
@@ -109,7 +122,8 @@ export const actions = {
 		const session = await locals.auth.validate();
 		if (!session) throw redirect(302, '/login');
 
-		const form = await superValidate(request, schema);
+		const formData = await request.formData();
+		const form = await superValidate(formData, schema);
 
 		// Convenient validation check:
 		if (!form.valid) {
@@ -117,9 +131,13 @@ export const actions = {
 		}
 
 		try {
+			const file = formData.get('pic');
+			const pic = await uploadFile(form.data.id, file);
+
 			const newItem = await prisma.giftItem.create({
 				data: {
-					...form.data
+					...form.data,
+					pic: pic.toString()
 				},
 				select: {
 					name: true

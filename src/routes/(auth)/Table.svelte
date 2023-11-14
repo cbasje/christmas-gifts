@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getPriceNumber, sum } from '$lib/utils/price';
+	import { formatPrice, getPriceNumber, sum } from '$lib/utils/price';
 	import type { PageData as OverviewData } from '../../routes/(auth)/$types';
 	import type { PageData as IdeasData } from '../../routes/(auth)/ideas/$types';
 	import type { PageData as WishData } from '../../routes/(auth)/wish-list/$types';
@@ -37,9 +37,26 @@
 		{allowEdit}
 		{isCollapsable}
 		bind:isCollapsed
-		{hasSummary}
-		summaryNumber={sum(items?.map((i) => getPriceNumber(i.price)) ?? [])}
-	/>
+	>
+		<svelte:fragment slot="summary">
+			{#if hasSummary}
+				<span class="text-sm">
+					<span class="text-xs uppercase opacity-75">sum</span>
+					{formatPrice(sum(items?.map((i) => getPriceNumber(i.price)) ?? []))}
+				</span>
+				<span class="text-sm">
+					<span class="text-xs uppercase opacity-75">purchased</span>
+					{formatPrice(
+						sum(
+							items
+								?.filter((i) => !('purchased' in i) || i.purchased)
+								.map((i) => getPriceNumber(i.price)) ?? []
+						)
+					)}
+				</span>
+			{/if}
+		</svelte:fragment>
+	</TableHeading>
 
 	{#if items !== null && items.length > 0 && (!isCollapsable || !isCollapsed)}
 		<tbody>

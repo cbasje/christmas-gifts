@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { t } from '$lib/translations';
-	import { formatPrice } from '$lib/utils/price';
 	import Icon from '@iconify/svelte';
 	import Badge from './Badge.svelte';
 
@@ -10,9 +9,7 @@
 	export let allowEdit = false;
 	export let isCollapsable = false;
 	export let isCollapsed = true;
-	export let hasSummary = false;
 	export let showBgColor = true;
-	export let summaryNumber = 0;
 
 	const toggleCollapsed = () => {
 		isCollapsed = !isCollapsed;
@@ -32,12 +29,7 @@
 			<Badge {title} hue={headerHue ?? 145} />
 
 			<div class="flex items-center gap-3 text-gray-600 dark:text-gray-300">
-				{#if hasSummary}
-					<span class="text-sm">
-						<span class="text-xs uppercase opacity-75">sum</span>
-						{formatPrice(summaryNumber)}
-					</span>
-				{/if}
+				<slot name="summary" />
 				{#if isCollapsable}
 					<Icon
 						icon="lucide:chevron-down"
@@ -58,7 +50,8 @@
 			: 'bg-gray-200 dark:bg-gray-700'}"
 		style="--color-hue: {headerHue}"
 	>
-		<th scope="col" class="w-[60vw] sm:w-[40%]">
+		<th scope="col" class="w-36">{$t('common.item.pic')}</th>
+		<th scope="col">
 			{$t('common.item.name')} + {$t('common.item.notes')}
 		</th>
 		<th scope="col" class="w-[6rem] sm:w-[10%]">
@@ -67,12 +60,6 @@
 		<th scope="col" class="w-[10rem] sm:w-[20%]">
 			{$t('common.item.link')}
 		</th>
-		<!-- TODO -->
-		<!-- <th
-                    class=""
-                >
-                    Picture
-                </th> -->
 		{#if allowPurchased}
 			<th scope="col" class="w-[8rem] sm:w-[10%]">
 				{$t('common.table.purchased')}

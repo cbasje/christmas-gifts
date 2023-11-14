@@ -5,7 +5,7 @@
 	"areas": {
 		"simple": { "top": "Top", "bottom": "Onder", "shoe": "Shoe size" },
 		"advanced": {
-			"head": "Hoofd",
+			"head": "Head",
 			"sleeve": "Sleeve",
 			"chest": "Chest",
 			"waist": "Waist",

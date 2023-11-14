@@ -64,14 +64,17 @@
 		? 'decoration-current line-through decoration-2 opacity-30'
 		: ''}"
 >
+	<td class="flex items-center px-6 py-3">
+		{#if item.pic}
+			<img class="shrink-0 rounded-md square-24" src={item.pic} alt="" />
+		{/if}
+	</td>
 	<td class=" min-h-4rem px-6 py-4">
 		<h3 class="text-sm font-medium text-gray-900 dark:text-gray-100">
 			{item.name}
 		</h3>
 		{#if item.notes}
-			<MarkdownDisplay
-				source={item.notes}
-				class="min-w-full text-gray-500 dark:text-gray-400"
+			<MarkdownDisplay source={item.notes} class="min-w-full text-gray-500 dark:text-gray-400"
 			></MarkdownDisplay>
 		{/if}
 	</td>
@@ -92,17 +95,6 @@
 			</a>
 		{/if}
 	</td>
-	<!-- TODO: -->
-	<!-- <td class="flex items-center px-6 py-3">
-                <div class="flex-shrink-0 h-10 w-10">
-                    <img
-                        v-if="item.pic"
-                        class="h-10 w-10 rounded-md"
-                        :src="item.pic[0].url"
-                        alt=""
-                    />
-                </div>
-            </td> -->
 	{#if 'purchased' in item && allowPurchased}
 		<td class=" px-6 py-3">
 			<button

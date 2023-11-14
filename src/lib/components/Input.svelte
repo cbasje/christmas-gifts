@@ -21,6 +21,7 @@
 	export let icon: IconifyIcon | string | null | undefined = undefined;
 	export let required = false;
 	export let disabled = false;
+	export let accept: string | undefined = undefined;
 	export let placeholder: string | null | undefined = undefined;
 	export let help: string | null | undefined = undefined;
 	export let messages: string[] | null | undefined = undefined;
@@ -121,6 +122,7 @@
 						{placeholder}
 						{required}
 						{disabled}
+						{accept}
 						{autocomplete}
 						aria-describedby={helpId ?? messageId}
 						on:input={(e) => dispatch('input', { value: e.currentTarget.value })}
