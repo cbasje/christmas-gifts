@@ -8,9 +8,9 @@
 	import toast from 'svelte-french-toast';
 	import { scale } from 'svelte/transition';
 	import { superForm } from 'sveltekit-superforms/client';
-	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 	import type { PageData as IdeasData } from '../../routes/(auth)/ideas/$types';
 	import type { PageData as WishData } from '../../routes/(auth)/wish-list/$types';
+	import Dropzone from './Dropzone.svelte';
 	import Input from './Input.svelte';
 
 	// const localePath = useLocalePath();
@@ -26,9 +26,6 @@
 		};
 	};
 	let linkItems: LinkItem[] = [];
-
-	const authorizedExtensions = ['.jpg', '.jpeg', '.png', '.webp'];
-	let files: string;
 
 	const {
 		elements: { trigger, overlay, content, title, description, close, portalled },
@@ -70,7 +67,44 @@
 		}
 	};
 
-	$: showDebug = $page.url.searchParams.get('d') === 'true';
+	type File = {
+		name: string;
+		preview: string;
+		contentType: string;
+	};
+	let files: File[] = [];
+	let droppedFiles: FileList;
+	let uploading: boolean = false;
+	const authorizedExtensions = ['.jpg', '.jpeg', '.png', '.webp'];
+
+	const onChangeHandler = (e: Event) => {
+		// read preview data as url into array per file
+		for (let i = 0; i < droppedFiles.length; i++) {
+			const file = droppedFiles[i];
+			if (
+				file.name &&
+				file.type.startsWith('image/') &&
+				!files.map((f) => f.name).includes(file.name)
+			) {
+				const reader = new FileReader();
+				reader.onload = (e) => {
+					console.log(`Reader result for ${file.name}`, e);
+
+					files = [
+						// TODO: ...files,
+						{
+							preview: e.target?.result as string,
+							name: file.name,
+							contentType: file.type
+						}
+					];
+				};
+				reader.readAsDataURL(file);
+			} else {
+				toast.error(file.name + ' could not be added');
+			}
+		}
+	};
 </script>
 
 <div class="fixed bottom-6 right-6">
@@ -100,7 +134,14 @@
 				{$t('common.editModal.create.description')}
 			</p>
 
-			<form class="space-y-6" method="POST" action="?/newItem" use:enhance>
+			<form
+				class="space-y-6"
+				method="POST"
+				action="?/newItem"
+				enctype="multipart/form-data"
+				use:enhance
+			>
+				<Input type="hidden" name="id" value={crypto.randomUUID()} />
 				<Input type="hidden" name="idea" value={$form.idea} />
 				<Input type="hidden" name="giftedById" value={$form.giftedById} />
 				<Input
@@ -157,15 +198,33 @@
 					message-class="mt-1 block w-full text-sm text-danger-400"
 					{...$constraints.link}
 				/>
-				<Input
-					type="file"
+
+				<!-- TODO: Update interaction -->
+				<Dropzone
+					disabled={uploading}
 					name="pic"
 					label={$t('common.item.pic')}
-					bind:value={files}
 					accept={authorizedExtensions.join(',')}
+					on:change={onChangeHandler}
+					bind:files={droppedFiles}
+					icon="lucide:upload"
+					help="PNG, JPG and GIF are allowed"
 					label-class="block text-sm font-medium text-gray-700"
-					input-class="text-transparent"
+					wrapper-class="textarea relative flex justify-center items-center border border-dashed border-gray-300 focus-within:border-primary-500 focus-within:bg-gray-100 p-4 py-10 rounded-md"
+					inner-class="flex flex-col justify-center items-center"
+					help-class="opacity-75"
 				/>
+				<ol class="dropzone-files">
+					{#each files as item}
+						<img
+							src={item.preview}
+							alt="A picture uploaded via the Dropzone"
+							class="shrink-0 rounded-md square-24"
+						/>
+						<li>{item.name}</li>
+					{/each}
+				</ol>
+
 				{#if $form.idea}
 					<Input
 						type="select"
@@ -245,18 +304,6 @@
 					</button>
 				</div>
 			</form>
-
-			<SuperDebug display={showDebug} data={form} />
 		</div>
 	{/if}
 </div>
-
-<style lang="postcss">
-	:global(input[type='file']) {
-		overflow: visible;
-
-		&::-webkit-file-upload-button {
-			@apply inline-flex justify-center overflow-visible rounded-md border-none bg-transparent px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
-		}
-	}
-</style>

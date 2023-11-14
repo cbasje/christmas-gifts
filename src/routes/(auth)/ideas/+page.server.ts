@@ -10,7 +10,7 @@ import { z } from 'zod';
 import type { Actions, PageServerLoad } from './$types';
 
 const schema = z.object({
-	id: z.string().uuid().optional(),
+	id: z.string().uuid(),
 	name: z.string(),
 	price: z
 		.string()
@@ -131,16 +131,13 @@ export const actions = {
 		}
 
 		try {
-			const id = crypto.randomUUID();
-
 			const file = formData.get('pic');
-			const pic = await uploadFile(id, file);
+			const pic = await uploadFile(form.data.id, file);
 
 			const newItem = await prisma.giftItem.create({
 				data: {
-					id,
-					pic,
-					...form.data
+					...form.data,
+					pic: pic.toString()
 				},
 				select: {
 					name: true
