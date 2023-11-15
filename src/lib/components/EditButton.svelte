@@ -181,7 +181,16 @@
 					{...$constraints.link}
 				/>
 
-				<DropzoneArea name="pic" />
+				<DropzoneArea
+					name="pic"
+					supabaseFile={item?.pic}
+					on:upload={() => {
+						form.update(($form) => {
+							$form.pic = 'updated';
+							return $form;
+						});
+					}}
+				/>
 
 				{#if $form.idea}
 					<Input
@@ -256,8 +265,11 @@
 					</button>
 					<button
 						type="submit"
-						class="inline-flex justify-center rounded-md bg-primary-100 px-4 py-2 text-sm font-medium text-primary-900 hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+						class="inline-flex justify-center rounded-md bg-primary-100 px-4 py-2 text-sm font-medium text-primary-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 enabled:hover:bg-primary-200 disabled:bg-primary-50"
 						disabled={$tainted === undefined}
+						title={$tainted === undefined
+							? $t('common.editModal.edit.submitTitle')
+							: ''}
 					>
 						{$t('common.editModal.edit.submit')}
 					</button>

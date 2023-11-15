@@ -1,16 +1,27 @@
 <script lang="ts">
 	import { t } from '$lib/translations';
+	import { createEventDispatcher } from 'svelte';
 	import toast from 'svelte-french-toast';
 	import Dropzone from './Dropzone.svelte';
 
 	export let name: string;
+	export let supabaseFile: string | null | undefined = undefined;
+
+	const dispatch = createEventDispatcher<{
+		upload: undefined;
+	}>();
 
 	type File = {
 		name: string;
-		preview: string;
-		contentType: string;
+		preview?: string;
+		contentType?: string;
+		url?: string;
 	};
 	let files: File[] = [];
+	if (supabaseFile) {
+		files = [{ name: '-', url: supabaseFile }];
+	}
+
 	let droppedFiles: FileList;
 	let uploading: boolean = false;
 	const authorizedExtensions = ['.jpg', '.jpeg', '.png', '.webp'];
@@ -24,6 +35,8 @@
 				file.type.startsWith('image/') &&
 				!files.map((f) => f.name).includes(file.name)
 			) {
+				dispatch('upload');
+
 				const reader = new FileReader();
 				reader.onload = (e) => {
 					console.log(`Reader result for ${file.name}`, e);
@@ -63,7 +76,7 @@
 <ol class="dropzone-files">
 	{#each files as item}
 		<img
-			src={item.preview}
+			src={item.preview ?? item.url}
 			alt="A picture uploaded via the Dropzone"
 			class="shrink-0 rounded-md square-24"
 		/>

@@ -1,7 +1,7 @@
 import { auth } from '$lib/server/lucia';
 import prisma from '$lib/server/prisma';
 import supabase from '$lib/server/supabase';
-import { isFile, uploadFile } from '$lib/utils/file';
+import { getSupabaseURL, isFile, uploadFile } from '$lib/utils/file';
 import { Group } from '@prisma/client';
 import { fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
@@ -71,7 +71,7 @@ export const load = (async ({ parent }) => {
 			i.pic
 				? {
 						...i,
-						pic: supabase.storage.from('files').getPublicUrl(i.pic).data.publicUrl
+						pic: getSupabaseURL(i.pic)
 				  }
 				: i
 		)

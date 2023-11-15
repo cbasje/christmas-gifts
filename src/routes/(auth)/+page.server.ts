@@ -3,6 +3,7 @@ import { auth } from '$lib/server/lucia';
 import { groupBy } from '$lib/utils/group-by';
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
+import { getSupabaseURL } from '$lib/utils/file';
 
 export const load = (async ({ parent }) => {
 	const { user, currentGroupId } = await parent();
@@ -22,6 +23,7 @@ export const load = (async ({ parent }) => {
 			price: true,
 			notes: true,
 			link: true,
+			pic: true,
 			purchased: true,
 			recipientId: true,
 			recipient: {
@@ -35,7 +37,17 @@ export const load = (async ({ parent }) => {
 
 	return {
 		user,
-		overviewList: groupBy(overviewList, 'recipientId')
+		overviewList: groupBy(
+			overviewList.map((i) =>
+				i.pic
+					? {
+							...i,
+							pic: getSupabaseURL(i.pic)
+					  }
+					: i
+			),
+			'recipientId'
+		)
 	};
 }) satisfies PageServerLoad;
 

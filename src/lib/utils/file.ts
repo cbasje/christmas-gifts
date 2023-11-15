@@ -29,3 +29,7 @@ export const uploadFile = async (id: string, file: File) => {
 		return data.path;
 	}
 };
+
+export const getSupabaseURL = (image: string) => {
+	return supabase.storage.from('files').getPublicUrl(image).data.publicUrl;
+};
