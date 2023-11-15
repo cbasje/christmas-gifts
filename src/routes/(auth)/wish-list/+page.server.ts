@@ -1,12 +1,13 @@
 import { auth } from '$lib/server/lucia';
 import prisma from '$lib/server/prisma';
 import supabase from '$lib/server/supabase';
-import { uploadFile } from '$lib/utils/file';
+import { isFile, uploadFile } from '$lib/utils/file';
 import { Group } from '@prisma/client';
 import { fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import type { Actions, PageServerLoad } from './$types';
+import type { GiftItem } from '$lib/types';
 
 const schema = z.object({
 	id: z.string().uuid(),
@@ -98,14 +99,22 @@ export const actions = {
 		}
 
 		try {
+			let data: Partial<GiftItem>;
 			const file = formData.get('pic');
-			const pic = await uploadFile(form.data.id, file);
-
-			const newItem = await prisma.giftItem.create({
-				data: {
+			if (isFile(file)) {
+				const pic = await uploadFile(form.data.id, file);
+				data = {
 					...form.data,
 					pic: pic.toString()
-				},
+				};
+			} else {
+				data = {
+					...form.data
+				};
+			}
+
+			const newItem = await prisma.giftItem.create({
+				data,
 				select: {
 					name: true
 				}
@@ -121,7 +130,8 @@ export const actions = {
 		const session = await locals.auth.validate();
 		if (!session) throw redirect(302, '/login');
 
-		const form = await superValidate(request, schema);
+		const formData = await request.formData();
+		const form = await superValidate(formData, schema);
 
 		// Convenient validation check:
 		if (!form.valid) {
@@ -129,13 +139,25 @@ export const actions = {
 		}
 
 		try {
+			let data: Partial<GiftItem>;
+			const file = formData.get('pic');
+			if (isFile(file)) {
+				const pic = await uploadFile(form.data.id, file);
+				data = {
+					...form.data,
+					pic: pic.toString()
+				};
+			} else {
+				data = {
+					...form.data
+				};
+			}
+
 			const editedItem = await prisma.giftItem.update({
 				where: {
 					id: form.data.id
 				},
-				data: {
-					...form.data
-				},
+				data,
 				select: {
 					name: true
 				}

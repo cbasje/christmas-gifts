@@ -132,14 +132,22 @@ export const actions = {
 		}
 
 		try {
+			let data: Partial<GiftItem>;
 			const file = formData.get('pic');
-			const pic = await uploadFile(form.data.id, file);
-
-			const newItem = await prisma.giftItem.create({
-				data: {
+			if (isFile(file)) {
+				const pic = await uploadFile(form.data.id, file);
+				data = {
 					...form.data,
 					pic: pic.toString()
-				},
+				};
+			} else {
+				data = {
+					...form.data
+				};
+			}
+
+			const newItem = await prisma.giftItem.create({
+				data,
 				select: {
 					name: true
 				}
