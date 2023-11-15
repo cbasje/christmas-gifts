@@ -1,7 +1,11 @@
 import supabase from '$lib/server/supabase';
 
 export const isFile = (input: FormDataEntryValue | null) => {
-	return input instanceof File && input.name && input.name !== 'undefined';
+	if (input instanceof File && input.name && input.name !== 'undefined') {
+		return input;
+	} else {
+		return false;
+	}
 };
 
 export const uploadFile = async (id: string, file: File) => {

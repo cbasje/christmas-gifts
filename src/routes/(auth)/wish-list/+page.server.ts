@@ -99,9 +99,9 @@ export const actions = {
 		}
 
 		try {
-			let data: Partial<GiftItem>;
-			const file = formData.get('pic');
-			if (isFile(file)) {
+			let data: typeof form.data;
+			const file = isFile(formData.get('pic'));
+			if (file) {
 				const pic = await uploadFile(form.data.id, file);
 				data = {
 					...form.data,
@@ -139,9 +139,9 @@ export const actions = {
 		}
 
 		try {
-			let data: Partial<GiftItem>;
-			const file = formData.get('pic');
-			if (isFile(file)) {
+			let data: typeof form.data;
+			const file = isFile(formData.get('pic'));
+			if (file) {
 				const pic = await uploadFile(form.data.id, file);
 				data = {
 					...form.data,
