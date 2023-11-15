@@ -21,6 +21,11 @@
 		"purchased": "Gekocht?",
 		"actions": "Acties"
 	},
+	"dropzone": {
+		"message": "Upload een bestand of sleep het hier naartoe",
+		"help": "PNG, JPG en GIF zijn toegestaan",
+		"alt": "Een plaatjes geüpload via de Dropzone"
+	},
 	"navigation": {
 		"overview": "Overzicht",
 		"wishList": "Mijn verlanglijst",
@@ -32,12 +37,14 @@
 			"title": "Voeg nieuw item toe",
 			"description": "Maak hier een nieuw item aan! Alleen dingen met een rode ster zijn verplicht.",
 			"submit": "Toevoegen",
+			"submitTitle": "Vul alles in voordat je het opslaat",
 			"cancel": "Annuleren"
 		},
 		"edit": {
 			"title": "Pas '{{item}}' aan",
 			"description": "Je kunt alles van dit item bewerken en alles blijft gekoppeld!",
 			"submit": "Opslaan",
+			"submitTitle": "Pas eerst iets aan voordat je het opslaat",
 			"cancel": "Annuleren"
 		}
 	}

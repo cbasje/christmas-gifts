@@ -67,7 +67,8 @@
 	on:change={onChangeHandler}
 	bind:files={droppedFiles}
 	icon="lucide:upload"
-	help="PNG, JPG and GIF are allowed"
+	message={$t('common.dropzone.message')}
+	help={$t('common.dropzone.help')}
 	label-class="block text-sm font-medium text-gray-700"
 	wrapper-class="textarea relative flex justify-center items-center border border-dashed border-gray-300 focus-within:border-primary-500 focus-within:bg-gray-100 p-4 py-10 rounded-md"
 	inner-class="flex flex-col justify-center items-center"
@@ -77,7 +78,7 @@
 	{#each files as item}
 		<img
 			src={item.preview ?? item.url}
-			alt="A picture uploaded via the Dropzone"
+			alt={$t('common.dropzone.alt')}
 			class="shrink-0 rounded-md square-24"
 		/>
 		<li>{item.name}</li>
