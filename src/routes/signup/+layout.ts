@@ -1,11 +1,9 @@
-import { loadTranslations, locale } from '$lib/translations';
+import { loadTranslations } from '$lib/translations';
 import type { Load } from '@sveltejs/kit';
 
-export const load = (async ({ url }) => {
+export const load = (async ({ url, data }) => {
 	const { pathname } = url;
-
-	const initLocale = locale.get() || 'en';
-	await loadTranslations(initLocale, pathname);
+	await loadTranslations(data.locale, pathname);
 
 	return {};
 }) satisfies Load;
