@@ -8,7 +8,7 @@
 
 	export let name: string;
 	export let hue: number | undefined = undefined;
-	export let sizes: UserSizes = {};
+	export let sizes: UserSizes = { simple: {}, advanced: {} };
 
 	const {
 		elements: { trigger, overlay, content, title, description, close, portalled },

@@ -66,7 +66,7 @@
 				<svelte:fragment slot="title">
 					<Badge title={recipient?.name ?? ''} hue={recipient?.hue ?? 145} />
 
-					<SizeChartPopup name={recipient?.name ?? ''} sizes={recipient?.sizes ?? {}} />
+					<SizeChartPopup name={recipient?.name ?? ''} sizes={recipient?.sizes} />
 				</svelte:fragment>
 			</Table>
 		{/each}
