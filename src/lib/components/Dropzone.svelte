@@ -20,14 +20,26 @@
 		delete $$restProps['help-class'];
 		return $$restProps;
 	}
+
+	const outerClass = '' + ($$props['outer-class'] ?? '');
+	const innerClass = 'flex flex-col justify-center items-center' + ($$props['inner-class'] ?? '');
+	const wrapperClass =
+		'textarea relative flex justify-center items-center text-gray-700 dark:text-gray-200 border border-dashed border-gray-300 dark:border-gray-600 focus-within:border-primary-500 dark:focus-within:border-primary-400 focus-within:bg-gray-100 dark:focus-within:bg-gray-800 p-4 py-10 rounded-md' +
+		($$props['wrapper-class'] ?? '');
+	const labelClass =
+		'block text-sm font-medium text-gray-700 dark:text-gray-200' +
+		($$props['label-class'] ?? '');
+	const iconClass = 'block mb-4 square-6' + ($$props['icon-class'] ?? '');
+	const messageClass = '' + ($$props['message-class'] ?? '');
+	const helpClass = 'opacity-75' + ($$props['help-class'] ?? '');
 </script>
 
-<fieldset class={$$props['outer-class']} class:opacity-50={$$restProps.disabled}>
-	<label for={id} class={$$props['label-class']}>
+<fieldset class={outerClass} class:opacity-50={$$restProps.disabled}>
+	<label for={id} class={labelClass}>
 		{label}
 	</label>
 
-	<div class={$$props['wrapper-class']}>
+	<div class={wrapperClass}>
 		<input
 			{id}
 			bind:files
@@ -49,15 +61,15 @@
 			on:focusout
 		/>
 
-		<div class={$$props['inner-class']}>
+		<div class={innerClass}>
 			{#if icon}
-				<Icon {icon} class="mb-4 square-6" />
+				<Icon {icon} class={iconClass} />
 			{/if}
-			<label for={id} class={$$props['message-class']}>
+			<label for={id} class={messageClass}>
 				{message ?? 'Upload a file or drag and drop'}
 			</label>
 			{#if help}
-				<small class={$$props['help-class']}>
+				<small class={helpClass}>
 					{help}
 				</small>
 			{/if}

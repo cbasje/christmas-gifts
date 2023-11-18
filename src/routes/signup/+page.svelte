@@ -4,6 +4,7 @@
 	import { superForm } from 'sveltekit-superforms/client';
 	import Header from '../(auth)/Header.svelte';
 	import type { PageData } from './$types';
+	import Icon from '@iconify/svelte';
 
 	export let data: PageData;
 
@@ -29,8 +30,6 @@
 		messages={$errors.username}
 		aria-invalid={$errors.username ? 'true' : undefined}
 		label-class="sr-only"
-		input-class="rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
-		message-class="mt-1 block w-full text-sm text-danger-400"
 		{...$constraints.username}
 	/>
 	<Input
@@ -43,16 +42,13 @@
 		messages={$errors.password}
 		aria-invalid={$errors.password ? 'true' : undefined}
 		label-class="sr-only"
-		input-class="rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
-		message-class="mt-1 block w-full text-sm text-danger-400"
 		{...$constraints.password}
 	/>
-	<Input
+	<button
 		type="submit"
-		label={$t('common.signUp')}
-		icon="solar:shield-keyhole-minimalistic-line-duotone"
-		outer-class="mt-4"
-		icon-class="h-4 w-4"
-		input-class="group relative w-full flex justify-center item-center gap-3 py-2 px-4 border border-primary-700 text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
-	/>
+		class="mt-4 flex w-full items-center justify-center gap-3 rounded-md border border-primary-700 bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500"
+	>
+		<Icon icon="solar:shield-keyhole-minimalistic-line-duotone" class="square-4" />
+		<span>{$t('common.signUp')}</span>
+	</button>
 </form>

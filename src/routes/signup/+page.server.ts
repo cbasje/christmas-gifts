@@ -42,7 +42,8 @@ export const actions = {
 					groups: ['HAUGEN', 'BENJAMINS'],
 					partnerId: null,
 					username: form.data.username,
-					sizes: {}
+					sizes: {},
+					hue: 145
 				}
 			});
 			const session = await auth.createSession({

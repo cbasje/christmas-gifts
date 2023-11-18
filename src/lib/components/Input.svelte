@@ -34,23 +34,40 @@
 
 	const helpId = help !== undefined ? 'form-help-' + crypto.randomUUID() : undefined;
 	const messageId = messages !== undefined ? 'form-message-' + crypto.randomUUID() : undefined;
+
+	const outerClass = ' ' + ($$props['outer-class'] ?? '');
+	const innerClass = ' ' + ($$props['inner-class'] ?? '');
+	const wrapperClass = ' ' + ($$props['wrapper-class'] ?? '');
+	const labelClass =
+		'block text-sm font-medium text-gray-700 dark:text-gray-200 ' +
+		($$props['label-class'] ?? '');
+	const inputClass =
+		'mt-1 focus:ring-primary-500 dark:text-gray-100 text-gray-900 bg-gray-100 dark:bg-gray-900 focus:border-primary-500 dark:focus:ring-primary-400 dark:focus:border-primary-400 block w-full shadow-sm sm:text-sm border-gray-300 dark:border-gray-700 rounded-md ' +
+		($$props['input-class'] ?? '');
+	const iconClass = 'block square-4 ' + ($$props['icon-class'] ?? '');
+	const messageClass =
+		'mt-1 block w-full text-sm text-danger-400 dark:text-danger-500 ' +
+		($$props['message-class'] ?? '');
+	const helpClass =
+		'mt-1 block w-full text-sm text-gray-400 dark:text-gray-500 ' +
+		($$props['help-class'] ?? '');
 </script>
 
 {#if type === 'hidden'}
 	<input type="hidden" {id} {name} bind:value />
 {:else}
-	<fieldset class={$$props['outer-class']}>
-		<div class={$$props['wrapper-class']}>
+	<fieldset class={outerClass}>
+		<div class={wrapperClass}>
 			{#if label !== undefined && !(type === 'submit' || type === 'button' || type === 'reset')}
-				<label class={$$props['label-class']} for={id}>
+				<label class={labelClass} for={id}>
 					{label}
 				</label>
 			{/if}
-			<div class={$$props['inner-class']}>
+			<div class={innerClass}>
 				{#if type === 'textarea'}
 					<textarea
 						{id}
-						class={$$props['input-class']}
+						class={inputClass}
 						{name}
 						bind:value
 						{placeholder}
@@ -63,20 +80,20 @@
 					<button
 						use:setType
 						{id}
-						class={$$props['input-class']}
+						class={inputClass}
 						{name}
 						{disabled}
 						aria-describedby={helpId ?? messageId}
 					>
 						{#if icon}
-							<Icon {icon} class={$$props['icon-class'] ?? 'block h-4 w-4'} />
+							<Icon {icon} class={iconClass} />
 						{/if}
 						{label}
 					</button>
 				{:else if type === 'select'}
 					<select
 						{id}
-						class={$$props['input-class']}
+						class={inputClass}
 						{name}
 						bind:value
 						{required}
@@ -95,7 +112,7 @@
 				{:else if type === 'select-multiple'}
 					<select
 						{id}
-						class={$$props['input-class']}
+						class={inputClass}
 						{name}
 						bind:value
 						multiple
@@ -116,7 +133,7 @@
 					<input
 						use:setType
 						{id}
-						class={$$props['input-class']}
+						class={inputClass}
 						{name}
 						bind:value
 						{placeholder}
@@ -131,11 +148,11 @@
 			</div>
 		</div>
 		{#if help !== undefined && messages === undefined}
-			<div id={helpId} class={$$props['help-class']}>{help}</div>
+			<div id={helpId} class={helpClass}>{help}</div>
 		{:else if messages !== undefined && messages !== null}
 			{#each messages as m, i}
 				<ul id="{messageId}-{i}">
-					<li class={$$props['message-class']}>
+					<li class={messageClass}>
 						{m}
 					</li>
 				</ul>

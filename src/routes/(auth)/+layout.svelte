@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { t } from '$lib/translations';
 	import { Toaster } from 'svelte-french-toast';
-	import '../styles.css';
+	import '../styles.postcss';
 	import type { LayoutServerData } from './$types';
 	import Footer from './Footer.svelte';
 	import Navigation from './Navigation.svelte';

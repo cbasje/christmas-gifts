@@ -69,10 +69,6 @@
 	icon="lucide:upload"
 	message={$t('common.dropzone.message')}
 	help={$t('common.dropzone.help')}
-	label-class="block text-sm font-medium text-gray-700"
-	wrapper-class="textarea relative flex justify-center items-center border border-dashed border-gray-300 focus-within:border-primary-500 focus-within:bg-gray-100 p-4 py-10 rounded-md"
-	inner-class="flex flex-col justify-center items-center"
-	help-class="opacity-75"
 />
 <ol class="dropzone-files">
 	{#each files as item}

@@ -6,7 +6,7 @@
 	import Icon from '@iconify/svelte';
 	import { createDialog, melt } from '@melt-ui/svelte';
 	import toast from 'svelte-french-toast';
-	import { scale } from 'svelte/transition';
+	import { fade, scale } from 'svelte/transition';
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { PageData as IdeasData } from '../../routes/(auth)/ideas/$types';
 	import type { PageData as WishData } from '../../routes/(auth)/wish-list/$types';
@@ -80,23 +80,35 @@
 
 <div use:melt={$portalled} class="absolute">
 	{#if $open}
-		<div use:melt={$overlay} class="fixed inset-0 z-50 bg-black/30" />
 		<div
-			class="fixed left-[50%] top-[50%] z-50 my-8 max-h-[85vh] w-full max-w-md translate-x-[-50%] translate-y-[-50%] overflow-scroll rounded-xl bg-white p-6 text-left align-middle shadow-xl"
+			use:melt={$overlay}
+			class="fixed inset-0 z-50 bg-black/30 dark:bg-black/50"
+			transition:fade={{ duration: 150 }}
+		/>
+		<div
+			class="fixed left-[50%] top-[50%] z-50 my-8 flex max-h-[85vh] w-full max-w-md translate-x-[-50%] translate-y-[-50%] flex-col gap-4 overflow-scroll rounded-xl bg-gray-100 p-6 text-left align-middle shadow-xl dark:bg-gray-900"
 			transition:scale={{
 				duration: 150
 			}}
 			use:melt={$content}
 		>
-			<h3 use:melt={$title} class="text-lg font-semibold leading-6 text-gray-900">
-				{$t('common.editModal.create.title')}
-			</h3>
-			<p use:melt={$description} class="text-base leading-normal text-gray-500">
-				{$t('common.editModal.create.description')}
-			</p>
+			<div>
+				<h3
+					use:melt={$title}
+					class="text-lg font-semibold leading-6 text-gray-900 dark:text-gray-100"
+				>
+					{$t('common.editPopup.create.title')}
+				</h3>
+				<p
+					use:melt={$description}
+					class="text-base leading-normal text-gray-500 dark:text-gray-400"
+				>
+					{$t('common.editPopup.create.description')}
+				</p>
+			</div>
 
 			<form
-				class="space-y-6"
+				class="contents"
 				method="POST"
 				action="?/newItem"
 				enctype="multipart/form-data"
@@ -114,9 +126,6 @@
 					required
 					messages={$errors.name}
 					aria-invalid={$errors.name ? 'true' : undefined}
-					label-class="block text-sm font-medium text-gray-700"
-					input-class="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-					message-class="mt-1 block w-full text-sm text-danger-400"
 					{...$constraints.name}
 				/>
 				<Input
@@ -127,9 +136,6 @@
 					autocomplete="transaction-amount"
 					messages={$errors.price}
 					aria-invalid={$errors.price ? 'true' : undefined}
-					label-class="block text-sm font-medium text-gray-700"
-					input-class="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-					message-class="mt-1 block w-full text-sm text-danger-400"
 					{...$constraints.price}
 				/>
 				<Input
@@ -141,9 +147,6 @@
 					messages={$errors.notes}
 					aria-invalid={$errors.notes ? 'true' : undefined}
 					placeholder="Type here more information about the item..."
-					label-class="block text-sm font-medium text-gray-700"
-					input-class="shadow-sm focus:ring-primary-500 focus:border-primary-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
-					message-class="mt-1 block w-full text-sm text-danger-400"
 					{...$constraints.notes}
 				/>
 				<Input
@@ -154,9 +157,6 @@
 					placeholder="www.example.com..."
 					messages={$errors.link}
 					aria-invalid={$errors.link ? 'true' : undefined}
-					label-class="block text-sm font-medium text-gray-700"
-					input-class="mt-1 focus:ring-primary-500 focus:border-primary-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
-					message-class="mt-1 block w-full text-sm text-danger-400"
 					{...$constraints.link}
 				/>
 
@@ -179,10 +179,6 @@
 						required
 						messages={$errors.recipientId}
 						aria-invalid={$errors.recipientId ? 'true' : undefined}
-						label-class="block text-sm font-medium text-gray-700"
-						input-class="shadow-sm focus:ring-primary-500 focus:border-primary-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
-						help-class="mt-1 block w-full text-sm text-gray-500"
-						message-class="mt-1 block w-full text-sm text-danger-400"
 						options={(users ?? []).map((u) => ({
 							label: u.name ?? '~user~',
 							value: u.id
@@ -198,9 +194,6 @@
 						messages={$errors.ideaLinkId}
 						aria-invalid={$errors.ideaLinkId ? 'true' : undefined}
 						help="First select a recipient."
-						label-class="block text-sm font-medium text-gray-700"
-						input-class="shadow-sm focus:ring-primary-500 focus:border-primary-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
-						help-class="mt-1 block w-full text-sm text-gray-500"
 						options={(linkItems ?? []).map((i) => ({
 							label: `${i.recipient?.name} - ${i.name}`,
 							value: i.id
@@ -220,10 +213,6 @@
 						messages={$errors.groups?._errors}
 						aria-invalid={$errors.groups?._errors ? 'true' : undefined}
 						help="Select all that apply by holding command (macOS) or control (PC)."
-						label-class="block text-sm font-medium text-gray-700"
-						input-class="shadow-sm focus:ring-primary-500 focus:border-primary-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
-						help-class="mt-1 block w-full text-sm text-gray-500"
-						message-class="mt-1 block w-full text-sm text-danger-400"
 						options={Groups.map((g) => ({
 							label: capitaliseString(g),
 							value: g
@@ -233,23 +222,23 @@
 				{:else}
 					<Input type="hidden" name="groups" value={$form.groups} />
 				{/if}
-				<div class="text-right">
+				<div class="self-end">
 					<button
 						use:melt={$close}
 						type="button"
-						class="inline-flex justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+						class="inline-flex justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:text-gray-100 dark:hover:bg-gray-700"
 					>
-						{$t('common.editModal.create.cancel')}
+						{$t('common.editPopup.create.cancel')}
 					</button>
 					<button
 						type="submit"
-						class="inline-flex justify-center rounded-md bg-primary-100 px-4 py-2 text-sm font-medium text-primary-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 enabled:hover:bg-primary-200 disabled:bg-primary-50"
+						class="inline-flex justify-center rounded-md bg-primary-100 px-4 py-2 text-sm font-medium text-primary-900 focus:outline-none focus:ring-2 focus:ring-primary-500 enabled:hover:bg-primary-200 disabled:bg-primary-50 dark:bg-primary-800 dark:text-primary-100 dark:enabled:hover:bg-primary-700 dark:disabled:bg-primary-900"
 						disabled={$tainted === undefined}
 						title={$tainted === undefined
-							? $t('common.editModal.create.submitTitle')
+							? $t('common.editPopup.create.submitTitle')
 							: ''}
 					>
-						{$t('common.editModal.create.submit')}
+						{$t('common.editPopup.create.submit')}
 					</button>
 				</div>
 			</form>
