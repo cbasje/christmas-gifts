@@ -1,7 +1,9 @@
 <script lang="ts">
 	import AddButton from '$lib/components/AddButton.svelte';
+	import SizeChartPopup from '$lib/components/SizeChartPopup.svelte';
 	import { t } from '$lib/translations';
 	import { createSwitch, melt } from '@melt-ui/svelte';
+	import Badge from '../Badge.svelte';
 	import Header from '../Header.svelte';
 	import Table from '../Table.svelte';
 	import TableContainer from '../TableContainer.svelte';
@@ -46,9 +48,8 @@
 	<TableContainer>
 		{#each Object.keys(data.ideaList) as id, index (id)}
 			{@const items = data.ideaList[id]}
+			{@const recipient = data.users.find((u) => u.id === id)}
 			<Table
-				title={items.at(0)?.recipient.name ?? undefined}
-				headerHue={items.at(0)?.recipient.hue ?? undefined}
 				showBgColor={false}
 				items={items.filter(
 					(item) =>
@@ -61,7 +62,13 @@
 				isCollapsable
 				hasSummary
 				pageData={data}
-			/>
+			>
+				<svelte:fragment slot="title">
+					<Badge title={recipient?.name ?? ''} hue={recipient?.hue ?? 145} />
+
+					<SizeChartPopup name={recipient?.name ?? ''} sizes={recipient?.sizes ?? {}} />
+				</svelte:fragment>
+			</Table>
 		{/each}
 	</TableContainer>
 {/if}

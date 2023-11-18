@@ -30,9 +30,9 @@
 		"overview": "Overview",
 		"wishList": "My wish list",
 		"ideas": "Ideas",
-		"sizeChart": "Size chart"
+		"sizeChart": "My size chart"
 	},
-	"editModal": {
+	"editPopup": {
 		"create": {
 			"title": "Create new item",
 			"description": "Create a new item here! Only things with a red star are required.",
@@ -47,5 +47,10 @@
 			"submitTitle": "Please change something before saving",
 			"cancel": "Cancel"
 		}
+	},
+	"sizeChartPopup": {
+		"title": "{{user}}'s sizes",
+		"description": "These are all of {{user}}'s sizes",
+		"close": "Close"
 	}
 }

@@ -1,4 +1,5 @@
 import type { Prisma, GiftItem as PrismaGiftItem, User as PrismaUser } from '@prisma/client';
+import { z } from 'zod';
 
 export type OverviewGiftItem = Omit<PrismaGiftItem, 'createdAt' | 'updatedAt'>;
 export type WishListGiftItem = Omit<
@@ -32,3 +33,24 @@ export interface Sizes extends Prisma.JsonObject {
 		inseam?: string;
 	};
 }
+
+export const UserSizesSchema = z.object({
+	simple: z
+		.object({
+			top: z.string().optional(),
+			bottom: z.string().optional(),
+			shoe: z.string().optional()
+		})
+		.optional(),
+	advanced: z
+		.object({
+			head: z.string().optional(),
+			sleeve: z.string().optional(),
+			chest: z.string().optional(),
+			waist: z.string().optional(),
+			hip: z.string().optional(),
+			inseam: z.string().optional()
+		})
+		.optional()
+});
+export type UserSizes = z.infer<typeof UserSizesSchema>;

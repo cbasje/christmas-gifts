@@ -33,15 +33,14 @@
 			name: 'common.navigation.ideas',
 			href: '/ideas',
 			icon: 'solar:clipboard-list-line-duotone'
-		}
-	];
-	const subMenuNavigation: NavigationItem[] = [
+		},
 		{
 			name: 'common.navigation.sizeChart',
 			href: '/size-chart',
 			icon: 'solar:ruler-line-duotone'
 		}
 	];
+	const subMenuNavigation: NavigationItem[] = [];
 
 	const handleRadioChange: CreateRadioGroupProps['onValueChange'] = ({ curr, next }) => {
 		if (curr !== next) {

@@ -1,9 +1,7 @@
 <script lang="ts">
 	import { t } from '$lib/translations';
 	import Icon from '@iconify/svelte';
-	import Badge from './Badge.svelte';
 
-	export let title = '';
 	export let headerHue: number | undefined;
 	export let allowPurchased = false;
 	export let allowEdit = false;
@@ -16,28 +14,28 @@
 	};
 </script>
 
-{#if title}
+{#if isCollapsable}
 	<caption>
 		<button
 			class="flex w-full cursor-pointer select-none items-center justify-between whitespace-nowrap px-6 py-3 {showBgColor
 				? `show-bg-color`
-				: 'bg-gray-200 dark:bg-gray-700'}"
+				: 'bg-gray-200 text-black dark:bg-gray-700 dark:text-white'}"
 			style="--color-hue: {headerHue}"
 			on:click={toggleCollapsed}
 			aria-label="Table Header"
 		>
-			<Badge {title} hue={headerHue ?? 145} />
+			<div class="flex items-center gap-3">
+				<slot name="title" />
+			</div>
 
-			<div class="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+			<div class="flex items-center gap-3">
 				<slot name="summary" />
-				{#if isCollapsable}
-					<Icon
-						icon="lucide:chevron-down"
-						class="block h-6 w-6 transition-transform duration-200 {!isCollapsed
-							? '-rotate-180'
-							: 'rotate-0'}"
-					/>
-				{/if}
+				<Icon
+					icon="lucide:chevron-down"
+					class="block transition-transform duration-200 square-6  {!isCollapsed
+						? '-rotate-180'
+						: 'rotate-0'}"
+				/>
 			</div>
 		</button>
 	</caption>
@@ -45,9 +43,9 @@
 
 <thead>
 	<tr
-		class=" text-gray-600 dark:text-gray-300 {isCollapsed && title && 'hidden'} {showBgColor
-			? `show-bg-color`
-			: 'bg-gray-200 dark:bg-gray-700'}"
+		class=" text-gray-600 dark:text-gray-300 {isCollapsed &&
+			$$slots.title &&
+			'hidden'} {showBgColor ? `show-bg-color` : 'bg-gray-200 dark:bg-gray-700'}"
 		style="--color-hue: {headerHue}"
 	>
 		<th scope="col" class="w-36">{$t('common.item.pic')}</th>

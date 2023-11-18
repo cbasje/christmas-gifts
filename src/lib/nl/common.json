@@ -30,9 +30,9 @@
 		"overview": "Overzicht",
 		"wishList": "Mijn verlanglijst",
 		"ideas": "Ideeën",
-		"sizeChart": "Maattabel"
+		"sizeChart": "Mijn maattabel"
 	},
-	"editModal": {
+	"editPopup": {
 		"create": {
 			"title": "Voeg nieuw item toe",
 			"description": "Maak hier een nieuw item aan! Alleen dingen met een rode ster zijn verplicht.",
@@ -47,5 +47,10 @@
 			"submitTitle": "Pas eerst iets aan voordat je het opslaat",
 			"cancel": "Annuleren"
 		}
+	},
+	"sizeChartPopup": {
+		"title": "{{user}}'s maten",
+		"description": "Dit zijn alle maten van {{user}}",
+		"close": "Sluiten"
 	}
 }

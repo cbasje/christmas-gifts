@@ -1,16 +1,17 @@
 <script lang="ts">
-	import { t } from '$lib/translations';
-	import Header from '../Header.svelte';
-	import { createTabs, melt } from '@melt-ui/svelte';
-	import SizeChartSimpleEmpty from './SizeChartSimpleEmpty.svelte';
-	import SizeChartEmpty from './SizeChartEmpty.svelte';
-	import SizeChartSimple from './SizeChartSimple.svelte';
-	import SizeChart from './SizeChart.svelte';
+	import { page } from '$app/stores';
 	import Input from '$lib/components/Input.svelte';
-	import type { PageData } from './$types';
+	import { t } from '$lib/translations';
+	import Icon from '@iconify/svelte';
+	import { createTabs, melt } from '@melt-ui/svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
-	import { page } from '$app/stores';
+	import SizeChart from '../../../lib/components/size-chart/SizeChart.svelte';
+	import SizeChartEmpty from '../../../lib/components/size-chart/SizeChartEmpty.svelte';
+	import SizeChartSimple from '../../../lib/components/size-chart/SizeChartSimple.svelte';
+	import SizeChartSimpleEmpty from '../../../lib/components/size-chart/SizeChartSimpleEmpty.svelte';
+	import Header from '../Header.svelte';
+	import type { PageData } from './$types';
 
 	export let data: PageData;
 
@@ -36,15 +37,14 @@
 		</svelte:fragment>
 
 		<svelte:fragment slot="buttons">
-			<Input
+			<button
 				type="submit"
-				label={$t('sizeChart.submit')}
-				icon="solar:diskette-line-duotone"
-				outer-class="self-end"
-				icon-class="h-4 w-4"
-				input-class="group relative flex justify-center item-center gap-3 py-2 px-4 border border-primary-700 text-sm font-medium rounded-md text-white bg-primary-600 enabled:hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
+				class="flex items-center justify-center gap-3 self-end rounded-md border border-primary-700 bg-primary-600 px-4 py-2 text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 enabled:hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
 				disabled={$tainted === undefined}
-			/>
+			>
+				<Icon icon="solar:diskette-line-duotone" class="square-4" />
+				<span>{$t('sizeChart.submit')}</span>
+			</button>
 		</svelte:fragment>
 	</Header>
 
@@ -60,7 +60,7 @@
 		</div>
 	</div>
 
-	<div use:melt={$content('Simple')} class="relative mx-auto w-full max-w-4xl">
+	<div use:melt={$content('Simple')} class="content-panel">
 		<!-- MARK: Simple SizeChart -->
 		<SizeChartSimpleEmpty />
 		<SizeChartSimple />
@@ -73,7 +73,7 @@
 			placeholder="S, M, L, etc."
 			messages={$errors.simple?.top}
 			aria-invalid={$errors.simple?.top ? 'true' : undefined}
-			outer-class="md:absolute right-[68.07%] top-[33.13%] md:w-[17ch] md:-translate-y-10"
+			outer-class="content-value right-[68.07%] top-[33.13%]"
 			{...$constraints.simple?.top}
 		/>
 		<Input
@@ -84,7 +84,7 @@
 			placeholder="W33 L36, etc."
 			messages={$errors.simple?.bottom}
 			aria-invalid={$errors.simple?.bottom ? 'true' : undefined}
-			outer-class="md:absolute right-[68.07%] top-[65.86%] md:w-[17ch] md:-translate-y-10"
+			outer-class="content-value right-[68.07%] top-[65.86%]"
 			{...$constraints.simple?.bottom}
 		/>
 		<Input
@@ -95,12 +95,12 @@
 			placeholder="One big foot"
 			messages={$errors.simple?.bottom}
 			aria-invalid={$errors.simple?.bottom ? 'true' : undefined}
-			outer-class="md:absolute right-[68.07%] top-[87.34%] md:w-[17ch] md:-translate-y-10"
+			outer-class="content-value right-[68.07%] top-[87.34%]"
 			{...$constraints.simple?.shoe}
 		/>
 	</div>
 
-	<div use:melt={$content('Advanced')} class="relative mx-auto w-full max-w-4xl">
+	<div use:melt={$content('Advanced')} class="content-panel">
 		<!-- MARK: Advanced SizeChart -->
 		<SizeChartEmpty />
 		<SizeChart />
@@ -113,7 +113,7 @@
 			placeholder="17 inch, etc."
 			messages={$errors.advanced?.head}
 			aria-invalid={$errors.advanced?.head ? 'true' : undefined}
-			outer-class="md:absolute right-[68.07%] top-[14.26%] md:w-[17ch] md:-translate-y-10"
+			outer-class="content-value right-[68.07%] top-[14.26%]"
 			{...$constraints.advanced?.head}
 		/>
 		<Input
@@ -124,7 +124,7 @@
 			placeholder="XL, 37 cm, etc."
 			messages={$errors.advanced?.sleeve}
 			aria-invalid={$errors.advanced?.sleeve ? 'true' : undefined}
-			outer-class="md:absolute right-[68.07%] top-[54.02%] md:w-[17ch] md:-translate-y-10"
+			outer-class="content-value right-[68.07%] top-[54.02%]"
 			{...$constraints.advanced?.sleeve}
 		/>
 		<Input
@@ -135,7 +135,7 @@
 			placeholder="239 mm, etc."
 			messages={$errors.advanced?.chest}
 			aria-invalid={$errors.advanced?.chest ? 'true' : undefined}
-			outer-class="md:absolute left-[68.47%] top-[32.53%] md:w-[17ch] md:-translate-y-10"
+			outer-class="content-value left-[68.47%] top-[32.53%]"
 			{...$constraints.advanced?.chest}
 		/>
 		<Input
@@ -146,7 +146,7 @@
 			placeholder="M, 0.5 m, 0.02 mile, etc."
 			messages={$errors.advanced?.waist}
 			aria-invalid={$errors.advanced?.waist ? 'true' : undefined}
-			outer-class="md:absolute left-[68.47%] top-[41.77%] md:w-[17ch] md:-translate-y-10"
+			outer-class="content-value left-[68.47%] top-[41.77%]"
 			{...$constraints.advanced?.waist}
 		/>
 		<Input
@@ -157,7 +157,7 @@
 			placeholder="2 baguettes, etc."
 			messages={$errors.advanced?.hip}
 			aria-invalid={$errors.advanced?.hip ? 'true' : undefined}
-			outer-class="md:absolute left-[68.47%] top-[49.40%] md:w-[17ch] md:-translate-y-10"
+			outer-class="content-value left-[68.47%] top-[49.40%]"
 			{...$constraints.advanced?.hip}
 		/>
 		<Input
@@ -168,7 +168,7 @@
 			placeholder="0.5 Sebastiaan, etc."
 			messages={$errors.advanced?.inseam}
 			aria-invalid={$errors.advanced?.inseam ? 'true' : undefined}
-			outer-class="md:absolute left-[68.47%] top-[84.94%] md:w-[17ch] md:-translate-y-10"
+			outer-class="content-value left-[68.47%] top-[84.94%]"
 			{...$constraints.advanced?.inseam}
 		/>
 	</div>
@@ -176,6 +176,13 @@
 <SuperDebug display={showDebug} data={form} />
 
 <style lang="postcss">
+	.content-panel {
+		@apply relative mx-auto w-full max-w-4xl;
+	}
+	.content-value {
+		@apply md:absolute md:w-[17ch] md:-translate-y-10;
+	}
+
 	.trigger {
 		@apply w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-primary-700 ring-white ring-opacity-60 ring-offset-2 ring-offset-primary-400 focus:outline-none focus:ring-2;
 

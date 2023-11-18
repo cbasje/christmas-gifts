@@ -40,7 +40,7 @@ const config: Config = {
 		{
 			locale: 'en',
 			key: 'sizeChart',
-			routes: ['/size-chart'],
+			routes: ['/size-chart', '/', '/ideas'],
 			loader: async () => (await import('./en/size-chart.json')).default
 		},
 		{
@@ -81,7 +81,7 @@ const config: Config = {
 		{
 			locale: 'nl',
 			key: 'sizeChart',
-			routes: ['/size-chart'],
+			routes: ['/size-chart', '/', '/ideas'],
 			loader: async () => (await import('./nl/size-chart.json')).default
 		}
 	]

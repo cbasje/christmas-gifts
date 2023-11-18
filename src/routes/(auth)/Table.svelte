@@ -12,7 +12,6 @@
 		| OverviewData['overviewList'][string];
 	export let pageData: IdeasData | WishData | undefined = undefined;
 
-	export let title: string | undefined = undefined;
 	export let headerHue: number | undefined = undefined;
 	export let allowPurchased = false;
 	export let allowEdit = false;
@@ -30,7 +29,6 @@
 	aria-label="Table"
 >
 	<TableHeading
-		{title}
 		{headerHue}
 		{showBgColor}
 		{allowPurchased}
@@ -38,6 +36,10 @@
 		{isCollapsable}
 		bind:isCollapsed
 	>
+		<svelte:fragment slot="title">
+			<slot name="title" />
+		</svelte:fragment>
+
 		<svelte:fragment slot="summary">
 			{#if hasSummary}
 				<span class="text-sm">

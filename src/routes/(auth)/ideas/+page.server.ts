@@ -60,8 +60,7 @@ export const load = (async ({ parent }) => {
 				groups: true,
 				recipient: {
 					select: {
-						name: true,
-						hue: true
+						name: true
 					}
 				}
 			}
@@ -80,7 +79,9 @@ export const load = (async ({ parent }) => {
 			},
 			select: {
 				id: true,
-				name: true
+				name: true,
+				hue: true,
+				sizes: true
 			}
 		})
 	]);

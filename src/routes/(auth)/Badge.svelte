@@ -3,7 +3,10 @@
 	export let hue: number;
 </script>
 
-<span class="badge text-md inline-flex rounded-full px-3 font-medium" style="--color-hue: {hue}">
+<span
+	class="badge inline-flex rounded-full px-4 py-0.5 text-lg font-medium"
+	style="--color-hue: {hue}"
+>
 	{title}
 </span>
 

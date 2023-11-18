@@ -1,31 +1,15 @@
 import { auth } from '$lib/server/lucia';
-import { error, fail, redirect } from '@sveltejs/kit';
-import type { Actions, PageServerLoad } from './$types';
-import { superValidate } from 'sveltekit-superforms/server';
 import prisma from '$lib/server/prisma';
-import { z } from 'zod';
-
-const schema = z.object({
-	simple: z.object({
-		top: z.string(),
-		bottom: z.string(),
-		shoe: z.string()
-	}),
-	advanced: z.object({
-		head: z.string(),
-		sleeve: z.string(),
-		chest: z.string(),
-		waist: z.string(),
-		hip: z.string(),
-		inseam: z.string()
-	})
-});
+import { UserSizesSchema } from '$lib/types';
+import { error, fail, redirect } from '@sveltejs/kit';
+import { superValidate } from 'sveltekit-superforms/server';
+import type { Actions, PageServerLoad } from './$types';
 
 export const load = (async ({ parent }) => {
 	const { user } = await parent();
 
 	if (!user) throw error(404, 'Not found');
-	const form = await superValidate(user.sizes as Record<string, string> | null, schema);
+	const form = await superValidate(user.sizes as Record<string, string> | null, UserSizesSchema);
 
 	return {
 		form,
@@ -38,7 +22,7 @@ export const actions = {
 		const session = await locals.auth.validate();
 		if (!session) throw redirect(302, '/login');
 
-		const form = await superValidate(request, schema);
+		const form = await superValidate(request, UserSizesSchema);
 
 		// Convenient validation check:
 		if (!form.valid) {

@@ -39,7 +39,7 @@
 	const innerClass = ' ' + ($$props['inner-class'] ?? '');
 	const wrapperClass = ' ' + ($$props['wrapper-class'] ?? '');
 	const labelClass =
-		'block text-sm font-medium text-gray-700 dark:text-gray-200 ' +
+		'block text-sm font-medium text-gray-600 dark:text-gray-300 ' +
 		($$props['label-class'] ?? '');
 	const inputClass =
 		'mt-1 focus:ring-primary-500 dark:text-gray-100 text-gray-900 bg-gray-100 dark:bg-gray-900 focus:border-primary-500 dark:focus:ring-primary-400 dark:focus:border-primary-400 block w-full shadow-sm sm:text-sm border-gray-300 dark:border-gray-700 rounded-md ' +
