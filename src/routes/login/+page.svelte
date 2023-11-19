@@ -1,14 +1,27 @@
 <script lang="ts">
 	import Input from '$lib/components/Input.svelte';
 	import { t } from '$lib/translations';
+	import Icon from '@iconify/svelte';
+	import toast from 'svelte-french-toast';
 	import { superForm } from 'sveltekit-superforms/client';
 	import Header from '../(auth)/Header.svelte';
 	import type { PageData } from './$types';
-	import Icon from '@iconify/svelte';
 
 	export let data: PageData;
 
-	const { form, enhance, errors, constraints } = superForm(data.form);
+	const { form, enhance, errors, constraints } = superForm(data.form, {
+		resetForm: true,
+		onResult: ({ result }) => {
+			if ('data' in result && result.data?.form?.valid && 'editedItem' in result.data) {
+				toast.success(`Logged you in successfully!`);
+			} else {
+				toast.error(`Logging in was not successful!`);
+			}
+		},
+		onError: ({ message }) => {
+			toast.error(`Logging in was not successful! Reason: ${message}`);
+		}
+	});
 </script>
 
 <Header padding={false}>

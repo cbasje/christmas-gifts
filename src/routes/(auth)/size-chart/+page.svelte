@@ -4,6 +4,7 @@
 	import { t } from '$lib/translations';
 	import Icon from '@iconify/svelte';
 	import { createTabs, melt } from '@melt-ui/svelte';
+	import toast from 'svelte-french-toast';
 	import { superForm } from 'sveltekit-superforms/client';
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 	import SizeChart from '../../../lib/components/size-chart/SizeChart.svelte';
@@ -22,7 +23,18 @@
 	} = createTabs();
 
 	const { form, enhance, constraints, errors, tainted } = superForm(data.form, {
-		dataType: 'json'
+		dataType: 'json',
+		resetForm: true,
+		onResult: ({ result }) => {
+			if ('data' in result && result.data?.form?.valid) {
+				toast.success(`Saved your sizes successfully!`);
+			} else {
+				toast.error(`Saving sizes was not successful!`);
+			}
+		},
+		onError: ({ message }) => {
+			toast.error(`Saving sizes was not successful! Reason: ${message}`);
+		}
 	});
 
 	$: showDebug = $page.url.searchParams.get('d') === 'true';
