@@ -80,10 +80,10 @@
 <style lang="postcss">
 	.content-panel {
 		@apply relative mx-auto w-full max-w-4xl text-gray-800 dark:text-gray-100;
-	}
-	.content-value {
-		@apply md:absolute md:w-[14ch] md:-translate-y-10;
 
+		:global(.content-value) {
+			@apply md:absolute md:w-[14ch] md:-translate-y-10;
+		}
 		span {
 			@apply text-sm font-medium text-gray-600 dark:text-gray-300;
 		}

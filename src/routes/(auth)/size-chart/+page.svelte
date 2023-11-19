@@ -178,9 +178,10 @@
 <style lang="postcss">
 	.content-panel {
 		@apply relative mx-auto w-full max-w-4xl;
-	}
-	.content-value {
-		@apply md:absolute md:w-[17ch] md:-translate-y-10;
+
+		:global(.content-value) {
+			@apply md:absolute md:w-[17ch] md:-translate-y-10;
+		}
 	}
 
 	.trigger {
