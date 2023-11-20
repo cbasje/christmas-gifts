@@ -75,7 +75,7 @@
 		<img
 			src={item.preview ?? item.url}
 			alt={$t('common.dropzone.alt')}
-			class="shrink-0 rounded-md square-24"
+			class="shrink-0 rounded-md object-cover square-24"
 		/>
 		<li>{item.name}</li>
 	{/each}

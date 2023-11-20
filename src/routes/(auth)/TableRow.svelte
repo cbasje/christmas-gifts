@@ -66,7 +66,7 @@
 >
 	<td class="flex items-center px-6 py-3">
 		{#if item.pic}
-			<img class="shrink-0 rounded-md square-24" src={item.pic} alt="" />
+			<img class="shrink-0 rounded-md object-cover square-24" src={item.pic} alt="" />
 		{/if}
 	</td>
 	<td class=" min-h-4rem px-6 py-4">
