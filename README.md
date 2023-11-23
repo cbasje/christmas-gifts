@@ -11,7 +11,7 @@ A webapp to track Christmas gifts for my family and in-laws.
 -   Styling: [TailwindCSS](https://tailwindcss.com/)
 -   Icons: [Iconify](https://iconify.com/)
 -   Database: [Supabase](https://supabase.com/)
--   ORM: [Prisma](https://prisma.io)
+-   ORM: [Drizzle](https://orm.drizzle.team/)
 
 ## Development
 

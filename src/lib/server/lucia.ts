@@ -1,11 +1,15 @@
 import { dev } from '$app/environment';
-import { prisma } from '@lucia-auth/adapter-prisma';
 import { lucia } from 'lucia';
 import { sveltekit } from 'lucia/middleware';
-import client from './prisma';
+import { postgres as postgresAdapter } from '@lucia-auth/adapter-postgresql';
+import { queryClient } from './drizzle';
 
 export const auth = lucia({
-	adapter: prisma(client),
+	adapter: postgresAdapter(queryClient, {
+		user: 'users',
+		key: 'keys',
+		session: 'sessions'
+	}),
 	middleware: sveltekit(),
 	env: dev ? 'DEV' : 'PROD',
 	getUserAttributes: (data) => {
