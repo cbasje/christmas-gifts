@@ -1,5 +1,5 @@
 {
-  "id": "ccdb2ac4-74b6-46d1-9dda-e85ac3ef646c",
+  "id": "c4a11888-e243-4108-be79-03d78bfb91d9",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -10,10 +10,9 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "uuid",
+          "type": "varchar(128)",
           "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
+          "notNull": true
         },
         "name": {
           "name": "name",
@@ -51,6 +50,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "pic": {
+          "name": "pic",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "purchased": {
           "name": "purchased",
           "type": "boolean",
@@ -77,15 +82,15 @@
           "primaryKey": false,
           "notNull": false
         },
-        "createdAt": {
-          "name": "createdAt",
+        "created_at": {
+          "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
           "default": "now()"
         },
-        "updatedAt": {
-          "name": "updatedAt",
+        "updated_at": {
+          "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
@@ -95,22 +100,7 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "gift_items_id_unique": {
-          "name": "gift_items_id_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "id"
-          ]
-        },
-        "gift_items_idea_link_id_unique": {
-          "name": "gift_items_idea_link_id_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "idea_link_id"
-          ]
-        }
-      }
+      "uniqueConstraints": {}
     },
     "keys": {
       "name": "keys",
@@ -118,35 +108,41 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "text",
+          "type": "varchar(255)",
           "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "varchar(15)",
+          "primaryKey": false,
           "notNull": true
         },
         "hashed_password": {
           "name": "hashed_password",
-          "type": "text",
+          "type": "varchar(255)",
           "primaryKey": false,
           "notNull": false
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
         }
       },
       "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "keys_id_unique": {
-          "name": "keys_id_unique",
-          "nullsNotDistinct": false,
-          "columns": [
+      "foreignKeys": {
+        "keys_user_id_users_id_fk": {
+          "name": "keys_user_id_users_id_fk",
+          "tableFrom": "keys",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
             "id"
-          ]
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
-      }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
     },
     "sessions": {
       "name": "sessions",
@@ -154,13 +150,13 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "text",
+          "type": "varchar(128)",
           "primaryKey": true,
           "notNull": true
         },
         "user_id": {
           "name": "user_id",
-          "type": "text",
+          "type": "varchar(15)",
           "primaryKey": false,
           "notNull": true
         },
@@ -184,17 +180,23 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "sessions_id_unique": {
-          "name": "sessions_id_unique",
-          "nullsNotDistinct": false,
-          "columns": [
+      "foreignKeys": {
+        "sessions_user_id_users_id_fk": {
+          "name": "sessions_user_id_users_id_fk",
+          "tableFrom": "sessions",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
             "id"
-          ]
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
-      }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
     },
     "users": {
       "name": "users",
@@ -202,10 +204,9 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "uuid",
+          "type": "varchar(15)",
           "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
+          "notNull": true
         },
         "name": {
           "name": "name",
@@ -219,8 +220,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "partnerId": {
-          "name": "partnerId",
+        "partner_id": {
+          "name": "partner_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -244,15 +245,15 @@
           "primaryKey": false,
           "notNull": false
         },
-        "createdAt": {
-          "name": "createdAt",
+        "created_at": {
+          "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
           "default": "now()"
         },
-        "updatedAt": {
-          "name": "updatedAt",
+        "updated_at": {
+          "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
@@ -263,13 +264,6 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "users_id_unique": {
-          "name": "users_id_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "id"
-          ]
-        },
         "users_name_unique": {
           "name": "users_name_unique",
           "nullsNotDistinct": false,
@@ -277,11 +271,18 @@
             "name"
           ]
         },
-        "users_partnerId_unique": {
-          "name": "users_partnerId_unique",
+        "users_user_name_unique": {
+          "name": "users_user_name_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "partnerId"
+            "user_name"
+          ]
+        },
+        "users_partner_id_unique": {
+          "name": "users_partner_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "partner_id"
           ]
         }
       }

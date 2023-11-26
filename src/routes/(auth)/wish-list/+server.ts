@@ -1,6 +1,8 @@
-import prisma from '$lib/server/prisma';
 import { error, json, redirect } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
+import { db } from '$lib/server/drizzle';
+import { giftItems } from '$lib/db/gift-item';
+import { and, eq } from 'drizzle-orm';
 
 export const DELETE = (async ({ request, locals }) => {
 	const session = await locals.auth.validate();
@@ -14,16 +16,12 @@ export const DELETE = (async ({ request, locals }) => {
 	}
 
 	try {
-		const removedItem = await prisma.giftItem.delete({
-			where: {
-				id
-			},
-			select: {
-				id: true
-			}
-		});
+		const removedItem = await db
+			.delete(giftItems)
+			.where(and(eq(giftItems.id, id), eq(giftItems.recipientId, session.user.id)))
+			.returning({ id: giftItems.id });
 
-		return json(removedItem);
+		return json(removedItem.at(0));
 	} catch (e) {
 		console.error(e);
 		throw error(500);

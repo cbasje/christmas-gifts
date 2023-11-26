@@ -1,38 +1,60 @@
 import { relations } from 'drizzle-orm';
-import { bigint, integer, jsonb, pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core';
+import {
+	bigint,
+	customType,
+	integer,
+	pgTable,
+	text,
+	timestamp,
+	varchar
+} from 'drizzle-orm/pg-core';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
+import { z } from 'zod';
 import { giftItems } from './gift-item';
 
 export const Groups = ['BENJAMINS', 'HAUGEN'] as const;
 export type Group = (typeof Groups)[number];
 
-export interface Sizes {
-	simple?: {
-		top?: string;
-		bottom?: string;
-		shoe?: string;
-	};
-	advanced?: {
-		head?: string;
-		sleeve?: string;
-		chest?: string;
-		waist?: string;
-		hip?: string;
-		inseam?: string;
-	};
-}
+export const UserSizesSchema = z.object({
+	simple: z.object({
+		top: z.string().optional(),
+		bottom: z.string().optional(),
+		shoe: z.string().optional()
+	}),
+	advanced: z.object({
+		head: z.string().optional(),
+		sleeve: z.string().optional(),
+		chest: z.string().optional(),
+		waist: z.string().optional(),
+		hip: z.string().optional(),
+		inseam: z.string().optional()
+	})
+});
+export type UserSizes = z.infer<typeof UserSizesSchema>;
+
+const customJsonb = <TData>(name: string) =>
+	customType<{ data: TData; driverData: string }>({
+		dataType() {
+			return 'jsonb';
+		},
+		// FIXME:
+		toDriver(value: TData) {
+			return value;
+		}
+	})(name);
 
 export const users = pgTable('users', {
 	id: varchar('id', {
 		length: 15
 	}).primaryKey(),
 	name: text('name').unique(),
-	userName: text('user_name').notNull(),
-	partnerId: text('partnerId').unique(),
-	groups: jsonb('groups').$type<Group[]>(),
+	username: text('user_name').notNull().unique(),
+	partnerId: text('partner_id').unique(),
+	groups: customJsonb('groups').$type<Group[]>(),
 	hue: integer('hue').default(145),
-	sizes: jsonb('sizes').$type<Sizes>(),
-	createdAt: timestamp('createdAt').defaultNow(),
-	updatedAt: timestamp('updatedAt').defaultNow()
+	sizes: customJsonb('sizes').$type<UserSizes>(),
+	createdAt: timestamp('created_at').defaultNow(),
+	updatedAt: timestamp('updated_at').defaultNow()
 });
 
 export const usersRelations = relations(users, ({ one, many }) => ({
@@ -45,6 +67,14 @@ export const usersRelations = relations(users, ({ one, many }) => ({
 	authSession: many(sessions),
 	key: many(keys)
 }));
+
+export const selectUserSchema = createSelectSchema(users);
+export type SelectUser = typeof users.$inferSelect;
+
+export const insertUserSchema = createInsertSchema(users, {
+	hue: (schema) => schema.id.min(0).max(360)
+});
+export type InsertUser = typeof users.$inferInsert;
 
 export const sessions = pgTable('sessions', {
 	id: varchar('id', {

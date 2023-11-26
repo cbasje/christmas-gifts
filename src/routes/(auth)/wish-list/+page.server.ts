@@ -1,14 +1,15 @@
+import { giftItems } from '$lib/db/gift-item';
+import { Groups } from '$lib/db/user';
+import { db } from '$lib/server/drizzle';
 import { auth } from '$lib/server/lucia';
-import prisma from '$lib/server/prisma';
-import supabase from '$lib/server/supabase';
 import { getSupabaseURL, isFile, uploadFile } from '$lib/utils/file';
-import { Group } from '@prisma/client';
 import { fail, redirect } from '@sveltejs/kit';
+import { and, eq, sql } from 'drizzle-orm';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import type { Actions, PageServerLoad } from './$types';
-import type { GiftItem } from '$lib/types';
 
+// TODO: drizzle-zod
 const schema = z.object({
 	id: z.string().uuid(),
 	name: z.string(),
@@ -23,46 +24,44 @@ const schema = z.object({
 	giftedById: z.string().nullish(),
 	link: z.string().url().nullish(),
 	pic: z.string().url().nullish(),
-	// purchased: z.boolean(),
 	idea: z.boolean().default(false),
 	ideaLinkId: z.string().nullish(),
-	groups: z.nativeEnum(Group).array()
+	groups: z.enum(Groups).array()
 });
 
 export const load = (async ({ parent }) => {
 	const { user, currentGroupId } = await parent();
 
-	const wishList = await prisma.giftItem.findMany({
-		where: {
-			recipientId: user.id,
-			groups: {
-				has: currentGroupId
-			},
-			idea: false
-		},
-		select: {
-			id: true,
-			name: true,
-			price: true,
-			notes: true,
-			link: true,
-			pic: true,
-			purchased: false,
-			recipientId: true,
-			giftedById: true,
-			idea: true,
-			ideaLinkId: true,
-			groups: true
-		}
-	});
-
-	const schemaWithDefaults = schema.merge(
-		z.object({
-			recipientId: z.string().default(user.id),
-			groups: z.nativeEnum(Group).array().default([currentGroupId])
+	const wishList = await db
+		.select({
+			id: giftItems.id,
+			name: giftItems.name,
+			price: giftItems.price,
+			notes: giftItems.notes,
+			link: giftItems.link,
+			pic: giftItems.pic,
+			recipientId: giftItems.recipientId,
+			giftedById: giftItems.giftedById,
+			idea: giftItems.idea,
+			ideaLinkId: giftItems.ideaLinkId,
+			groups: giftItems.groups
 		})
+		.from(giftItems)
+		.where(
+			and(
+				eq(giftItems.recipientId, user.id),
+				sql<boolean>`${giftItems.groups} ? ${currentGroupId}`,
+				eq(giftItems.idea, false)
+			)
+		);
+
+	const formData = await superValidate(
+		{
+			recipientId: user.id,
+			groups: [currentGroupId]
+		},
+		schema
 	);
-	const formData = await superValidate(schemaWithDefaults);
 
 	return {
 		formData,
@@ -113,14 +112,16 @@ export const actions = {
 				};
 			}
 
-			const newItem = await prisma.giftItem.create({
-				data,
-				select: {
-					name: true
-				}
-			});
+			const newItem = await db
+				.insert(giftItems)
+				.values({
+					...data
+				})
+				.returning({
+					name: giftItems.name
+				});
 
-			return { form, newItem };
+			return { form, newItem: newItem.at(0) };
 		} catch (error) {
 			console.error(error);
 			return fail(500, { form });
@@ -153,17 +154,17 @@ export const actions = {
 				};
 			}
 
-			const editedItem = await prisma.giftItem.update({
-				where: {
-					id: form.data.id
-				},
-				data,
-				select: {
-					name: true
-				}
-			});
+			const editedItem = await db
+				.update(giftItems)
+				.set({
+					...data
+				})
+				.where(eq(giftItems.id, form.data.id))
+				.returning({
+					name: giftItems.name
+				});
 
-			return { form, editedItem };
+			return { form, editedItem: editedItem.at(0) };
 		} catch (error) {
 			console.error(error);
 			return fail(500, { form });

@@ -7,10 +7,10 @@
 	import toast from 'svelte-french-toast';
 	import { superForm } from 'sveltekit-superforms/client';
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
-	import SizeChart from '../../../lib/components/size-chart/SizeChart.svelte';
-	import SizeChartEmpty from '../../../lib/components/size-chart/SizeChartEmpty.svelte';
-	import SizeChartSimple from '../../../lib/components/size-chart/SizeChartSimple.svelte';
-	import SizeChartSimpleEmpty from '../../../lib/components/size-chart/SizeChartSimpleEmpty.svelte';
+	import SizeChart from '$lib/components/size-chart/SizeChart.svelte';
+	import SizeChartEmpty from '$lib/components/size-chart/SizeChartEmpty.svelte';
+	import SizeChartSimple from '$lib/components/size-chart/SizeChartSimple.svelte';
+	import SizeChartSimpleEmpty from '$lib/components/size-chart/SizeChartSimpleEmpty.svelte';
 	import Header from '../Header.svelte';
 	import type { PageData } from './$types';
 
@@ -24,7 +24,7 @@
 
 	const { form, enhance, constraints, errors, tainted } = superForm(data.form, {
 		dataType: 'json',
-		resetForm: true,
+		resetForm: false,
 		onResult: ({ result }) => {
 			if ('data' in result && result.data?.form?.valid) {
 				toast.success(`Saved your sizes successfully!`);

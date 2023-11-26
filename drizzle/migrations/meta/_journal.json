@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1700733459767,
-      "tag": "0000_numerous_scalphunter",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1700734378660,
-      "tag": "0001_low_korath",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1700734695706,
-      "tag": "0002_daffy_luckman",
+      "when": 1700754864869,
+      "tag": "0000_flimsy_maestro",
       "breakpoints": true
     }
   ]

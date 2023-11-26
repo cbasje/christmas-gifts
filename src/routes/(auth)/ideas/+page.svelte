@@ -46,16 +46,15 @@
 
 {#if data.ideaList}
 	<TableContainer>
-		{#each Object.keys(data.ideaList) as id, index (id)}
+		{#each Object.keys(data.ideaList) as id (id)}
 			{@const items = data.ideaList[id]}
 			{@const recipient = data.users.find((u) => u.id === id)}
 			<Table
 				showBgColor={false}
 				items={items.filter(
 					(item) =>
-						item.giftedById != null &&
-						(item.giftedById === data.user.id ||
-							($showPartner && item.giftedById === data.user.partnerId))
+						item.giftedById === data.user.id ||
+						($showPartner && item.giftedById === data.user.partnerId)
 				) ?? undefined}
 				allowPurchased
 				allowEdit
@@ -66,7 +65,10 @@
 				<svelte:fragment slot="title">
 					<Badge title={recipient?.name ?? ''} hue={recipient?.hue ?? 145} />
 
-					<SizeChartPopup name={recipient?.name ?? ''} sizes={recipient?.sizes} />
+					<SizeChartPopup
+						name={recipient?.name ?? ''}
+						sizes={recipient?.sizes ?? undefined}
+					/>
 				</svelte:fragment>
 			</Table>
 		{/each}

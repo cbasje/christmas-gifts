@@ -1,5 +1,5 @@
+import type { Group } from '$lib/db/user';
 import { auth } from '$lib/server/lucia';
-import type { Group } from '$lib/types';
 import { error, json, redirect } from '@sveltejs/kit';
 import { LuciaError } from 'lucia';
 import type { RequestHandler } from './$types';

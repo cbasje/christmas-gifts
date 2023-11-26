@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { Groups } from '$lib/db/user';
 	import { t } from '$lib/translations';
-	import { Groups } from '$lib/types';
+	import type { LinkItem } from '$lib/types';
 	import { capitaliseString } from '$lib/utils/capitalise';
 	import Icon from '@iconify/svelte';
 	import { createDialog, melt } from '@melt-ui/svelte';
@@ -18,13 +19,6 @@
 	export let currentUserGroups: IdeasData['currentUserGroups'] | WishData['currentUserGroups'];
 	export let users: IdeasData['users'] | undefined = undefined;
 
-	type LinkItem = {
-		id: string;
-		name: string;
-		recipient: {
-			name: string | null;
-		};
-	};
 	let linkItems: LinkItem[] = [];
 
 	const {
@@ -195,7 +189,7 @@
 						aria-invalid={$errors.ideaLinkId ? 'true' : undefined}
 						help="First select a recipient."
 						options={(linkItems ?? []).map((i) => ({
-							label: `${i.recipient?.name} - ${i.name}`,
+							label: `${i.recipientName} - ${i.name}`,
 							value: i.id
 						}))}
 						{...$constraints.ideaLinkId}
@@ -203,7 +197,7 @@
 				{:else}
 					<Input type="hidden" name="recipientId" value={$form.recipientId} />
 				{/if}
-				{#if currentUserGroups.length > 1}
+				{#if currentUserGroups && currentUserGroups.length > 1}
 					<Input
 						type="select-multiple"
 						name="groups"

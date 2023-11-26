@@ -5,6 +5,7 @@ import { setError, superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import type { Actions, PageServerLoad } from './$types';
 
+// TODO: drizzle-zod
 const schema = z.object({
 	username: z.string().nonempty().max(255),
 	password: z.string().nonempty().min(6).max(255)
@@ -18,7 +19,7 @@ export const load = (async ({ locals, url, cookies }) => {
 			const session = await auth.createSession({
 				userId: userId,
 				attributes: {
-					group: user.groups[0]
+					group: user.groups?.at(0)
 				}
 			});
 
@@ -60,7 +61,7 @@ export const actions = {
 			const session = await auth.createSession({
 				userId: key.userId,
 				attributes: {
-					group: user.groups[0]
+					group: user.groups?.at(0)
 				}
 			});
 

@@ -6,6 +6,7 @@ import { setError, superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import type { Actions, PageServerLoad } from './$types';
 
+// TODO: drizzle-zod
 const schema = z.object({
 	username: z.string().nonempty().max(255),
 	password: z.string().nonempty().min(6).max(255)
@@ -40,16 +41,17 @@ export const actions = {
 				attributes: {
 					name: capitaliseString(form.data.username),
 					groups: ['HAUGEN', 'BENJAMINS'],
-					partnerId: null,
-					username: form.data.username,
-					sizes: {},
+					partner_id: null,
+					user_name: form.data.username,
+					sizes: { simple: {}, advanced: {} },
 					hue: 145
 				}
 			});
 			const session = await auth.createSession({
 				userId: user.userId,
 				attributes: {
-					group: user.groups[0]
+					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+					group: user.groups.at(0)!
 				}
 			});
 

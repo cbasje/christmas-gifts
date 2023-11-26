@@ -1,9 +1,10 @@
+import { UserSizesSchema, users } from '$lib/db/user';
 import { auth } from '$lib/server/lucia';
-import prisma from '$lib/server/prisma';
-import { UserSizesSchema } from '$lib/types';
 import { error, fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import type { Actions, PageServerLoad } from './$types';
+import { db } from '$lib/server/drizzle';
+import { eq } from 'drizzle-orm';
 
 export const load = (async ({ parent }) => {
 	const { user } = await parent();
@@ -30,12 +31,12 @@ export const actions = {
 		}
 
 		try {
-			await prisma.user.update({
-				where: { id: session.user.id },
-				data: {
+			await db
+				.update(users)
+				.set({
 					sizes: form.data
-				}
-			});
+				})
+				.where(eq(users.id, session.user.id));
 
 			return { form };
 		} catch (error) {

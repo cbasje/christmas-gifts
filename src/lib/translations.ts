@@ -5,6 +5,7 @@ const initLocales = ['en', 'nl' /*, 'fy', 'sv' */];
 
 const config: Config = {
 	loaders: initLocales.reduce<
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		{ locale: string; key: string; routes?: string[]; loader: () => Promise<any> }[]
 	>((prevValue, currLocale) => {
 		return [

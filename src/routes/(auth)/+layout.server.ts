@@ -11,6 +11,6 @@ export const load = (async ({ locals, cookies }) => {
 	return {
 		locale,
 		user: session.user,
-		currentGroupId: session.group ?? session.user.groups[0]
+		currentGroupId: session.group ?? session.user.groups?.at(0)
 	};
 }) satisfies LayoutServerLoad;

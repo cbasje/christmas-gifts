@@ -1,6 +1,10 @@
-import prisma from '$lib/server/prisma';
+import { giftItems } from '$lib/db/gift-item';
+import { users } from '$lib/db/user';
+import { db } from '$lib/server/drizzle';
 import { error, json, redirect } from '@sveltejs/kit';
+import { and, eq, sql } from 'drizzle-orm';
 import type { RequestHandler } from './$types';
+import type { LinkItem } from '$lib/types';
 
 export const GET = (async ({ url, locals }) => {
 	const session = await locals.auth.validate();
@@ -13,24 +17,23 @@ export const GET = (async ({ url, locals }) => {
 	}
 
 	try {
-		const linkItems = await prisma.giftItem.findMany({
-			where: {
-				recipientId,
-				groups: {
-					has: session.group
-				},
-				idea: false
-			},
-			select: {
-				id: true,
-				name: true,
-				recipient: {
-					select: { name: true }
-				}
-			}
-		});
+		const linkItems = await db
+			.select({
+				id: giftItems.id,
+				name: giftItems.name,
+				recipientName: users.name
+			})
+			.from(giftItems)
+			.leftJoin(users, eq(giftItems.recipientId, users.id))
+			.where(
+				and(
+					eq(giftItems.recipientId, recipientId),
+					sql<boolean>`${giftItems.groups} ? ${session.group}`,
+					eq(giftItems.idea, false)
+				)
+			);
 
-		return json(linkItems);
+		return json(linkItems satisfies LinkItem[]);
 	} catch (e) {
 		console.error(e);
 		throw error(500);
@@ -55,11 +58,9 @@ export const PATCH = (async ({ request, locals }) => {
 	}
 
 	try {
-		const updatedItem = await prisma.giftItem.update({
-			where: {
-				id
-			},
-			data: {
+		const updatedItem = await db
+			.update(giftItems)
+			.set({
 				purchased
 				// FIXME:
 				// ideaLink: hasIdeaLink
@@ -69,15 +70,15 @@ export const PATCH = (async ({ request, locals }) => {
 				// 			}
 				// 	  }
 				// 	: undefined
-			},
-			select: {
-				id: true,
-				purchased: true,
-				giftedById: true
-			}
-		});
+			})
+			.where(eq(giftItems.id, id))
+			.returning({
+				id: giftItems.id,
+				purchased: giftItems.purchased,
+				giftedById: giftItems.giftedById
+			});
 
-		return json(updatedItem);
+		return json(updatedItem.at(0));
 	} catch (e) {
 		console.error(e);
 		throw error(500);
@@ -96,16 +97,15 @@ export const DELETE = (async ({ request, locals }) => {
 	}
 
 	try {
-		const removedItem = await prisma.giftItem.delete({
-			where: {
-				id
-			},
-			select: {
-				id: true
-			}
-		});
+		const removedItem = await db
+			.delete(giftItems)
 
-		return json(removedItem);
+			.where(eq(giftItems.id, id))
+			.returning({
+				id: giftItems.id
+			});
+
+		return json(removedItem.at(0));
 	} catch (e) {
 		console.error(e);
 		throw error(500);

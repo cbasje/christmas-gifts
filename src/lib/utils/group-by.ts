@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const groupBy = <T extends Record<string, any>, K extends keyof T>(
 	arr: T[],
 	key: K

@@ -23,20 +23,20 @@
 		{#each Object.keys(data.overviewList) as id (id)}
 			{@const items = data.overviewList[id]}
 			<Table
-				headerHue={items.at(0)?.recipient.hue ?? undefined}
+				headerHue={items.at(0)?.recipientHue ?? undefined}
 				{items}
 				allowPurchased
 				isCollapsable
 			>
 				<svelte:fragment slot="title">
 					<Badge
-						title={items.at(0)?.recipient.name ?? ''}
-						hue={items.at(0)?.recipient.hue ?? 145}
+						title={items.at(0)?.recipientName ?? ''}
+						hue={items.at(0)?.recipientHue ?? 145}
 					/>
 
 					<SizeChartPopup
-						name={items.at(0)?.recipient.name ?? ''}
-						hue={items.at(0)?.recipient.hue ?? 145}
+						name={items.at(0)?.recipientName ?? ''}
+						hue={items.at(0)?.recipientHue ?? 145}
 					/>
 				</svelte:fragment>
 			</Table>

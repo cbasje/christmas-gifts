@@ -1,6 +1,8 @@
-import prisma from '$lib/server/prisma';
 import { error, json, redirect } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
+import { db } from '$lib/server/drizzle';
+import { giftItems } from '$lib/db/gift-item';
+import { eq } from 'drizzle-orm';
 
 export const PATCH = (async ({ request, locals }) => {
 	const session = await locals.auth.validate();
@@ -20,64 +22,26 @@ export const PATCH = (async ({ request, locals }) => {
 	}
 
 	try {
-		const updatedItem = await prisma.giftItem.update({
-			where: {
-				id
-			},
-			data: {
+		const updatedItem = await db
+			.update(giftItems)
+			.set({
 				purchased,
-				giftedBy: purchased
-					? {
-							connect: {
-								id: session.user.id
-							}
-					  }
-					: {
-							disconnect: true
-					  }
+				giftedById: purchased ? session.user.id : null
 				//   FIXME:
 				// ideaLink: {
 				// 	update: {
 				//         data: {}
 				//     }
 				// }
-			},
-			select: {
-				id: true,
-				purchased: true,
-				giftedById: true
-			}
-		});
+			})
+			.where(eq(giftItems.id, id))
+			.returning({
+				id: giftItems.id,
+				purchased: giftItems.purchased,
+				giftedById: giftItems.giftedById
+			});
 
-		return json(updatedItem);
-	} catch (e) {
-		console.error(e);
-		throw error(500);
-	}
-}) satisfies RequestHandler;
-
-export const DELETE = (async ({ request, locals }) => {
-	const session = await locals.auth.validate();
-	if (!session) throw redirect(302, '/login');
-
-	const form = await request.formData();
-	const id = form.get('id');
-
-	if (id === undefined || typeof id !== 'string') {
-		throw error(400);
-	}
-
-	try {
-		const removedItem = await prisma.giftItem.delete({
-			where: {
-				id
-			},
-			select: {
-				id: true
-			}
-		});
-
-		return json(removedItem);
+		return json(updatedItem.at(0));
 	} catch (e) {
 		console.error(e);
 		throw error(500);

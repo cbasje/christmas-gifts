@@ -53,7 +53,7 @@
 		elements: { root, input },
 		states: { checked: isPurchased }
 	} = createSwitch({
-		defaultChecked: 'purchased' in item && item.purchased,
+		defaultChecked: 'purchased' in item && (item.purchased ?? undefined),
 		onCheckedChange: switchPurchased
 	});
 </script>
