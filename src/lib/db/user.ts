@@ -1,13 +1,5 @@
 import { relations } from 'drizzle-orm';
-import {
-	bigint,
-	customType,
-	integer,
-	pgTable,
-	text,
-	timestamp,
-	varchar
-} from 'drizzle-orm/pg-core';
+import { bigint, integer, jsonb, pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 import { giftItems } from './gift-item';
@@ -32,17 +24,6 @@ export const UserSizesSchema = z.object({
 });
 export type UserSizes = z.infer<typeof UserSizesSchema>;
 
-const customJsonb = <TData>(name: string) =>
-	customType<{ data: TData; driverData: string }>({
-		dataType() {
-			return 'jsonb';
-		},
-		// FIXME:
-		toDriver(value: TData) {
-			return value;
-		}
-	})(name);
-
 export const users = pgTable('users', {
 	id: varchar('id', {
 		length: 15
@@ -50,9 +31,9 @@ export const users = pgTable('users', {
 	name: text('name').unique(),
 	username: text('user_name').notNull().unique(),
 	partnerId: text('partner_id').unique(),
-	groups: customJsonb('groups').$type<Group[]>(),
+	groups: jsonb('groups').$type<Group[]>(),
 	hue: integer('hue').default(145),
-	sizes: customJsonb('sizes').$type<UserSizes>(),
+	sizes: jsonb('sizes').$type<UserSizes>(),
 	createdAt: timestamp('created_at').defaultNow(),
 	updatedAt: timestamp('updated_at').defaultNow()
 });

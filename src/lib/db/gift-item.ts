@@ -1,18 +1,7 @@
 import { relations } from 'drizzle-orm';
-import { boolean, customType, pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { boolean, jsonb, pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { users, type Group } from './user';
-
-const customJsonb = <TData>(name: string) =>
-	customType<{ data: TData; driverData: string }>({
-		dataType() {
-			return 'jsonb';
-		},
-		// FIXME:
-		toDriver(value: TData) {
-			return value;
-		}
-	})(name);
 
 export const giftItems = pgTable('gift_items', {
 	id: varchar('id', {
@@ -30,7 +19,7 @@ export const giftItems = pgTable('gift_items', {
 	purchased: boolean('purchased').default(false),
 	idea: boolean('idea').default(false),
 	ideaLinkId: text('idea_link_id'),
-	groups: customJsonb('groups').$type<Group[]>(),
+	groups: jsonb('groups').$type<Group[]>(),
 	createdAt: timestamp('created_at').defaultNow(),
 	updatedAt: timestamp('updated_at').defaultNow()
 });
