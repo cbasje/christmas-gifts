@@ -52,5 +52,11 @@
 		"title": "{{user}}'s sizes",
 		"description": "These are all of {{user}}'s sizes",
 		"close": "Close"
+	},
+	"error": {
+		"403": "Maintenance",
+		"description": "Unfortunately, there is either something wrong with this website or I am doing some maintenance!",
+		"message": "Unfortunately, I am doing some {{message; default: maintenance}}!",
+		"end": "I hope to be done {{end}}!"
 	}
 }

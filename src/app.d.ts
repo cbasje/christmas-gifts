@@ -4,7 +4,9 @@ import type { Group, UserSizes } from '$lib/db/schema/user';
 // for information about these interfaces
 declare global {
 	namespace App {
-		// interface Error {}
+		interface Error {
+			end?: Date;
+		}
 		interface Locals {
 			auth: import('lucia').AuthRequest;
 		}
@@ -22,7 +24,7 @@ declare global {
 			name: string | null;
 			user_name: string;
 			partner_id: string | null;
-			groups: Group[];
+			groups?: Group[];
 			hue: number;
 			sizes: UserSizes | null;
 			created_at?: Date;

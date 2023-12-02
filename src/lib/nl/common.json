@@ -52,5 +52,11 @@
 		"title": "{{user}}'s maten",
 		"description": "Dit zijn alle maten van {{user}}",
 		"close": "Sluiten"
+	},
+	"error": {
+		"403": "Onderhoud",
+		"description": "Helaas is er óf iets mis met deze website óf ik ben bezig met onderhoud!",
+		"message": "Helaas ben ik bezig met {{message; default: onderhoud}}!",
+		"end": "Ik ben hopelijk klaar {{end}}!"
 	}
 }

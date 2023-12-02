@@ -1,10 +1,11 @@
 import i18n, { type Config } from 'sveltekit-i18n';
 
-export const defaultLocale = 'en';
-const initLocales = ['en', 'nl' /*, 'fy', 'sv' */];
+export const Locales = ['en', 'nl' /*, 'fy', 'sv' */] as const;
+export type Locale = (typeof Locales)[number];
+export const defaultLocale: Locale = 'en';
 
 const config: Config = {
-	loaders: initLocales.reduce<
+	loaders: Locales.reduce<
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		{ locale: string; key: string; routes?: string[]; loader: () => Promise<any> }[]
 	>((prevValue, currLocale) => {
