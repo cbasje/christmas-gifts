@@ -1,7 +1,7 @@
 import { error, json, redirect } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { db } from '$lib/server/drizzle';
-import { giftItems } from '$lib/db/gift-item';
+import { giftItems } from '$lib/db/schema/gift-item';
 import { eq } from 'drizzle-orm';
 
 export const PATCH = (async ({ request, locals }) => {

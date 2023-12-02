@@ -1,8 +1,7 @@
-// import 'dotenv/config';
 import type { Config } from 'drizzle-kit';
 
 export default {
-	schema: ['./src/lib/db/gift-item.ts', './src/lib/db/user.ts'],
+	schema: './src/lib/db/schema/*',
 	out: './drizzle/migrations',
 	driver: 'pg',
 	dbCredentials: {

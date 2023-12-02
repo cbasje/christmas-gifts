@@ -2,7 +2,7 @@
 	import { enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { Groups } from '$lib/db/user';
+	import { Groups } from '$lib/db/schema/user';
 	import { t } from '$lib/translations';
 	import { capitaliseString } from '$lib/utils/capitalise';
 	import Icon from '@iconify/svelte';

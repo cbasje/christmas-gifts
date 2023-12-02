@@ -1,5 +1,5 @@
 {
-  "id": "c4a11888-e243-4108-be79-03d78bfb91d9",
+  "id": "54f105dc-8139-4c55-b9ca-807b7a04c1aa",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -10,7 +10,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "varchar(128)",
+          "type": "text",
           "primaryKey": true,
           "notNull": true
         },
@@ -60,14 +60,14 @@
           "name": "purchased",
           "type": "boolean",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": false
         },
         "idea": {
           "name": "idea",
           "type": "boolean",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": false
         },
         "idea_link_id": {
@@ -98,6 +98,68 @@
         }
       },
       "indexes": {},
+      "foreignKeys": {
+        "gift_items_recipient_id_users_id_fk": {
+          "name": "gift_items_recipient_id_users_id_fk",
+          "tableFrom": "gift_items",
+          "tableTo": "users",
+          "columnsFrom": [
+            "recipient_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        },
+        "gift_items_gifted_by_id_users_id_fk": {
+          "name": "gift_items_gifted_by_id_users_id_fk",
+          "tableFrom": "gift_items",
+          "tableTo": "users",
+          "columnsFrom": [
+            "gifted_by_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "maintenance": {
+      "name": "maintenance",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "start": {
+          "name": "start",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "end": {
+          "name": "end",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "reason": {
+          "name": "reason",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
@@ -108,13 +170,13 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "varchar(255)",
+          "type": "text",
           "primaryKey": true,
           "notNull": true
         },
         "user_id": {
           "name": "user_id",
-          "type": "varchar(15)",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -137,8 +199,8 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -150,13 +212,13 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "varchar(128)",
+          "type": "text",
           "primaryKey": true,
           "notNull": true
         },
         "user_id": {
           "name": "user_id",
-          "type": "varchar(15)",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -191,8 +253,8 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -204,7 +266,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "varchar(15)",
+          "type": "text",
           "primaryKey": true,
           "notNull": true
         },
@@ -236,7 +298,7 @@
           "name": "hue",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": 145
         },
         "sizes": {
@@ -276,13 +338,6 @@
           "nullsNotDistinct": false,
           "columns": [
             "user_name"
-          ]
-        },
-        "users_partner_id_unique": {
-          "name": "users_partner_id_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "partner_id"
           ]
         }
       }

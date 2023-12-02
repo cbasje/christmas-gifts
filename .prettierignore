@@ -7,5 +7,5 @@ package
 .env.*
 !.env.example
 bun.lockb
-drizzle
+drizzle/meta
 drizzle/migrations

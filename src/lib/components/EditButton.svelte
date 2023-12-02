@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { Groups } from '$lib/db/user';
+	import { Groups } from '$lib/db/schema/user';
 	import { t } from '$lib/translations';
 	import type { LinkItem } from '$lib/types';
 	import { capitaliseString } from '$lib/utils/capitalise';

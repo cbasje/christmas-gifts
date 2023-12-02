@@ -1,5 +1,5 @@
-import { giftItems } from '$lib/db/gift-item';
-import { users } from '$lib/db/user';
+import { giftItems } from '$lib/db/schema/gift-item';
+import { users } from '$lib/db/schema/user';
 import { db } from '$lib/server/drizzle';
 import { auth } from '$lib/server/lucia';
 import { getSupabaseURL } from '$lib/utils/file';

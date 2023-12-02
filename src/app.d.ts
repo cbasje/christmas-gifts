@@ -1,5 +1,5 @@
 // See https://kit.svelte.dev/docs/types#app
-import type { Group, UserSizes } from '$lib/db/user';
+import type { Group, UserSizes } from '$lib/db/schema/user';
 
 // for information about these interfaces
 declare global {

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { invalidate } from '$app/navigation';
 	import { page } from '$app/stores';
-	import type { SelectGiftItem } from '$lib/db/gift-item';
+	import type { SelectGiftItem } from '$lib/db/schema/gift-item';
 	import Icon from '@iconify/svelte';
 	import toast from 'svelte-french-toast';
 

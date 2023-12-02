@@ -1,4 +1,4 @@
-import { UserSizesSchema, users } from '$lib/db/user';
+import { UserSizesSchema, users } from '$lib/db/schema/user';
 import { auth } from '$lib/server/lucia';
 import { error, fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';

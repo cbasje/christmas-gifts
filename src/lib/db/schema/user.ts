@@ -25,14 +25,12 @@ export const UserSizesSchema = z.object({
 export type UserSizes = z.infer<typeof UserSizesSchema>;
 
 export const users = pgTable('users', {
-	id: varchar('id', {
-		length: 15
-	}).primaryKey(),
+	id: text('id').primaryKey().notNull(),
 	name: text('name').unique(),
 	username: text('user_name').notNull().unique(),
-	partnerId: text('partner_id').unique(),
+	partnerId: text('partner_id'),
 	groups: jsonb('groups').$type<Group[]>(),
-	hue: integer('hue').default(145),
+	hue: integer('hue').default(145).notNull(),
 	sizes: jsonb('sizes').$type<UserSizes>(),
 	createdAt: timestamp('created_at').defaultNow(),
 	updatedAt: timestamp('updated_at').defaultNow()
@@ -58,14 +56,10 @@ export const insertUserSchema = createInsertSchema(users, {
 export type InsertUser = typeof users.$inferInsert;
 
 export const sessions = pgTable('sessions', {
-	id: varchar('id', {
-		length: 128
-	}).primaryKey(),
-	userId: varchar('user_id', {
-		length: 15
-	})
+	id: text('id').primaryKey().notNull(),
+	userId: text('user_id')
 		.notNull()
-		.references(() => users.id),
+		.references(() => users.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
 	activeExpires: bigint('active_expires', {
 		mode: 'number'
 	}).notNull(),
@@ -76,58 +70,11 @@ export const sessions = pgTable('sessions', {
 });
 
 export const keys = pgTable('keys', {
-	id: varchar('id', {
-		length: 255
-	}).primaryKey(),
-	userId: varchar('user_id', {
-		length: 15
-	})
+	id: text('id').primaryKey().notNull(),
+	userId: text('user_id')
 		.notNull()
-		.references(() => users.id),
+		.references(() => users.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
 	hashedPassword: varchar('hashed_password', {
 		length: 255
 	})
 });
-
-//   model User {
-//     id       String  @id @unique @default(uuid()) /// @zod.uuid()
-//     name     String? @unique
-//     username String
-
-//     items        GiftItem[] @relation("ReceivingItems")
-//     giftingItems GiftItem[] @relation("GiftingItems")
-//     partner      User?      @relation("Partner", fields: [partnerId], references: [id])
-//     partnerId    String?    @unique
-//     partner2     User?      @relation("Partner")
-//     groups       Group[]
-//     hue          Int        @default(145) /// @zod.min(0).max(360)
-
-//     sizes Json?
-
-//     auth_session Session[]
-//     key          Key[]
-
-//     createdAt DateTime? @default(now())
-//     updatedAt DateTime? @updatedAt
-//   }
-
-//   model Session {
-//     id             String @id @unique
-//     user_id        String
-//     active_expires BigInt
-//     idle_expires   BigInt
-//     user           User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
-
-//     group Group?
-
-//     @@index([user_id])
-//   }
-
-//   model Key {
-//     id              String  @id @unique
-//     hashed_password String?
-//     user_id         String
-//     user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
-
-//     @@index([user_id])
-//   }
