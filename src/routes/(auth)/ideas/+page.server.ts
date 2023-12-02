@@ -56,12 +56,12 @@ export const load = (async ({ parent }) => {
 			and(
 				not(eq(giftItems.recipientId, user.id)),
 				sql<boolean>`${giftItems.groups} ? ${currentGroupId}`,
+				eq(giftItems.idea, true),
+				isNotNull(giftItems.giftedById),
 				or(
-					eq(giftItems.idea, true),
 					eq(giftItems.giftedById, user.id),
 					eq(giftItems.giftedById, user.partnerId ?? '')
-				),
-				isNotNull(giftItems.giftedById)
+				)
 			)
 		)
 		.orderBy(desc(users.hue));
@@ -73,9 +73,7 @@ export const load = (async ({ parent }) => {
 			sizes: users.sizes
 		})
 		.from(users)
-		.where(
-			and(not(eq(users.id, user.id)), sql<boolean>`${giftItems.groups} ? ${currentGroupId}`)
-		)
+		.where(and(not(eq(users.id, user.id)), sql<boolean>`${users.groups} ? ${currentGroupId}`))
 		.orderBy(asc(users.name));
 
 	const formData = await superValidate(
