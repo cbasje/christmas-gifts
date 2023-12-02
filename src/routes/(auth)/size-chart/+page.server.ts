@@ -34,7 +34,8 @@ export const actions = {
 			await db
 				.update(users)
 				.set({
-					sizes: form.data
+					sizes: form.data,
+					updatedAt: new Date()
 				})
 				.where(eq(users.id, session.user.id));
 

@@ -61,7 +61,8 @@ export const PATCH = (async ({ request, locals }) => {
 		const updatedItem = await db
 			.update(giftItems)
 			.set({
-				purchased
+				purchased,
+				updatedAt: new Date()
 				// FIXME:
 				// ideaLink: hasIdeaLink
 				// 	? {

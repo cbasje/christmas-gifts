@@ -26,7 +26,8 @@ export const PATCH = (async ({ request, locals }) => {
 			.update(giftItems)
 			.set({
 				purchased,
-				giftedById: purchased ? session.user.id : null
+				giftedById: purchased ? session.user.id : null,
+				updatedAt: new Date()
 				//   FIXME:
 				// ideaLink: {
 				// 	update: {

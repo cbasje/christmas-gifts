@@ -157,7 +157,8 @@ export const actions = {
 			const editedItem = await db
 				.update(giftItems)
 				.set({
-					...data
+					...data,
+					updatedAt: new Date()
 				})
 				.where(eq(giftItems.id, form.data.id))
 				.returning({
