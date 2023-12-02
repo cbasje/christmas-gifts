@@ -19,7 +19,7 @@ export const load = (async ({ locals, url, cookies }) => {
 			const session = await auth.createSession({
 				userId: userId,
 				attributes: {
-					group: user.groups?.at(0)
+					group: user.groups?.at(0) ?? 'HAUGEN'
 				}
 			});
 
@@ -61,7 +61,7 @@ export const actions = {
 			const session = await auth.createSession({
 				userId: key.userId,
 				attributes: {
-					group: user.groups?.at(0)
+					group: user.groups?.at(0) ?? 'HAUGEN'
 				}
 			});
 

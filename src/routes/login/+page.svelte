@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { dev } from '$app/environment';
 	import Input from '$lib/components/Input.svelte';
 	import { t } from '$lib/translations';
 	import Icon from '@iconify/svelte';
@@ -12,10 +13,10 @@
 	const { form, enhance, errors, constraints } = superForm(data.form, {
 		resetForm: true,
 		onResult: ({ result }) => {
-			if (result.type === 'redirect') {
-				toast.success(`Logged you in successfully!`);
-			} else {
+			if (result.type === 'failure' || result.type === 'error') {
 				toast.error(`Logging in was not successful!`);
+			} else {
+				toast.success(`Logged you in successfully!`);
 			}
 		},
 		onError: ({ message }) => {
@@ -64,4 +65,7 @@
 		<Icon icon="solar:shield-keyhole-minimalistic-line-duotone" class="square-4" />
 		<span>{$t('common.signIn')}</span>
 	</button>
+	{#if dev}
+		<a href="/signup">Signup</a>
+	{/if}
 </form>

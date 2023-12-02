@@ -24,7 +24,7 @@ export const load = (async ({ locals }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({ request, locals }) => {
+	default: async ({ request }) => {
 		const form = await superValidate(request, schema);
 
 		if (!form.valid) {
@@ -32,7 +32,7 @@ export const actions = {
 		}
 
 		try {
-			const user = await auth.createUser({
+			await auth.createUser({
 				key: {
 					providerId: 'username', // auth method
 					providerUserId: form.data.username.toLowerCase(), // unique id when using "username" auth method
@@ -40,23 +40,12 @@ export const actions = {
 				},
 				attributes: {
 					name: capitaliseString(form.data.username),
-					groups: ['HAUGEN', 'BENJAMINS'],
 					partner_id: null,
 					user_name: form.data.username,
 					sizes: { simple: {}, advanced: {} },
 					hue: 145
 				}
 			});
-			const session = await auth.createSession({
-				userId: user.userId,
-				attributes: {
-					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-					group: user.groups.at(0)!
-				}
-			});
-
-			// Set auth cookie
-			locals.auth.setSession(session);
 		} catch (e) {
 			console.error(e);
 			if (e instanceof LuciaError && e.message === 'AUTH_DUPLICATE_KEY_ID') {
@@ -67,7 +56,7 @@ export const actions = {
 				form
 			});
 		}
-		// redirect to /
-		throw redirect(302, '/');
+
+		return { form };
 	}
 } satisfies Actions;

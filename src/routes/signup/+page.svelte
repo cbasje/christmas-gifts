@@ -12,10 +12,10 @@
 	const { form, enhance, errors, constraints } = superForm(data.form, {
 		resetForm: true,
 		onResult: ({ result }) => {
-			if (result.type === 'redirect') {
-				toast.success(`Signed you up successfully!`);
-			} else {
+			if (result.type === 'failure' || result.type === 'error') {
 				toast.error(`Signing up was not successful!`);
+			} else {
+				toast.success(`Signed you up successfully!`);
 			}
 		},
 		onError: ({ message }) => {
