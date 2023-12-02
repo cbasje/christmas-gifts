@@ -1,7 +1,7 @@
 import { maintenance } from '$lib/db/schema/maintenance';
 import { db } from '$lib/server/drizzle';
 import { error, redirect } from '@sveltejs/kit';
-import { desc, gte, isNull, or, sql } from 'drizzle-orm';
+import { desc, gte, isNull, lte, or, sql } from 'drizzle-orm';
 import type { LayoutServerLoad } from './$types';
 
 export const load = (async ({ locals, parent }) => {
@@ -17,6 +17,7 @@ export const load = (async ({ locals, parent }) => {
 			isOn: or(isNull(maintenance.end), gte(maintenance.end, new Date())) ?? sql<null>`NULL`
 		})
 		.from(maintenance)
+		.where(lte(maintenance.start, new Date()))
 		.orderBy(desc(maintenance.start))
 		.limit(1);
 
