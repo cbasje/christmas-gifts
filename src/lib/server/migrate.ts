@@ -1,9 +1,12 @@
-import { drizzle } from 'drizzle-orm/postgres-js';
-import { migrate } from 'drizzle-orm/postgres-js/migrator';
-import postgres from 'postgres';
+import { drizzle } from 'drizzle-orm/node-postgres';
+import { migrate } from 'drizzle-orm/node-postgres/migrator';
+import postgres from 'pg';
 import { connectionString } from './drizzle';
 
 // This will run migrations on the database, skipping the ones already applied
 // for migrations
-const migrationClient = postgres(connectionString, { max: 1 });
-migrate(drizzle(migrationClient), { migrationsFolder: './drizzle/migrations' });
+const migrationPool = new postgres.Pool({
+	connectionString,
+	max: 1
+});
+migrate(drizzle(migrationPool), { migrationsFolder: './drizzle/migrations' });
