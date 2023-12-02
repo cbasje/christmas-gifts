@@ -22,7 +22,7 @@ export const PATCH = (async ({ request, locals }) => {
 	}
 
 	try {
-		const updatedItem = await db
+		const [updatedItem] = await db
 			.update(giftItems)
 			.set({
 				purchased,
@@ -42,7 +42,7 @@ export const PATCH = (async ({ request, locals }) => {
 				giftedById: giftItems.giftedById
 			});
 
-		return json(updatedItem.at(0));
+		return json(updatedItem);
 	} catch (e) {
 		console.error(e);
 		throw error(500);

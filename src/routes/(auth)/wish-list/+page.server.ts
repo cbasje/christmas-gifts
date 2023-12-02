@@ -112,7 +112,7 @@ export const actions = {
 				};
 			}
 
-			const newItem = await db
+			const [newItem] = await db
 				.insert(giftItems)
 				.values({
 					...data
@@ -121,7 +121,7 @@ export const actions = {
 					name: giftItems.name
 				});
 
-			return { form, newItem: newItem.at(0) };
+			return { form, newItem };
 		} catch (error) {
 			console.error(error);
 			return fail(500, { form });
@@ -154,7 +154,7 @@ export const actions = {
 				};
 			}
 
-			const editedItem = await db
+			const [editedItem] = await db
 				.update(giftItems)
 				.set({
 					...data,
@@ -165,7 +165,7 @@ export const actions = {
 					name: giftItems.name
 				});
 
-			return { form, editedItem: editedItem.at(0) };
+			return { form, editedItem };
 		} catch (error) {
 			console.error(error);
 			return fail(500, { form });

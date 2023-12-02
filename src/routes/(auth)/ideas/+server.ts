@@ -58,7 +58,7 @@ export const PATCH = (async ({ request, locals }) => {
 	}
 
 	try {
-		const updatedItem = await db
+		const [updatedItem] = await db
 			.update(giftItems)
 			.set({
 				purchased,
@@ -79,7 +79,7 @@ export const PATCH = (async ({ request, locals }) => {
 				giftedById: giftItems.giftedById
 			});
 
-		return json(updatedItem.at(0));
+		return json(updatedItem);
 	} catch (e) {
 		console.error(e);
 		throw error(500);
@@ -98,7 +98,7 @@ export const DELETE = (async ({ request, locals }) => {
 	}
 
 	try {
-		const removedItem = await db
+		const [removedItem] = await db
 			.delete(giftItems)
 
 			.where(eq(giftItems.id, id))
@@ -106,7 +106,7 @@ export const DELETE = (async ({ request, locals }) => {
 				id: giftItems.id
 			});
 
-		return json(removedItem.at(0));
+		return json(removedItem);
 	} catch (e) {
 		console.error(e);
 		throw error(500);

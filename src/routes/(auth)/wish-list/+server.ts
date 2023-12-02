@@ -16,12 +16,12 @@ export const DELETE = (async ({ request, locals }) => {
 	}
 
 	try {
-		const removedItem = await db
+		const [removedItem] = await db
 			.delete(giftItems)
 			.where(and(eq(giftItems.id, id), eq(giftItems.recipientId, session.user.id)))
 			.returning({ id: giftItems.id });
 
-		return json(removedItem.at(0));
+		return json(removedItem);
 	} catch (e) {
 		console.error(e);
 		throw error(500);
