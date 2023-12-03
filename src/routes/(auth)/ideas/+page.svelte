@@ -47,29 +47,32 @@
 {#if data.ideaList}
 	<TableContainer>
 		{#each Object.keys(data.ideaList) as id, index (id)}
-			{@const items = data.ideaList[id]}
-			{@const recipient = data.users.find((u) => u.id === id)}
-			<Table
-				showBgColor={false}
-				items={items.filter(
+			{@const items =
+				data.ideaList[id].filter(
 					(item) =>
 						item.giftedById === data.user.id ||
 						($showPartner &&
 							item.recipientId !== data.user.partnerId &&
 							item.giftedById === data.user.partnerId)
 				) ?? undefined}
-				allowPurchased
-				allowEdit
-				isCollapsable
-				hasSummary
-				pageData={data}
-			>
-				<svelte:fragment slot="title">
-					<Badge title={recipient?.name ?? ''} hue={recipient?.hue ?? 145} />
+			{@const recipient = data.users.find((u) => u.id === id)}
+			{#if items.length > 0}
+				<Table
+					showBgColor={false}
+					{items}
+					allowPurchased
+					allowEdit
+					isCollapsable
+					hasSummary
+					pageData={data}
+				>
+					<svelte:fragment slot="title">
+						<Badge title={recipient?.name ?? ''} hue={recipient?.hue ?? 145} />
 
-					<SizeChartPopup name={recipient?.name ?? ''} sizes={recipient?.sizes} />
-				</svelte:fragment>
-			</Table>
+						<SizeChartPopup name={recipient?.name ?? ''} sizes={recipient?.sizes} />
+					</svelte:fragment>
+				</Table>
+			{/if}
 		{/each}
 	</TableContainer>
 {/if}
