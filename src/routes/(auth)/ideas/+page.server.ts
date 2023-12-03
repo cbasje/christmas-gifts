@@ -56,9 +56,9 @@ export const load = (async ({ parent }) => {
 			and(
 				not(eq(giftItems.recipientId, user.id)),
 				sql<boolean>`${giftItems.groups} ? ${currentGroupId}`,
-				eq(giftItems.idea, true),
 				isNotNull(giftItems.giftedById),
 				or(
+					eq(giftItems.idea, true),
 					eq(giftItems.giftedById, user.id),
 					eq(giftItems.giftedById, user.partnerId ?? '')
 				)
