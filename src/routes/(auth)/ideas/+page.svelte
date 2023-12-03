@@ -53,9 +53,8 @@
 				showBgColor={false}
 				items={items.filter(
 					(item) =>
-						item.giftedById != null &&
-						(item.giftedById === data.user.id ||
-							($showPartner && item.giftedById === data.user.partnerId))
+						item.giftedById === data.user.id ||
+						($showPartner && item.giftedById === data.user.partnerId)
 				) ?? undefined}
 				allowPurchased
 				allowEdit

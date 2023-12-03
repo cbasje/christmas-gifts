@@ -43,7 +43,15 @@ export const load = (async ({ parent }) => {
 				groups: {
 					has: currentGroupId
 				},
-				OR: [{ idea: true }, { giftedById: user.id }]
+				giftedById: {
+					not: null
+				},
+				OR: [
+					{ idea: true },
+					{ giftedById: user.id },
+
+					user.partnerId ? { giftedById: user.partnerId } : undefined
+				]
 			},
 			select: {
 				id: true,
