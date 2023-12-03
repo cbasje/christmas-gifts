@@ -54,7 +54,9 @@
 				items={items.filter(
 					(item) =>
 						item.giftedById === data.user.id ||
-						($showPartner && item.giftedById === data.user.partnerId)
+						($showPartner &&
+							item.recipientId !== data.user.partnerId &&
+							item.giftedById === data.user.partnerId)
 				) ?? undefined}
 				allowPurchased
 				allowEdit
