@@ -44,14 +44,12 @@ export const load = (async ({ parent }) => {
 			pic: giftItems.pic,
 			purchased: giftItems.purchased,
 			recipientId: giftItems.recipientId,
-			recipientName: users.name,
 			giftedById: giftItems.giftedById,
 			idea: giftItems.idea,
 			ideaLinkId: giftItems.ideaLinkId,
 			groups: giftItems.groups
 		})
 		.from(giftItems)
-		.leftJoin(users, eq(users.id, giftItems.recipientId))
 		.where(
 			and(
 				not(eq(giftItems.recipientId, user.id)),
@@ -60,7 +58,7 @@ export const load = (async ({ parent }) => {
 				or(
 					eq(giftItems.idea, true),
 					eq(giftItems.giftedById, user.id),
-					eq(giftItems.giftedById, user.partnerId ?? '')
+					user.partnerId ? eq(giftItems.giftedById, user.partnerId ?? '') : undefined
 				)
 			)
 		)

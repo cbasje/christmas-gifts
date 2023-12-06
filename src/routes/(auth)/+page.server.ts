@@ -20,12 +20,9 @@ export const load = (async ({ parent }) => {
 			link: giftItems.link,
 			pic: giftItems.pic,
 			purchased: giftItems.purchased,
-			recipientId: giftItems.recipientId,
-			recipientName: users.name,
-			recipientHue: users.hue
+			recipientId: giftItems.recipientId
 		})
 		.from(giftItems)
-		.leftJoin(users, eq(users.id, giftItems.recipientId))
 		.where(
 			and(
 				not(eq(giftItems.recipientId, user.id)),
@@ -34,9 +31,19 @@ export const load = (async ({ parent }) => {
 			)
 		)
 		.orderBy(desc(users.hue));
+	const groupUsers = await db
+		.select({
+			id: users.id,
+			name: users.name,
+			hue: users.hue,
+			sizes: users.sizes
+		})
+		.from(users)
+		.where(and(not(eq(users.id, user.id)), sql<boolean>`${users.groups} ? ${currentGroupId}`))
+		.orderBy(asc(users.name));
 
 	return {
-		user,
+		users: groupUsers,
 		overviewList: groupBy(
 			overviewList.map((i) =>
 				i.pic
