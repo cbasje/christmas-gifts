@@ -22,21 +22,15 @@
 	<TableContainer>
 		{#each Object.keys(data.overviewList) as id (id)}
 			{@const items = data.overviewList[id]}
-			<Table
-				headerHue={items.at(0)?.recipient.hue ?? undefined}
-				{items}
-				allowPurchased
-				isCollapsable
-			>
+			{@const recipient = data.users.find((u) => u.id === id)}
+			<Table headerHue={recipient?.hue ?? undefined} {items} allowPurchased isCollapsable>
 				<svelte:fragment slot="title">
-					<Badge
-						title={items.at(0)?.recipient.name ?? ''}
-						hue={items.at(0)?.recipient.hue ?? 145}
-					/>
+					<Badge title={recipient?.name ?? ''} hue={recipient?.hue ?? 145} />
 
 					<SizeChartPopup
-						name={items.at(0)?.recipient.name ?? ''}
-						hue={items.at(0)?.recipient.hue ?? 145}
+						name={recipient?.name ?? ''}
+						hue={recipient?.hue ?? 145}
+						sizes={recipient?.sizes}
 					/>
 				</svelte:fragment>
 			</Table>

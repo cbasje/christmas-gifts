@@ -49,8 +49,7 @@ export const load = (async ({ parent }) => {
 				OR: [
 					{ idea: true },
 					{ giftedById: user.id },
-
-					user.partnerId ? { giftedById: user.partnerId } : undefined
+					...(user.partnerId ? [{ giftedById: user.partnerId }] : [])
 				]
 			},
 			select: {
