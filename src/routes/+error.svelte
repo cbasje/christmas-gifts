@@ -40,10 +40,10 @@
 		place-content: center;
 		height: 100vh;
 		height: 100dvh;
+	}
 
-		:global(header) {
-			width: min(40ch, 100vw);
-			padding-inline: 1rem;
-		}
+	:global(header) {
+		width: min(40ch, 100vw);
+		padding-inline: 1rem;
 	}
 </style>
