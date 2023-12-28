@@ -5,7 +5,7 @@ import { auth } from '$lib/server/lucia';
 import { getSupabaseURL } from '$lib/utils/file';
 import { groupBy } from '$lib/utils/group-by';
 import { fail, redirect } from '@sveltejs/kit';
-import { and, desc, eq, not, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, not, sql } from 'drizzle-orm';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load = (async ({ parent }) => {
@@ -23,11 +23,11 @@ export const load = (async ({ parent }) => {
 			recipientId: giftItems.recipientId
 		})
 		.from(giftItems)
+		.leftJoin(users, eq(giftItems.recipientId, users.id))
 		.where(
 			and(
 				not(eq(giftItems.recipientId, user.id)),
-				sql<boolean>`${giftItems.groups} ? ${currentGroupId}`,
-				eq(giftItems.idea, false)
+				sql<boolean>`${giftItems.groups} ? ${currentGroupId}`
 			)
 		)
 		.orderBy(desc(users.hue));

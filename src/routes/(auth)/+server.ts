@@ -1,7 +1,7 @@
 import { error, json, redirect } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { db } from '$lib/server/drizzle';
-import { giftItems } from '$lib/db/schema/gift-item';
+import { giftItems, ideas } from '$lib/db/schema/gift-item';
 import { eq } from 'drizzle-orm';
 
 export const PATCH = (async ({ request, locals }) => {
@@ -22,25 +22,34 @@ export const PATCH = (async ({ request, locals }) => {
 	}
 
 	try {
-		const [updatedItem] = await db
-			.update(giftItems)
-			.set({
-				purchased,
-				giftedById: purchased ? session.user.id : null,
-				updatedAt: new Date()
-				//   FIXME:
-				// ideaLink: {
-				// 	update: {
-				//         data: {}
-				//     }
-				// }
-			})
-			.where(eq(giftItems.id, id))
-			.returning({
-				id: giftItems.id,
-				purchased: giftItems.purchased,
-				giftedById: giftItems.giftedById
-			});
+		const updatedItem = await db.transaction(async (tx) => {
+			const [item] = await tx
+				.update(giftItems)
+				.set({
+					purchased,
+					giftedById: purchased ? session.user.id : null,
+					updatedAt: new Date()
+				})
+				.where(eq(giftItems.id, id))
+				.returning({
+					id: giftItems.id,
+					purchased: giftItems.purchased,
+					giftedById: giftItems.giftedById,
+					ideaId: giftItems.ideaId
+				});
+
+			if (item.ideaId) {
+				await tx
+					.update(ideas)
+					.set({
+						purchased,
+						updatedAt: new Date()
+					})
+					.where(eq(ideas.id, item.ideaId));
+			}
+
+			return item;
+		});
 
 		return json(updatedItem);
 	} catch (e) {

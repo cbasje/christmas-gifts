@@ -1,4 +1,4 @@
-import { giftItems } from '$lib/db/schema/gift-item';
+import { giftItems, ideas } from '$lib/db/schema/gift-item';
 import { users } from '$lib/db/schema/user';
 import { db } from '$lib/server/drizzle';
 import { error, json, redirect } from '@sveltejs/kit';
@@ -28,8 +28,7 @@ export const GET = (async ({ url, locals }) => {
 			.where(
 				and(
 					eq(giftItems.recipientId, recipientId),
-					sql<boolean>`${giftItems.groups} ? ${session.group}`,
-					eq(giftItems.idea, false)
+					sql<boolean>`${giftItems.groups} ? ${session.group}`
 				)
 			);
 
@@ -58,26 +57,34 @@ export const PATCH = (async ({ request, locals }) => {
 	}
 
 	try {
-		const [updatedItem] = await db
-			.update(giftItems)
-			.set({
-				purchased,
-				updatedAt: new Date()
-				// FIXME:
-				// ideaLink: hasIdeaLink
-				// 	? {
-				// 			update: {
-				// 				purchased
-				// 			}
-				// 	  }
-				// 	: undefined
-			})
-			.where(eq(giftItems.id, id))
-			.returning({
-				id: giftItems.id,
-				purchased: giftItems.purchased,
-				giftedById: giftItems.giftedById
-			});
+		const updatedItem = await db.transaction(async (tx) => {
+			const [idea] = await tx
+				.update(ideas)
+				.set({
+					purchased,
+					updatedAt: new Date()
+				})
+				.where(eq(ideas.id, id))
+				.returning({
+					id: ideas.id,
+					purchased: ideas.purchased,
+					giftedById: ideas.giftedById,
+					giftItemId: ideas.giftItemId
+				});
+
+			if (idea.giftItemId) {
+				await tx
+					.update(giftItems)
+					.set({
+						purchased,
+						giftedById: purchased ? session.user.id : null,
+						updatedAt: new Date()
+					})
+					.where(eq(giftItems.id, idea.giftItemId));
+			}
+
+			return idea;
+		});
 
 		return json(updatedItem);
 	} catch (e) {

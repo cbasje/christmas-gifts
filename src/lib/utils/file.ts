@@ -14,9 +14,6 @@ export const uploadFile = async (id: string, file: File) => {
 
 	const extension = file.name.split('.').at(-1);
 	const contentType = 'image/' + extension?.toLowerCase();
-	console.log('🎄 --------------------------------------🎄');
-	console.log('🎄 ~ uploading:', file.name, contentType);
-	console.log('🎄 --------------------------------------🎄');
 
 	// const filename = `${id}.${}`;
 	const { data, error } = await supabase.storage.from('files').upload(id, file, {

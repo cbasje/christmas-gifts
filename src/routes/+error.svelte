@@ -14,7 +14,12 @@
 </script>
 
 <div class="wrapper">
-	<Header padding={false}>
+	<Header
+		padding={false}
+		style={{
+			width: 'min(40ch, 100vw)'
+		}}
+	>
 		{#if $page.status === 403}
 			{$t('common.error.403')}
 		{:else}
@@ -40,10 +45,5 @@
 		place-content: center;
 		height: 100vh;
 		height: 100dvh;
-	}
-
-	:global(header) {
-		width: min(40ch, 100vw);
-		padding-inline: 1rem;
 	}
 </style>

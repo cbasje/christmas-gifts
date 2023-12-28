@@ -25,7 +25,6 @@ const schema = z.object({
 	link: z.string().url().nullish(),
 	pic: z.string().url().nullish(),
 	idea: z.boolean().default(false),
-	ideaLinkId: z.string().nullish(),
 	groups: z.enum(Groups).array()
 });
 
@@ -42,16 +41,14 @@ export const load = (async ({ parent }) => {
 			pic: giftItems.pic,
 			recipientId: giftItems.recipientId,
 			giftedById: giftItems.giftedById,
-			idea: giftItems.idea,
-			ideaLinkId: giftItems.ideaLinkId,
+			idea: sql<boolean>`FALSE`,
 			groups: giftItems.groups
 		})
 		.from(giftItems)
 		.where(
 			and(
 				eq(giftItems.recipientId, user.id),
-				sql<boolean>`${giftItems.groups} ? ${currentGroupId}`,
-				eq(giftItems.idea, false)
+				sql<boolean>`${giftItems.groups} ? ${currentGroupId}`
 			)
 		);
 
@@ -157,7 +154,14 @@ export const actions = {
 			const [editedItem] = await db
 				.update(giftItems)
 				.set({
-					...data,
+					name: form.data.name,
+					recipientId: form.data.recipientId,
+					price: form.data.price,
+					giftedById: form.data.giftedById,
+					link: form.data.link,
+					pic: form.data.pic,
+					notes: form.data.notes,
+					groups: form.data.groups,
 					updatedAt: new Date()
 				})
 				.where(eq(giftItems.id, form.data.id))

@@ -1,8 +1,8 @@
-import { giftItems } from '$lib/db/schema/gift-item';
-import { Groups, users } from '$lib/db/schema/user';
+import { ideas } from '$lib/db/schema/gift-item';
+import { users } from '$lib/db/schema/user';
 import { db } from '$lib/server/drizzle';
 import { auth } from '$lib/server/lucia';
-import { getSupabaseURL, isFile, uploadFile } from '$lib/utils/file';
+import { isFile, uploadFile } from '$lib/utils/file';
 import { groupBy } from '$lib/utils/group-by';
 import { fail, redirect } from '@sveltejs/kit';
 import { and, asc, desc, eq, isNotNull, not, or, sql } from 'drizzle-orm';
@@ -20,15 +20,11 @@ const schema = z.object({
 			message: 'Price must consist of numbers with currency codes.'
 		})
 		.nullish(),
-	notes: z.string().nullish(),
 	recipientId: z.string(),
 	giftedById: z.string().nullish(),
 	link: z.string().url().nullish(),
-	pic: z.string().url().nullish(),
-	// purchased: z.boolean(),
 	idea: z.boolean().default(true),
-	ideaLinkId: z.string().nullish(),
-	groups: z.enum(Groups).array()
+	giftItemId: z.string().nullish()
 });
 
 export const load = (async ({ parent }) => {
@@ -36,29 +32,25 @@ export const load = (async ({ parent }) => {
 
 	const ideaList = await db
 		.select({
-			id: giftItems.id,
-			name: giftItems.name,
-			price: giftItems.price,
-			notes: giftItems.notes,
-			link: giftItems.link,
-			pic: giftItems.pic,
-			purchased: giftItems.purchased,
-			recipientId: giftItems.recipientId,
-			giftedById: giftItems.giftedById,
-			idea: giftItems.idea,
-			ideaLinkId: giftItems.ideaLinkId,
-			groups: giftItems.groups
+			id: ideas.id,
+			name: ideas.name,
+			price: ideas.price,
+			recipientId: ideas.recipientId,
+			giftedById: ideas.giftedById,
+			link: ideas.link,
+			purchased: ideas.purchased,
+			giftItemId: ideas.giftItemId,
+			idea: sql<boolean>`TRUE`
 		})
-		.from(giftItems)
+		.from(ideas)
+		.leftJoin(users, eq(ideas.recipientId, users.id))
 		.where(
 			and(
-				not(eq(giftItems.recipientId, user.id)),
-				sql<boolean>`${giftItems.groups} ? ${currentGroupId}`,
-				isNotNull(giftItems.giftedById),
+				not(eq(ideas.recipientId, user.id)),
+				isNotNull(ideas.giftedById),
 				or(
-					eq(giftItems.idea, true),
-					eq(giftItems.giftedById, user.id),
-					user.partnerId ? eq(giftItems.giftedById, user.partnerId ?? '') : undefined
+					eq(ideas.giftedById, user.id),
+					user.partnerId ? eq(ideas.giftedById, user.partnerId ?? '') : undefined
 				)
 			)
 		)
@@ -76,8 +68,7 @@ export const load = (async ({ parent }) => {
 
 	const formData = await superValidate(
 		{
-			giftedById: user.id,
-			groups: [currentGroupId]
+			giftedById: user.id
 		},
 		schema
 	);
@@ -86,17 +77,7 @@ export const load = (async ({ parent }) => {
 		formData,
 		currentUserGroups: user.groups,
 		users: groupUsers,
-		ideaList: groupBy(
-			ideaList.map((i) =>
-				i.pic
-					? {
-							...i,
-							pic: getSupabaseURL(i.pic)
-					  }
-					: i
-			),
-			'recipientId'
-		)
+		ideaList: groupBy(ideaList, 'recipientId')
 	};
 }) satisfies PageServerLoad;
 
@@ -136,12 +117,12 @@ export const actions = {
 			}
 
 			const [newItem] = await db
-				.insert(giftItems)
+				.insert(ideas)
 				.values({
 					...data
 				})
 				.returning({
-					name: giftItems.name
+					name: ideas.name
 				});
 
 			return { form, newItem };
@@ -163,29 +144,20 @@ export const actions = {
 		}
 
 		try {
-			let data: typeof form.data;
-			const file = isFile(formData.get('pic'));
-			if (file) {
-				const pic = await uploadFile(form.data.id, file);
-				data = {
-					...form.data,
-					pic: pic.toString()
-				};
-			} else {
-				data = {
-					...form.data
-				};
-			}
-
 			const [editedItem] = await db
-				.update(giftItems)
+				.update(ideas)
 				.set({
-					...data,
+					name: form.data.name,
+					recipientId: form.data.recipientId,
+					price: form.data.price,
+					giftedById: form.data.giftedById,
+					link: form.data.link,
+					giftItemId: form.data.giftItemId,
 					updatedAt: new Date()
 				})
-				.where(eq(giftItems.id, form.data.id))
+				.where(eq(ideas.id, form.data.id))
 				.returning({
-					name: giftItems.name
+					name: ideas.name
 				});
 
 			return { form, editedItem };
