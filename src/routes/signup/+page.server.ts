@@ -8,8 +8,8 @@ import type { Actions, PageServerLoad } from './$types';
 
 // TODO: drizzle-zod
 const schema = z.object({
-	username: z.string().nonempty().max(255),
-	password: z.string().nonempty().min(6).max(255)
+	username: z.string().min(1).max(255),
+	password: z.string().min(6).max(255)
 });
 
 export const load = (async ({ locals }) => {
