@@ -55,6 +55,7 @@ export const actions = {
 					hashedPassword,
 					name: capitaliseString(form.data.username),
 					partnerId: null,
+					groups: ['HAUGEN', 'BENJAMINS'],
 					sizes: { simple: {}, advanced: {} },
 					hue: 145,
 					updatedAt: new Date()
