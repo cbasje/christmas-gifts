@@ -1,12 +1,5 @@
-import { drizzle } from 'drizzle-orm/node-postgres';
-import postgres from 'pg';
+import { neon } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/neon-http';
 
-export const connectionString = process.env.DATABASE_URL ?? '';
-
-// Disable prefetch as it is not supported for "Transaction" pool mode
-export const pool = new postgres.Pool({
-	connectionString
-});
-export const db = drizzle(pool);
-// export const queryClient = postgres(connectionString, { prepare: false });
-// export const db = drizzle(queryClient);
+const sql = neon(process.env.DATABASE_URL!);
+export const db = drizzle(sql);
