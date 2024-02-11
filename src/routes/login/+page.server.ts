@@ -43,7 +43,7 @@ export const load = (async ({ locals, url, cookies }) => {
 		}
 	}
 
-	const form = superValidate(schema);
+	const form = await superValidate(schema);
 
 	return {
 		form

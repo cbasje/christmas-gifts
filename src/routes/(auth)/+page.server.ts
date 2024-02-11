@@ -24,7 +24,7 @@ export const load = (async ({ parent }) => {
 		.leftJoin(users, eq(giftItems.recipientId, users.id))
 		.where(
 			and(
-				not(eq(giftItems.recipientId, user.id)),
+				not(eq(giftItems.recipientId, user?.id ?? '')),
 				sql<boolean>`${giftItems.groups} ? ${currentGroupId}`
 			)
 		)
@@ -37,7 +37,12 @@ export const load = (async ({ parent }) => {
 			sizes: users.sizes
 		})
 		.from(users)
-		.where(and(not(eq(users.id, user.id)), sql<boolean>`${users.groups} ? ${currentGroupId}`))
+		.where(
+			and(
+				not(eq(users.id, user?.id ?? '')),
+				sql<boolean>`${users.groups} ? ${currentGroupId}`
+			)
+		)
 		.orderBy(asc(users.name));
 
 	return {
@@ -48,7 +53,7 @@ export const load = (async ({ parent }) => {
 					? {
 							...i,
 							pic: getSupabaseURL(i.pic)
-					  }
+						}
 					: i
 			),
 			'recipientId'

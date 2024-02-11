@@ -1,6 +1,6 @@
 import { auth } from '$lib/server/lucia';
 import { defaultLocale, locales } from '$lib/translations';
-import type { Handle } from '@sveltejs/kit';
+import { redirect, type Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 
 const lang = (async ({ event, resolve }) => {
@@ -30,7 +30,7 @@ export const authorization = (async ({ event, resolve }) => {
 	if (!sessionId) {
 		event.locals.user = null;
 		event.locals.session = null;
-		return resolve(event);
+		return redirect(302, '/login');
 	}
 
 	const { session, user } = await auth.validateSession(sessionId);

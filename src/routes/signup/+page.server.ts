@@ -19,7 +19,7 @@ const schema = z.object({
 export const load = (async ({ locals }) => {
 	if (locals.session) redirect(302, '/');
 
-	const form = superValidate(schema);
+	const form = await superValidate(schema);
 
 	return {
 		form

@@ -50,8 +50,8 @@
 			{@const items =
 				data.ideaList[id].filter(
 					(item) =>
-						item.giftedById === data.user.id ||
-						($showPartner && item.giftedById === data.user.partnerId)
+						item.giftedById === data.user?.id ||
+						($showPartner && item.giftedById === data.user?.partnerId)
 				) ?? undefined}
 			{@const recipient = data.users.find((u) => u.id === id)}
 			<Table
