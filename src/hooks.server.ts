@@ -27,7 +27,7 @@ const lang = (async ({ event, resolve }) => {
 
 function shouldProtectRoute(routeId: string | null) {
 	// The group '(auth)' should be protected
-	return routeId && routeId?.startsWith('/(auth)/') === true;
+	return !routeId || routeId?.startsWith('/(auth)') === true;
 }
 
 export const authorization = (async ({ event, resolve }) => {
