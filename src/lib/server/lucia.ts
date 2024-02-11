@@ -3,9 +3,6 @@ import { users, type AuthSession, type User, authSessions } from '$lib/db/schema
 import { DrizzlePostgreSQLAdapter } from '@lucia-auth/adapter-drizzle';
 import { Lucia, TimeSpan } from 'lucia';
 import { db } from './drizzle';
-import { webcrypto } from 'node:crypto';
-
-globalThis.crypto = webcrypto as Crypto;
 
 const adapter = new DrizzlePostgreSQLAdapter(db, authSessions, users);
 
