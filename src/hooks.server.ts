@@ -25,12 +25,19 @@ const lang = (async ({ event, resolve }) => {
 	});
 }) satisfies Handle;
 
+function shouldProtectRoute(routeId: string | null) {
+	// The group '(auth)' should be protected
+	return routeId && routeId?.startsWith('/(auth)/') === true;
+}
+
 export const authorization = (async ({ event, resolve }) => {
 	const sessionId = event.cookies.get(auth.sessionCookieName);
 	if (!sessionId) {
 		event.locals.user = null;
 		event.locals.session = null;
-		return redirect(302, '/login');
+
+		if (shouldProtectRoute(event.route.id)) redirect(302, '/login');
+		else return resolve(event);
 	}
 
 	const { session, user } = await auth.validateSession(sessionId);
@@ -48,6 +55,7 @@ export const authorization = (async ({ event, resolve }) => {
 			...sessionCookie.attributes
 		});
 	}
+
 	event.locals.user = user;
 	event.locals.session = session;
 	return resolve(event);
