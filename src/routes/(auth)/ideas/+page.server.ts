@@ -45,11 +45,11 @@ export const load = (async ({ parent }) => {
 		.leftJoin(users, eq(ideas.recipientId, users.id))
 		.where(
 			and(
-				not(eq(ideas.recipientId, user?.id ?? '')),
+				not(eq(ideas.recipientId, user.id ?? '')),
 				isNotNull(ideas.giftedById),
 				or(
-					eq(ideas.giftedById, user?.id ?? ''),
-					user?.partnerId ? eq(ideas.giftedById, user?.partnerId ?? '') : undefined
+					eq(ideas.giftedById, user.id ?? ''),
+					user.partnerId ? eq(ideas.giftedById, user.partnerId ?? '') : undefined
 				)
 			)
 		)
@@ -63,23 +63,20 @@ export const load = (async ({ parent }) => {
 		})
 		.from(users)
 		.where(
-			and(
-				not(eq(users.id, user?.id ?? '')),
-				sql<boolean>`${users.groups} ? ${currentGroupId}`
-			)
+			and(not(eq(users.id, user.id ?? '')), sql<boolean>`${users.groups} ? ${currentGroupId}`)
 		)
 		.orderBy(asc(users.name));
 
 	const formData = await superValidate(
 		{
-			giftedById: user?.id
+			giftedById: user.id
 		},
 		schema
 	);
 
 	return {
 		formData,
-		currentUserGroups: user?.groups,
+		currentUserGroups: user.groups,
 		users: groupUsers,
 		ideaList: groupBy(ideaList, 'recipientId')
 	};

@@ -24,8 +24,14 @@ export const load = (async ({ locals, parent }) => {
 			end: maintenanceMode.end ?? undefined
 		});
 
+	const { user, session } = locals;
+	if (!user || !session)
+		error(401, {
+			message: 'Something is wrong!'
+		});
+
 	return {
-		user: locals.user,
-		currentGroupId: locals.session?.group ?? locals.user?.groups?.at(0)
+		user,
+		currentGroupId: session.group ?? user.groups?.at(0)
 	};
 }) satisfies LayoutServerLoad;

@@ -46,14 +46,14 @@ export const load = (async ({ parent }) => {
 		.from(giftItems)
 		.where(
 			and(
-				eq(giftItems.recipientId, user?.id ?? ''),
+				eq(giftItems.recipientId, user.id ?? ''),
 				sql<boolean>`${giftItems.groups} ? ${currentGroupId}`
 			)
 		);
 
 	const formData = await superValidate(
 		{
-			recipientId: user?.id,
+			recipientId: user.id,
 			groups: currentGroupId ? [currentGroupId] : []
 		},
 		schema
@@ -61,13 +61,13 @@ export const load = (async ({ parent }) => {
 
 	return {
 		formData,
-		currentUserGroups: user?.groups,
+		currentUserGroups: user.groups,
 		wishList: wishList.map((i) =>
 			i.pic
 				? {
 						...i,
 						pic: getSupabaseURL(i.pic)
-				  }
+					}
 				: i
 		)
 	};

@@ -126,7 +126,7 @@
 							class="text-md flex rounded-full font-medium focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-white dark:focus:ring-offset-gray-800"
 						>
 							<span class="sr-only">Open user menu</span>
-							<Badge title={user?.name ?? ''} hue={user?.hue} />
+							<Badge title={user.name ?? ''} hue={user.hue} />
 						</button>
 					</div>
 					<ul
@@ -134,7 +134,7 @@
 						transition:fly={{ duration: 150, y: -10 }}
 						class="absolute right-0 flex w-64 origin-top-right flex-col gap-1 rounded-md bg-white p-2 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-gray-800"
 					>
-						{#if user?.groups && user?.groups.length > 1}
+						{#if user.groups && user.groups.length > 1}
 							<li
 								use:melt={$menuItem}
 								class="mb-2 block px-1 text-sm text-gray-700 dark:text-gray-200"
