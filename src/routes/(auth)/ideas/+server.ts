@@ -8,12 +8,12 @@ import type { LinkItem } from '$lib/types';
 
 export const GET = (async ({ url, locals }) => {
 	const session = await locals.auth.validate();
-	if (!session) throw redirect(302, '/login');
+	if (!session) redirect(302, '/login');
 
 	const recipientId = url.searchParams.get('recipientId');
 
 	if (!recipientId) {
-		throw error(400);
+		error(400);
 	}
 
 	try {
@@ -35,13 +35,13 @@ export const GET = (async ({ url, locals }) => {
 		return json(linkItems satisfies LinkItem[]);
 	} catch (e) {
 		console.error(e);
-		throw error(500);
+		error(500);
 	}
 }) satisfies RequestHandler;
 
 export const PATCH = (async ({ request, locals }) => {
 	const session = await locals.auth.validate();
-	if (!session) throw redirect(302, '/login');
+	if (!session) redirect(302, '/login');
 
 	const form = await request.formData();
 	const id = form.get('id');
@@ -53,7 +53,7 @@ export const PATCH = (async ({ request, locals }) => {
 		purchased === undefined ||
 		typeof purchased !== 'boolean'
 	) {
-		throw error(400);
+		error(400);
 	}
 
 	try {
@@ -89,19 +89,19 @@ export const PATCH = (async ({ request, locals }) => {
 		return json(updatedItem);
 	} catch (e) {
 		console.error(e);
-		throw error(500);
+		error(500);
 	}
 }) satisfies RequestHandler;
 
 export const DELETE = (async ({ request, locals }) => {
 	const session = await locals.auth.validate();
-	if (!session) throw redirect(302, '/login');
+	if (!session) redirect(302, '/login');
 
 	const form = await request.formData();
 	const id = form.get('id');
 
 	if (id === undefined || typeof id !== 'string') {
-		throw error(400);
+		error(400);
 	}
 
 	try {
@@ -116,6 +116,6 @@ export const DELETE = (async ({ request, locals }) => {
 		return json(removedItem);
 	} catch (e) {
 		console.error(e);
-		throw error(500);
+		error(500);
 	}
 }) satisfies RequestHandler;

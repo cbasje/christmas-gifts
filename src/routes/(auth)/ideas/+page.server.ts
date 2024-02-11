@@ -87,11 +87,11 @@ export const actions = {
 		if (!session) return fail(401);
 		await auth.invalidateSession(session.sessionId); // invalidate session
 		locals.auth.setSession(null); // remove cookie
-		throw redirect(302, '/login'); // redirect to login page
+		redirect(302, '/login'); // redirect to login page
 	},
 	newItem: async ({ request, locals }) => {
 		const session = await locals.auth.validate();
-		if (!session) throw redirect(302, '/login');
+		if (!session) redirect(302, '/login');
 
 		const formData = await request.formData();
 		const form = await superValidate(formData, schema);
@@ -133,7 +133,7 @@ export const actions = {
 	},
 	editItem: async ({ request, locals }) => {
 		const session = await locals.auth.validate();
-		if (!session) throw redirect(302, '/login');
+		if (!session) redirect(302, '/login');
 
 		const formData = await request.formData();
 		const form = await superValidate(formData, schema);

@@ -6,7 +6,7 @@ import { eq } from 'drizzle-orm';
 
 export const PATCH = (async ({ request, locals }) => {
 	const session = await locals.auth.validate();
-	if (!session) throw redirect(302, '/login');
+	if (!session) redirect(302, '/login');
 
 	const form = await request.formData();
 	const id = form.get('id');
@@ -18,7 +18,7 @@ export const PATCH = (async ({ request, locals }) => {
 		purchased === undefined ||
 		typeof purchased !== 'boolean'
 	) {
-		throw error(400);
+		error(400);
 	}
 
 	try {
@@ -54,6 +54,6 @@ export const PATCH = (async ({ request, locals }) => {
 		return json(updatedItem);
 	} catch (e) {
 		console.error(e);
-		throw error(500);
+		error(500);
 	}
 }) satisfies RequestHandler;

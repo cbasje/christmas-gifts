@@ -9,7 +9,7 @@ import { eq } from 'drizzle-orm';
 export const load = (async ({ parent }) => {
 	const { user } = await parent();
 
-	if (!user) throw error(404, 'Not found');
+	if (!user) error(404, 'Not found');
 	const form = await superValidate(user.sizes as Record<string, string> | null, UserSizesSchema);
 
 	return {
@@ -21,7 +21,7 @@ export const load = (async ({ parent }) => {
 export const actions = {
 	updateSizes: async ({ locals, request }) => {
 		const session = await locals.auth.validate();
-		if (!session) throw redirect(302, '/login');
+		if (!session) redirect(302, '/login');
 
 		const form = await superValidate(request, UserSizesSchema);
 
@@ -50,6 +50,6 @@ export const actions = {
 		if (!session) return fail(401);
 		await auth.invalidateSession(session.sessionId); // invalidate session
 		locals.auth.setSession(null); // remove cookie
-		throw redirect(302, '/login'); // redirect to login page
+		redirect(302, '/login'); // redirect to login page
 	}
 } satisfies Actions;

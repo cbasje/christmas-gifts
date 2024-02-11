@@ -26,11 +26,11 @@ export const load = (async ({ locals, url, cookies }) => {
 			locals.auth.setSession(session); // set session cookie
 		} catch (e) {
 			console.error(e);
-			throw error(500);
+			error(500);
 		}
 
 		// redirect to /
-		throw redirect(302, '/');
+		redirect(302, '/');
 	}
 
 	const form = superValidate(schema);
@@ -82,6 +82,6 @@ export const actions = {
 			});
 		}
 		// redirect to /
-		throw redirect(302, '/');
+		redirect(302, '/');
 	}
 } satisfies Actions;

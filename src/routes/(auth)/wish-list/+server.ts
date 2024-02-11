@@ -6,13 +6,13 @@ import { and, eq } from 'drizzle-orm';
 
 export const DELETE = (async ({ request, locals }) => {
 	const session = await locals.auth.validate();
-	if (!session) throw redirect(302, '/login');
+	if (!session) redirect(302, '/login');
 
 	const form = await request.formData();
 	const id = form.get('id');
 
 	if (id === undefined || typeof id !== 'string') {
-		throw error(400);
+		error(400);
 	}
 
 	try {
@@ -24,6 +24,6 @@ export const DELETE = (async ({ request, locals }) => {
 		return json(removedItem);
 	} catch (e) {
 		console.error(e);
-		throw error(500);
+		error(500);
 	}
 }) satisfies RequestHandler;

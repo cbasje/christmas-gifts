@@ -16,7 +16,7 @@ const lang = (async ({ event, resolve }) => {
 		);
 
 		currentLocale = [...localeSet][0];
-		event.cookies.set('locale', currentLocale);
+		/* @migration task: add path argument */ event.cookies.set('locale', currentLocale);
 		console.log('🗣️', headerLangs, localeSet);
 	}
 

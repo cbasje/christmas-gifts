@@ -6,7 +6,7 @@ import type { LayoutServerLoad } from './$types';
 
 export const load = (async ({ locals, parent }) => {
 	const session = await locals.auth.validate();
-	if (!session) throw redirect(302, '/login');
+	if (!session) redirect(302, '/login');
 
 	const data = await parent();
 
@@ -22,10 +22,10 @@ export const load = (async ({ locals, parent }) => {
 		.limit(1);
 
 	if (maintenanceMode?.isOn)
-		throw error(403, {
-			message: maintenanceMode.reason ? maintenanceMode.reason[data.locale] : '',
-			end: maintenanceMode.end ?? undefined
-		});
+		error(403, {
+        			message: maintenanceMode.reason ? maintenanceMode.reason[data.locale] : '',
+        			end: maintenanceMode.end ?? undefined
+        		});
 
 	return {
 		user: session.user,
