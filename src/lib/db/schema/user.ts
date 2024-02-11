@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm';
-import { bigint, integer, jsonb, pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { integer, jsonb, pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 import { giftItems } from './gift-item';
@@ -32,6 +32,9 @@ export const users = pgTable('users', {
 	groups: jsonb('groups').$type<Group[]>(),
 	hue: integer('hue').default(145).notNull(),
 	sizes: jsonb('sizes').$type<UserSizes>(),
+	hashedPassword: varchar('hashed_password', {
+		length: 255
+	}),
 	createdAt: timestamp('created_at').defaultNow(),
 	updatedAt: timestamp('updated_at').defaultNow()
 });
@@ -43,38 +46,27 @@ export const usersRelations = relations(users, ({ one, many }) => ({
 	}),
 	items: many(giftItems, { relationName: 'ReceivingItems' }),
 	giftingItems: many(giftItems, { relationName: 'GiftingItems' }),
-	authSession: many(sessions),
-	key: many(keys)
+	authSession: many(authSessions)
 }));
 
 export const selectUserSchema = createSelectSchema(users);
-export type SelectUser = typeof users.$inferSelect;
+export type User = typeof users.$inferSelect;
 
 export const insertUserSchema = createInsertSchema(users, {
 	hue: (schema) => schema.id.min(0).max(360)
 });
-export type InsertUser = typeof users.$inferInsert;
+export type NewUser = typeof users.$inferInsert;
 
-export const sessions = pgTable('sessions', {
+export const authSessions = pgTable('sessions', {
 	id: text('id').primaryKey().notNull(),
 	userId: text('user_id')
 		.notNull()
 		.references(() => users.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
-	activeExpires: bigint('active_expires', {
-		mode: 'number'
-	}).notNull(),
-	idleExpires: bigint('idle_expires', {
-		mode: 'number'
+	expiresAt: timestamp('expires_at', {
+		withTimezone: true,
+		mode: 'date'
 	}).notNull(),
 	group: text('group').$type<Group>()
 });
 
-export const keys = pgTable('keys', {
-	id: text('id').primaryKey().notNull(),
-	userId: text('user_id')
-		.notNull()
-		.references(() => users.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
-	hashedPassword: varchar('hashed_password', {
-		length: 255
-	})
-});
+export type AuthSession = typeof authSessions.$inferSelect;

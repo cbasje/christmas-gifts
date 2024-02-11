@@ -1,10 +1,9 @@
 import { ideas } from '$lib/db/schema/gift-item';
 import { users } from '$lib/db/schema/user';
 import { db } from '$lib/server/drizzle';
-import { auth } from '$lib/server/lucia';
 import { isFile, uploadFile } from '$lib/utils/file';
 import { groupBy } from '$lib/utils/group-by';
-import { fail, redirect } from '@sveltejs/kit';
+import { fail } from '@sveltejs/kit';
 import { and, asc, desc, eq, isNotNull, not, or, sql } from 'drizzle-orm';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
@@ -46,11 +45,11 @@ export const load = (async ({ parent }) => {
 		.leftJoin(users, eq(ideas.recipientId, users.id))
 		.where(
 			and(
-				not(eq(ideas.recipientId, user.id)),
+				not(eq(ideas.recipientId, user?.id ?? '')),
 				isNotNull(ideas.giftedById),
 				or(
-					eq(ideas.giftedById, user.id),
-					user.partnerId ? eq(ideas.giftedById, user.partnerId ?? '') : undefined
+					eq(ideas.giftedById, user?.id ?? ''),
+					user?.partnerId ? eq(ideas.giftedById, user?.partnerId ?? '') : undefined
 				)
 			)
 		)
@@ -63,36 +62,31 @@ export const load = (async ({ parent }) => {
 			sizes: users.sizes
 		})
 		.from(users)
-		.where(and(not(eq(users.id, user.id)), sql<boolean>`${users.groups} ? ${currentGroupId}`))
+		.where(
+			and(
+				not(eq(users.id, user?.id ?? '')),
+				sql<boolean>`${users.groups} ? ${currentGroupId}`
+			)
+		)
 		.orderBy(asc(users.name));
 
 	const formData = await superValidate(
 		{
-			giftedById: user.id
+			giftedById: user?.id
 		},
 		schema
 	);
 
 	return {
 		formData,
-		currentUserGroups: user.groups,
+		currentUserGroups: user?.groups,
 		users: groupUsers,
 		ideaList: groupBy(ideaList, 'recipientId')
 	};
 }) satisfies PageServerLoad;
 
 export const actions = {
-	logout: async ({ locals }) => {
-		const session = await locals.auth.validate();
-		if (!session) return fail(401);
-		await auth.invalidateSession(session.sessionId); // invalidate session
-		locals.auth.setSession(null); // remove cookie
-		redirect(302, '/login'); // redirect to login page
-	},
-	newItem: async ({ request, locals }) => {
-		const session = await locals.auth.validate();
-		if (!session) redirect(302, '/login');
-
+	newItem: async ({ request }) => {
 		const formData = await request.formData();
 		const form = await superValidate(formData, schema);
 
@@ -131,10 +125,7 @@ export const actions = {
 			return fail(500, { form });
 		}
 	},
-	editItem: async ({ request, locals }) => {
-		const session = await locals.auth.validate();
-		if (!session) redirect(302, '/login');
-
+	editItem: async ({ request }) => {
 		const formData = await request.formData();
 		const form = await superValidate(formData, schema);
 

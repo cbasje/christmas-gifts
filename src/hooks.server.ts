@@ -16,7 +16,7 @@ const lang = (async ({ event, resolve }) => {
 		);
 
 		currentLocale = [...localeSet][0];
-		/* @migration task: add path argument */ event.cookies.set('locale', currentLocale);
+		event.cookies.set('locale', currentLocale, { path: '/' });
 		console.log('🗣️', headerLangs, localeSet);
 	}
 
@@ -26,9 +26,31 @@ const lang = (async ({ event, resolve }) => {
 }) satisfies Handle;
 
 export const authorization = (async ({ event, resolve }) => {
-	// we can pass `event` because we used the SvelteKit middleware
-	event.locals.auth = auth.handleRequest(event);
-	return await resolve(event);
+	const sessionId = event.cookies.get(auth.sessionCookieName);
+	if (!sessionId) {
+		event.locals.user = null;
+		event.locals.session = null;
+		return resolve(event);
+	}
+
+	const { session, user } = await auth.validateSession(sessionId);
+	if (session && session.fresh) {
+		const sessionCookie = auth.createSessionCookie(session.id);
+		event.cookies.set(sessionCookie.name, sessionCookie.value, {
+			path: '.',
+			...sessionCookie.attributes
+		});
+	}
+	if (!session) {
+		const sessionCookie = auth.createBlankSessionCookie();
+		event.cookies.set(sessionCookie.name, sessionCookie.value, {
+			path: '.',
+			...sessionCookie.attributes
+		});
+	}
+	event.locals.user = user;
+	event.locals.session = session;
+	return resolve(event);
 }) satisfies Handle;
 
 export const handle = sequence(authorization, lang);

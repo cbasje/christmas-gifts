@@ -1,10 +1,9 @@
 import { UserSizesSchema, users } from '$lib/db/schema/user';
-import { auth } from '$lib/server/lucia';
-import { error, fail, redirect } from '@sveltejs/kit';
+import { db } from '$lib/server/drizzle';
+import { error, fail } from '@sveltejs/kit';
+import { eq } from 'drizzle-orm';
 import { superValidate } from 'sveltekit-superforms/server';
 import type { Actions, PageServerLoad } from './$types';
-import { db } from '$lib/server/drizzle';
-import { eq } from 'drizzle-orm';
 
 export const load = (async ({ parent }) => {
 	const { user } = await parent();
@@ -20,9 +19,6 @@ export const load = (async ({ parent }) => {
 
 export const actions = {
 	updateSizes: async ({ locals, request }) => {
-		const session = await locals.auth.validate();
-		if (!session) redirect(302, '/login');
-
 		const form = await superValidate(request, UserSizesSchema);
 
 		// Convenient validation check:
@@ -37,19 +33,12 @@ export const actions = {
 					sizes: form.data,
 					updatedAt: new Date()
 				})
-				.where(eq(users.id, session.user.id));
+				.where(eq(users.id, locals.user?.id ?? ''));
 
 			return { form };
 		} catch (error) {
 			console.error(error);
 			return fail(500, { form });
 		}
-	},
-	logout: async ({ locals }) => {
-		const session = await locals.auth.validate();
-		if (!session) return fail(401);
-		await auth.invalidateSession(session.sessionId); // invalidate session
-		locals.auth.setSession(null); // remove cookie
-		redirect(302, '/login'); // redirect to login page
 	}
 } satisfies Actions;

@@ -1,13 +1,10 @@
-import { error, json, redirect } from '@sveltejs/kit';
-import type { RequestHandler } from './$types';
-import { db } from '$lib/server/drizzle';
 import { giftItems } from '$lib/db/schema/gift-item';
+import { db } from '$lib/server/drizzle';
+import { error, json } from '@sveltejs/kit';
 import { and, eq } from 'drizzle-orm';
+import type { RequestHandler } from './$types';
 
 export const DELETE = (async ({ request, locals }) => {
-	const session = await locals.auth.validate();
-	if (!session) redirect(302, '/login');
-
 	const form = await request.formData();
 	const id = form.get('id');
 
@@ -18,7 +15,7 @@ export const DELETE = (async ({ request, locals }) => {
 	try {
 		const [removedItem] = await db
 			.delete(giftItems)
-			.where(and(eq(giftItems.id, id), eq(giftItems.recipientId, session.user.id)))
+			.where(and(eq(giftItems.id, id), eq(giftItems.recipientId, locals.user?.id ?? '')))
 			.returning({ id: giftItems.id });
 
 		return json(removedItem);

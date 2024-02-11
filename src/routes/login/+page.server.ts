@@ -1,36 +1,46 @@
 import { auth } from '$lib/server/lucia';
 import { error, fail, redirect } from '@sveltejs/kit';
-import { LuciaError } from 'lucia';
+import { Argon2id } from 'oslo/password';
 import { setError, superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import type { Actions, PageServerLoad } from './$types';
+import { users } from '$lib/db/schema/user';
+import { db } from '$lib/server/drizzle';
+import { eq } from 'drizzle-orm';
 
 // TODO: drizzle-zod
 const schema = z.object({
-	username: z.string().min(1).max(255),
+	username: z.string().min(1).max(255).toLowerCase(),
 	password: z.string().min(6).max(255)
 });
 
 export const load = (async ({ locals, url, cookies }) => {
-	const userId = url.searchParams.get('user_id') ?? cookies.get('user');
+	if (locals.user) redirect(302, '/');
+
+	const userId = url.searchParams.get('user_id');
 	if (userId) {
 		try {
-			const user = await auth.getUser(userId);
-			const session = await auth.createSession({
-				userId: userId,
-				attributes: {
-					group: user.groups?.at(0) ?? 'HAUGEN'
-				}
+			// find user by username
+			const [existingUser] = await db
+				.select()
+				.from(users)
+				.where(eq(users.id, userId))
+				.limit(1);
+
+			const session = await auth.createSession(existingUser.id, {
+				group: existingUser.groups?.at(0) ?? 'HAUGEN'
+			});
+			const sessionCookie = auth.createSessionCookie(session.id);
+			cookies.set(sessionCookie.name, sessionCookie.value, {
+				path: '.',
+				...sessionCookie.attributes
 			});
 
-			locals.auth.setSession(session); // set session cookie
+			// redirect to /
+			redirect(302, '/');
 		} catch (e) {
 			console.error(e);
-			error(500);
 		}
-
-		// redirect to /
-		redirect(302, '/');
 	}
 
 	const form = superValidate(schema);
@@ -41,7 +51,7 @@ export const load = (async ({ locals, url, cookies }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({ request, locals }) => {
+	default: async ({ request, cookies }) => {
 		const form = await superValidate(request, schema);
 
 		if (!form.valid) {
@@ -49,39 +59,40 @@ export const actions = {
 		}
 
 		try {
-			// find user by key
-			// and validate password
-			const key = await auth.useKey(
-				'username',
-				form.data.username.toLowerCase(),
+			// find user by username
+			const [existingUser] = await db
+				.select()
+				.from(users)
+				.where(eq(users.username, form.data.username))
+				.limit(1);
+
+			// validate password
+			const isValidPassword = await new Argon2id().verify(
+				existingUser?.hashedPassword ?? '',
 				form.data.password
 			);
 
-			const user = await auth.getUser(key.userId);
-			const session = await auth.createSession({
-				userId: key.userId,
-				attributes: {
-					group: user.groups?.at(0) ?? 'HAUGEN'
-				}
-			});
+			if (!existingUser) {
+				return setError(form, 'username', 'Incorrect username');
+			}
+			if (!isValidPassword) {
+				return setError(form, 'password', 'Incorrect password');
+			}
 
-			// Set auth cookie
-			locals.auth.setSession(session);
-		} catch (e) {
-			console.error(e);
-			if (e instanceof LuciaError && e.message === 'AUTH_INVALID_KEY_ID') {
-				// user does not exist
-				return setError(form, 'username', 'Incorrect username.');
-			}
-			if (e instanceof LuciaError && e.message === 'AUTH_INVALID_PASSWORD') {
-				// invalid password
-				return setError(form, 'password', 'Incorrect password.');
-			}
-			return fail(500, {
-				form
+			const session = await auth.createSession(existingUser.id, {
+				group: existingUser.groups?.at(0) ?? 'HAUGEN'
 			});
+			const sessionCookie = auth.createSessionCookie(session.id);
+			cookies.set(sessionCookie.name, sessionCookie.value, {
+				path: '.',
+				...sessionCookie.attributes
+			});
+		} catch (error_) {
+			const { message } = error_ instanceof Error ? error_ : { message: 'Internal error!' };
+			console.error(message);
+			return setError(form, 'username', message);
 		}
-		// redirect to /
+
 		redirect(302, '/');
 	}
 } satisfies Actions;

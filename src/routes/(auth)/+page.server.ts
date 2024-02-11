@@ -1,12 +1,10 @@
 import { giftItems } from '$lib/db/schema/gift-item';
 import { users } from '$lib/db/schema/user';
 import { db } from '$lib/server/drizzle';
-import { auth } from '$lib/server/lucia';
 import { getSupabaseURL } from '$lib/utils/file';
 import { groupBy } from '$lib/utils/group-by';
-import { fail, redirect } from '@sveltejs/kit';
 import { and, asc, desc, eq, not, sql } from 'drizzle-orm';
-import type { Actions, PageServerLoad } from './$types';
+import type { PageServerLoad } from './$types';
 
 export const load = (async ({ parent }) => {
 	const { user, currentGroupId } = await parent();
@@ -57,13 +55,3 @@ export const load = (async ({ parent }) => {
 		)
 	};
 }) satisfies PageServerLoad;
-
-export const actions = {
-	logout: async ({ locals }) => {
-		const session = await locals.auth.validate();
-		if (!session) return fail(401);
-		await auth.invalidateSession(session.sessionId); // invalidate session
-		locals.auth.setSession(null); // remove cookie
-		redirect(302, '/login'); // redirect to login page
-	}
-} satisfies Actions;

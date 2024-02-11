@@ -1,13 +1,10 @@
-import { error, json, redirect } from '@sveltejs/kit';
-import type { RequestHandler } from './$types';
-import { db } from '$lib/server/drizzle';
 import { giftItems, ideas } from '$lib/db/schema/gift-item';
+import { db } from '$lib/server/drizzle';
+import { error, json } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
+import type { RequestHandler } from './$types';
 
 export const PATCH = (async ({ request, locals }) => {
-	const session = await locals.auth.validate();
-	if (!session) redirect(302, '/login');
-
 	const form = await request.formData();
 	const id = form.get('id');
 	const purchased = form.get('purchased') === 'true';
@@ -27,7 +24,7 @@ export const PATCH = (async ({ request, locals }) => {
 				.update(giftItems)
 				.set({
 					purchased,
-					giftedById: purchased ? session.user.id : null,
+					giftedById: purchased ? locals.user?.id : null,
 					updatedAt: new Date()
 				})
 				.where(eq(giftItems.id, id))

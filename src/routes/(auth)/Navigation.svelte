@@ -175,7 +175,7 @@
 							</li>
 						{/each}
 						<li use:melt={$menuItem}>
-							<form method="post" action="?/logout" use:enhance>
+							<form method="post" action="/logout" use:enhance>
 								<button
 									type="submit"
 									class="flex w-full cursor-pointer flex-row-reverse items-center justify-between rounded-md px-3 py-2 text-left text-sm font-medium text-danger-800 hover:bg-gray-300 hover:text-danger-900 dark:text-danger-300 dark:hover:bg-gray-700 dark:hover:text-danger-100"

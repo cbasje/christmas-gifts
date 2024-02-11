@@ -1,20 +1,23 @@
+import { users } from '$lib/db/schema/user';
+import { db } from '$lib/server/drizzle';
 import { auth } from '$lib/server/lucia';
 import { capitaliseString } from '$lib/utils/capitalise';
 import { fail, redirect } from '@sveltejs/kit';
-import { LuciaError } from 'lucia';
+import { eq } from 'drizzle-orm';
+import { generateId } from 'lucia';
+import { Argon2id } from 'oslo/password';
 import { setError, superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import type { Actions, PageServerLoad } from './$types';
 
 // TODO: drizzle-zod
 const schema = z.object({
-	username: z.string().min(1).max(255),
+	username: z.string().min(1).max(255).toLowerCase(),
 	password: z.string().min(6).max(255)
 });
 
 export const load = (async ({ locals }) => {
-	const session = await locals.auth.validate();
-	if (session) redirect(302, '/');
+	if (locals.session) redirect(302, '/');
 
 	const form = superValidate(schema);
 
@@ -24,7 +27,7 @@ export const load = (async ({ locals }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({ request }) => {
+	default: async ({ request, cookies }) => {
 		const form = await superValidate(request, schema);
 
 		if (!form.valid) {
@@ -32,31 +35,46 @@ export const actions = {
 		}
 
 		try {
-			await auth.createUser({
-				key: {
-					providerId: 'username', // auth method
-					providerUserId: form.data.username.toLowerCase(), // unique id when using "username" auth method
-					password: form.data.password // hashed by Lucia
-				},
-				attributes: {
-					name: capitaliseString(form.data.username),
-					partner_id: null,
-					user_name: form.data.username,
-					sizes: { simple: {}, advanced: {} },
-					hue: 145
-				}
-			});
-		} catch (e) {
-			console.error(e);
-			if (e instanceof LuciaError && e.message === 'AUTH_DUPLICATE_KEY_ID') {
-				// check for unique constraint error in user table
-				return setError(form, 'username', 'Incorrect username.');
+			const userId = generateId(15);
+			const hashedPassword = await new Argon2id().hash(form.data.password);
+
+			const [existingUser] = await db
+				.select()
+				.from(users)
+				.where(eq(users.username, form.data.username))
+				.limit(1);
+			if (existingUser) {
+				return setError(form, 'username', 'Username is already in use');
 			}
-			return fail(500, {
-				form
+
+			const [createdUser] = await db
+				.insert(users)
+				.values({
+					id: userId,
+					username: form.data.username.toLowerCase(),
+					hashedPassword,
+					name: capitaliseString(form.data.username),
+					partnerId: null,
+					sizes: { simple: {}, advanced: {} },
+					hue: 145,
+					updatedAt: new Date()
+				})
+				.returning();
+
+			const session = await auth.createSession(userId, {
+				group: createdUser.groups?.at(0) ?? 'HAUGEN'
 			});
+			const sessionCookie = auth.createSessionCookie(session.id);
+			cookies.set(sessionCookie.name, sessionCookie.value, {
+				path: '.',
+				...sessionCookie.attributes
+			});
+		} catch (error_) {
+			const { message } = error_ instanceof Error ? error_ : { message: 'Internal error!' };
+			console.error(message);
+			return setError(form, 'username', message);
 		}
 
-		return { form };
+		redirect(302, '/');
 	}
 } satisfies Actions;

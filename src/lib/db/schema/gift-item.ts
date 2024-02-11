@@ -42,7 +42,7 @@ export const giftItemsRelations = relations(giftItems, ({ one }) => ({
 }));
 
 export const selectGiftItemSchema = createSelectSchema(giftItems);
-export type SelectGiftItem = typeof giftItems.$inferSelect;
+export type GiftItem = typeof giftItems.$inferSelect;
 
 export const insertGiftItemSchema = createInsertSchema(giftItems, {
 	id: (schema) => schema.id.uuid(),
@@ -52,7 +52,7 @@ export const insertGiftItemSchema = createInsertSchema(giftItems, {
 		}),
 	link: (schema) => schema.link.url()
 }).pick({ id: true });
-export type InsertGiftItem = typeof giftItems.$inferInsert;
+export type NewGiftItem = typeof giftItems.$inferInsert;
 
 export const ideas = pgTable('ideas', {
 	id: text('id').primaryKey().notNull(),
@@ -93,7 +93,7 @@ export const ideasRelations = relations(ideas, ({ one }) => ({
 }));
 
 export const selectIdeaSchema = createSelectSchema(ideas);
-export type SelectIdea = typeof ideas.$inferSelect;
+export type Idea = typeof ideas.$inferSelect;
 
 export const insertIdeaSchema = createInsertSchema(ideas, {
 	id: (schema) => schema.id.uuid(),
@@ -103,4 +103,4 @@ export const insertIdeaSchema = createInsertSchema(ideas, {
 		}),
 	link: (schema) => schema.link.url()
 }).pick({ id: true });
-export type InsertIdea = typeof ideas.$inferInsert;
+export type NewIdea = typeof ideas.$inferInsert;

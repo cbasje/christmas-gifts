@@ -1,9 +1,8 @@
 import { giftItems } from '$lib/db/schema/gift-item';
 import { Groups } from '$lib/db/schema/user';
 import { db } from '$lib/server/drizzle';
-import { auth } from '$lib/server/lucia';
 import { getSupabaseURL, isFile, uploadFile } from '$lib/utils/file';
-import { fail, redirect } from '@sveltejs/kit';
+import { fail } from '@sveltejs/kit';
 import { and, eq, sql } from 'drizzle-orm';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
@@ -47,22 +46,22 @@ export const load = (async ({ parent }) => {
 		.from(giftItems)
 		.where(
 			and(
-				eq(giftItems.recipientId, user.id),
+				eq(giftItems.recipientId, user?.id ?? ''),
 				sql<boolean>`${giftItems.groups} ? ${currentGroupId}`
 			)
 		);
 
 	const formData = await superValidate(
 		{
-			recipientId: user.id,
-			groups: [currentGroupId]
+			recipientId: user?.id,
+			groups: currentGroupId ? [currentGroupId] : []
 		},
 		schema
 	);
 
 	return {
 		formData,
-		currentUserGroups: user.groups,
+		currentUserGroups: user?.groups,
 		wishList: wishList.map((i) =>
 			i.pic
 				? {
@@ -75,17 +74,7 @@ export const load = (async ({ parent }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	logout: async ({ locals }) => {
-		const session = await locals.auth.validate();
-		if (!session) return fail(401);
-		await auth.invalidateSession(session.sessionId); // invalidate session
-		locals.auth.setSession(null); // remove cookie
-		redirect(302, '/login'); // redirect to login page
-	},
-	newItem: async ({ request, locals }) => {
-		const session = await locals.auth.validate();
-		if (!session) redirect(302, '/login');
-
+	newItem: async ({ request }) => {
 		const formData = await request.formData();
 		const form = await superValidate(formData, schema);
 
@@ -124,10 +113,7 @@ export const actions = {
 			return fail(500, { form });
 		}
 	},
-	editItem: async ({ request, locals }) => {
-		const session = await locals.auth.validate();
-		if (!session) redirect(302, '/login');
-
+	editItem: async ({ request }) => {
 		const formData = await request.formData();
 		const form = await superValidate(formData, schema);
 

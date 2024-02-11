@@ -1,23 +1,26 @@
 import { dev } from '$app/environment';
-import { pg } from '@lucia-auth/adapter-postgresql';
-import { lucia } from 'lucia';
-import { sveltekit } from 'lucia/middleware';
-import { pool } from './drizzle';
+import { users, type AuthSession, type User, authSessions } from '$lib/db/schema/user';
+import { DrizzlePostgreSQLAdapter } from '@lucia-auth/adapter-drizzle';
+import { Lucia, TimeSpan } from 'lucia';
+import { db } from './drizzle';
+import { webcrypto } from 'node:crypto';
 
-export const auth = lucia({
-	adapter: pg(pool, {
-		user: 'users',
-		key: 'keys',
-		session: 'sessions'
-	}),
-	middleware: sveltekit(),
-	env: dev ? 'DEV' : 'PROD',
+globalThis.crypto = webcrypto as Crypto;
+
+const adapter = new DrizzlePostgreSQLAdapter(db, authSessions, users);
+
+export const auth = new Lucia(adapter, {
+	sessionCookie: {
+		attributes: {
+			secure: !dev
+		}
+	},
+	sessionExpiresIn: new TimeSpan(6, 'm'),
 	getUserAttributes: (data) => {
 		return {
-			id: data.id,
 			name: data.name,
-			username: data.user_name,
-			partnerId: data.partner_id,
+			username: data.username,
+			partnerId: data.partnerId,
 			groups: data.groups,
 			sizes: data.sizes,
 			hue: data.hue
@@ -27,11 +30,13 @@ export const auth = lucia({
 		return {
 			group: data.group
 		};
-	},
-	sessionExpiresIn: {
-		activePeriod: 60 * 60 * 24 * 7 * 1000, // one week
-		idlePeriod: 60 * 60 * 24 * 182.5 * 1000 // one half year
 	}
 });
 
-export type Auth = typeof auth;
+declare module 'lucia' {
+	interface Register {
+		Lucia: typeof auth;
+		DatabaseUserAttributes: Omit<User, 'id'>;
+		DatabaseSessionAttributes: Omit<AuthSession, 'id' | 'expiresAt' | 'userId'>;
+	}
+}

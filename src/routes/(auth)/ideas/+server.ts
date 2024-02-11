@@ -1,15 +1,12 @@
 import { giftItems, ideas } from '$lib/db/schema/gift-item';
 import { users } from '$lib/db/schema/user';
 import { db } from '$lib/server/drizzle';
-import { error, json, redirect } from '@sveltejs/kit';
+import type { LinkItem } from '$lib/types';
+import { error, json } from '@sveltejs/kit';
 import { and, eq, sql } from 'drizzle-orm';
 import type { RequestHandler } from './$types';
-import type { LinkItem } from '$lib/types';
 
 export const GET = (async ({ url, locals }) => {
-	const session = await locals.auth.validate();
-	if (!session) redirect(302, '/login');
-
 	const recipientId = url.searchParams.get('recipientId');
 
 	if (!recipientId) {
@@ -28,7 +25,7 @@ export const GET = (async ({ url, locals }) => {
 			.where(
 				and(
 					eq(giftItems.recipientId, recipientId),
-					sql<boolean>`${giftItems.groups} ? ${session.group}`
+					sql<boolean>`${giftItems.groups} ? ${locals.session?.group}`
 				)
 			);
 
@@ -40,9 +37,6 @@ export const GET = (async ({ url, locals }) => {
 }) satisfies RequestHandler;
 
 export const PATCH = (async ({ request, locals }) => {
-	const session = await locals.auth.validate();
-	if (!session) redirect(302, '/login');
-
 	const form = await request.formData();
 	const id = form.get('id');
 	const purchased = form.get('purchased') === 'true';
@@ -77,7 +71,7 @@ export const PATCH = (async ({ request, locals }) => {
 					.update(giftItems)
 					.set({
 						purchased,
-						giftedById: purchased ? session.user.id : null,
+						giftedById: purchased ? locals.user?.id : null,
 						updatedAt: new Date()
 					})
 					.where(eq(giftItems.id, idea.giftItemId));
@@ -93,10 +87,7 @@ export const PATCH = (async ({ request, locals }) => {
 	}
 }) satisfies RequestHandler;
 
-export const DELETE = (async ({ request, locals }) => {
-	const session = await locals.auth.validate();
-	if (!session) redirect(302, '/login');
-
+export const DELETE = (async ({ request }) => {
 	const form = await request.formData();
 	const id = form.get('id');
 
