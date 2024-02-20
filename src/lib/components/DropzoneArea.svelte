@@ -23,10 +23,10 @@
 	}
 
 	let droppedFiles: FileList;
-	let uploading: boolean = false;
+	let uploading = false;
 	const authorizedExtensions = ['.jpg', '.jpeg', '.png', '.webp'];
 
-	const onChangeHandler = (e: Event) => {
+	const onChangeHandler = () => {
 		// read preview data as url into array per file
 		for (let i = 0; i < droppedFiles.length; i++) {
 			const file = droppedFiles[i];

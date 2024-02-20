@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { Groups } from '$lib/db/schema/user';
 	import { t } from '$lib/translations';
-	import { Groups } from '$lib/types';
+	import type { LinkItem } from '$lib/types';
 	import { capitaliseString } from '$lib/utils/capitalise';
 	import Icon from '@iconify/svelte';
 	import { createDialog, melt } from '@melt-ui/svelte';
@@ -18,13 +19,6 @@
 	export let currentUserGroups: IdeasData['currentUserGroups'] | WishData['currentUserGroups'];
 	export let users: IdeasData['users'] | undefined = undefined;
 
-	type LinkItem = {
-		id: string;
-		name: string;
-		recipient: {
-			name: string | null;
-		};
-	};
 	let linkItems: LinkItem[] = [];
 
 	const {
@@ -92,7 +86,7 @@
 			}}
 			use:melt={$content}
 		>
-			<div>
+			<header>
 				<h3
 					use:melt={$title}
 					class="text-lg font-semibold leading-6 text-gray-900 dark:text-gray-100"
@@ -105,7 +99,7 @@
 				>
 					{$t('common.editPopup.create.description')}
 				</p>
-			</div>
+			</header>
 
 			<form
 				class="contents"
@@ -115,8 +109,8 @@
 				use:enhance
 			>
 				<Input type="hidden" name="id" value={crypto.randomUUID()} />
-				<Input type="hidden" name="idea" value={$form.idea} />
 				<Input type="hidden" name="giftedById" value={$form.giftedById} />
+
 				<Input
 					type="text"
 					name="name"
@@ -138,17 +132,19 @@
 					aria-invalid={$errors.price ? 'true' : undefined}
 					{...$constraints.price}
 				/>
-				<Input
-					type="textarea"
-					name="notes"
-					label={$t('common.item.notes')}
-					bind:value={$form.notes}
-					rows="3"
-					messages={$errors.notes}
-					aria-invalid={$errors.notes ? 'true' : undefined}
-					placeholder="Type here more information about the item..."
-					{...$constraints.notes}
-				/>
+				{#if !$form.idea}
+					<Input
+						type="textarea"
+						name="notes"
+						label={$t('common.item.notes')}
+						bind:value={$form.notes}
+						rows="3"
+						messages={$errors.notes}
+						aria-invalid={$errors.notes ? 'true' : undefined}
+						placeholder="Type here more information about the item..."
+						{...$constraints.notes}
+					/>
+				{/if}
 				<Input
 					type="text"
 					name="link"
@@ -188,41 +184,43 @@
 					/>
 					<Input
 						type="select"
-						name="ideaLinkId"
+						name="giftItemId"
 						label={$t('common.item.ideaLink')}
-						bind:value={$form.ideaLinkId}
-						messages={$errors.ideaLinkId}
-						aria-invalid={$errors.ideaLinkId ? 'true' : undefined}
+						bind:value={$form.giftItemId}
+						messages={$errors.giftItemId}
+						aria-invalid={$errors.giftItemId ? 'true' : undefined}
 						help="First select a recipient."
 						options={(linkItems ?? []).map((i) => ({
-							label: `${i.recipient?.name} - ${i.name}`,
+							label: `${i.recipientName} - ${i.name}`,
 							value: i.id
 						}))}
-						{...$constraints.ideaLinkId}
+						{...$constraints.giftItemId}
 					/>
 				{:else}
 					<Input type="hidden" name="recipientId" value={$form.recipientId} />
 				{/if}
-				{#if currentUserGroups.length > 1}
-					<Input
-						type="select-multiple"
-						name="groups"
-						label={$t('common.item.groups')}
-						bind:value={$form.groups}
-						required
-						messages={$errors.groups?._errors}
-						aria-invalid={$errors.groups?._errors ? 'true' : undefined}
-						help="Select all that apply by holding command (macOS) or control (PC)."
-						options={Groups.map((g) => ({
-							label: capitaliseString(g),
-							value: g
-						}))}
-						{...$constraints.groups}
-					/>
-				{:else}
-					<Input type="hidden" name="groups" value={$form.groups} />
+				{#if !$form.idea}
+					{#if currentUserGroups && currentUserGroups.length > 1}
+						<Input
+							type="select-multiple"
+							name="groups"
+							label={$t('common.item.groups')}
+							bind:value={$form.groups}
+							required
+							messages={$errors.groups?._errors}
+							aria-invalid={$errors.groups?._errors ? 'true' : undefined}
+							help="Select all that apply by holding command (macOS) or control (PC)."
+							options={Groups.map((g) => ({
+								label: capitaliseString(g),
+								value: g
+							}))}
+							{...$constraints.groups}
+						/>
+					{:else}
+						<Input type="hidden" name="groups" value={$form.groups} />
+					{/if}
 				{/if}
-				<div class="self-end">
+				<footer class="self-end">
 					<button
 						use:melt={$close}
 						type="button"
@@ -240,7 +238,7 @@
 					>
 						{$t('common.editPopup.create.submit')}
 					</button>
-				</div>
+				</footer>
 			</form>
 		</div>
 	{/if}

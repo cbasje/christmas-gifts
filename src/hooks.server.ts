@@ -1,6 +1,6 @@
 import { auth } from '$lib/server/lucia';
 import { defaultLocale, locales } from '$lib/translations';
-import type { Handle } from '@sveltejs/kit';
+import { redirect, type Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 
 const lang = (async ({ event, resolve }) => {
@@ -16,7 +16,8 @@ const lang = (async ({ event, resolve }) => {
 		);
 
 		currentLocale = [...localeSet][0];
-		event.cookies.set('locale', currentLocale);
+		event.cookies.set('locale', currentLocale, { path: '/' });
+		console.log('🗣️', headerLangs, localeSet);
 	}
 
 	return resolve(event, {
@@ -24,10 +25,40 @@ const lang = (async ({ event, resolve }) => {
 	});
 }) satisfies Handle;
 
+function shouldProtectRoute(routeId: string | null) {
+	// The group '(auth)' should be protected
+	return !routeId || routeId?.startsWith('/(auth)') === true;
+}
+
 export const authorization = (async ({ event, resolve }) => {
-	// we can pass `event` because we used the SvelteKit middleware
-	event.locals.auth = auth.handleRequest(event);
-	return await resolve(event);
+	const sessionId = event.cookies.get(auth.sessionCookieName);
+	if (!sessionId) {
+		event.locals.user = null;
+		event.locals.session = null;
+
+		if (shouldProtectRoute(event.route.id)) redirect(302, '/login');
+		else return resolve(event);
+	}
+
+	const { session, user } = await auth.validateSession(sessionId);
+	if (session && session.fresh) {
+		const sessionCookie = auth.createSessionCookie(session.id);
+		event.cookies.set(sessionCookie.name, sessionCookie.value, {
+			path: '.',
+			...sessionCookie.attributes
+		});
+	}
+	if (!session) {
+		const sessionCookie = auth.createBlankSessionCookie();
+		event.cookies.set(sessionCookie.name, sessionCookie.value, {
+			path: '.',
+			...sessionCookie.attributes
+		});
+	}
+
+	event.locals.user = user;
+	event.locals.session = session;
+	return resolve(event);
 }) satisfies Handle;
 
 export const handle = sequence(authorization, lang);

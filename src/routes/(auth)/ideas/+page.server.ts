@@ -1,15 +1,15 @@
-import { auth } from '$lib/server/lucia';
-import prisma from '$lib/server/prisma';
-import supabase from '$lib/server/supabase';
-import { getSupabaseURL, isFile, uploadFile } from '$lib/utils/file';
+import { ideas } from '$lib/db/schema/gift-item';
+import { users } from '$lib/db/schema/user';
+import { db } from '$lib/server/drizzle';
+import { isFile, uploadFile } from '$lib/utils/file';
 import { groupBy } from '$lib/utils/group-by';
-import { Group } from '@prisma/client';
-import { fail, redirect } from '@sveltejs/kit';
+import { fail } from '@sveltejs/kit';
+import { and, asc, desc, eq, isNotNull, not, or, sql } from 'drizzle-orm';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import type { Actions, PageServerLoad } from './$types';
-import type { GiftItem } from '$lib/types';
 
+// TODO: drizzle-zod
 const schema = z.object({
 	id: z.string().uuid(),
 	name: z.string(),
@@ -19,118 +19,72 @@ const schema = z.object({
 			message: 'Price must consist of numbers with currency codes.'
 		})
 		.nullish(),
-	notes: z.string().nullish(),
 	recipientId: z.string(),
 	giftedById: z.string().nullish(),
 	link: z.string().url().nullish(),
-	pic: z.string().url().nullish(),
-	// purchased: z.boolean(),
 	idea: z.boolean().default(true),
-	ideaLinkId: z.string().nullish(),
-	groups: z.nativeEnum(Group).array()
+	giftItemId: z.string().nullish()
 });
 
 export const load = (async ({ parent }) => {
 	const { user, currentGroupId } = await parent();
 
-	const [ideaList, users] = await prisma.$transaction([
-		prisma.giftItem.findMany({
-			orderBy: { recipient: { hue: 'desc' } },
-			where: {
-				recipientId: {
-					not: user.id
-				},
-				groups: {
-					has: currentGroupId
-				},
-				giftedById: {
-					not: null
-				},
-				OR: [
-					{ idea: true },
-					{ giftedById: user.id },
-					...(user.partnerId ? [{ giftedById: user.partnerId }] : [])
-				]
-			},
-			select: {
-				id: true,
-				name: true,
-				price: true,
-				notes: true,
-				link: true,
-				pic: true,
-				purchased: true,
-				recipientId: true,
-				giftedById: true,
-				idea: true,
-				ideaLinkId: true,
-				groups: true,
-				recipient: {
-					select: {
-						name: true
-					}
-				}
-			}
-		}),
-		prisma.user.findMany({
-			where: {
-				id: {
-					not: user.id
-				},
-				groups: {
-					has: currentGroupId
-				}
-			},
-			orderBy: {
-				name: 'asc'
-			},
-			select: {
-				id: true,
-				name: true,
-				hue: true,
-				sizes: true
-			}
+	const ideaList = await db
+		.select({
+			id: ideas.id,
+			name: ideas.name,
+			price: ideas.price,
+			recipientId: ideas.recipientId,
+			giftedById: ideas.giftedById,
+			link: ideas.link,
+			purchased: ideas.purchased,
+			giftItemId: ideas.giftItemId,
+			idea: sql<boolean>`TRUE`
 		})
-	]);
+		.from(ideas)
+		.leftJoin(users, eq(ideas.recipientId, users.id))
+		.where(
+			and(
+				not(eq(ideas.recipientId, user.id ?? '')),
+				isNotNull(ideas.giftedById),
+				or(
+					eq(ideas.giftedById, user.id ?? ''),
+					user.partnerId ? eq(ideas.giftedById, user.partnerId ?? '') : undefined
+				)
+			)
+		)
+		.orderBy(desc(users.hue));
 
-	const schemaWithDefaults = schema.merge(
-		z.object({
-			giftedById: z.string().default(user.id).nullish(),
-			groups: z.nativeEnum(Group).array().default([currentGroupId])
+	const groupUsers = await db
+		.select({
+			id: users.id,
+			name: users.name,
+			hue: users.hue,
+			sizes: users.sizes
 		})
+		.from(users)
+		.where(
+			and(not(eq(users.id, user.id ?? '')), sql<boolean>`${users.groups} ? ${currentGroupId}`)
+		)
+		.orderBy(asc(users.name));
+
+	const formData = await superValidate(
+		{
+			giftedById: user.id
+		},
+		schema
 	);
-	const formData = await superValidate(schemaWithDefaults);
 
 	return {
 		formData,
 		currentUserGroups: user.groups,
-		ideaList: groupBy(
-			ideaList.map((i) =>
-				i.pic
-					? {
-							...i,
-							pic: getSupabaseURL(i.pic)
-					  }
-					: i
-			),
-			'recipientId'
-		),
-		users
+		users: groupUsers,
+		ideaList: groupBy(ideaList, 'recipientId')
 	};
 }) satisfies PageServerLoad;
 
 export const actions = {
-	logout: async ({ locals }) => {
-		const session = await locals.auth.validate();
-		if (!session) return fail(401);
-		await auth.invalidateSession(session.sessionId); // invalidate session
-		locals.auth.setSession(null); // remove cookie
-		throw redirect(302, '/login'); // redirect to login page
-	},
-	newItem: async ({ request, locals }) => {
-		const session = await locals.auth.validate();
-		if (!session) throw redirect(302, '/login');
-
+	newItem: async ({ request }) => {
 		const formData = await request.formData();
 		const form = await superValidate(formData, schema);
 
@@ -154,12 +108,14 @@ export const actions = {
 				};
 			}
 
-			const newItem = await prisma.giftItem.create({
-				data: { ...data },
-				select: {
-					name: true
-				}
-			});
+			const [newItem] = await db
+				.insert(ideas)
+				.values({
+					...data
+				})
+				.returning({
+					name: ideas.name
+				});
 
 			return { form, newItem };
 		} catch (error) {
@@ -167,10 +123,7 @@ export const actions = {
 			return fail(500, { form });
 		}
 	},
-	editItem: async ({ request, locals }) => {
-		const session = await locals.auth.validate();
-		if (!session) throw redirect(302, '/login');
-
+	editItem: async ({ request }) => {
 		const formData = await request.formData();
 		const form = await superValidate(formData, schema);
 
@@ -180,29 +133,21 @@ export const actions = {
 		}
 
 		try {
-			let data: typeof form.data;
-			const file = isFile(formData.get('pic'));
-			if (file) {
-				const pic = await uploadFile(form.data.id, file);
-				data = {
-					...form.data,
-					pic: pic.toString()
-				};
-			} else {
-				data = {
-					...form.data
-				};
-			}
-
-			const editedItem = await prisma.giftItem.update({
-				where: {
-					id: form.data.id
-				},
-				data,
-				select: {
-					name: true
-				}
-			});
+			const [editedItem] = await db
+				.update(ideas)
+				.set({
+					name: form.data.name,
+					recipientId: form.data.recipientId,
+					price: form.data.price,
+					giftedById: form.data.giftedById,
+					link: form.data.link,
+					giftItemId: form.data.giftItemId,
+					updatedAt: new Date()
+				})
+				.where(eq(ideas.id, form.data.id))
+				.returning({
+					name: ideas.name
+				});
 
 			return { form, editedItem };
 		} catch (error) {

@@ -1,0 +1,27 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1701523293459,
+      "tag": "0000_adorable_hiroim",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1703789777746,
+      "tag": "0001_hot_malice",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1707649901512,
+      "tag": "0002_military_marvel_boy",
+      "breakpoints": true
+    }
+  ]
+}

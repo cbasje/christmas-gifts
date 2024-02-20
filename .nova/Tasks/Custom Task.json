@@ -1,0 +1,16 @@
+{
+  "actions" : {
+    "build" : {
+      "enabled" : true,
+      "script" : "bun run build"
+    },
+    "clean" : {
+      "enabled" : true,
+      "script" : "bun run lint"
+    },
+    "run" : {
+      "enabled" : true,
+      "script" : "bun run dev"
+    }
+  }
+}

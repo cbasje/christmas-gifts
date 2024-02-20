@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { invalidate } from '$app/navigation';
 	import { page } from '$app/stores';
+	import type { GiftItem } from '$lib/db/schema/gift-item';
 	import Icon from '@iconify/svelte';
-	import type { GiftItem } from '@prisma/client';
 	import toast from 'svelte-french-toast';
 
 	export let id: GiftItem['id'];

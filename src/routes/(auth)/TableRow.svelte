@@ -53,7 +53,7 @@
 		elements: { root, input },
 		states: { checked: isPurchased }
 	} = createSwitch({
-		defaultChecked: 'purchased' in item && item.purchased,
+		defaultChecked: 'purchased' in item && (item.purchased ?? undefined),
 		onCheckedChange: switchPurchased
 	});
 </script>
@@ -65,7 +65,7 @@
 		: ''}"
 >
 	<td class="flex items-center px-6 py-3">
-		{#if item.pic}
+		{#if 'pic' in item && item.pic}
 			<img class="shrink-0 rounded-md object-cover square-24" src={item.pic} alt="" />
 		{/if}
 	</td>
@@ -73,7 +73,7 @@
 		<h3 class="text-sm font-medium text-gray-900 dark:text-gray-100">
 			{item.name}
 		</h3>
-		{#if item.notes}
+		{#if 'notes' in item && item.notes}
 			<MarkdownDisplay source={item.notes} class="min-w-full text-gray-500 dark:text-gray-400"
 			></MarkdownDisplay>
 		{/if}
@@ -117,12 +117,7 @@
 		<td class="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
 			<div class="flex items-center justify-center gap-5">
 				{#if formData !== undefined && currentUserGroups !== undefined}
-					<EditButton
-						item={'groups' in item ? item : undefined}
-						{formData}
-						{currentUserGroups}
-						{users}
-					/>
+					<EditButton {item} {formData} {currentUserGroups} {users} />
 				{/if}
 
 				<RemoveButton id={item.id} name={item.name} />

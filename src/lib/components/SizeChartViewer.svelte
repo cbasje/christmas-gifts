@@ -1,6 +1,6 @@
 <script lang="ts">
+	import type { UserSizes } from '$lib/db/schema/user';
 	import { t } from '$lib/translations';
-	import type { UserSizes } from '$lib/types';
 	import { createTabs, melt } from '@melt-ui/svelte';
 	import SizeChart from './size-chart/SizeChart.svelte';
 	import SizeChartEmpty from './size-chart/SizeChartEmpty.svelte';

@@ -1,46 +1,42 @@
-import prisma from '$lib/server/prisma';
-import { error, json, redirect } from '@sveltejs/kit';
+import { giftItems, ideas } from '$lib/db/schema/gift-item';
+import { users } from '$lib/db/schema/user';
+import { db } from '$lib/server/drizzle';
+import type { LinkItem } from '$lib/types';
+import { error, json } from '@sveltejs/kit';
+import { and, eq, sql } from 'drizzle-orm';
 import type { RequestHandler } from './$types';
 
 export const GET = (async ({ url, locals }) => {
-	const session = await locals.auth.validate();
-	if (!session) throw redirect(302, '/login');
-
 	const recipientId = url.searchParams.get('recipientId');
 
 	if (!recipientId) {
-		throw error(400);
+		error(400);
 	}
 
 	try {
-		const linkItems = await prisma.giftItem.findMany({
-			where: {
-				recipientId,
-				groups: {
-					has: session.group
-				},
-				idea: false
-			},
-			select: {
-				id: true,
-				name: true,
-				recipient: {
-					select: { name: true }
-				}
-			}
-		});
+		const linkItems = await db
+			.select({
+				id: giftItems.id,
+				name: giftItems.name,
+				recipientName: users.name
+			})
+			.from(giftItems)
+			.leftJoin(users, eq(giftItems.recipientId, users.id))
+			.where(
+				and(
+					eq(giftItems.recipientId, recipientId),
+					sql<boolean>`${giftItems.groups} ? ${locals.session?.group}`
+				)
+			);
 
-		return json(linkItems);
+		return json(linkItems satisfies LinkItem[]);
 	} catch (e) {
 		console.error(e);
-		throw error(500);
+		error(500);
 	}
 }) satisfies RequestHandler;
 
 export const PATCH = (async ({ request, locals }) => {
-	const session = await locals.auth.validate();
-	if (!session) throw redirect(302, '/login');
-
 	const form = await request.formData();
 	const id = form.get('id');
 	const purchased = form.get('purchased') === 'true';
@@ -51,63 +47,62 @@ export const PATCH = (async ({ request, locals }) => {
 		purchased === undefined ||
 		typeof purchased !== 'boolean'
 	) {
-		throw error(400);
+		error(400);
 	}
 
 	try {
-		const updatedItem = await prisma.giftItem.update({
-			where: {
-				id
-			},
-			data: {
-				purchased
-				// FIXME:
-				// ideaLink: hasIdeaLink
-				// 	? {
-				// 			update: {
-				// 				purchased
-				// 			}
-				// 	  }
-				// 	: undefined
-			},
-			select: {
-				id: true,
-				purchased: true,
-				giftedById: true
-			}
-		});
+		const [updatedIdea] = await db
+			.update(ideas)
+			.set({
+				purchased,
+				updatedAt: new Date()
+			})
+			.where(eq(ideas.id, id))
+			.returning({
+				id: ideas.id,
+				purchased: ideas.purchased,
+				giftedById: ideas.giftedById,
+				giftItemId: ideas.giftItemId
+			});
 
-		return json(updatedItem);
+		if (updatedIdea.giftItemId) {
+			await db
+				.update(giftItems)
+				.set({
+					purchased,
+					giftedById: purchased ? locals.user?.id : null,
+					updatedAt: new Date()
+				})
+				.where(eq(giftItems.id, updatedIdea.giftItemId));
+		}
+
+		return json(updatedIdea);
 	} catch (e) {
 		console.error(e);
-		throw error(500);
+		error(500);
 	}
 }) satisfies RequestHandler;
 
-export const DELETE = (async ({ request, locals }) => {
-	const session = await locals.auth.validate();
-	if (!session) throw redirect(302, '/login');
-
+export const DELETE = (async ({ request }) => {
 	const form = await request.formData();
 	const id = form.get('id');
 
 	if (id === undefined || typeof id !== 'string') {
-		throw error(400);
+		error(400);
 	}
 
 	try {
-		const removedItem = await prisma.giftItem.delete({
-			where: {
-				id
-			},
-			select: {
-				id: true
-			}
-		});
+		const [removedItem] = await db
+			.delete(giftItems)
+
+			.where(eq(giftItems.id, id))
+			.returning({
+				id: giftItems.id
+			});
 
 		return json(removedItem);
 	} catch (e) {
 		console.error(e);
-		throw error(500);
+		error(500);
 	}
 }) satisfies RequestHandler;

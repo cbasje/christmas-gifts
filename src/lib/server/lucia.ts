@@ -1,16 +1,20 @@
 import { dev } from '$app/environment';
-import { prisma } from '@lucia-auth/adapter-prisma';
-import { lucia } from 'lucia';
-import { sveltekit } from 'lucia/middleware';
-import client from './prisma';
+import { users, type AuthSession, type User, authSessions } from '$lib/db/schema/user';
+import { DrizzlePostgreSQLAdapter } from '@lucia-auth/adapter-drizzle';
+import { Lucia, TimeSpan } from 'lucia';
+import { db } from './drizzle';
 
-export const auth = lucia({
-	adapter: prisma(client),
-	middleware: sveltekit(),
-	env: dev ? 'DEV' : 'PROD',
+const adapter = new DrizzlePostgreSQLAdapter(db, authSessions, users);
+
+export const auth = new Lucia(adapter, {
+	sessionCookie: {
+		attributes: {
+			secure: !dev
+		}
+	},
+	sessionExpiresIn: new TimeSpan(6, 'm'),
 	getUserAttributes: (data) => {
 		return {
-			id: data.id,
 			name: data.name,
 			username: data.username,
 			partnerId: data.partnerId,
@@ -23,11 +27,13 @@ export const auth = lucia({
 		return {
 			group: data.group
 		};
-	},
-	sessionExpiresIn: {
-		activePeriod: 60 * 60 * 24 * 7 * 1000, // one week
-		idlePeriod: 60 * 60 * 24 * 182.5 * 1000 // one half year
 	}
 });
 
-export type Auth = typeof auth;
+declare module 'lucia' {
+	interface Register {
+		Lucia: typeof auth;
+		DatabaseUserAttributes: Omit<User, 'id'>;
+		DatabaseSessionAttributes: Omit<AuthSession, 'id' | 'expiresAt' | 'userId'>;
+	}
+}

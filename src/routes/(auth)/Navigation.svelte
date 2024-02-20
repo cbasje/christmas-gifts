@@ -2,8 +2,8 @@
 	import { enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { Groups } from '$lib/db/schema/user';
 	import { t } from '$lib/translations';
-	import { Groups } from '$lib/types';
 	import { capitaliseString } from '$lib/utils/capitalise';
 	import Icon from '@iconify/svelte';
 	import {
@@ -134,7 +134,7 @@
 						transition:fly={{ duration: 150, y: -10 }}
 						class="absolute right-0 flex w-64 origin-top-right flex-col gap-1 rounded-md bg-white p-2 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-gray-800"
 					>
-						{#if user.groups.length > 1}
+						{#if user.groups && user.groups.length > 1}
 							<li
 								use:melt={$menuItem}
 								class="mb-2 block px-1 text-sm text-gray-700 dark:text-gray-200"
@@ -175,7 +175,7 @@
 							</li>
 						{/each}
 						<li use:melt={$menuItem}>
-							<form method="post" action="?/logout" use:enhance>
+							<form method="post" action="/logout" use:enhance>
 								<button
 									type="submit"
 									class="flex w-full cursor-pointer flex-row-reverse items-center justify-between rounded-md px-3 py-2 text-left text-sm font-medium text-danger-800 hover:bg-gray-300 hover:text-danger-900 dark:text-danger-300 dark:hover:bg-gray-700 dark:hover:text-danger-100"

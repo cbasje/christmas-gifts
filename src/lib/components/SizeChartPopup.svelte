@@ -1,6 +1,6 @@
 <script lang="ts">
+	import type { UserSizes } from '$lib/db/schema/user';
 	import { t } from '$lib/translations';
-	import type { UserSizes } from '$lib/types';
 	import Icon from '@iconify/svelte';
 	import { createDialog, melt } from '@melt-ui/svelte';
 	import { fade, scale } from 'svelte/transition';
@@ -47,7 +47,7 @@
 			}}
 			use:melt={$content}
 		>
-			<div>
+			<header>
 				<h3
 					use:melt={$title}
 					class="text-lg font-semibold leading-6 text-gray-900 dark:text-gray-100"
@@ -60,11 +60,11 @@
 				>
 					{$t('common.sizeChartPopup.description', { user: name ?? '' })}
 				</p>
-			</div>
+			</header>
 
 			<SizeChartViewer {sizes} />
 
-			<div class="self-end">
+			<footer class="self-end">
 				<button
 					use:melt={$close}
 					type="button"
@@ -72,7 +72,7 @@
 				>
 					{$t('common.sizeChartPopup.close')}
 				</button>
-			</div>
+			</footer>
 		</div>
 	{/if}
 </div>

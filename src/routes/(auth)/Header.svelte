@@ -6,6 +6,7 @@
 	class="mx-auto flex w-full max-w-3xl flex-col sm:flex-row md:max-w-7xl {padding
 		? 'px-2 py-5 sm:px-6 lg:px-8'
 		: ''}"
+	{...$$restProps}
 >
 	<div class="grow">
 		<h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">

@@ -1,11 +1,10 @@
-import prisma from '$lib/server/prisma';
-import { error, json, redirect } from '@sveltejs/kit';
+import { giftItems, ideas } from '$lib/db/schema/gift-item';
+import { db } from '$lib/server/drizzle';
+import { error, json } from '@sveltejs/kit';
+import { eq } from 'drizzle-orm';
 import type { RequestHandler } from './$types';
 
 export const PATCH = (async ({ request, locals }) => {
-	const session = await locals.auth.validate();
-	if (!session) throw redirect(302, '/login');
-
 	const form = await request.formData();
 	const id = form.get('id');
 	const purchased = form.get('purchased') === 'true';
@@ -16,70 +15,38 @@ export const PATCH = (async ({ request, locals }) => {
 		purchased === undefined ||
 		typeof purchased !== 'boolean'
 	) {
-		throw error(400);
+		error(400);
 	}
 
 	try {
-		const updatedItem = await prisma.giftItem.update({
-			where: {
-				id
-			},
-			data: {
+		const [updatedItem] = await db
+			.update(giftItems)
+			.set({
 				purchased,
-				giftedBy: purchased
-					? {
-							connect: {
-								id: session.user.id
-							}
-					  }
-					: {
-							disconnect: true
-					  }
-				//   FIXME:
-				// ideaLink: {
-				// 	update: {
-				//         data: {}
-				//     }
-				// }
-			},
-			select: {
-				id: true,
-				purchased: true,
-				giftedById: true
-			}
-		});
+				giftedById: purchased ? locals.user?.id : null,
+				updatedAt: new Date()
+			})
+			.where(eq(giftItems.id, id))
+			.returning({
+				id: giftItems.id,
+				purchased: giftItems.purchased,
+				giftedById: giftItems.giftedById,
+				ideaId: giftItems.ideaId
+			});
+
+		if (updatedItem.ideaId) {
+			await db
+				.update(ideas)
+				.set({
+					purchased,
+					updatedAt: new Date()
+				})
+				.where(eq(ideas.id, updatedItem.ideaId));
+		}
 
 		return json(updatedItem);
 	} catch (e) {
 		console.error(e);
-		throw error(500);
-	}
-}) satisfies RequestHandler;
-
-export const DELETE = (async ({ request, locals }) => {
-	const session = await locals.auth.validate();
-	if (!session) throw redirect(302, '/login');
-
-	const form = await request.formData();
-	const id = form.get('id');
-
-	if (id === undefined || typeof id !== 'string') {
-		throw error(400);
-	}
-
-	try {
-		const removedItem = await prisma.giftItem.delete({
-			where: {
-				id
-			},
-			select: {
-				id: true
-			}
-		});
-
-		return json(removedItem);
-	} catch (e) {
-		console.error(e);
-		throw error(500);
+		error(500);
 	}
 }) satisfies RequestHandler;
