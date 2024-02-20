@@ -29,43 +29,50 @@ const schema = z.object({
 export const load = (async ({ parent }) => {
 	const { user, currentGroupId } = await parent();
 
-	const ideaList = await db
-		.select({
-			id: ideas.id,
-			name: ideas.name,
-			price: ideas.price,
-			recipientId: ideas.recipientId,
-			giftedById: ideas.giftedById,
-			link: ideas.link,
-			purchased: ideas.purchased,
-			giftItemId: ideas.giftItemId,
-			idea: sql<boolean>`TRUE`
-		})
-		.from(ideas)
-		.leftJoin(users, eq(ideas.recipientId, users.id))
-		.where(
-			and(
-				not(eq(ideas.recipientId, user.id ?? '')),
-				isNotNull(ideas.giftedById),
-				or(
-					eq(ideas.giftedById, user.id ?? ''),
-					user.partnerId ? eq(ideas.giftedById, user.partnerId ?? '') : undefined
+	const [ideaList, groupUsers] = await db.transaction(async (tx) => {
+		const i = await tx
+			.select({
+				id: ideas.id,
+				name: ideas.name,
+				price: ideas.price,
+				recipientId: ideas.recipientId,
+				giftedById: ideas.giftedById,
+				link: ideas.link,
+				purchased: ideas.purchased,
+				giftItemId: ideas.giftItemId,
+				idea: sql<boolean>`TRUE`
+			})
+			.from(ideas)
+			.leftJoin(users, eq(ideas.recipientId, users.id))
+			.where(
+				and(
+					not(eq(ideas.recipientId, user.id ?? '')),
+					isNotNull(ideas.giftedById),
+					or(
+						eq(ideas.giftedById, user.id ?? ''),
+						user.partnerId ? eq(ideas.giftedById, user.partnerId ?? '') : undefined
+					)
 				)
 			)
-		)
-		.orderBy(desc(users.hue));
-	const groupUsers = await db
-		.select({
-			id: users.id,
-			name: users.name,
-			hue: users.hue,
-			sizes: users.sizes
-		})
-		.from(users)
-		.where(
-			and(not(eq(users.id, user.id ?? '')), sql<boolean>`${users.groups} ? ${currentGroupId}`)
-		)
-		.orderBy(asc(users.name));
+			.orderBy(desc(users.hue));
+		const u = await tx
+			.select({
+				id: users.id,
+				name: users.name,
+				hue: users.hue,
+				sizes: users.sizes
+			})
+			.from(users)
+			.where(
+				and(
+					not(eq(users.id, user.id ?? '')),
+					sql<boolean>`${users.groups} ? ${currentGroupId}`
+				)
+			)
+			.orderBy(asc(users.name));
+
+		return [i, u];
+	});
 
 	const formData = await superValidate(
 		{

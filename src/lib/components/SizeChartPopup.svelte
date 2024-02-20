@@ -10,6 +10,9 @@
 	export let hue: number | undefined = undefined;
 	export let sizes: UserSizes = { simple: {}, advanced: {} };
 
+	console.log('🎄 -----------------🎄');
+	console.log('🎄 ~ sizes:', sizes);
+	console.log('🎄 -----------------🎄');
 	const {
 		elements: { trigger, overlay, content, title, description, close, portalled },
 		states: { open }
