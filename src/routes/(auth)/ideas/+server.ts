@@ -51,36 +51,32 @@ export const PATCH = (async ({ request, locals }) => {
 	}
 
 	try {
-		const updatedItem = await db.transaction(async (tx) => {
-			const [idea] = await tx
-				.update(ideas)
+		const [updatedIdea] = await db
+			.update(ideas)
+			.set({
+				purchased,
+				updatedAt: new Date()
+			})
+			.where(eq(ideas.id, id))
+			.returning({
+				id: ideas.id,
+				purchased: ideas.purchased,
+				giftedById: ideas.giftedById,
+				giftItemId: ideas.giftItemId
+			});
+
+		if (updatedIdea.giftItemId) {
+			await db
+				.update(giftItems)
 				.set({
 					purchased,
+					giftedById: purchased ? locals.user?.id : null,
 					updatedAt: new Date()
 				})
-				.where(eq(ideas.id, id))
-				.returning({
-					id: ideas.id,
-					purchased: ideas.purchased,
-					giftedById: ideas.giftedById,
-					giftItemId: ideas.giftItemId
-				});
+				.where(eq(giftItems.id, updatedIdea.giftItemId));
+		}
 
-			if (idea.giftItemId) {
-				await tx
-					.update(giftItems)
-					.set({
-						purchased,
-						giftedById: purchased ? locals.user?.id : null,
-						updatedAt: new Date()
-					})
-					.where(eq(giftItems.id, idea.giftItemId));
-			}
-
-			return idea;
-		});
-
-		return json(updatedItem);
+		return json(updatedIdea);
 	} catch (e) {
 		console.error(e);
 		error(500);

@@ -9,42 +9,37 @@ import type { PageServerLoad } from './$types';
 export const load = (async ({ parent }) => {
 	const { user, currentGroupId } = await parent();
 
-	const [overviewList, groupUsers] = await db.transaction(async (tx) => {
-		const o = await tx
-			.select({
-				id: giftItems.id,
-				name: giftItems.name,
-				price: giftItems.price,
-				notes: giftItems.notes,
-				link: giftItems.link,
-				pic: giftItems.pic,
-				purchased: giftItems.purchased,
-				recipientId: giftItems.recipientId
-			})
-			.from(giftItems)
-			.leftJoin(users, eq(giftItems.recipientId, users.id))
-			.where(
-				and(
-					not(eq(giftItems.recipientId, user.id)),
-					sql<boolean>`${giftItems.groups} ? ${currentGroupId}`
-				)
+	const overviewList = await db
+		.select({
+			id: giftItems.id,
+			name: giftItems.name,
+			price: giftItems.price,
+			notes: giftItems.notes,
+			link: giftItems.link,
+			pic: giftItems.pic,
+			purchased: giftItems.purchased,
+			recipientId: giftItems.recipientId
+		})
+		.from(giftItems)
+		.leftJoin(users, eq(giftItems.recipientId, users.id))
+		.where(
+			and(
+				not(eq(giftItems.recipientId, user.id)),
+				sql<boolean>`${giftItems.groups} ? ${currentGroupId}`
 			)
-			.orderBy(desc(users.hue));
-		const u = await tx
-			.select({
-				id: users.id,
-				name: users.name,
-				hue: users.hue,
-				sizes: users.sizes
-			})
-			.from(users)
-			.where(
-				and(not(eq(users.id, user.id)), sql<boolean>`${users.groups} ? ${currentGroupId}`)
-			)
-			.orderBy(asc(users.name));
+		)
+		.orderBy(desc(users.hue));
 
-		return [o, u];
-	});
+	const groupUsers = await db
+		.select({
+			id: users.id,
+			name: users.name,
+			hue: users.hue,
+			sizes: users.sizes
+		})
+		.from(users)
+		.where(and(not(eq(users.id, user.id)), sql<boolean>`${users.groups} ? ${currentGroupId}`))
+		.orderBy(asc(users.name));
 
 	return {
 		users: groupUsers,

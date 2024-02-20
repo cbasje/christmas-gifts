@@ -19,34 +19,30 @@ export const PATCH = (async ({ request, locals }) => {
 	}
 
 	try {
-		const updatedItem = await db.transaction(async (tx) => {
-			const [item] = await tx
-				.update(giftItems)
+		const [updatedItem] = await db
+			.update(giftItems)
+			.set({
+				purchased,
+				giftedById: purchased ? locals.user?.id : null,
+				updatedAt: new Date()
+			})
+			.where(eq(giftItems.id, id))
+			.returning({
+				id: giftItems.id,
+				purchased: giftItems.purchased,
+				giftedById: giftItems.giftedById,
+				ideaId: giftItems.ideaId
+			});
+
+		if (updatedItem.ideaId) {
+			await db
+				.update(ideas)
 				.set({
 					purchased,
-					giftedById: purchased ? locals.user?.id : null,
 					updatedAt: new Date()
 				})
-				.where(eq(giftItems.id, id))
-				.returning({
-					id: giftItems.id,
-					purchased: giftItems.purchased,
-					giftedById: giftItems.giftedById,
-					ideaId: giftItems.ideaId
-				});
-
-			if (item.ideaId) {
-				await tx
-					.update(ideas)
-					.set({
-						purchased,
-						updatedAt: new Date()
-					})
-					.where(eq(ideas.id, item.ideaId));
-			}
-
-			return item;
-		});
+				.where(eq(ideas.id, updatedItem.ideaId));
+		}
 
 		return json(updatedItem);
 	} catch (e) {
