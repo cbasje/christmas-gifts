@@ -1,8 +1,9 @@
 import type { Group } from '$lib/db/schema/user';
 import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
+import { auth } from '$lib/server/lucia';
 
-export const PATCH = (async ({ request, locals }) => {
+export const PATCH = (async ({ request, cookies, locals }) => {
 	const form = await request.formData();
 	const id = form.get('id');
 
@@ -11,7 +12,19 @@ export const PATCH = (async ({ request, locals }) => {
 	}
 
 	// TODO: check of dit werkt?
-	if (locals.session) locals.session.group = id as Group;
+	if (locals.session) {
+		const oldSession = locals.session;
+		await auth.invalidateSession(oldSession.id);
+
+		const session = await auth.createSession(oldSession.userId, {
+			group: id as Group
+		});
+		const sessionCookie = auth.createSessionCookie(session.id);
+		cookies.set(sessionCookie.name, sessionCookie.value, {
+			path: '.',
+			...sessionCookie.attributes
+		});
+	}
 
 	return json({ success: true });
 }) satisfies RequestHandler;
