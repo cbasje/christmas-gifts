@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { t } from '$lib/translations';
 	import { Toaster } from 'svelte-french-toast';
-	import '../styles.postcss';
 	import type { LayoutServerData } from './$types';
 	import Footer from './Footer.svelte';
 	import Navigation from './Navigation.svelte';
+	import '../../app.postcss';
 
 	export let data: LayoutServerData;
 </script>

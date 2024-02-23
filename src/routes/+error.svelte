@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import { t } from '$lib/translations';
 	import Header from './(auth)/Header.svelte';
-	import './styles.postcss';
+	import '../app.postcss';
 
 	const formatEnd = (value: Date) => {
 		const formatter = new Intl.RelativeTimeFormat($page.data.locale);
