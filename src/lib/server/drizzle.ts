@@ -1,5 +1,16 @@
+import { dev } from '$app/environment';
 import { neon } from '@neondatabase/serverless';
-import { drizzle } from 'drizzle-orm/neon-http';
+import { drizzle as drizzleNeon, type NeonHttpDatabase } from 'drizzle-orm/neon-http';
+import { drizzle as drizzlePg, type NodePgDatabase } from 'drizzle-orm/node-postgres';
+import postgres from 'pg';
 
-const sql = neon(process.env.DATABASE_URL!);
-export const db = drizzle(sql);
+export let db: NodePgDatabase | NeonHttpDatabase;
+if (dev) {
+	const pool = new postgres.Pool({
+		connectionString: process.env.DATABASE_URL!
+	});
+	db = drizzlePg(pool);
+} else {
+	const sql = neon(process.env.DATABASE_URL!);
+	db = drizzleNeon(sql);
+}
