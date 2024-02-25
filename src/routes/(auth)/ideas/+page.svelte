@@ -3,7 +3,7 @@
 	import SizeChartPopup from '$lib/components/SizeChartPopup.svelte';
 	import { t } from '$lib/translations';
 	import { createSwitch, melt } from '@melt-ui/svelte';
-	import Badge from '../Badge.svelte';
+	import { Badge } from '$lib/components/ui/badge';
 	import Header from '../Header.svelte';
 	import Table from '../Table.svelte';
 	import TableContainer from '../TableContainer.svelte';

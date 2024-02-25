@@ -15,7 +15,7 @@
 	} from '@melt-ui/svelte';
 	import { fly, slide } from 'svelte/transition';
 	import type { LayoutServerData } from './$types';
-	import Badge from './Badge.svelte';
+	import { Badge } from '$lib/components/ui/badge';
 
 	// FIXME: const localePath = useLocalePath();
 	export let user: LayoutServerData['user'];
@@ -141,13 +141,13 @@
 							>
 								<ul
 									use:melt={$radioRoot}
-									class="flex space-x-1 rounded-lg bg-primary-900/[0.1] p-1 dark:bg-primary-50/[0.1]"
+									class="bg-primary-900/[0.1] dark:bg-primary-50/[0.1] flex space-x-1 rounded-lg p-1"
 								>
 									{#each Groups as group (group)}
 										<li
 											class="{$isChecked(group)
 												? 'bg-primary-600 text-white'
-												: 'bg-transparent text-primary-700 hover:bg-white/[0.5] hover:text-primary-600 dark:text-primary-600 dark:hover:bg-gray-500/[0.5] dark:hover:text-primary-500'} inline-flex h-full w-full cursor-pointer justify-center rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+												: 'text-primary-700 hover:text-primary-600 dark:text-primary-600 dark:hover:text-primary-500 bg-transparent hover:bg-white/[0.5] dark:hover:bg-gray-500/[0.5]'} focus:ring-primary-500 inline-flex h-full w-full cursor-pointer justify-center rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2"
 										>
 											<button
 												use:melt={$radioItem(group)}
@@ -178,7 +178,7 @@
 							<form method="post" action="/logout" use:enhance>
 								<button
 									type="submit"
-									class="flex w-full cursor-pointer flex-row-reverse items-center justify-between rounded-md px-3 py-2 text-left text-sm font-medium text-danger-800 hover:bg-gray-300 hover:text-danger-900 dark:text-danger-300 dark:hover:bg-gray-700 dark:hover:text-danger-100"
+									class="text-danger-800 hover:text-danger-900 dark:text-danger-300 dark:hover:text-danger-100 flex w-full cursor-pointer flex-row-reverse items-center justify-between rounded-md px-3 py-2 text-left text-sm font-medium hover:bg-gray-300 dark:hover:bg-gray-700"
 								>
 									<Icon
 										icon="solar:logout-2-line-duotone"
