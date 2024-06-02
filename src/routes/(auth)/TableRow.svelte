@@ -2,20 +2,20 @@
 	import { invalidate } from '$app/navigation';
 	import { page } from '$app/stores';
 	import EditButton from '$lib/components/EditButton.svelte';
+	import MarkdownDisplay from '$lib/components/MarkdownDisplay.svelte';
 	import RemoveButton from '$lib/components/RemoveButton.svelte';
+	import { Switch } from '$lib/components/ui/switch';
 	import { formatLink } from '$lib/utils/link';
 	import { formatPrice } from '$lib/utils/price';
-	import { createSwitch, melt, type CreateSwitchProps } from '@melt-ui/svelte';
 	import toast from 'svelte-french-toast';
 	import type { PageData as OverviewData } from '../../routes/(auth)/$types';
 	import type { PageData as IdeasData } from '../../routes/(auth)/ideas/$types';
 	import type { PageData as WishData } from '../../routes/(auth)/wish-list/$types';
-	import MarkdownDisplay from '$lib/components/MarkdownDisplay.svelte';
 
 	type EditGiftItem = (IdeasData['ideaList'][string] | WishData['wishList'])[number];
 	type GiftItem = EditGiftItem | OverviewData['overviewList'][string][number];
 
-	export let formData: IdeasData['formData'] | WishData['formData'] | undefined = undefined;
+	export let formData: IdeasData['data'] | WishData['data'] | undefined = undefined;
 	export let currentUserGroups:
 		| IdeasData['currentUserGroups']
 		| WishData['currentUserGroups']
@@ -26,7 +26,9 @@
 	export let allowPurchased = false;
 	export let allowEdit = false;
 
-	const switchPurchased: CreateSwitchProps['onCheckedChange'] = ({ next }) => {
+	let isPurchased = 'purchased' in item && (item.purchased ?? undefined);
+
+	const switchPurchased = (next: boolean) => {
 		const formData = new FormData();
 		formData.set('id', item.id);
 		formData.set('purchased', String(next));
@@ -48,20 +50,12 @@
 			});
 		return next;
 	};
-
-	const {
-		elements: { root, input },
-		states: { checked: isPurchased }
-	} = createSwitch({
-		defaultChecked: 'purchased' in item && (item.purchased ?? undefined),
-		onCheckedChange: switchPurchased
-	});
 </script>
 
 <tr
 	class="group border-b border-gray-200 last:border-none dark:border-gray-700 {'purchased' in
-		item && $isPurchased
-		? 'decoration-current line-through decoration-2 opacity-30'
+		item && isPurchased
+		? 'line-through decoration-current decoration-2 opacity-30'
 		: ''}"
 >
 	<td class="flex items-center px-6 py-3">
@@ -89,7 +83,7 @@
 				href={item.link}
 				target="_blank"
 				rel="noopener noreferrer"
-				class="inline-block w-full cursor-pointer overflow-hidden overflow-ellipsis whitespace-nowrap px-6 py-4 text-sm font-normal text-primary-500 underline hover:text-primary-700"
+				class="inline-block w-full cursor-pointer overflow-hidden overflow-ellipsis whitespace-nowrap px-6 py-4 text-sm font-normal text-primary-foreground underline"
 			>
 				{formatLink(item.link)}
 			</a>
@@ -97,20 +91,7 @@
 	</td>
 	{#if 'purchased' in item && allowPurchased}
 		<td class=" px-6 py-3">
-			<button
-				use:melt={$root}
-				class="relative inline-flex h-6 w-11 items-center rounded-full {$isPurchased
-					? 'bg-success-500'
-					: 'bg-gray-200 dark:bg-gray-400'}"
-			>
-				<span class="sr-only">Item purchased</span>
-				<span
-					class="inline-block h-4 w-4 transform rounded-full bg-white dark:bg-gray-100 {$isPurchased
-						? 'translate-x-6'
-						: 'translate-x-1'}"
-				/>
-			</button>
-			<input use:melt={$input} />
+			<Switch bind:checked={isPurchased} onCheckedChange={switchPurchased} />
 		</td>
 	{/if}
 	{#if allowEdit}

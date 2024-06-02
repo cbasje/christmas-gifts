@@ -20,6 +20,6 @@
 		}
 	}
 	.prose :global(a) {
-		@apply cursor-pointer font-normal  text-primary-500 hover:text-primary-700 dark:text-primary-600 dark:hover:text-primary-800;
+		@apply cursor-pointer font-normal text-primary-foreground;
 	}
 </style>

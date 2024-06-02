@@ -1,4 +1,4 @@
-import { users } from '$lib/db/schema/user';
+import { authSchema, users } from '$lib/db/schema/user';
 import { db } from '$lib/server/drizzle';
 import { auth } from '$lib/server/lucia';
 import { capitaliseString } from '$lib/utils/capitalise';
@@ -6,20 +6,14 @@ import { fail, redirect } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import { generateId } from 'lucia';
 import { Argon2id } from 'oslo/password';
+import { zod } from 'sveltekit-superforms/adapters';
 import { setError, superValidate } from 'sveltekit-superforms/server';
-import { z } from 'zod';
 import type { Actions, PageServerLoad } from './$types';
-
-// TODO: drizzle-zod
-const schema = z.object({
-	username: z.string().min(1).max(255).toLowerCase(),
-	password: z.string().min(6).max(255)
-});
 
 export const load = (async ({ locals }) => {
 	if (locals.session) redirect(302, '/');
 
-	const form = await superValidate(schema);
+	const form = await superValidate(zod(authSchema));
 
 	return {
 		form
@@ -28,7 +22,7 @@ export const load = (async ({ locals }) => {
 
 export const actions = {
 	default: async ({ request, cookies }) => {
-		const form = await superValidate(request, schema);
+		const form = await superValidate(request, zod(authSchema));
 
 		if (!form.valid) {
 			return fail(400, { form });

@@ -1,31 +1,12 @@
-import { giftItems } from '$lib/db/schema/gift-item';
-import { Groups } from '$lib/db/schema/user';
+import { giftItems, insertGiftItemSchema } from '$lib/db/schema/gift-item';
 import { db } from '$lib/server/drizzle';
-import { getSupabaseURL, isFile, uploadFile } from '$lib/utils/file';
+import { getSupabaseURL, uploadFile } from '$lib/utils/file';
 import { fail } from '@sveltejs/kit';
 import { and, eq, sql } from 'drizzle-orm';
-import { superValidate } from 'sveltekit-superforms/server';
-import { z } from 'zod';
+import { nanoid } from 'nanoid/non-secure';
+import { zod } from 'sveltekit-superforms/adapters';
+import { superValidate, withFiles } from 'sveltekit-superforms/server';
 import type { Actions, PageServerLoad } from './$types';
-
-// TODO: drizzle-zod
-const schema = z.object({
-	id: z.string().uuid(),
-	name: z.string(),
-	price: z
-		.string()
-		.regex(/(?:[$€])?\s?\d+(?:[,.]\d+)?/g, {
-			message: 'Price must consist of numbers with currency codes.'
-		})
-		.nullish(),
-	notes: z.string().nullish(),
-	recipientId: z.string(),
-	giftedById: z.string().nullish(),
-	link: z.string().url().nullish(),
-	pic: z.string().url().nullish(),
-	idea: z.boolean().default(false),
-	groups: z.enum(Groups).array()
-});
 
 export const load = (async ({ parent }) => {
 	const { user, currentGroupId } = await parent();
@@ -56,11 +37,11 @@ export const load = (async ({ parent }) => {
 			recipientId: user.id,
 			groups: currentGroupId ? [currentGroupId] : []
 		},
-		schema
+		zod(insertGiftItemSchema)
 	);
 
 	return {
-		formData,
+		data: formData,
 		currentUserGroups: user.groups,
 		wishList: wishList.map((i) =>
 			i.pic
@@ -76,38 +57,31 @@ export const load = (async ({ parent }) => {
 export const actions = {
 	newItem: async ({ request }) => {
 		const formData = await request.formData();
-		const form = await superValidate(formData, schema);
+		const form = await superValidate(formData, zod(insertGiftItemSchema));
 
-		// Convenient validation check:
 		if (!form.valid) {
 			return fail(400, { form });
 		}
 
 		try {
-			let data: typeof form.data;
-			const file = isFile(formData.get('pic'));
-			if (file) {
-				const pic = await uploadFile(form.data.id, file);
-				data = {
-					...form.data,
-					pic: pic.toString()
-				};
-			} else {
-				data = {
-					...form.data
-				};
+			let picURL: string | undefined;
+			if (form.data.pic) {
+				picURL = await uploadFile(form.data.id, form.data.pic);
 			}
 
-			const [newItem] = await db
-				.insert(giftItems)
-				.values({
-					...data
-				})
-				.returning({
-					name: giftItems.name
-				});
+			await db.insert(giftItems).values({
+				id: nanoid(),
+				name: form.data.name,
+				price: form.data.price,
+				notes: form.data.notes,
+				recipientId: form.data.recipientId,
+				giftedById: form.data.giftedById,
+				link: form.data.link,
+				pic: picURL,
+				groups: form.data.groups
+			});
 
-			return { form, newItem };
+			return withFiles({ form });
 		} catch (error) {
 			console.error(error);
 			return fail(500, { form });
@@ -115,47 +89,34 @@ export const actions = {
 	},
 	editItem: async ({ request }) => {
 		const formData = await request.formData();
-		const form = await superValidate(formData, schema);
+		const form = await superValidate(formData, zod(insertGiftItemSchema));
 
-		// Convenient validation check:
 		if (!form.valid) {
 			return fail(400, { form });
 		}
 
 		try {
-			let data: typeof form.data;
-			const file = isFile(formData.get('pic'));
-			if (file) {
-				const pic = await uploadFile(form.data.id, file);
-				data = {
-					...form.data,
-					pic: pic.toString()
-				};
-			} else {
-				data = {
-					...form.data
-				};
+			let picURL: string | undefined;
+			if (form.data.pic) {
+				picURL = await uploadFile(form.data.id, form.data.pic);
 			}
 
-			const [editedItem] = await db
+			await db
 				.update(giftItems)
 				.set({
 					name: form.data.name,
-					recipientId: form.data.recipientId,
 					price: form.data.price,
+					notes: form.data.notes,
+					recipientId: form.data.recipientId,
 					giftedById: form.data.giftedById,
 					link: form.data.link,
-					pic: form.data.pic,
-					notes: form.data.notes,
+					pic: picURL,
 					groups: form.data.groups,
 					updatedAt: new Date()
 				})
-				.where(eq(giftItems.id, form.data.id))
-				.returning({
-					name: giftItems.name
-				});
+				.where(eq(giftItems.id, form.data.id));
 
-			return { form, editedItem };
+			return withFiles({ form });
 		} catch (error) {
 			console.error(error);
 			return fail(500, { form });

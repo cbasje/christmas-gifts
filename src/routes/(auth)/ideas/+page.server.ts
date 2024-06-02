@@ -1,30 +1,13 @@
-import { ideas } from '$lib/db/schema/gift-item';
+import { ideas, insertIdeaSchema } from '$lib/db/schema/gift-item';
 import { users } from '$lib/db/schema/user';
 import { db } from '$lib/server/drizzle';
-import { isFile, uploadFile } from '$lib/utils/file';
 import { groupBy } from '$lib/utils/group-by';
 import { fail } from '@sveltejs/kit';
 import { and, asc, desc, eq, isNotNull, not, or, sql } from 'drizzle-orm';
-import { superValidate } from 'sveltekit-superforms/server';
-import { z } from 'zod';
+import { nanoid } from 'nanoid/non-secure';
+import { zod } from 'sveltekit-superforms/adapters';
+import { superValidate, withFiles } from 'sveltekit-superforms/server';
 import type { Actions, PageServerLoad } from './$types';
-
-// TODO: drizzle-zod
-const schema = z.object({
-	id: z.string().uuid(),
-	name: z.string(),
-	price: z
-		.string()
-		.regex(/(?:[$€])?\s?\d+(?:[,.]\d+)?/g, {
-			message: 'Price must consist of numbers with currency codes.'
-		})
-		.nullish(),
-	recipientId: z.string(),
-	giftedById: z.string().nullish(),
-	link: z.string().url().nullish(),
-	idea: z.boolean().default(true),
-	giftItemId: z.string().nullish()
-});
 
 export const load = (async ({ parent }) => {
 	const { user, currentGroupId } = await parent();
@@ -72,11 +55,11 @@ export const load = (async ({ parent }) => {
 		{
 			giftedById: user.id
 		},
-		schema
+		zod(insertIdeaSchema)
 	);
 
 	return {
-		formData,
+		data: formData,
 		currentUserGroups: user.groups,
 		users: groupUsers,
 		ideaList: groupBy(ideaList, 'recipientId')
@@ -86,38 +69,24 @@ export const load = (async ({ parent }) => {
 export const actions = {
 	newItem: async ({ request }) => {
 		const formData = await request.formData();
-		const form = await superValidate(formData, schema);
+		const form = await superValidate(formData, zod(insertIdeaSchema));
 
-		// Convenient validation check:
 		if (!form.valid) {
 			return fail(400, { form });
 		}
 
 		try {
-			let data: typeof form.data;
-			const file = isFile(formData.get('pic'));
-			if (file) {
-				const pic = await uploadFile(form.data.id, file);
-				data = {
-					...form.data,
-					pic: pic.toString()
-				};
-			} else {
-				data = {
-					...form.data
-				};
-			}
+			await db.insert(ideas).values({
+				id: nanoid(),
+				name: form.data.name,
+				price: form.data.price,
+				recipientId: form.data.recipientId,
+				giftedById: form.data.giftedById,
+				link: form.data.link,
+				giftItemId: form.data.giftItemId
+			});
 
-			const [newItem] = await db
-				.insert(ideas)
-				.values({
-					...data
-				})
-				.returning({
-					name: ideas.name
-				});
-
-			return { form, newItem };
+			return withFiles({ form });
 		} catch (error) {
 			console.error(error);
 			return fail(500, { form });
@@ -125,31 +94,27 @@ export const actions = {
 	},
 	editItem: async ({ request }) => {
 		const formData = await request.formData();
-		const form = await superValidate(formData, schema);
+		const form = await superValidate(formData, zod(insertIdeaSchema));
 
-		// Convenient validation check:
 		if (!form.valid) {
 			return fail(400, { form });
 		}
 
 		try {
-			const [editedItem] = await db
+			await db
 				.update(ideas)
 				.set({
 					name: form.data.name,
-					recipientId: form.data.recipientId,
 					price: form.data.price,
+					recipientId: form.data.recipientId,
 					giftedById: form.data.giftedById,
 					link: form.data.link,
 					giftItemId: form.data.giftItemId,
 					updatedAt: new Date()
 				})
-				.where(eq(ideas.id, form.data.id))
-				.returning({
-					name: ideas.name
-				});
+				.where(eq(ideas.id, form.data.id));
 
-			return { form, editedItem };
+			return withFiles({ form });
 		} catch (error) {
 			console.error(error);
 			return fail(500, { form });

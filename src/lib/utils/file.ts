@@ -1,13 +1,5 @@
 import supabase from '$lib/server/supabase';
 
-export const isFile = (input: FormDataEntryValue | null) => {
-	if (input instanceof File && input.name && input.name !== 'undefined') {
-		return input;
-	} else {
-		return false;
-	}
-};
-
 export const uploadFile = async (id: string, file: File) => {
 	// Write the file to the static folder
 	// writeFileSync(`static/${file.name}`, Buffer.from(await file.arrayBuffer()));

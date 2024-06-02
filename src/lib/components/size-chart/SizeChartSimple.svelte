@@ -4,7 +4,7 @@
 	viewBox="0 0 498 498"
 	fill="none"
 	xmlns="http://www.w3.org/2000/svg"
-	class="mx-auto h-[auto] w-full max-w-3xl text-primary-900 dark:text-primary-100 md:hidden md:max-w-7xl"
+	class="mx-auto h-[auto] w-full max-w-3xl text-primary-foreground md:hidden md:max-w-7xl"
 >
 	<path
 		d="M249 54C260 54 270 58 270 82.5C270.833 83.3333 273 84.1 273 88C273 96.1 261.5 97 261.5 110C261.5 123 300 119 300 143.5C300 199 293 251.278 293 268.5C293 277 288.5 283.5 285 283.5"

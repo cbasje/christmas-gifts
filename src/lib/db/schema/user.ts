@@ -4,8 +4,8 @@ import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 import { giftItems } from './gift-item';
 
-export const Groups = ['BENJAMINS', 'HAUGEN'] as const;
-export type Group = (typeof Groups)[number];
+export const groups = ['BENJAMINS', 'HAUGEN'] as const;
+export type Group = (typeof groups)[number];
 
 export const UserSizesSchema = z.object({
 	simple: z.object({
@@ -53,9 +53,14 @@ export const selectUserSchema = createSelectSchema(users);
 export type User = typeof users.$inferSelect;
 
 export const insertUserSchema = createInsertSchema(users, {
-	hue: (schema) => schema.id.min(0).max(360)
+	hue: (schema) => schema.hue.min(0).max(360)
 });
 export type NewUser = typeof users.$inferInsert;
+
+export const authSchema = z.object({
+	username: z.string().min(1).max(255).toLowerCase(),
+	password: z.string().min(6).max(255)
+});
 
 export const authSessions = pgTable('sessions', {
 	id: text('id').primaryKey().notNull(),

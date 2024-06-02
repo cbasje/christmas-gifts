@@ -1,18 +1,12 @@
-import { auth } from '$lib/server/lucia';
-import { error, fail, redirect } from '@sveltejs/kit';
-import { Argon2id } from 'oslo/password';
-import { setError, superValidate } from 'sveltekit-superforms/server';
-import { z } from 'zod';
-import type { Actions, PageServerLoad } from './$types';
-import { users } from '$lib/db/schema/user';
+import { authSchema, users } from '$lib/db/schema/user';
 import { db } from '$lib/server/drizzle';
+import { auth } from '$lib/server/lucia';
+import { fail, redirect } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
-
-// TODO: drizzle-zod
-const schema = z.object({
-	username: z.string().min(1).max(255).toLowerCase(),
-	password: z.string().min(6).max(255)
-});
+import { Argon2id } from 'oslo/password';
+import { zod } from 'sveltekit-superforms/adapters';
+import { setError, superValidate } from 'sveltekit-superforms/server';
+import type { Actions, PageServerLoad } from './$types';
 
 export const load = (async ({ locals, url, cookies }) => {
 	if (locals.user) redirect(302, '/');
@@ -43,7 +37,7 @@ export const load = (async ({ locals, url, cookies }) => {
 		}
 	}
 
-	const form = await superValidate(schema);
+	const form = await superValidate(zod(authSchema));
 
 	return {
 		form
@@ -52,7 +46,7 @@ export const load = (async ({ locals, url, cookies }) => {
 
 export const actions = {
 	default: async ({ request, cookies }) => {
-		const form = await superValidate(request, schema);
+		const form = await superValidate(request, zod(authSchema));
 
 		if (!form.valid) {
 			return fail(400, { form });

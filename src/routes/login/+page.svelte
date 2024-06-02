@@ -1,16 +1,20 @@
 <script lang="ts">
 	import { dev } from '$app/environment';
-	import Input from '$lib/components/Input.svelte';
+	import * as Form from '$lib/components/ui/form';
+	import { Input } from '$lib/components/ui/input';
+	import { authSchema } from '$lib/db/schema/user';
 	import { t } from '$lib/translations';
-	import Icon from '@iconify/svelte';
 	import toast from 'svelte-french-toast';
+	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { superForm } from 'sveltekit-superforms/client';
 	import Header from '../(auth)/Header.svelte';
 	import type { PageData } from './$types';
+	import Button from '$lib/components/ui/button/button.svelte';
 
 	export let data: PageData;
 
-	const { form, enhance, errors, constraints } = superForm(data.form, {
+	const form = superForm(data.form, {
+		validators: zodClient(authSchema),
 		resetForm: true,
 		onResult: ({ result }) => {
 			if (result.type === 'failure' || result.type === 'error') {
@@ -19,10 +23,11 @@
 				toast.success(`Logged you in successfully!`);
 			}
 		},
-		onError: ({ message }) => {
-			toast.error(`Logging in was not successful! Reason: ${message}`);
+		onError: ({ result }) => {
+			toast.error(`Logging in was not successful! Reason: ${result?.error.message}`);
 		}
 	});
+	const { form: formData, enhance } = form;
 </script>
 
 <Header padding={false}>
@@ -34,38 +39,37 @@
 </Header>
 
 <form class="mt-8 flex flex-col gap-2" method="POST" use:enhance>
-	<Input
-		name="username"
-		type="text"
-		label={$t('common.user.username')}
-		bind:value={$form.username}
-		placeholder={$t('common.user.username')}
-		autocomplete="username"
-		messages={$errors.username}
-		aria-invalid={$errors.username ? 'true' : undefined}
-		label-class="sr-only"
-		{...$constraints.username}
-	/>
-	<Input
-		name="password"
-		type="password"
-		label={$t('common.user.password')}
-		bind:value={$form.password}
-		placeholder={$t('common.user.password')}
-		autocomplete="current-password"
-		messages={$errors.password}
-		aria-invalid={$errors.password ? 'true' : undefined}
-		label-class="sr-only"
-		{...$constraints.password}
-	/>
-	<button
-		type="submit"
-		class="mt-4 flex w-full items-center justify-center gap-3 rounded-md border border-primary-700 bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500"
-	>
-		<Icon icon="solar:shield-keyhole-minimalistic-line-duotone" class="square-4" />
-		<span>{$t('common.signIn')}</span>
-	</button>
+	<Form.Field {form} name="username">
+		<Form.Control let:attrs>
+			<Form.Label>{$t('common.user.username')}</Form.Label>
+			<Input
+				{...attrs}
+				bind:value={$formData.username}
+				placeholder={$t('common.user.username')}
+				autocomplete="username"
+			/>
+		</Form.Control>
+		<Form.FieldErrors />
+	</Form.Field>
+
+	<Form.Field {form} name="password">
+		<Form.Control let:attrs>
+			<Form.Label>{$t('common.user.password')}</Form.Label>
+			<Input
+				{...attrs}
+				bind:value={$formData.password}
+				type="password"
+				placeholder={$t('common.user.password')}
+				autocomplete="current-password"
+			/>
+		</Form.Control>
+		<Form.FieldErrors />
+	</Form.Field>
+	<Form.Button>
+		{$t('common.signIn')}
+	</Form.Button>
+
 	{#if dev}
-		<a href="/signup">Signup</a>
+		<Button href="/signup" variant="outline">{$t('common.signUp')}</Button>
 	{/if}
 </form>

@@ -1,7 +1,11 @@
 import { relations } from 'drizzle-orm';
 import { boolean, jsonb, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import { users, type Group } from './user';
+import { nanoid } from 'nanoid/non-secure';
+import { z } from 'zod';
+import { groups, users, type Group } from './user';
+
+const priceRegex = /^(?:[$€])?\s?\d+(?:[,.]\d+)?$/g;
 
 export const giftItems = pgTable('gift_items', {
 	id: text('id').primaryKey().notNull(),
@@ -45,13 +49,30 @@ export const selectGiftItemSchema = createSelectSchema(giftItems);
 export type GiftItem = typeof giftItems.$inferSelect;
 
 export const insertGiftItemSchema = createInsertSchema(giftItems, {
-	id: (schema) => schema.id.uuid(),
+	id: (schema) => schema.id.nanoid().default(nanoid()),
 	price: (schema) =>
-		schema.price.regex(/(?:[$€])?\s?\d+(?:[,.]\d+)?/g, {
+		schema.price.regex(priceRegex, {
 			message: 'Price must consist of numbers with currency codes.'
 		}),
-	link: (schema) => schema.link.url()
-}).pick({ id: true });
+	link: (schema) => schema.link.url(),
+	pic: () =>
+		z
+			.instanceof(File, { message: 'Please upload a file.' })
+			.refine((f) => f.size < 100_000, 'Max 100 kB upload size.'),
+	groups: () => z.enum(['BENJAMINS', 'HAUGEN']).array()
+})
+	.pick({
+		id: true,
+		name: true,
+		price: true,
+		notes: true,
+		recipientId: true,
+		giftedById: true,
+		link: true,
+		pic: true,
+		groups: true
+	})
+	.merge(z.object({ idea: z.literal(false).default(false) }));
 export type NewGiftItem = typeof giftItems.$inferInsert;
 
 export const ideas = pgTable('ideas', {
@@ -96,11 +117,21 @@ export const selectIdeaSchema = createSelectSchema(ideas);
 export type Idea = typeof ideas.$inferSelect;
 
 export const insertIdeaSchema = createInsertSchema(ideas, {
-	id: (schema) => schema.id.uuid(),
+	id: (schema) => schema.id.nanoid().default(nanoid()),
 	price: (schema) =>
-		schema.price.regex(/(?:[$€])?\s?\d+(?:[,.]\d+)?/g, {
+		schema.price.regex(priceRegex, {
 			message: 'Price must consist of numbers with currency codes.'
 		}),
 	link: (schema) => schema.link.url()
-}).pick({ id: true });
+})
+	.pick({
+		id: true,
+		name: true,
+		price: true,
+		recipientId: true,
+		giftedById: true,
+		link: true,
+		giftItemId: true
+	})
+	.merge(z.object({ idea: z.literal(true).default(true) }));
 export type NewIdea = typeof ideas.$inferInsert;
