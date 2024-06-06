@@ -12,7 +12,7 @@
 
 <Sheet.Root>
 	<Sheet.Trigger>
-		<Icon icon="solar:ruler-line-duotone" class="square-4" />
+		<Icon icon="ph:ruler-duotone" class="square-4" />
 		<span class="sr-only">Open size chart popup</span>
 	</Sheet.Trigger>
 

@@ -35,8 +35,8 @@
 </script>
 
 <button
-	class="cursor-pointer font-normal text-danger-500 hover:text-danger-700 dark:text-danger-600 dark:hover:text-danger-800"
+	class="text-danger-500 hover:text-danger-700 dark:text-danger-600 dark:hover:text-danger-800 cursor-pointer font-normal"
 	on:click={removeItem}
 >
-	<Icon icon="solar:trash-bin-2-line-duotone" class="block h-6 w-6" />
+	<Icon icon="ph:trash-simple-duotone" class="block h-6 w-6" />
 </button>

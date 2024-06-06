@@ -89,7 +89,7 @@
 			<Menubar.Item inset>
 				<form method="post" action="/logout" use:enhance>
 					<FormButton>
-						<Icon icon="solar:logout-2-line-duotone" class="block h-4 w-4" />
+						<Icon icon="ph:arrow-square-out-duotone" class="block h-4 w-4" />
 						<span>{$t('common.signOut')}</span>
 					</FormButton>
 				</form>

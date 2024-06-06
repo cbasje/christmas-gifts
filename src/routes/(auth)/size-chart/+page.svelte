@@ -44,7 +44,7 @@
 
 		<svelte:fragment slot="buttons">
 			<Button type="submit" disabled={$tainted === undefined}>
-				<Icon icon="solar:diskette-line-duotone" class="square-4" />
+				<Icon icon="ph:floppy-disk-duotone" class="square-4" />
 				<span>{$t('sizeChart.submit')}</span>
 			</Button>
 		</svelte:fragment>

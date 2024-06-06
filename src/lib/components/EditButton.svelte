@@ -111,7 +111,7 @@
 
 <Sheet.Root bind:open onOpenChange={handleOpenChange}>
 	<Sheet.Trigger>
-		<Icon icon="solar:pen-line-duotone" class="block h-6 w-6" />
+		<Icon icon="ph:pen-duotone" class="block h-6 w-6" />
 	</Sheet.Trigger>
 
 	<Sheet.Content>
