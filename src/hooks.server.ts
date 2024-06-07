@@ -3,7 +3,7 @@ import { defaultLocale, locales } from '$lib/translations';
 import { redirect, type Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 
-const lang = (async ({ event, resolve }) => {
+const localization = (async ({ event, resolve }) => {
 	const { headers } = event.request;
 
 	let currentLocale = event.cookies.get('locale');
@@ -25,12 +25,8 @@ const lang = (async ({ event, resolve }) => {
 	});
 }) satisfies Handle;
 
-function shouldProtectRoute(routeId: string | null) {
-	// The group '(auth)' should be protected
-	return !routeId || routeId?.startsWith('/(auth)') === true;
-}
-
-export const authorization = (async ({ event, resolve }) => {
+const authorization = (async ({ event, resolve }) => {
+	// Doing a server hook forces to run the auth check on every request
 	const sessionId = event.cookies.get(auth.sessionCookieName);
 	if (!sessionId) {
 		event.locals.user = null;
@@ -55,10 +51,15 @@ export const authorization = (async ({ event, resolve }) => {
 			...sessionCookie.attributes
 		});
 	}
-
 	event.locals.user = user;
 	event.locals.session = session;
+
 	return resolve(event);
 }) satisfies Handle;
 
-export const handle = sequence(authorization, lang);
+function shouldProtectRoute(routeId: string | null) {
+	// The group '(auth)' should be protected
+	return routeId && routeId.startsWith('/(auth)') === true;
+}
+
+export const handle = sequence(authorization, localization);
