@@ -41,7 +41,7 @@ export const authorization = (async ({ event, resolve }) => {
 	}
 
 	const { session, user } = await auth.validateSession(sessionId);
-	if (session && session.fresh) {
+	if (session?.fresh) {
 		const sessionCookie = auth.createSessionCookie(session.id);
 		event.cookies.set(sessionCookie.name, sessionCookie.value, {
 			path: '.',
