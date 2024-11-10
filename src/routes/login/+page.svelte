@@ -14,13 +14,14 @@
 		resetForm: true,
 		onResult: ({ result }) => {
 			if (result.type === 'failure' || result.type === 'error') {
-				toast.error(`Logging in was not successful!`);
+				toast.error('Logging in was not successful!');
 			} else {
-				toast.success(`Logged you in successfully!`);
+				toast.success('Logged you in successfully!');
 			}
 		},
 		onError: ({ message }) => {
 			toast.error(`Logging in was not successful! Reason: ${message}`);
+			console.error(message);
 		}
 	});
 </script>

@@ -27,13 +27,14 @@
 		resetForm: false,
 		onResult: ({ result }) => {
 			if ('data' in result && result.data?.form?.valid) {
-				toast.success(`Saved your sizes successfully!`);
+				toast.success("Saved your sizes successfully!");
 			} else {
-				toast.error(`Saving sizes was not successful!`);
+				toast.error("Saving sizes was not successful!");
 			}
 		},
 		onError: ({ message }) => {
 			toast.error(`Saving sizes was not successful! Reason: ${message}`);
+			console.error(message);
 		}
 	});
 

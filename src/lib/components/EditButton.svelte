@@ -33,11 +33,12 @@
 				open.set(false);
 				toast.success(`Updated ${result.data.editedItem.name} successfully!`);
 			} else {
-				toast.error(`Updating item was not successful!`);
+				toast.error("Updating item was not successful!");
 			}
 		},
 		onError: ({ message }) => {
 			toast.error(`Updating item was not successful! Reason: ${message}`);
+			console.error(message);
 		}
 	});
 

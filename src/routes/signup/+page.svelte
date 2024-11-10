@@ -13,13 +13,14 @@
 		resetForm: true,
 		onResult: ({ result }) => {
 			if (result.type === 'failure' || result.type === 'error') {
-				toast.error(`Signing up was not successful!`);
+				toast.error('Signing up was not successful!');
 			} else {
-				toast.success(`Signed you up successfully!`);
+				toast.success('Signed you up successfully!');
 			}
 		},
 		onError: ({ message }) => {
 			toast.error(`Signing up was not successful! Reason: ${message}`);
+			console.error(message);
 		}
 	});
 </script>

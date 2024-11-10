@@ -39,11 +39,12 @@
 					} list successfully!`
 				);
 			} else {
-				toast.error(`Adding item was not successful!`);
+				toast.error("Adding item was not successful!");
 			}
 		},
 		onError: ({ message }) => {
 			toast.error(`Adding item was not successful! Reason: ${message}`);
+			console.error(message);
 		}
 	});
 
