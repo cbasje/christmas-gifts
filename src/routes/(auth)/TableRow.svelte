@@ -15,16 +15,16 @@ import MarkdownDisplay from '$lib/components/MarkdownDisplay.svelte';
 type EditGiftItem = (IdeasData['ideaList'][string] | WishData['wishList'])[number];
 type GiftItem = EditGiftItem | OverviewData['overviewList'][string][number];
 
-export const formData: IdeasData['formData'] | WishData['formData'] | undefined = undefined;
-export const currentUserGroups:
+export let formData: IdeasData['formData'] | WishData['formData'] | undefined = undefined;
+export let currentUserGroups:
 	| IdeasData['currentUserGroups']
 	| WishData['currentUserGroups']
 	| undefined = undefined;
-export const users: IdeasData['users'] | undefined = undefined;
+export let users: IdeasData['users'] | undefined = undefined;
 
 export let item: GiftItem;
-export const allowPurchased = false;
-export const allowEdit = false;
+export let allowPurchased = false;
+export let allowEdit = false;
 
 const switchPurchased: CreateSwitchProps['onCheckedChange'] = ({ next }) => {
 	const formData = new FormData();

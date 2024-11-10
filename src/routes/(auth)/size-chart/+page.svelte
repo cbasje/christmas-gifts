@@ -16,7 +16,7 @@ import type { PageData } from './$types';
 
 export let data: PageData;
 
-const categories = ['Simple', 'Advanced'];
+let categories = ['Simple', 'Advanced'];
 
 const {
 	elements: { root, list, content, trigger },

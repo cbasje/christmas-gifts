@@ -6,9 +6,9 @@ const id = `form-dropzone-${crypto.randomUUID()}`;
 export let name: string;
 export let files: FileList;
 export let label: string;
-export const icon: IconifyIcon | string | null | undefined = undefined;
-export const message: string | null | undefined = undefined;
-export const help: string | null | undefined = undefined;
+export let icon: IconifyIcon | string | null | undefined = undefined;
+export let message: string | null | undefined = undefined;
+export let help: string | null | undefined = undefined;
 
 function prunedRestProps() {
 	delete $$restProps['class'];

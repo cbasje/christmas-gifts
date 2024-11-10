@@ -17,11 +17,11 @@ import Input from './Input.svelte';
 // const localePath = useLocalePath();
 export let formData: IdeasData['formData'] | WishData['formData'];
 export let currentUserGroups: IdeasData['currentUserGroups'] | WishData['currentUserGroups'];
-export const users: IdeasData['users'] | undefined = undefined;
+export let users: IdeasData['users'] | undefined = undefined;
 
 type Idea = IdeasData['ideaList'][string][number];
 type GiftItem = WishData['wishList'][number];
-export const item: Idea | GiftItem | undefined = undefined;
+export let item: Idea | GiftItem | undefined = undefined;
 
 let linkItems: LinkItem[] = [];
 

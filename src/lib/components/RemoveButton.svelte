@@ -24,7 +24,7 @@ const removeItem = async () => {
 				{
 					loading: 'Removing...',
 					success: `Removed '${name}' successfully!`,
-					error: 'Removing item was not successful!',
+					error: `Removing item was not successful!`,
 				},
 			)
 			.then(() => {

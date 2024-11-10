@@ -1,5 +1,5 @@
 <script lang="ts">
-export const padding = true;
+export let padding = true;
 </script>
 
 <header

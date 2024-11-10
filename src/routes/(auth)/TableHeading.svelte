@@ -3,11 +3,11 @@ import { t } from '$lib/translations';
 import Icon from '@iconify/svelte';
 
 export let headerHue: number | undefined;
-export const allowPurchased = false;
-export const allowEdit = false;
-export const isCollapsable = false;
+export let allowPurchased = false;
+export let allowEdit = false;
+export let isCollapsable = false;
 export let isCollapsed = true;
-export const showBgColor = true;
+export let showBgColor = true;
 
 const toggleCollapsed = () => {
 	isCollapsed = !isCollapsed;

@@ -16,17 +16,17 @@ const id = `form-input-${crypto.randomUUID()}`;
 
 export let name: string;
 export let value: string | string[] | boolean | null | undefined;
-export const label: string | null | undefined = undefined;
+export let label: string | null | undefined = undefined;
 export let type: HTMLInputAttributes['type'] | 'textarea' | 'select' | 'select-multiple';
-export const icon: IconifyIcon | string | null | undefined = undefined;
-export const required = false;
-export const disabled = false;
-export const accept: string | undefined = undefined;
-export const placeholder: string | null | undefined = undefined;
-export const help: string | null | undefined = undefined;
-export const messages: string[] | null | undefined = undefined;
-export const autocomplete: HTMLInputAttributes['autocomplete'] | null | undefined = undefined;
-export const options: SelectOption[] | null | undefined = undefined;
+export let icon: IconifyIcon | string | null | undefined = undefined;
+export let required = false;
+export let disabled = false;
+export let accept: string | undefined = undefined;
+export let placeholder: string | null | undefined = undefined;
+export let help: string | null | undefined = undefined;
+export let messages: string[] | null | undefined = undefined;
+export let autocomplete: HTMLInputAttributes['autocomplete'] | null | undefined = undefined;
+export let options: SelectOption[] | null | undefined = undefined;
 
 function setType(node: HTMLInputElement | HTMLButtonElement) {
 	if (node && type) node.type = type;

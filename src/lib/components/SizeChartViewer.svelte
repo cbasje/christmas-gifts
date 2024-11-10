@@ -8,7 +8,7 @@ import SizeChartSimple from './size-chart/SizeChartSimple.svelte';
 import SizeChartSimpleEmpty from './size-chart/SizeChartSimpleEmpty.svelte';
 
 export let sizes: UserSizes;
-const categories = ['Simple', 'Advanced'];
+let categories = ['Simple', 'Advanced'];
 
 const {
 	elements: { root, list, content, trigger },

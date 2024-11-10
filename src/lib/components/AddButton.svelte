@@ -17,7 +17,7 @@ import Input from './Input.svelte';
 // const localePath = useLocalePath();
 export let formData: IdeasData['formData'] | WishData['formData'];
 export let currentUserGroups: IdeasData['currentUserGroups'] | WishData['currentUserGroups'];
-export const users: IdeasData['users'] | undefined = undefined;
+export let users: IdeasData['users'] | undefined = undefined;
 
 let linkItems: LinkItem[] = [];
 

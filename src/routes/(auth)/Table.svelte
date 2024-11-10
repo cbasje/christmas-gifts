@@ -10,16 +10,16 @@ export let items:
 	| IdeasData['ideaList'][string]
 	| WishData['wishList']
 	| OverviewData['overviewList'][string];
-export const pageData: IdeasData | WishData | undefined = undefined;
+export let pageData: IdeasData | WishData | undefined = undefined;
 
-export const headerHue: number | undefined = undefined;
-export const allowPurchased = false;
-export const allowEdit = false;
-export const isCollapsable = false;
-export const hasSummary = false;
-export const showBgColor = true;
+export let headerHue: number | undefined = undefined;
+export let allowPurchased = false;
+export let allowEdit = false;
+export let isCollapsable = false;
+export let hasSummary = false;
+export let showBgColor = true;
 
-const isCollapsed = !!isCollapsable;
+let isCollapsed = !!isCollapsable;
 </script>
 
 <table

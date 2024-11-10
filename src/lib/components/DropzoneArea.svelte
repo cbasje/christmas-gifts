@@ -5,7 +5,7 @@ import toast from 'svelte-french-toast';
 import Dropzone from './Dropzone.svelte';
 
 export let name: string;
-export const supabaseFile: string | null | undefined = undefined;
+export let supabaseFile: string | null | undefined = undefined;
 
 const dispatch = createEventDispatcher<{
 	upload: undefined;
@@ -23,7 +23,7 @@ if (supabaseFile) {
 }
 
 let droppedFiles: FileList;
-const uploading = false;
+let uploading = false;
 const authorizedExtensions = ['.jpg', '.jpeg', '.png', '.webp'];
 
 const onChangeHandler = () => {

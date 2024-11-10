@@ -1,6 +1,6 @@
 <script lang="ts">
 export let title: string;
-export const hue: number | null | undefined = 145;
+export let hue: number | null | undefined = 145;
 </script>
 
 <span

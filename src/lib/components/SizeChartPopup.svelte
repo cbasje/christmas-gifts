@@ -7,8 +7,8 @@ import { fade, scale } from 'svelte/transition';
 import SizeChartViewer from './SizeChartViewer.svelte';
 
 export let name: string;
-export const hue: number | undefined = undefined;
-export const sizes: UserSizes = { simple: {}, advanced: {} };
+export let hue: number | undefined = undefined;
+export let sizes: UserSizes = { simple: {}, advanced: {} };
 
 console.log('🎄 -----------------🎄');
 console.log('🎄 ~ sizes:', sizes);
