@@ -36,9 +36,9 @@ const { form, enhance, constraints, errors, reset, tainted } = superForm(formDat
 			toast.error('Updating item was not successful!');
 		}
 	},
-	onError: ({ message }) => {
-		toast.error(`Updating item was not successful! Reason: ${message}`);
-		console.error(message);
+	onError: ({ result }) => {
+		toast.error(`Updating item was not successful! Reason: ${result.error.message}`);
+		console.error(result.error.message);
 	},
 });
 

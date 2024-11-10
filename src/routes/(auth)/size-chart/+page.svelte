@@ -32,9 +32,9 @@ const { form, enhance, constraints, errors, tainted } = superForm(data.form, {
 			toast.error('Saving sizes was not successful!');
 		}
 	},
-	onError: ({ message }) => {
-		toast.error(`Saving sizes was not successful! Reason: ${message}`);
-		console.error(message);
+	onError: ({ result }) => {
+		toast.error(`Saving sizes was not successful! Reason: ${result.error.message}`);
+		console.error(result.error.message);
 	},
 });
 

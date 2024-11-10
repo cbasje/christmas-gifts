@@ -42,9 +42,9 @@ const { form, enhance, constraints, errors, tainted } = superForm(formData, {
 			toast.error('Adding item was not successful!');
 		}
 	},
-	onError: ({ message }) => {
-		toast.error(`Adding item was not successful! Reason: ${message}`);
-		console.error(message);
+	onError: ({ result }) => {
+		toast.error(`Adding item was not successful! Reason: ${result.error.message}`);
+		console.error(result.error.message);
 	},
 });
 

@@ -19,9 +19,9 @@ const { form, enhance, errors, constraints } = superForm(data.form, {
 			toast.success('Logged you in successfully!');
 		}
 	},
-	onError: ({ message }) => {
-		toast.error(`Logging in was not successful! Reason: ${message}`);
-		console.error(message);
+	onError: ({ result }) => {
+		toast.error(`Logging in was not successful! Reason: ${result.error.message}`);
+		console.error(result.error.message);
 	},
 });
 </script>
