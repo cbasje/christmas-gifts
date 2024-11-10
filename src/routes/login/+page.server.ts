@@ -20,28 +20,20 @@ export const load = (async ({ locals, url, cookies }) => {
 
 	const userId = url.searchParams.get('user_id');
 	if (userId) {
-		try {
-			// find user by username
-			const [existingUser] = await db
-				.select()
-				.from(users)
-				.where(eq(users.id, userId))
-				.limit(1);
+		// find user by username
+		const [existingUser] = await db.select().from(users).where(eq(users.id, userId)).limit(1);
 
-			const session = await auth.createSession(existingUser.id, {
-				group: existingUser.groups?.at(0) ?? 'HAUGEN',
-			});
-			const sessionCookie = auth.createSessionCookie(session.id);
-			cookies.set(sessionCookie.name, sessionCookie.value, {
-				path: '.',
-				...sessionCookie.attributes,
-			});
+		const session = await auth.createSession(existingUser.id, {
+			group: existingUser.groups?.at(0) ?? 'HAUGEN',
+		});
+		const sessionCookie = auth.createSessionCookie(session.id);
+		cookies.set(sessionCookie.name, sessionCookie.value, {
+			path: '.',
+			...sessionCookie.attributes,
+		});
 
-			// redirect to /
-			redirect(302, '/');
-		} catch (e) {
-			console.error(e);
-		}
+		// redirect to /
+		redirect(302, '/');
 	}
 
 	const form = await superValidate(zod(schema));
