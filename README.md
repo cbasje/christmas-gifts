@@ -7,7 +7,6 @@ A webapp to track Christmas gifts for my family and in-laws.
 ## Stack
 
 -   Framework: [SvelteKit](https://kit.svelte.dev/)
--   Deployment: [Vercel](https://vercel.com)
 -   Styling: [TailwindCSS](https://tailwindcss.com/)
 -   Icons: [Iconify](https://iconify.com/)
 -   Database: [Supabase](https://supabase.com/)

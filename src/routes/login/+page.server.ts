@@ -1,12 +1,12 @@
+import { users } from '$lib/db/schema/user';
+import { db } from '$lib/server/drizzle';
 import { auth } from '$lib/server/lucia';
-import { error, fail, redirect } from '@sveltejs/kit';
-import { Argon2id } from 'oslo/password';
+import { verifyPasswordHash } from '$lib/server/password';
+import { fail, redirect } from '@sveltejs/kit';
+import { eq } from 'drizzle-orm';
 import { setError, superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import type { Actions, PageServerLoad } from './$types';
-import { users } from '$lib/db/schema/user';
-import { db } from '$lib/server/drizzle';
-import { eq } from 'drizzle-orm';
 
 // TODO: drizzle-zod
 const schema = z.object({
@@ -67,7 +67,7 @@ export const actions = {
 				.limit(1);
 
 			// validate password
-			const isValidPassword = await new Argon2id().verify(
+			const isValidPassword = await verifyPasswordHash(
 				existingUser?.hashedPassword ?? '',
 				form.data.password
 			);

@@ -1,11 +1,11 @@
 import { users } from '$lib/db/schema/user';
 import { db } from '$lib/server/drizzle';
 import { auth } from '$lib/server/lucia';
+import { hashPassword } from '$lib/server/password';
 import { capitaliseString } from '$lib/utils/capitalise';
 import { fail, redirect } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import { generateId } from 'lucia';
-import { Argon2id } from 'oslo/password';
 import { setError, superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import type { Actions, PageServerLoad } from './$types';
@@ -36,7 +36,7 @@ export const actions = {
 
 		try {
 			const userId = generateId(15);
-			const hashedPassword = await new Argon2id().hash(form.data.password);
+			const hashedPassword = await hashPassword(form.data.password);
 
 			const [existingUser] = await db
 				.select()
