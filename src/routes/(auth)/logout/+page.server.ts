@@ -10,9 +10,9 @@ export const actions = {
 		const sessionCookie = auth.createBlankSessionCookie(); // remove cookie
 		cookies.set(sessionCookie.name, sessionCookie.value, {
 			path: '.',
-			...sessionCookie.attributes
+			...sessionCookie.attributes,
 		});
 
 		redirect(302, '/login');
-	}
+	},
 } satisfies Actions;

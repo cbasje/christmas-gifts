@@ -1,28 +1,28 @@
 <script lang="ts">
-	import Input from '$lib/components/Input.svelte';
-	import { t } from '$lib/translations';
-	import Icon from '@iconify/svelte';
-	import toast from 'svelte-french-toast';
-	import { superForm } from 'sveltekit-superforms/client';
-	import Header from '../(auth)/Header.svelte';
-	import type { PageData } from './$types';
+import Input from '$lib/components/Input.svelte';
+import { t } from '$lib/translations';
+import Icon from '@iconify/svelte';
+import toast from 'svelte-french-toast';
+import { superForm } from 'sveltekit-superforms/client';
+import Header from '../(auth)/Header.svelte';
+import type { PageData } from './$types';
 
-	export let data: PageData;
+export let data: PageData;
 
-	const { form, enhance, errors, constraints } = superForm(data.form, {
-		resetForm: true,
-		onResult: ({ result }) => {
-			if (result.type === 'failure' || result.type === 'error') {
-				toast.error('Signing up was not successful!');
-			} else {
-				toast.success('Signed you up successfully!');
-			}
-		},
-		onError: ({ message }) => {
-			toast.error(`Signing up was not successful! Reason: ${message}`);
-			console.error(message);
+const { form, enhance, errors, constraints } = superForm(data.form, {
+	resetForm: true,
+	onResult: ({ result }) => {
+		if (result.type === 'failure' || result.type === 'error') {
+			toast.error('Signing up was not successful!');
+		} else {
+			toast.success('Signed you up successfully!');
 		}
-	});
+	},
+	onError: ({ message }) => {
+		toast.error(`Signing up was not successful! Reason: ${message}`);
+		console.error(message);
+	},
+});
 </script>
 
 <Header padding={false}>

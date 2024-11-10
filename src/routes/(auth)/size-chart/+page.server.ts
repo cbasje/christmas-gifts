@@ -13,7 +13,7 @@ export const load = (async ({ parent }) => {
 
 	return {
 		form,
-		user
+		user,
 	};
 }) satisfies PageServerLoad;
 
@@ -31,7 +31,7 @@ export const actions = {
 				.update(users)
 				.set({
 					sizes: form.data,
-					updatedAt: new Date()
+					updatedAt: new Date(),
 				})
 				.where(eq(users.id, locals.user?.id ?? ''));
 
@@ -40,5 +40,5 @@ export const actions = {
 			console.error(error);
 			return fail(500, { form });
 		}
-	}
+	},
 } satisfies Actions;

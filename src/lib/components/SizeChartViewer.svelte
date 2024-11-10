@@ -1,18 +1,18 @@
 <script lang="ts">
-	import type { UserSizes } from '$lib/db/schema/user';
-	import { t } from '$lib/translations';
-	import { createTabs, melt } from '@melt-ui/svelte';
-	import SizeChart from './size-chart/SizeChart.svelte';
-	import SizeChartEmpty from './size-chart/SizeChartEmpty.svelte';
-	import SizeChartSimple from './size-chart/SizeChartSimple.svelte';
-	import SizeChartSimpleEmpty from './size-chart/SizeChartSimpleEmpty.svelte';
+import type { UserSizes } from '$lib/db/schema/user';
+import { t } from '$lib/translations';
+import { createTabs, melt } from '@melt-ui/svelte';
+import SizeChart from './size-chart/SizeChart.svelte';
+import SizeChartEmpty from './size-chart/SizeChartEmpty.svelte';
+import SizeChartSimple from './size-chart/SizeChartSimple.svelte';
+import SizeChartSimpleEmpty from './size-chart/SizeChartSimpleEmpty.svelte';
 
-	export let sizes: UserSizes;
-	let categories = ['Simple', 'Advanced'];
+export let sizes: UserSizes;
+const categories = ['Simple', 'Advanced'];
 
-	const {
-		elements: { root, list, content, trigger }
-	} = createTabs();
+const {
+	elements: { root, list, content, trigger },
+} = createTabs();
 </script>
 
 <div class="mx-auto w-full max-w-xl">

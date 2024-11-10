@@ -11,7 +11,7 @@ export const UserSizesSchema = z.object({
 	simple: z.object({
 		top: z.string().optional(),
 		bottom: z.string().optional(),
-		shoe: z.string().optional()
+		shoe: z.string().optional(),
 	}),
 	advanced: z.object({
 		head: z.string().optional(),
@@ -19,8 +19,8 @@ export const UserSizesSchema = z.object({
 		chest: z.string().optional(),
 		waist: z.string().optional(),
 		hip: z.string().optional(),
-		inseam: z.string().optional()
-	})
+		inseam: z.string().optional(),
+	}),
 });
 export type UserSizes = z.infer<typeof UserSizesSchema>;
 
@@ -33,27 +33,27 @@ export const users = pgTable('users', {
 	hue: integer('hue').default(145).notNull(),
 	sizes: jsonb('sizes').$type<UserSizes>(),
 	hashedPassword: varchar('hashed_password', {
-		length: 255
+		length: 255,
 	}),
 	createdAt: timestamp('created_at').defaultNow(),
-	updatedAt: timestamp('updated_at').defaultNow()
+	updatedAt: timestamp('updated_at').defaultNow(),
 });
 
 export const usersRelations = relations(users, ({ one, many }) => ({
 	partner: one(users, {
 		fields: [users.partnerId],
-		references: [users.id]
+		references: [users.id],
 	}),
 	items: many(giftItems, { relationName: 'ReceivingItems' }),
 	giftingItems: many(giftItems, { relationName: 'GiftingItems' }),
-	authSession: many(authSessions)
+	authSession: many(authSessions),
 }));
 
 export const selectUserSchema = createSelectSchema(users);
 export type User = typeof users.$inferSelect;
 
 export const insertUserSchema = createInsertSchema(users, {
-	hue: (schema) => schema.id.min(0).max(360)
+	hue: (schema) => schema.id.min(0).max(360),
 });
 export type NewUser = typeof users.$inferInsert;
 
@@ -64,9 +64,9 @@ export const authSessions = pgTable('sessions', {
 		.references(() => users.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
 	expiresAt: timestamp('expires_at', {
 		withTimezone: true,
-		mode: 'date'
+		mode: 'date',
 	}).notNull(),
-	group: text('group').$type<Group>()
+	group: text('group').$type<Group>(),
 });
 
 export type AuthSession = typeof authSessions.$inferSelect;

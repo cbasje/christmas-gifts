@@ -1,66 +1,66 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import { Groups } from '$lib/db/schema/user';
-	import { t } from '$lib/translations';
-	import type { LinkItem } from '$lib/types';
-	import { capitaliseString } from '$lib/utils/capitalise';
-	import Icon from '@iconify/svelte';
-	import { createDialog, melt } from '@melt-ui/svelte';
-	import toast from 'svelte-french-toast';
-	import { fade, scale } from 'svelte/transition';
-	import { superForm } from 'sveltekit-superforms/client';
-	import type { PageData as IdeasData } from '../../routes/(auth)/ideas/$types';
-	import type { PageData as WishData } from '../../routes/(auth)/wish-list/$types';
-	import DropzoneArea from './DropzoneArea.svelte';
-	import Input from './Input.svelte';
+import { page } from '$app/stores';
+import { Groups } from '$lib/db/schema/user';
+import { t } from '$lib/translations';
+import type { LinkItem } from '$lib/types';
+import { capitaliseString } from '$lib/utils/capitalise';
+import Icon from '@iconify/svelte';
+import { createDialog, melt } from '@melt-ui/svelte';
+import toast from 'svelte-french-toast';
+import { fade, scale } from 'svelte/transition';
+import { superForm } from 'sveltekit-superforms/client';
+import type { PageData as IdeasData } from '../../routes/(auth)/ideas/$types';
+import type { PageData as WishData } from '../../routes/(auth)/wish-list/$types';
+import DropzoneArea from './DropzoneArea.svelte';
+import Input from './Input.svelte';
 
-	// const localePath = useLocalePath();
-	export let formData: IdeasData['formData'] | WishData['formData'];
-	export let currentUserGroups: IdeasData['currentUserGroups'] | WishData['currentUserGroups'];
-	export let users: IdeasData['users'] | undefined = undefined;
+// const localePath = useLocalePath();
+export let formData: IdeasData['formData'] | WishData['formData'];
+export let currentUserGroups: IdeasData['currentUserGroups'] | WishData['currentUserGroups'];
+export const users: IdeasData['users'] | undefined = undefined;
 
-	let linkItems: LinkItem[] = [];
+let linkItems: LinkItem[] = [];
 
-	const {
-		elements: { trigger, overlay, content, title, description, close, portalled },
-		states: { open }
-	} = createDialog({
-		forceVisible: true
+const {
+	elements: { trigger, overlay, content, title, description, close, portalled },
+	states: { open },
+} = createDialog({
+	forceVisible: true,
+});
+
+const { form, enhance, constraints, errors, tainted } = superForm(formData, {
+	resetForm: true,
+	onResult: ({ result }) => {
+		if ('data' in result && result.data?.form?.valid && 'newItem' in result.data) {
+			open.set(false);
+			toast.success(
+				`Added ${result.data.newItem.name} to your ${
+					result.data.newItem?.idea ? 'idea' : 'wish'
+				} list successfully!`,
+			);
+		} else {
+			toast.error('Adding item was not successful!');
+		}
+	},
+	onError: ({ message }) => {
+		toast.error(`Adding item was not successful! Reason: ${message}`);
+		console.error(message);
+	},
+});
+
+const onRecipientChange = async (e: CustomEvent<{ value: string }>) => {
+	const url = new URL($page.url);
+	url.searchParams.set('recipientId', String(e.detail.value));
+
+	const response = await fetch(url, {
+		method: 'GET',
 	});
 
-	const { form, enhance, constraints, errors, tainted } = superForm(formData, {
-		resetForm: true,
-		onResult: ({ result }) => {
-			if ('data' in result && result.data?.form?.valid && 'newItem' in result.data) {
-				open.set(false);
-				toast.success(
-					`Added ${result.data.newItem.name} to your ${
-						result.data.newItem?.idea ? 'idea' : 'wish'
-					} list successfully!`
-				);
-			} else {
-				toast.error("Adding item was not successful!");
-			}
-		},
-		onError: ({ message }) => {
-			toast.error(`Adding item was not successful! Reason: ${message}`);
-			console.error(message);
-		}
-	});
-
-	const onRecipientChange = async (e: CustomEvent<{ value: string }>) => {
-		const url = new URL($page.url);
-		url.searchParams.set('recipientId', String(e.detail.value));
-
-		const response = await fetch(url, {
-			method: 'GET'
-		});
-
-		if (response.ok) {
-			const responseJson = await response.json();
-			linkItems = [...responseJson];
-		}
-	};
+	if (response.ok) {
+		const responseJson = await response.json();
+		linkItems = [...responseJson];
+	}
+};
 </script>
 
 <div class="fixed bottom-6 right-6">

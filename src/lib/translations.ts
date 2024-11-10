@@ -14,46 +14,46 @@ const config: Config = {
 			{
 				locale: currLocale,
 				key: 'common',
-				loader: async () => (await import(`./${currLocale}/common.json`)).default
+				loader: async () => (await import(`./${currLocale}/common.json`)).default,
 			},
 			{
 				locale: currLocale,
 				key: 'overview',
 				routes: ['/'],
-				loader: async () => (await import(`./${currLocale}/overview.json`)).default
+				loader: async () => (await import(`./${currLocale}/overview.json`)).default,
 			},
 			{
 				locale: currLocale,
 				key: 'login',
 				routes: ['/login'],
-				loader: async () => (await import(`./${currLocale}/login.json`)).default
+				loader: async () => (await import(`./${currLocale}/login.json`)).default,
 			},
 			{
 				locale: currLocale,
 				key: 'signup',
 				routes: ['/signup'],
-				loader: async () => (await import(`./${currLocale}/signup.json`)).default
+				loader: async () => (await import(`./${currLocale}/signup.json`)).default,
 			},
 			{
 				locale: currLocale,
 				key: 'wishList',
 				routes: ['/wish-list'],
-				loader: async () => (await import(`./${currLocale}/wish-list.json`)).default
+				loader: async () => (await import(`./${currLocale}/wish-list.json`)).default,
 			},
 			{
 				locale: currLocale,
 				key: 'ideas',
 				routes: ['/ideas'],
-				loader: async () => (await import(`./${currLocale}/ideas.json`)).default
+				loader: async () => (await import(`./${currLocale}/ideas.json`)).default,
 			},
 			{
 				locale: currLocale,
 				key: 'sizeChart',
 				routes: ['/size-chart', '/', '/ideas'],
-				loader: async () => (await import(`./${currLocale}/size-chart.json`)).default
-			}
+				loader: async () => (await import(`./${currLocale}/size-chart.json`)).default,
+			},
 		];
-	}, [])
+	}, []),
 };
 
 export const { t, locale, locales, loading, loadTranslations } = new i18n(config);

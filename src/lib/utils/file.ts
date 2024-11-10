@@ -18,7 +18,7 @@ export const uploadFile = async (id: string, file: File) => {
 	// const filename = `${id}.${}`;
 	const { data, error } = await supabase.storage.from('files').upload(id, file, {
 		upsert: true,
-		contentType
+		contentType,
 	});
 	if (error) {
 		throw new Error(error.message, { cause: error });

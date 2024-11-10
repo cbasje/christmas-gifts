@@ -1,37 +1,37 @@
 <script lang="ts">
-	import { invalidate } from '$app/navigation';
-	import { page } from '$app/stores';
-	import type { GiftItem } from '$lib/db/schema/gift-item';
-	import Icon from '@iconify/svelte';
-	import toast from 'svelte-french-toast';
+import { invalidate } from '$app/navigation';
+import { page } from '$app/stores';
+import type { GiftItem } from '$lib/db/schema/gift-item';
+import Icon from '@iconify/svelte';
+import toast from 'svelte-french-toast';
 
-	export let id: GiftItem['id'];
-	export let name: GiftItem['name'];
+export let id: GiftItem['id'];
+export let name: GiftItem['name'];
 
-	const removeItem = async () => {
-		const value: boolean = confirm('Are you sure?');
+const removeItem = async () => {
+	const value: boolean = confirm('Are you sure?');
 
-		if (value) {
-			const formData = new FormData();
-			formData.set('id', id);
+	if (value) {
+		const formData = new FormData();
+		formData.set('id', id);
 
-			await toast
-				.promise(
-					fetch($page.url, {
-						method: 'DELETE',
-						body: formData
-					}),
-					{
-						loading: 'Removing...',
-						success: `Removed '${name}' successfully!`,
-						error: `Removing item was not successful!`
-					}
-				)
-				.then(() => {
-					invalidate($page.url);
-				});
-		}
-	};
+		await toast
+			.promise(
+				fetch($page.url, {
+					method: 'DELETE',
+					body: formData,
+				}),
+				{
+					loading: 'Removing...',
+					success: `Removed '${name}' successfully!`,
+					error: 'Removing item was not successful!',
+				},
+			)
+			.then(() => {
+				invalidate($page.url);
+			});
+	}
+};
 </script>
 
 <button

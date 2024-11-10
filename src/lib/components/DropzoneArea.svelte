@@ -1,61 +1,61 @@
 <script lang="ts">
-	import { t } from '$lib/translations';
-	import { createEventDispatcher } from 'svelte';
-	import toast from 'svelte-french-toast';
-	import Dropzone from './Dropzone.svelte';
+import { t } from '$lib/translations';
+import { createEventDispatcher } from 'svelte';
+import toast from 'svelte-french-toast';
+import Dropzone from './Dropzone.svelte';
 
-	export let name: string;
-	export let supabaseFile: string | null | undefined = undefined;
+export let name: string;
+export const supabaseFile: string | null | undefined = undefined;
 
-	const dispatch = createEventDispatcher<{
-		upload: undefined;
-	}>();
+const dispatch = createEventDispatcher<{
+	upload: undefined;
+}>();
 
-	type File = {
-		name: string;
-		preview?: string;
-		contentType?: string;
-		url?: string;
-	};
-	let files: File[] = [];
-	if (supabaseFile) {
-		files = [{ name: '-', url: supabaseFile }];
-	}
+type File = {
+	name: string;
+	preview?: string;
+	contentType?: string;
+	url?: string;
+};
+let files: File[] = [];
+if (supabaseFile) {
+	files = [{ name: '-', url: supabaseFile }];
+}
 
-	let droppedFiles: FileList;
-	let uploading = false;
-	const authorizedExtensions = ['.jpg', '.jpeg', '.png', '.webp'];
+let droppedFiles: FileList;
+const uploading = false;
+const authorizedExtensions = ['.jpg', '.jpeg', '.png', '.webp'];
 
-	const onChangeHandler = () => {
-		// read preview data as url into array per file
-		for (let i = 0; i < droppedFiles.length; i++) {
-			const file = droppedFiles[i];
-			if (
-				file.name &&
-				file.type.startsWith('image/') &&
-				!files.map((f) => f.name).includes(file.name)
-			) {
-				dispatch('upload');
+const onChangeHandler = () => {
+	// read preview data as url into array per file
+	for (let i = 0; i < droppedFiles.length; i++) {
+		const file = droppedFiles[i];
+		if (
+			file.name &&
+			file.type.startsWith('image/') &&
+			!files.map((f) => f.name).includes(file.name)
+		) {
+			dispatch('upload');
 
-				const reader = new FileReader();
-				reader.onload = (e) => {
-					console.log(`Reader result for ${file.name}`, e);
+			const reader = new FileReader();
+			reader.onload = (e) => {
+				console.log(`Reader result for ${file.name}`, e);
 
-					files = [
-						// TODO: ...files,
-						{
-							preview: e.target?.result as string,
-							name: file.name,
-							contentType: file.type
-						}
-					];
-				};
-				reader.readAsDataURL(file);
-			} else {
-				toast.error(file.name + ' could not be added');
-			}
+				files = [
+					// TODO: ...files,
+					{
+						preview: e.target?.result as string,
+						name: file.name,
+						contentType: file.type,
+					},
+				];
+			};
+			reader.readAsDataURL(file);
+		} else {
+			toast.error(file.name + ' could not be added');
 		}
-	};
+	}
+};
 </script>
 
 <!-- TODO: Update interaction -->

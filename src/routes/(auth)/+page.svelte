@@ -1,13 +1,13 @@
 <script lang="ts">
-	import SizeChartPopup from '$lib/components/SizeChartPopup.svelte';
-	import { t } from '$lib/translations';
-	import type { PageData } from './$types';
-	import Badge from './Badge.svelte';
-	import Header from './Header.svelte';
-	import Table from './Table.svelte';
-	import TableContainer from './TableContainer.svelte';
+import SizeChartPopup from '$lib/components/SizeChartPopup.svelte';
+import { t } from '$lib/translations';
+import type { PageData } from './$types';
+import Badge from './Badge.svelte';
+import Header from './Header.svelte';
+import Table from './Table.svelte';
+import TableContainer from './TableContainer.svelte';
 
-	export let data: PageData;
+export let data: PageData;
 </script>
 
 <Header>

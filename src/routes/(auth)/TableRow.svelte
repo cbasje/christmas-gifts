@@ -1,61 +1,61 @@
 <script lang="ts">
-	import { invalidate } from '$app/navigation';
-	import { page } from '$app/stores';
-	import EditButton from '$lib/components/EditButton.svelte';
-	import RemoveButton from '$lib/components/RemoveButton.svelte';
-	import { formatLink } from '$lib/utils/link';
-	import { formatPrice } from '$lib/utils/price';
-	import { createSwitch, melt, type CreateSwitchProps } from '@melt-ui/svelte';
-	import toast from 'svelte-french-toast';
-	import type { PageData as OverviewData } from '../../routes/(auth)/$types';
-	import type { PageData as IdeasData } from '../../routes/(auth)/ideas/$types';
-	import type { PageData as WishData } from '../../routes/(auth)/wish-list/$types';
-	import MarkdownDisplay from '$lib/components/MarkdownDisplay.svelte';
+import { invalidate } from '$app/navigation';
+import { page } from '$app/stores';
+import EditButton from '$lib/components/EditButton.svelte';
+import RemoveButton from '$lib/components/RemoveButton.svelte';
+import { formatLink } from '$lib/utils/link';
+import { formatPrice } from '$lib/utils/price';
+import { createSwitch, melt, type CreateSwitchProps } from '@melt-ui/svelte';
+import toast from 'svelte-french-toast';
+import type { PageData as OverviewData } from '../../routes/(auth)/$types';
+import type { PageData as IdeasData } from '../../routes/(auth)/ideas/$types';
+import type { PageData as WishData } from '../../routes/(auth)/wish-list/$types';
+import MarkdownDisplay from '$lib/components/MarkdownDisplay.svelte';
 
-	type EditGiftItem = (IdeasData['ideaList'][string] | WishData['wishList'])[number];
-	type GiftItem = EditGiftItem | OverviewData['overviewList'][string][number];
+type EditGiftItem = (IdeasData['ideaList'][string] | WishData['wishList'])[number];
+type GiftItem = EditGiftItem | OverviewData['overviewList'][string][number];
 
-	export let formData: IdeasData['formData'] | WishData['formData'] | undefined = undefined;
-	export let currentUserGroups:
-		| IdeasData['currentUserGroups']
-		| WishData['currentUserGroups']
-		| undefined = undefined;
-	export let users: IdeasData['users'] | undefined = undefined;
+export const formData: IdeasData['formData'] | WishData['formData'] | undefined = undefined;
+export const currentUserGroups:
+	| IdeasData['currentUserGroups']
+	| WishData['currentUserGroups']
+	| undefined = undefined;
+export const users: IdeasData['users'] | undefined = undefined;
 
-	export let item: GiftItem;
-	export let allowPurchased = false;
-	export let allowEdit = false;
+export let item: GiftItem;
+export const allowPurchased = false;
+export const allowEdit = false;
 
-	const switchPurchased: CreateSwitchProps['onCheckedChange'] = ({ next }) => {
-		const formData = new FormData();
-		formData.set('id', item.id);
-		formData.set('purchased', String(next));
+const switchPurchased: CreateSwitchProps['onCheckedChange'] = ({ next }) => {
+	const formData = new FormData();
+	formData.set('id', item.id);
+	formData.set('purchased', String(next));
 
-		toast
-			.promise(
-				fetch($page.url, {
-					method: 'PATCH',
-					body: formData
-				}),
-				{
-					loading: 'Saving...',
-					success: `Changed purchase status of '${item.name}' successfully!`,
-					error: `Saving purchase status was not successful!`
-				}
-			)
-			.then(() => {
-				invalidate($page.url);
-			});
-		return next;
-	};
+	toast
+		.promise(
+			fetch($page.url, {
+				method: 'PATCH',
+				body: formData,
+			}),
+			{
+				loading: 'Saving...',
+				success: `Changed purchase status of '${item.name}' successfully!`,
+				error: `Saving purchase status was not successful!`,
+			},
+		)
+		.then(() => {
+			invalidate($page.url);
+		});
+	return next;
+};
 
-	const {
-		elements: { root, input },
-		states: { checked: isPurchased }
-	} = createSwitch({
-		defaultChecked: 'purchased' in item && (item.purchased ?? undefined),
-		onCheckedChange: switchPurchased
-	});
+const {
+	elements: { root, input },
+	states: { checked: isPurchased },
+} = createSwitch({
+	defaultChecked: 'purchased' in item && (item.purchased ?? undefined),
+	onCheckedChange: switchPurchased,
+});
 </script>
 
 <tr

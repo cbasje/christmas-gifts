@@ -37,22 +37,22 @@ export const formatPrice = (priceString: string | number | null) => {
 	const sekFormatter = new Intl.NumberFormat('nl-NL', {
 		style: 'currency',
 		currency: 'SEK',
-		maximumFractionDigits: 2
+		maximumFractionDigits: 2,
 	});
 	const eurFormatter = new Intl.NumberFormat('nl-NL', {
 		style: 'currency',
 		currency: 'EUR',
-		maximumFractionDigits: 2
+		maximumFractionDigits: 2,
 	});
 	const usdFormatter = new Intl.NumberFormat('en-US', {
 		style: 'currency',
 		currency: 'USD',
-		maximumFractionDigits: 2
+		maximumFractionDigits: 2,
 	});
 	const defaultFormatter = new Intl.NumberFormat('default', {
 		style: 'decimal',
 		minimumFractionDigits: 2,
-		maximumFractionDigits: 2
+		maximumFractionDigits: 2,
 	});
 
 	let currencyCode = '';

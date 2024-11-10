@@ -1,96 +1,96 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import { Groups } from '$lib/db/schema/user';
-	import { t } from '$lib/translations';
-	import type { LinkItem } from '$lib/types';
-	import { capitaliseString } from '$lib/utils/capitalise';
-	import Icon from '@iconify/svelte';
-	import { createDialog, melt, type CreateDialogProps } from '@melt-ui/svelte';
-	import toast from 'svelte-french-toast';
-	import { fade, scale } from 'svelte/transition';
-	import { superForm } from 'sveltekit-superforms/client';
-	import type { PageData as IdeasData } from '../../routes/(auth)/ideas/$types';
-	import type { PageData as WishData } from '../../routes/(auth)/wish-list/$types';
-	import DropzoneArea from './DropzoneArea.svelte';
-	import Input from './Input.svelte';
+import { page } from '$app/stores';
+import { Groups } from '$lib/db/schema/user';
+import { t } from '$lib/translations';
+import type { LinkItem } from '$lib/types';
+import { capitaliseString } from '$lib/utils/capitalise';
+import Icon from '@iconify/svelte';
+import { createDialog, melt, type CreateDialogProps } from '@melt-ui/svelte';
+import toast from 'svelte-french-toast';
+import { fade, scale } from 'svelte/transition';
+import { superForm } from 'sveltekit-superforms/client';
+import type { PageData as IdeasData } from '../../routes/(auth)/ideas/$types';
+import type { PageData as WishData } from '../../routes/(auth)/wish-list/$types';
+import DropzoneArea from './DropzoneArea.svelte';
+import Input from './Input.svelte';
 
-	// const localePath = useLocalePath();
-	export let formData: IdeasData['formData'] | WishData['formData'];
-	export let currentUserGroups: IdeasData['currentUserGroups'] | WishData['currentUserGroups'];
-	export let users: IdeasData['users'] | undefined = undefined;
+// const localePath = useLocalePath();
+export let formData: IdeasData['formData'] | WishData['formData'];
+export let currentUserGroups: IdeasData['currentUserGroups'] | WishData['currentUserGroups'];
+export const users: IdeasData['users'] | undefined = undefined;
 
-	type Idea = IdeasData['ideaList'][string][number];
-	type GiftItem = WishData['wishList'][number];
-	export let item: Idea | GiftItem | undefined = undefined;
+type Idea = IdeasData['ideaList'][string][number];
+type GiftItem = WishData['wishList'][number];
+export const item: Idea | GiftItem | undefined = undefined;
 
-	let linkItems: LinkItem[] = [];
+let linkItems: LinkItem[] = [];
 
-	const { form, enhance, constraints, errors, reset, tainted } = superForm(formData, {
-		id: item?.id,
-		resetForm: true,
-		onResult: ({ result }) => {
-			if ('data' in result && result.data?.form?.valid && 'editedItem' in result.data) {
-				open.set(false);
-				toast.success(`Updated ${result.data.editedItem.name} successfully!`);
-			} else {
-				toast.error("Updating item was not successful!");
-			}
-		},
-		onError: ({ message }) => {
-			toast.error(`Updating item was not successful! Reason: ${message}`);
-			console.error(message);
+const { form, enhance, constraints, errors, reset, tainted } = superForm(formData, {
+	id: item?.id,
+	resetForm: true,
+	onResult: ({ result }) => {
+		if ('data' in result && result.data?.form?.valid && 'editedItem' in result.data) {
+			open.set(false);
+			toast.success(`Updated ${result.data.editedItem.name} successfully!`);
+		} else {
+			toast.error('Updating item was not successful!');
 		}
+	},
+	onError: ({ message }) => {
+		toast.error(`Updating item was not successful! Reason: ${message}`);
+		console.error(message);
+	},
+});
+
+const handleOpenChange: CreateDialogProps['onOpenChange'] = ({ next }) => {
+	if (next === true && item !== undefined) {
+		form.set(
+			{
+				id: item.id,
+				name: item.name,
+				price: item.price,
+				recipientId: item.recipientId,
+				giftedById: item.giftedById,
+				link: item.link,
+				idea: item.idea,
+				...('notes' in item
+					? {
+							notes: item.notes,
+							groups: item.groups ?? [],
+						}
+					: {
+							giftItemId: item.giftItemId,
+						}),
+			},
+			{ taint: false },
+		);
+	} else if (next === false) {
+		reset();
+	}
+	return next;
+};
+
+const {
+	elements: { trigger, overlay, content, title, description, close, portalled },
+	states: { open },
+} = createDialog({
+	forceVisible: true,
+	onOpenChange: handleOpenChange,
+});
+
+const onRecipientChange = async (e: CustomEvent<{ value: string }>) => {
+	const url = new URL($page.url);
+	url.searchParams.set('recipientId', String(e.detail.value));
+
+	const response = await fetch(url, {
+		method: 'GET',
 	});
 
-	const handleOpenChange: CreateDialogProps['onOpenChange'] = ({ next }) => {
-		if (next === true && item !== undefined) {
-			form.set(
-				{
-					id: item.id,
-					name: item.name,
-					price: item.price,
-					recipientId: item.recipientId,
-					giftedById: item.giftedById,
-					link: item.link,
-					idea: item.idea,
-					...('notes' in item
-						? {
-								notes: item.notes,
-								groups: item.groups ?? []
-						  }
-						: {
-								giftItemId: item.giftItemId
-						  })
-				},
-				{ taint: false }
-			);
-		} else if (next === false) {
-			reset();
-		}
-		return next;
-	};
-
-	const {
-		elements: { trigger, overlay, content, title, description, close, portalled },
-		states: { open }
-	} = createDialog({
-		forceVisible: true,
-		onOpenChange: handleOpenChange
-	});
-
-	const onRecipientChange = async (e: CustomEvent<{ value: string }>) => {
-		const url = new URL($page.url);
-		url.searchParams.set('recipientId', String(e.detail.value));
-
-		const response = await fetch(url, {
-			method: 'GET'
-		});
-
-		if (response.ok) {
-			const responseJson = await response.json();
-			linkItems = [...responseJson];
-		}
-	};
+	if (response.ok) {
+		const responseJson = await response.json();
+		linkItems = [...responseJson];
+	}
+};
 </script>
 
 <button

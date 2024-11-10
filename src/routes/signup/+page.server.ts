@@ -13,7 +13,7 @@ import type { Actions, PageServerLoad } from './$types';
 // TODO: drizzle-zod
 const schema = z.object({
 	username: z.string().min(1).max(255).toLowerCase(),
-	password: z.string().min(6).max(255)
+	password: z.string().min(6).max(255),
 });
 
 export const load = (async ({ locals }) => {
@@ -22,7 +22,7 @@ export const load = (async ({ locals }) => {
 	const form = await superValidate(schema);
 
 	return {
-		form
+		form,
 	};
 }) satisfies PageServerLoad;
 
@@ -58,17 +58,17 @@ export const actions = {
 					groups: ['HAUGEN', 'BENJAMINS'],
 					sizes: { simple: {}, advanced: {} },
 					hue: 145,
-					updatedAt: new Date()
+					updatedAt: new Date(),
 				})
 				.returning();
 
 			const session = await auth.createSession(userId, {
-				group: createdUser.groups?.at(0) ?? 'HAUGEN'
+				group: createdUser.groups?.at(0) ?? 'HAUGEN',
 			});
 			const sessionCookie = auth.createSessionCookie(session.id);
 			cookies.set(sessionCookie.name, sessionCookie.value, {
 				path: '.',
-				...sessionCookie.attributes
+				...sessionCookie.attributes,
 			});
 		} catch (error_) {
 			const { message } = error_ instanceof Error ? error_ : { message: 'Internal error!' };
@@ -77,5 +77,5 @@ export const actions = {
 		}
 
 		redirect(302, '/');
-	}
+	},
 } satisfies Actions;

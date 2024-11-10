@@ -5,6 +5,6 @@ export const load = (async ({ cookies }) => {
 	const locale = (cookies.get('locale') ?? defaultLocale) as Locale;
 
 	return {
-		locale
+		locale,
 	};
 }) satisfies LayoutServerLoad;

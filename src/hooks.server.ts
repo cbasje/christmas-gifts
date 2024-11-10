@@ -1,6 +1,6 @@
 import { auth } from '$lib/server/lucia';
 import { defaultLocale, locales } from '$lib/translations';
-import { redirect, type Handle } from '@sveltejs/kit';
+import { type Handle, redirect } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 
 const lang = (async ({ event, resolve }) => {
@@ -12,7 +12,7 @@ const lang = (async ({ event, resolve }) => {
 		const localeSet = new Set(
 			headerLangs
 				?.filter((l) => locales.get().includes(l.split('-')[0]))
-				.map((l) => l.split('-')[0])
+				.map((l) => l.split('-')[0]),
 		);
 
 		currentLocale = [...localeSet][0];
@@ -21,7 +21,7 @@ const lang = (async ({ event, resolve }) => {
 	}
 
 	return resolve(event, {
-		transformPageChunk: ({ html }) => html.replace('%lang%', currentLocale ?? defaultLocale)
+		transformPageChunk: ({ html }) => html.replace('%lang%', currentLocale ?? defaultLocale),
 	});
 }) satisfies Handle;
 
@@ -45,14 +45,14 @@ export const authorization = (async ({ event, resolve }) => {
 		const sessionCookie = auth.createSessionCookie(session.id);
 		event.cookies.set(sessionCookie.name, sessionCookie.value, {
 			path: '.',
-			...sessionCookie.attributes
+			...sessionCookie.attributes,
 		});
 	}
 	if (!session) {
 		const sessionCookie = auth.createBlankSessionCookie();
 		event.cookies.set(sessionCookie.name, sessionCookie.value, {
 			path: '.',
-			...sessionCookie.attributes
+			...sessionCookie.attributes,
 		});
 	}
 

@@ -1,25 +1,25 @@
 <script lang="ts">
-	import { formatPrice, getPriceNumber, sum } from '$lib/utils/price';
-	import type { PageData as OverviewData } from '../../routes/(auth)/$types';
-	import type { PageData as IdeasData } from '../../routes/(auth)/ideas/$types';
-	import type { PageData as WishData } from '../../routes/(auth)/wish-list/$types';
-	import TableHeading from './TableHeading.svelte';
-	import TableRow from './TableRow.svelte';
+import { formatPrice, getPriceNumber, sum } from '$lib/utils/price';
+import type { PageData as OverviewData } from '../../routes/(auth)/$types';
+import type { PageData as IdeasData } from '../../routes/(auth)/ideas/$types';
+import type { PageData as WishData } from '../../routes/(auth)/wish-list/$types';
+import TableHeading from './TableHeading.svelte';
+import TableRow from './TableRow.svelte';
 
-	export let items:
-		| IdeasData['ideaList'][string]
-		| WishData['wishList']
-		| OverviewData['overviewList'][string];
-	export let pageData: IdeasData | WishData | undefined = undefined;
+export let items:
+	| IdeasData['ideaList'][string]
+	| WishData['wishList']
+	| OverviewData['overviewList'][string];
+export const pageData: IdeasData | WishData | undefined = undefined;
 
-	export let headerHue: number | undefined = undefined;
-	export let allowPurchased = false;
-	export let allowEdit = false;
-	export let isCollapsable = false;
-	export let hasSummary = false;
-	export let showBgColor = true;
+export const headerHue: number | undefined = undefined;
+export const allowPurchased = false;
+export const allowEdit = false;
+export const isCollapsable = false;
+export const hasSummary = false;
+export const showBgColor = true;
 
-	let isCollapsed = !!isCollapsable;
+const isCollapsed = !!isCollapsable;
 </script>
 
 <table

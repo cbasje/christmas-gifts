@@ -1,16 +1,16 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import { t } from '$lib/translations';
-	import Header from './(auth)/Header.svelte';
-	import './styles.postcss';
+import { page } from '$app/stores';
+import { t } from '$lib/translations';
+import Header from './(auth)/Header.svelte';
+import './styles.postcss';
 
-	const formatEnd = (value: Date) => {
-		const formatter = new Intl.RelativeTimeFormat($page.data.locale);
+const formatEnd = (value: Date) => {
+	const formatter = new Intl.RelativeTimeFormat($page.data.locale);
 
-		const minutes = (value.valueOf() - Date.now()) / 1000 / 60;
-		if (minutes < 60) return formatter.format(Math.round(minutes), 'minute');
-		else return formatter.format(Math.round(minutes / 60), 'hour');
-	};
+	const minutes = (value.valueOf() - Date.now()) / 1000 / 60;
+	if (minutes < 60) return formatter.format(Math.round(minutes), 'minute');
+	else return formatter.format(Math.round(minutes / 60), 'hour');
+};
 </script>
 
 <div class="wrapper">

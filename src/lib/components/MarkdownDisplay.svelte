@@ -1,7 +1,7 @@
 <script lang="ts">
-	import SvelteMarkdown from 'svelte-markdown';
+import SvelteMarkdown from 'svelte-markdown';
 
-	export let source: string;
+export let source: string;
 </script>
 
 <section class="{$$props.class} prose prose-sm h-auto">

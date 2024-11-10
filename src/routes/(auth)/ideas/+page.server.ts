@@ -16,14 +16,14 @@ const schema = z.object({
 	price: z
 		.string()
 		.regex(/(?:[$€])?\s?\d+(?:[,.]\d+)?/g, {
-			message: 'Price must consist of numbers with currency codes.'
+			message: 'Price must consist of numbers with currency codes.',
 		})
 		.nullish(),
 	recipientId: z.string(),
 	giftedById: z.string().nullish(),
 	link: z.string().url().nullish(),
 	idea: z.boolean().default(true),
-	giftItemId: z.string().nullish()
+	giftItemId: z.string().nullish(),
 });
 
 export const load = (async ({ parent }) => {
@@ -39,7 +39,7 @@ export const load = (async ({ parent }) => {
 			link: ideas.link,
 			purchased: ideas.purchased,
 			giftItemId: ideas.giftItemId,
-			idea: sql<boolean>`TRUE`
+			idea: sql<boolean>`TRUE`,
 		})
 		.from(ideas)
 		.leftJoin(users, eq(ideas.recipientId, users.id))
@@ -49,9 +49,9 @@ export const load = (async ({ parent }) => {
 				isNotNull(ideas.giftedById),
 				or(
 					eq(ideas.giftedById, user.id ?? ''),
-					user.partnerId ? eq(ideas.giftedById, user.partnerId ?? '') : undefined
-				)
-			)
+					user.partnerId ? eq(ideas.giftedById, user.partnerId ?? '') : undefined,
+				),
+			),
 		)
 		.orderBy(desc(users.hue));
 
@@ -60,26 +60,29 @@ export const load = (async ({ parent }) => {
 			id: users.id,
 			name: users.name,
 			hue: users.hue,
-			sizes: users.sizes
+			sizes: users.sizes,
 		})
 		.from(users)
 		.where(
-			and(not(eq(users.id, user.id ?? '')), sql<boolean>`${users.groups} ? ${currentGroupId}`)
+			and(
+				not(eq(users.id, user.id ?? '')),
+				sql<boolean>`${users.groups} ? ${currentGroupId}`,
+			),
 		)
 		.orderBy(asc(users.name));
 
 	const formData = await superValidate(
 		{
-			giftedById: user.id
+			giftedById: user.id,
 		},
-		schema
+		schema,
 	);
 
 	return {
 		formData,
 		currentUserGroups: user.groups,
 		users: groupUsers,
-		ideaList: groupBy(ideaList, 'recipientId')
+		ideaList: groupBy(ideaList, 'recipientId'),
 	};
 }) satisfies PageServerLoad;
 
@@ -100,21 +103,21 @@ export const actions = {
 				const pic = await uploadFile(form.data.id, file);
 				data = {
 					...form.data,
-					pic: pic.toString()
+					pic: pic.toString(),
 				};
 			} else {
 				data = {
-					...form.data
+					...form.data,
 				};
 			}
 
 			const [newItem] = await db
 				.insert(ideas)
 				.values({
-					...data
+					...data,
 				})
 				.returning({
-					name: ideas.name
+					name: ideas.name,
 				});
 
 			return { form, newItem };
@@ -142,11 +145,11 @@ export const actions = {
 					giftedById: form.data.giftedById,
 					link: form.data.link,
 					giftItemId: form.data.giftItemId,
-					updatedAt: new Date()
+					updatedAt: new Date(),
 				})
 				.where(eq(ideas.id, form.data.id))
 				.returning({
-					name: ideas.name
+					name: ideas.name,
 				});
 
 			return { form, editedItem };
@@ -154,5 +157,5 @@ export const actions = {
 			console.error(error);
 			return fail(500, { form });
 		}
-	}
+	},
 } satisfies Actions;

@@ -1,84 +1,80 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	import { invalidateAll } from '$app/navigation';
-	import { page } from '$app/stores';
-	import { Groups } from '$lib/db/schema/user';
-	import { t } from '$lib/translations';
-	import { capitaliseString } from '$lib/utils/capitalise';
-	import Icon from '@iconify/svelte';
-	import {
-		createCollapsible,
-		createDropdownMenu,
-		createRadioGroup,
-		melt,
-		type CreateRadioGroupProps
-	} from '@melt-ui/svelte';
-	import { fly, slide } from 'svelte/transition';
-	import type { LayoutServerData } from './$types';
-	import Badge from './Badge.svelte';
+import { enhance } from '$app/forms';
+import { invalidateAll } from '$app/navigation';
+import { page } from '$app/stores';
+import { Groups } from '$lib/db/schema/user';
+import { t } from '$lib/translations';
+import { capitaliseString } from '$lib/utils/capitalise';
+import Icon from '@iconify/svelte';
+import {
+	createCollapsible,
+	createDropdownMenu,
+	createRadioGroup,
+	melt,
+	type CreateRadioGroupProps,
+} from '@melt-ui/svelte';
+import { fly, slide } from 'svelte/transition';
+import type { LayoutServerData } from './$types';
+import Badge from './Badge.svelte';
 
-	// FIXME: const localePath = useLocalePath();
-	export let user: LayoutServerData['user'];
-	export let currentGroupId: LayoutServerData['currentGroupId'];
+// FIXME: const localePath = useLocalePath();
+export let user: LayoutServerData['user'];
+export let currentGroupId: LayoutServerData['currentGroupId'];
 
-	type NavigationItem = { name: string; href: string; icon: string };
-	const mainMenuNavigation: NavigationItem[] = [
-		{ name: 'common.navigation.overview', href: '/', icon: 'solar:home-2-line-duotone' },
-		{
-			name: 'common.navigation.wishList',
-			href: '/wish-list',
-			icon: 'solar:checklist-line-duotone'
-		},
-		{
-			name: 'common.navigation.ideas',
-			href: '/ideas',
-			icon: 'solar:clipboard-list-line-duotone'
-		},
-		{
-			name: 'common.navigation.sizeChart',
-			href: '/size-chart',
-			icon: 'solar:ruler-line-duotone'
-		}
-	];
-	const subMenuNavigation: NavigationItem[] = [];
+type NavigationItem = { name: string; href: string; icon: string };
+const mainMenuNavigation: NavigationItem[] = [
+	{ name: 'common.navigation.overview', href: '/', icon: 'solar:home-2-line-duotone' },
+	{
+		name: 'common.navigation.wishList',
+		href: '/wish-list',
+		icon: 'solar:checklist-line-duotone',
+	},
+	{
+		name: 'common.navigation.ideas',
+		href: '/ideas',
+		icon: 'solar:clipboard-list-line-duotone',
+	},
+	{
+		name: 'common.navigation.sizeChart',
+		href: '/size-chart',
+		icon: 'solar:ruler-line-duotone',
+	},
+];
+const subMenuNavigation: NavigationItem[] = [];
 
-	const handleRadioChange: CreateRadioGroupProps['onValueChange'] = ({ curr, next }) => {
-		if (curr !== next) {
-			const formData = new FormData();
-			formData.set('id', next);
+const handleRadioChange: CreateRadioGroupProps['onValueChange'] = ({ curr, next }) => {
+	if (curr !== next) {
+		const formData = new FormData();
+		formData.set('id', next);
 
-			fetch($page.url.origin + '/group', {
-				method: 'PATCH',
-				body: formData
-			}).then(() => {
-				invalidateAll();
-			});
+		fetch($page.url.origin + '/group', {
+			method: 'PATCH',
+			body: formData,
+		}).then(() => {
+			invalidateAll();
+		});
 
-			return next;
-		}
-		return curr;
-	};
+		return next;
+	}
+	return curr;
+};
 
-	const {
-		elements: {
-			root: collapsibleRoot,
-			content: collapsibleContent,
-			trigger: triggerCollapsible
-		},
-		states: { open: isCollapsibleOpen }
-	} = createCollapsible();
+const {
+	elements: { root: collapsibleRoot, content: collapsibleContent, trigger: triggerCollapsible },
+	states: { open: isCollapsibleOpen },
+} = createCollapsible();
 
-	const {
-		elements: { trigger: triggerMenu, menu, item: menuItem }
-	} = createDropdownMenu();
+const {
+	elements: { trigger: triggerMenu, menu, item: menuItem },
+} = createDropdownMenu();
 
-	const {
-		elements: { root: radioRoot, item: radioItem },
-		helpers: { isChecked }
-	} = createRadioGroup({
-		defaultValue: currentGroupId,
-		onValueChange: handleRadioChange
-	});
+const {
+	elements: { root: radioRoot, item: radioItem },
+	helpers: { isChecked },
+} = createRadioGroup({
+	defaultValue: currentGroupId,
+	onValueChange: handleRadioChange,
+});
 </script>
 
 <nav use:melt={$collapsibleRoot} class="bg-white dark:bg-gray-800">

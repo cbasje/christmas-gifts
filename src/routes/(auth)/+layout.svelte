@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { t } from '$lib/translations';
-	import { Toaster } from 'svelte-french-toast';
-	import '../styles.postcss';
-	import type { LayoutServerData } from './$types';
-	import Footer from './Footer.svelte';
-	import Navigation from './Navigation.svelte';
+import { t } from '$lib/translations';
+import { Toaster } from 'svelte-french-toast';
+import '../styles.postcss';
+import type { LayoutServerData } from './$types';
+import Footer from './Footer.svelte';
+import Navigation from './Navigation.svelte';
 
-	export let data: LayoutServerData;
+export let data: LayoutServerData;
 </script>
 
 <svelte:head>

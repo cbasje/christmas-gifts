@@ -1,44 +1,44 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import Input from '$lib/components/Input.svelte';
-	import { t } from '$lib/translations';
-	import Icon from '@iconify/svelte';
-	import { createTabs, melt } from '@melt-ui/svelte';
-	import toast from 'svelte-french-toast';
-	import { superForm } from 'sveltekit-superforms/client';
-	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
-	import SizeChart from '$lib/components/size-chart/SizeChart.svelte';
-	import SizeChartEmpty from '$lib/components/size-chart/SizeChartEmpty.svelte';
-	import SizeChartSimple from '$lib/components/size-chart/SizeChartSimple.svelte';
-	import SizeChartSimpleEmpty from '$lib/components/size-chart/SizeChartSimpleEmpty.svelte';
-	import Header from '../Header.svelte';
-	import type { PageData } from './$types';
+import { page } from '$app/stores';
+import Input from '$lib/components/Input.svelte';
+import { t } from '$lib/translations';
+import Icon from '@iconify/svelte';
+import { createTabs, melt } from '@melt-ui/svelte';
+import toast from 'svelte-french-toast';
+import { superForm } from 'sveltekit-superforms/client';
+import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
+import SizeChart from '$lib/components/size-chart/SizeChart.svelte';
+import SizeChartEmpty from '$lib/components/size-chart/SizeChartEmpty.svelte';
+import SizeChartSimple from '$lib/components/size-chart/SizeChartSimple.svelte';
+import SizeChartSimpleEmpty from '$lib/components/size-chart/SizeChartSimpleEmpty.svelte';
+import Header from '../Header.svelte';
+import type { PageData } from './$types';
 
-	export let data: PageData;
+export let data: PageData;
 
-	let categories = ['Simple', 'Advanced'];
+const categories = ['Simple', 'Advanced'];
 
-	const {
-		elements: { root, list, content, trigger }
-	} = createTabs();
+const {
+	elements: { root, list, content, trigger },
+} = createTabs();
 
-	const { form, enhance, constraints, errors, tainted } = superForm(data.form, {
-		dataType: 'json',
-		resetForm: false,
-		onResult: ({ result }) => {
-			if ('data' in result && result.data?.form?.valid) {
-				toast.success("Saved your sizes successfully!");
-			} else {
-				toast.error("Saving sizes was not successful!");
-			}
-		},
-		onError: ({ message }) => {
-			toast.error(`Saving sizes was not successful! Reason: ${message}`);
-			console.error(message);
+const { form, enhance, constraints, errors, tainted } = superForm(data.form, {
+	dataType: 'json',
+	resetForm: false,
+	onResult: ({ result }) => {
+		if ('data' in result && result.data?.form?.valid) {
+			toast.success('Saved your sizes successfully!');
+		} else {
+			toast.error('Saving sizes was not successful!');
 		}
-	});
+	},
+	onError: ({ message }) => {
+		toast.error(`Saving sizes was not successful! Reason: ${message}`);
+		console.error(message);
+	},
+});
 
-	$: showDebug = $page.url.searchParams.get('d') === 'true';
+$: showDebug = $page.url.searchParams.get('d') === 'true';
 </script>
 
 <form method="POST" action="?/updateSizes" class="flex w-full flex-col" use:enhance>

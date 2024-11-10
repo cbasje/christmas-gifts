@@ -13,7 +13,7 @@ export const giftItems = pgTable('gift_items', {
 		.references(() => users.id, { onDelete: 'restrict', onUpdate: 'cascade' }),
 	giftedById: text('gifted_by_id').references(() => users.id, {
 		onDelete: 'set null',
-		onUpdate: 'cascade'
+		onUpdate: 'cascade',
 	}),
 	link: text('link'),
 	pic: text('pic'),
@@ -21,24 +21,24 @@ export const giftItems = pgTable('gift_items', {
 	ideaId: text('idea_link_id'),
 	groups: jsonb('groups').$type<Group[]>(),
 	createdAt: timestamp('created_at').defaultNow(),
-	updatedAt: timestamp('updated_at').defaultNow()
+	updatedAt: timestamp('updated_at').defaultNow(),
 });
 
 export const giftItemsRelations = relations(giftItems, ({ one }) => ({
 	recipient: one(users, {
 		fields: [giftItems.recipientId],
 		references: [users.id],
-		relationName: 'ReceivingItems'
+		relationName: 'ReceivingItems',
 	}),
 	giftedBy: one(users, {
 		fields: [giftItems.giftedById],
 		references: [users.id],
-		relationName: 'GiftingItems'
+		relationName: 'GiftingItems',
 	}),
 	ideaLink: one(ideas, {
 		fields: [giftItems.ideaId],
-		references: [ideas.id]
-	})
+		references: [ideas.id],
+	}),
 }));
 
 export const selectGiftItemSchema = createSelectSchema(giftItems);
@@ -48,9 +48,9 @@ export const insertGiftItemSchema = createInsertSchema(giftItems, {
 	id: (schema) => schema.id.uuid(),
 	price: (schema) =>
 		schema.price.regex(/(?:[$€])?\s?\d+(?:[,.]\d+)?/g, {
-			message: 'Price must consist of numbers with currency codes.'
+			message: 'Price must consist of numbers with currency codes.',
 		}),
-	link: (schema) => schema.link.url()
+	link: (schema) => schema.link.url(),
 }).pick({ id: true });
 export type NewGiftItem = typeof giftItems.$inferInsert;
 
@@ -63,33 +63,33 @@ export const ideas = pgTable('ideas', {
 		.references(() => users.id, { onDelete: 'restrict', onUpdate: 'cascade' }),
 	giftedById: text('gifted_by_id').references(() => users.id, {
 		onDelete: 'set null',
-		onUpdate: 'cascade'
+		onUpdate: 'cascade',
 	}),
 	link: text('link'),
 	giftItemId: text('gift_item_id').references(() => giftItems.id, {
 		onDelete: 'set null',
-		onUpdate: 'cascade'
+		onUpdate: 'cascade',
 	}),
 	purchased: boolean('purchased').default(false).notNull(),
 	createdAt: timestamp('created_at').defaultNow(),
-	updatedAt: timestamp('updated_at').defaultNow()
+	updatedAt: timestamp('updated_at').defaultNow(),
 });
 
 export const ideasRelations = relations(ideas, ({ one }) => ({
 	recipient: one(users, {
 		fields: [ideas.recipientId],
 		references: [users.id],
-		relationName: 'ReceivingItems'
+		relationName: 'ReceivingItems',
 	}),
 	giftedBy: one(users, {
 		fields: [ideas.giftedById],
 		references: [users.id],
-		relationName: 'GiftingItems'
+		relationName: 'GiftingItems',
 	}),
 	ideaLink: one(giftItems, {
 		fields: [ideas.giftItemId],
-		references: [giftItems.id]
-	})
+		references: [giftItems.id],
+	}),
 }));
 
 export const selectIdeaSchema = createSelectSchema(ideas);
@@ -99,8 +99,8 @@ export const insertIdeaSchema = createInsertSchema(ideas, {
 	id: (schema) => schema.id.uuid(),
 	price: (schema) =>
 		schema.price.regex(/(?:[$€])?\s?\d+(?:[,.]\d+)?/g, {
-			message: 'Price must consist of numbers with currency codes.'
+			message: 'Price must consist of numbers with currency codes.',
 		}),
-	link: (schema) => schema.link.url()
+	link: (schema) => schema.link.url(),
 }).pick({ id: true });
 export type NewIdea = typeof ideas.$inferInsert;

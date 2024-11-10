@@ -18,15 +18,15 @@ export const GET = (async ({ url, locals }) => {
 			.select({
 				id: giftItems.id,
 				name: giftItems.name,
-				recipientName: users.name
+				recipientName: users.name,
 			})
 			.from(giftItems)
 			.leftJoin(users, eq(giftItems.recipientId, users.id))
 			.where(
 				and(
 					eq(giftItems.recipientId, recipientId),
-					sql<boolean>`${giftItems.groups} ? ${locals.session?.group}`
-				)
+					sql<boolean>`${giftItems.groups} ? ${locals.session?.group}`,
+				),
 			);
 
 		return json(linkItems satisfies LinkItem[]);
@@ -55,14 +55,14 @@ export const PATCH = (async ({ request, locals }) => {
 			.update(ideas)
 			.set({
 				purchased,
-				updatedAt: new Date()
+				updatedAt: new Date(),
 			})
 			.where(eq(ideas.id, id))
 			.returning({
 				id: ideas.id,
 				purchased: ideas.purchased,
 				giftedById: ideas.giftedById,
-				giftItemId: ideas.giftItemId
+				giftItemId: ideas.giftItemId,
 			});
 
 		if (updatedIdea.giftItemId) {
@@ -71,7 +71,7 @@ export const PATCH = (async ({ request, locals }) => {
 				.set({
 					purchased,
 					giftedById: purchased ? locals.user?.id : null,
-					updatedAt: new Date()
+					updatedAt: new Date(),
 				})
 				.where(eq(giftItems.id, updatedIdea.giftItemId));
 		}
@@ -97,7 +97,7 @@ export const DELETE = (async ({ request }) => {
 
 			.where(eq(giftItems.id, id))
 			.returning({
-				id: giftItems.id
+				id: giftItems.id,
 			});
 
 		return json(removedItem);

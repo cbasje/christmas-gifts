@@ -1,0 +1,53 @@
+{
+	"$schema": "https://biomejs.dev/schemas/1.8.3/schema.json",
+	"files": {
+		"include": [
+			"deno.json",
+			"biome.jsonc",
+			"package.json",
+			"tsconfig.json",
+			"svelte.config.js",
+			"src/**/*"
+		]
+	},
+	"formatter": {
+		"enabled": true,
+		"formatWithErrors": false,
+		"indentStyle": "tab",
+		"indentWidth": 4,
+		"lineEnding": "lf",
+		"lineWidth": 100,
+		"attributePosition": "auto"
+	},
+	"organizeImports": { "enabled": true },
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true
+		},
+		"ignore": [
+			".DS_Store",
+			"node_modules",
+			"build",
+			".svelte-kit",
+			"package",
+			".env",
+			".env.*",
+			"bun.lockb",
+			"drizzle/meta",
+			"drizzle/migrations"
+		]
+	},
+	"javascript": {
+		"formatter": {
+			"quoteProperties": "asNeeded",
+			"trailingCommas": "all",
+			"semicolons": "always",
+			"arrowParentheses": "always",
+			"bracketSpacing": true,
+			"bracketSameLine": false,
+			"quoteStyle": "single",
+			"attributePosition": "auto"
+		}
+	}
+}

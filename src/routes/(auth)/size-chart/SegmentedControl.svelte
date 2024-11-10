@@ -1,20 +1,20 @@
 <script lang="ts">
-	import { createTabs, melt } from '@melt-ui/svelte';
+import { createTabs, melt } from '@melt-ui/svelte';
 
-	type TabType = 'Simple' | 'Advanced';
+type TabType = 'Simple' | 'Advanced';
 
-	export let selectedTab: TabType;
-	export let categories: TabType[];
+export let selectedTab: TabType;
+export let categories: TabType[];
 
-	const {
-		elements: { root, list, trigger },
-		states: { value }
-	} = createTabs({
-		onValueChange: ({ next }) => {
-			return (selectedTab = next as TabType);
-		},
-		defaultValue: selectedTab
-	});
+const {
+	elements: { root, list, trigger },
+	states: { value },
+} = createTabs({
+	onValueChange: ({ next }) => {
+		return (selectedTab = next as TabType);
+	},
+	defaultValue: selectedTab,
+});
 </script>
 
 <div use:melt={$root}>

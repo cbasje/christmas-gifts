@@ -11,7 +11,7 @@ import type { Actions, PageServerLoad } from './$types';
 // TODO: drizzle-zod
 const schema = z.object({
 	username: z.string().min(1).max(255).toLowerCase(),
-	password: z.string().min(6).max(255)
+	password: z.string().min(6).max(255),
 });
 
 export const load = (async ({ locals, url, cookies }) => {
@@ -28,12 +28,12 @@ export const load = (async ({ locals, url, cookies }) => {
 				.limit(1);
 
 			const session = await auth.createSession(existingUser.id, {
-				group: existingUser.groups?.at(0) ?? 'HAUGEN'
+				group: existingUser.groups?.at(0) ?? 'HAUGEN',
 			});
 			const sessionCookie = auth.createSessionCookie(session.id);
 			cookies.set(sessionCookie.name, sessionCookie.value, {
 				path: '.',
-				...sessionCookie.attributes
+				...sessionCookie.attributes,
 			});
 
 			// redirect to /
@@ -46,7 +46,7 @@ export const load = (async ({ locals, url, cookies }) => {
 	const form = await superValidate(schema);
 
 	return {
-		form
+		form,
 	};
 }) satisfies PageServerLoad;
 
@@ -69,7 +69,7 @@ export const actions = {
 			// validate password
 			const isValidPassword = await verifyPasswordHash(
 				existingUser?.hashedPassword ?? '',
-				form.data.password
+				form.data.password,
 			);
 
 			if (!existingUser) {
@@ -80,12 +80,12 @@ export const actions = {
 			}
 
 			const session = await auth.createSession(existingUser.id, {
-				group: existingUser.groups?.at(0) ?? 'HAUGEN'
+				group: existingUser.groups?.at(0) ?? 'HAUGEN',
 			});
 			const sessionCookie = auth.createSessionCookie(session.id);
 			cookies.set(sessionCookie.name, sessionCookie.value, {
 				path: '.',
-				...sessionCookie.attributes
+				...sessionCookie.attributes,
 			});
 		} catch (error_) {
 			const { message } = error_ instanceof Error ? error_ : { message: 'Internal error!' };
@@ -94,5 +94,5 @@ export const actions = {
 		}
 
 		redirect(302, '/');
-	}
+	},
 } satisfies Actions;

@@ -17,12 +17,12 @@ export const PATCH = (async ({ request, cookies, locals }) => {
 		await auth.invalidateSession(oldSession.id);
 
 		const session = await auth.createSession(oldSession.userId, {
-			group: id as Group
+			group: id as Group,
 		});
 		const sessionCookie = auth.createSessionCookie(session.id);
 		cookies.set(sessionCookie.name, sessionCookie.value, {
 			path: '.',
-			...sessionCookie.attributes
+			...sessionCookie.attributes,
 		});
 	}
 

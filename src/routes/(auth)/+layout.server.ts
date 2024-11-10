@@ -11,7 +11,7 @@ export const load = (async ({ locals, parent }) => {
 		.select({
 			reason: maintenance.reason,
 			end: maintenance.end,
-			isOn: or(isNull(maintenance.end), gte(maintenance.end, new Date())) ?? sql<null>`NULL`
+			isOn: or(isNull(maintenance.end), gte(maintenance.end, new Date())) ?? sql<null>`NULL`,
 		})
 		.from(maintenance)
 		.where(lte(maintenance.start, new Date()))
@@ -21,17 +21,17 @@ export const load = (async ({ locals, parent }) => {
 	if (maintenanceMode?.isOn)
 		error(403, {
 			message: maintenanceMode.reason ? maintenanceMode.reason[data.locale] : '',
-			end: maintenanceMode.end ?? undefined
+			end: maintenanceMode.end ?? undefined,
 		});
 
 	const { user, session } = locals;
 	if (!user || !session)
 		error(401, {
-			message: 'Something is wrong!'
+			message: 'Something is wrong!',
 		});
 
 	return {
 		user,
-		currentGroupId: session.group ?? user.groups?.at(0)
+		currentGroupId: session.group ?? user.groups?.at(0),
 	};
 }) satisfies LayoutServerLoad;

@@ -7,5 +7,5 @@ export const maintenance = pgTable('maintenance', {
 	id: serial('id').primaryKey().notNull(),
 	start: timestamp('start').defaultNow().notNull(),
 	end: timestamp('end'),
-	reason: jsonb('reason').$type<MaintenanceReason>()
+	reason: jsonb('reason').$type<MaintenanceReason>(),
 });

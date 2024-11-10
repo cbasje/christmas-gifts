@@ -7,8 +7,8 @@ import sequence from 'svelte-sequential-preprocessor';
 const config = {
 	preprocess: sequence([vitePreprocess(), preprocessMeltUI()]),
 	kit: {
-		adapter: adapter()
-	}
+		adapter: adapter(),
+	},
 };
 
 export default config;

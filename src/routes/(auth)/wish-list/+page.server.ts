@@ -15,7 +15,7 @@ const schema = z.object({
 	price: z
 		.string()
 		.regex(/(?:[$€])?\s?\d+(?:[,.]\d+)?/g, {
-			message: 'Price must consist of numbers with currency codes.'
+			message: 'Price must consist of numbers with currency codes.',
 		})
 		.nullish(),
 	notes: z.string().nullish(),
@@ -24,7 +24,7 @@ const schema = z.object({
 	link: z.string().url().nullish(),
 	pic: z.string().url().nullish(),
 	idea: z.boolean().default(false),
-	groups: z.enum(Groups).array()
+	groups: z.enum(Groups).array(),
 });
 
 export const load = (async ({ parent }) => {
@@ -41,22 +41,22 @@ export const load = (async ({ parent }) => {
 			recipientId: giftItems.recipientId,
 			giftedById: giftItems.giftedById,
 			idea: sql<boolean>`FALSE`,
-			groups: giftItems.groups
+			groups: giftItems.groups,
 		})
 		.from(giftItems)
 		.where(
 			and(
 				eq(giftItems.recipientId, user.id ?? ''),
-				sql<boolean>`${giftItems.groups} ? ${currentGroupId}`
-			)
+				sql<boolean>`${giftItems.groups} ? ${currentGroupId}`,
+			),
 		);
 
 	const formData = await superValidate(
 		{
 			recipientId: user.id,
-			groups: currentGroupId ? [currentGroupId] : []
+			groups: currentGroupId ? [currentGroupId] : [],
 		},
-		schema
+		schema,
 	);
 
 	return {
@@ -66,10 +66,10 @@ export const load = (async ({ parent }) => {
 			i.pic
 				? {
 						...i,
-						pic: getSupabaseURL(i.pic)
+						pic: getSupabaseURL(i.pic),
 					}
-				: i
-		)
+				: i,
+		),
 	};
 }) satisfies PageServerLoad;
 
@@ -90,21 +90,21 @@ export const actions = {
 				const pic = await uploadFile(form.data.id, file);
 				data = {
 					...form.data,
-					pic: pic.toString()
+					pic: pic.toString(),
 				};
 			} else {
 				data = {
-					...form.data
+					...form.data,
 				};
 			}
 
 			const [newItem] = await db
 				.insert(giftItems)
 				.values({
-					...data
+					...data,
 				})
 				.returning({
-					name: giftItems.name
+					name: giftItems.name,
 				});
 
 			return { form, newItem };
@@ -129,11 +129,11 @@ export const actions = {
 				const pic = await uploadFile(form.data.id, file);
 				data = {
 					...form.data,
-					pic: pic.toString()
+					pic: pic.toString(),
 				};
 			} else {
 				data = {
-					...form.data
+					...form.data,
 				};
 			}
 
@@ -148,11 +148,11 @@ export const actions = {
 					pic: form.data.pic,
 					notes: form.data.notes,
 					groups: form.data.groups,
-					updatedAt: new Date()
+					updatedAt: new Date(),
 				})
 				.where(eq(giftItems.id, form.data.id))
 				.returning({
-					name: giftItems.name
+					name: giftItems.name,
 				});
 
 			return { form, editedItem };
@@ -160,5 +160,5 @@ export const actions = {
 			console.error(error);
 			return fail(500, { form });
 		}
-	}
+	},
 } satisfies Actions;

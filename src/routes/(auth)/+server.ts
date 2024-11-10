@@ -24,14 +24,14 @@ export const PATCH = (async ({ request, locals }) => {
 			.set({
 				purchased,
 				giftedById: purchased ? locals.user?.id : null,
-				updatedAt: new Date()
+				updatedAt: new Date(),
 			})
 			.where(eq(giftItems.id, id))
 			.returning({
 				id: giftItems.id,
 				purchased: giftItems.purchased,
 				giftedById: giftItems.giftedById,
-				ideaId: giftItems.ideaId
+				ideaId: giftItems.ideaId,
 			});
 
 		if (updatedItem.ideaId) {
@@ -39,7 +39,7 @@ export const PATCH = (async ({ request, locals }) => {
 				.update(ideas)
 				.set({
 					purchased,
-					updatedAt: new Date()
+					updatedAt: new Date(),
 				})
 				.where(eq(ideas.id, updatedItem.ideaId));
 		}

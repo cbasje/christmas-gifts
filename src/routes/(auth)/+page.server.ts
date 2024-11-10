@@ -18,15 +18,15 @@ export const load = (async ({ parent }) => {
 			link: giftItems.link,
 			pic: giftItems.pic,
 			purchased: giftItems.purchased,
-			recipientId: giftItems.recipientId
+			recipientId: giftItems.recipientId,
 		})
 		.from(giftItems)
 		.leftJoin(users, eq(giftItems.recipientId, users.id))
 		.where(
 			and(
 				not(eq(giftItems.recipientId, user.id)),
-				sql<boolean>`${giftItems.groups} ? ${currentGroupId}`
-			)
+				sql<boolean>`${giftItems.groups} ? ${currentGroupId}`,
+			),
 		)
 		.orderBy(desc(users.hue));
 
@@ -35,7 +35,7 @@ export const load = (async ({ parent }) => {
 			id: users.id,
 			name: users.name,
 			hue: users.hue,
-			sizes: users.sizes
+			sizes: users.sizes,
 		})
 		.from(users)
 		.where(and(not(eq(users.id, user.id)), sql<boolean>`${users.groups} ? ${currentGroupId}`))
@@ -48,11 +48,11 @@ export const load = (async ({ parent }) => {
 				i.pic
 					? {
 							...i,
-							pic: getSupabaseURL(i.pic)
+							pic: getSupabaseURL(i.pic),
 						}
-					: i
+					: i,
 			),
-			'recipientId'
-		)
+			'recipientId',
+		),
 	};
 }) satisfies PageServerLoad;

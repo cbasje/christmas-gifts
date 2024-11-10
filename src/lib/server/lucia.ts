@@ -9,8 +9,8 @@ const adapter = new DrizzlePostgreSQLAdapter(db, authSessions, users);
 export const auth = new Lucia(adapter, {
 	sessionCookie: {
 		attributes: {
-			secure: !dev
-		}
+			secure: !dev,
+		},
 	},
 	sessionExpiresIn: new TimeSpan(6, 'm'),
 	getUserAttributes: (data) => {
@@ -20,14 +20,14 @@ export const auth = new Lucia(adapter, {
 			partnerId: data.partnerId,
 			groups: data.groups,
 			sizes: data.sizes,
-			hue: data.hue
+			hue: data.hue,
 		};
 	},
 	getSessionAttributes: (data) => {
 		return {
-			group: data.group
+			group: data.group,
 		};
-	}
+	},
 });
 
 declare module 'lucia' {

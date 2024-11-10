@@ -1,24 +1,24 @@
 <script lang="ts">
-	import type { UserSizes } from '$lib/db/schema/user';
-	import { t } from '$lib/translations';
-	import Icon from '@iconify/svelte';
-	import { createDialog, melt } from '@melt-ui/svelte';
-	import { fade, scale } from 'svelte/transition';
-	import SizeChartViewer from './SizeChartViewer.svelte';
+import type { UserSizes } from '$lib/db/schema/user';
+import { t } from '$lib/translations';
+import Icon from '@iconify/svelte';
+import { createDialog, melt } from '@melt-ui/svelte';
+import { fade, scale } from 'svelte/transition';
+import SizeChartViewer from './SizeChartViewer.svelte';
 
-	export let name: string;
-	export let hue: number | undefined = undefined;
-	export let sizes: UserSizes = { simple: {}, advanced: {} };
+export let name: string;
+export const hue: number | undefined = undefined;
+export const sizes: UserSizes = { simple: {}, advanced: {} };
 
-	console.log('🎄 -----------------🎄');
-	console.log('🎄 ~ sizes:', sizes);
-	console.log('🎄 -----------------🎄');
-	const {
-		elements: { trigger, overlay, content, title, description, close, portalled },
-		states: { open }
-	} = createDialog({
-		forceVisible: true
-	});
+console.log('🎄 -----------------🎄');
+console.log('🎄 ~ sizes:', sizes);
+console.log('🎄 -----------------🎄');
+const {
+	elements: { trigger, overlay, content, title, description, close, portalled },
+	states: { open },
+} = createDialog({
+	forceVisible: true,
+});
 </script>
 
 <button
