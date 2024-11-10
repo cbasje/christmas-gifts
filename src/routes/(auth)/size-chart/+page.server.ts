@@ -2,14 +2,18 @@ import { UserSizesSchema, users } from '$lib/db/schema/user';
 import { db } from '$lib/server/drizzle';
 import { error, fail } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
-import { superValidate } from 'sveltekit-superforms/server';
+import { superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load = (async ({ parent }) => {
 	const { user } = await parent();
 
 	if (!user) error(404, 'Not found');
-	const form = await superValidate(user.sizes as Record<string, string> | null, UserSizesSchema);
+	const form = await superValidate(
+		user.sizes as Record<string, string> | null,
+		zod(UserSizesSchema),
+	);
 
 	return {
 		form,
@@ -19,7 +23,7 @@ export const load = (async ({ parent }) => {
 
 export const actions = {
 	updateSizes: async ({ locals, request }) => {
-		const form = await superValidate(request, UserSizesSchema);
+		const form = await superValidate(request, zod(UserSizesSchema));
 
 		// Convenient validation check:
 		if (!form.valid) {

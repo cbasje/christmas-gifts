@@ -4,7 +4,8 @@ import { db } from '$lib/server/drizzle';
 import { getSupabaseURL, isFile, uploadFile } from '$lib/utils/file';
 import { fail } from '@sveltejs/kit';
 import { and, eq, sql } from 'drizzle-orm';
-import { superValidate } from 'sveltekit-superforms/server';
+import { superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -56,7 +57,7 @@ export const load = (async ({ parent }) => {
 			recipientId: user.id,
 			groups: currentGroupId ? [currentGroupId] : [],
 		},
-		schema,
+		zod(schema),
 	);
 
 	return {
@@ -75,8 +76,7 @@ export const load = (async ({ parent }) => {
 
 export const actions = {
 	newItem: async ({ request }) => {
-		const formData = await request.formData();
-		const form = await superValidate(formData, schema);
+		const form = await superValidate(request, zod(schema));
 
 		// Convenient validation check:
 		if (!form.valid) {
@@ -114,8 +114,7 @@ export const actions = {
 		}
 	},
 	editItem: async ({ request }) => {
-		const formData = await request.formData();
-		const form = await superValidate(formData, schema);
+		const form = await superValidate(request, zod(schema));
 
 		// Convenient validation check:
 		if (!form.valid) {

@@ -4,7 +4,8 @@ import { auth } from '$lib/server/lucia';
 import { verifyPasswordHash } from '$lib/server/password';
 import { fail, redirect } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
-import { setError, superValidate } from 'sveltekit-superforms/server';
+import { setError, superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -43,7 +44,7 @@ export const load = (async ({ locals, url, cookies }) => {
 		}
 	}
 
-	const form = await superValidate(schema);
+	const form = await superValidate(zod(schema));
 
 	return {
 		form,
@@ -52,7 +53,7 @@ export const load = (async ({ locals, url, cookies }) => {
 
 export const actions = {
 	default: async ({ request, cookies }) => {
-		const form = await superValidate(request, schema);
+		const form = await superValidate(request, zod(schema));
 
 		if (!form.valid) {
 			return fail(400, { form });

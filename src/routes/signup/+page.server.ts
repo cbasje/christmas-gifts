@@ -6,6 +6,7 @@ import { capitaliseString } from '$lib/utils/capitalise';
 import { fail, redirect } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import { generateId } from 'lucia';
+import { zod } from 'sveltekit-superforms/adapters';
 import { setError, superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import type { Actions, PageServerLoad } from './$types';
@@ -19,7 +20,7 @@ const schema = z.object({
 export const load = (async ({ locals }) => {
 	if (locals.session) redirect(302, '/');
 
-	const form = await superValidate(schema);
+	const form = await superValidate(zod(schema));
 
 	return {
 		form,
@@ -28,7 +29,7 @@ export const load = (async ({ locals }) => {
 
 export const actions = {
 	default: async ({ request, cookies }) => {
-		const form = await superValidate(request, schema);
+		const form = await superValidate(request, zod(schema));
 
 		if (!form.valid) {
 			return fail(400, { form });

@@ -5,7 +5,8 @@ import { isFile, uploadFile } from '$lib/utils/file';
 import { groupBy } from '$lib/utils/group-by';
 import { fail } from '@sveltejs/kit';
 import { and, asc, desc, eq, isNotNull, not, or, sql } from 'drizzle-orm';
-import { superValidate } from 'sveltekit-superforms/server';
+import { superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -75,7 +76,7 @@ export const load = (async ({ parent }) => {
 		{
 			giftedById: user.id,
 		},
-		schema,
+		zod(schema),
 	);
 
 	return {
@@ -88,8 +89,7 @@ export const load = (async ({ parent }) => {
 
 export const actions = {
 	newItem: async ({ request }) => {
-		const formData = await request.formData();
-		const form = await superValidate(formData, schema);
+		const form = await superValidate(request, zod(schema));
 
 		// Convenient validation check:
 		if (!form.valid) {
@@ -127,8 +127,7 @@ export const actions = {
 		}
 	},
 	editItem: async ({ request }) => {
-		const formData = await request.formData();
-		const form = await superValidate(formData, schema);
+		const form = await superValidate(request, zod(schema));
 
 		// Convenient validation check:
 		if (!form.valid) {
