@@ -2,10 +2,12 @@
 	"$schema": "https://biomejs.dev/schemas/1.8.3/schema.json",
 	"files": {
 		"include": [
+			".vscode/**/*",
 			"deno.json",
 			"biome.jsonc",
 			"package.json",
 			"tsconfig.json",
+			"vite.config.js",
 			"svelte.config.js",
 			"src/**/*"
 		]

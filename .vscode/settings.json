@@ -1,1 +1,4 @@
-{ "turboConsoleLog.logMessagePrefix": "🎄" }
+{
+	"turboConsoleLog.logMessagePrefix": "🎄",
+	"editor.defaultFormatter": "biomejs.biome"
+}

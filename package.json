@@ -11,12 +11,12 @@
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"db:push": "drizzle-kit push:pg",
-		"db:pull": "drizzle-kit introspect:pg",
-		"db:generate": "drizzle-kit generate:pg",
+		"db:push": "drizzle-kit push",
+		"db:pull": "drizzle-kit introspect",
+		"db:generate": "drizzle-kit generate",
 		"db:migrate": "bun run ./src/lib/server/migrate.ts",
-		"db:up": "drizzle-kit up:pg",
-		"db:check": "drizzle-kit check:pg",
+		"db:up": "drizzle-kit up",
+		"db:check": "drizzle-kit check",
 		"db:studio": "drizzle-kit studio"
 	},
 	"dependencies": {
