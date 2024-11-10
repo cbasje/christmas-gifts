@@ -1,10 +1,8 @@
 {
-  "id": "61a8af41-7126-43a0-bbd9-c8d3b6215b4c",
-  "prevId": "545402d2-5c11-4b7d-afbf-01668c9a59f9",
-  "version": "5",
-  "dialect": "pg",
+  "version": "7",
+  "dialect": "postgresql",
   "tables": {
-    "gift_items": {
+    "public.gift_items": {
       "name": "gift_items",
       "schema": "",
       "columns": {
@@ -95,34 +93,37 @@
         "gift_items_recipient_id_users_id_fk": {
           "name": "gift_items_recipient_id_users_id_fk",
           "tableFrom": "gift_items",
-          "tableTo": "users",
           "columnsFrom": [
             "recipient_id"
           ],
+          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "restrict",
-          "onUpdate": "cascade"
+          "onUpdate": "cascade",
+          "onDelete": "restrict"
         },
         "gift_items_gifted_by_id_users_id_fk": {
           "name": "gift_items_gifted_by_id_users_id_fk",
           "tableFrom": "gift_items",
-          "tableTo": "users",
           "columnsFrom": [
             "gifted_by_id"
           ],
+          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
-          "onUpdate": "cascade"
+          "onUpdate": "cascade",
+          "onDelete": "set null"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
-    "ideas": {
+    "public.ideas": {
       "name": "ideas",
       "schema": "",
       "columns": {
@@ -195,47 +196,50 @@
         "ideas_recipient_id_users_id_fk": {
           "name": "ideas_recipient_id_users_id_fk",
           "tableFrom": "ideas",
-          "tableTo": "users",
           "columnsFrom": [
             "recipient_id"
           ],
+          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "restrict",
-          "onUpdate": "cascade"
+          "onUpdate": "cascade",
+          "onDelete": "restrict"
         },
         "ideas_gifted_by_id_users_id_fk": {
           "name": "ideas_gifted_by_id_users_id_fk",
           "tableFrom": "ideas",
-          "tableTo": "users",
           "columnsFrom": [
             "gifted_by_id"
           ],
+          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
-          "onUpdate": "cascade"
+          "onUpdate": "cascade",
+          "onDelete": "set null"
         },
         "ideas_gift_item_id_gift_items_id_fk": {
           "name": "ideas_gift_item_id_gift_items_id_fk",
           "tableFrom": "ideas",
-          "tableTo": "gift_items",
           "columnsFrom": [
             "gift_item_id"
           ],
+          "tableTo": "gift_items",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
-          "onUpdate": "cascade"
+          "onUpdate": "cascade",
+          "onDelete": "set null"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
-    "maintenance": {
+    "public.maintenance": {
       "name": "maintenance",
       "schema": "",
       "columns": {
@@ -268,9 +272,12 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
-    "sessions": {
+    "public.sessions": {
       "name": "sessions",
       "schema": "",
       "columns": {
@@ -304,21 +311,24 @@
         "sessions_user_id_users_id_fk": {
           "name": "sessions_user_id_users_id_fk",
           "tableFrom": "sessions",
-          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
+          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "cascade"
+          "onUpdate": "cascade",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
-    "users": {
+    "public.users": {
       "name": "users",
       "schema": "",
       "columns": {
@@ -392,26 +402,35 @@
       "uniqueConstraints": {
         "users_name_unique": {
           "name": "users_name_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "name"
-          ]
+          ],
+          "nullsNotDistinct": false
         },
         "users_user_name_unique": {
           "name": "users_user_name_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "user_name"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
-      }
+      },
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     }
   },
   "enums": {},
   "schemas": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
-  }
+    "tables": {},
+    "columns": {}
+  },
+  "id": "61a8af41-7126-43a0-bbd9-c8d3b6215b4c",
+  "prevId": "545402d2-5c11-4b7d-afbf-01668c9a59f9",
+  "sequences": {},
+  "policies": {},
+  "views": {},
+  "roles": {}
 }
