@@ -24,7 +24,7 @@ const removeItem = async () => {
 				{
 					loading: 'Removing...',
 					success: `Removed '${name}' successfully!`,
-					error: `Removing item was not successful!`,
+					error: 'Removing item was not successful!',
 				},
 			)
 			.then(() => {
@@ -38,5 +38,5 @@ const removeItem = async () => {
 	class="cursor-pointer font-normal text-danger-500 hover:text-danger-700 dark:text-danger-600 dark:hover:text-danger-800"
 	on:click={removeItem}
 >
-	<Icon icon="solar:trash-bin-2-line-duotone" class="block h-6 w-6" />
+	<Icon icon="ph:trash" class="block h-6 w-6" />
 </button>

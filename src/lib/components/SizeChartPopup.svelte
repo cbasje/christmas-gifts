@@ -29,7 +29,7 @@ const {
 		: 'bg-gray-300 dark:bg-gray-600'}"
 	style={hue ? `--color-hue: ${hue}` : undefined}
 >
-	<Icon icon="solar:ruler-line-duotone" class="square-4" />
+	<Icon icon="ph:ruler" class="square-4" />
 	<span class="sr-only">Open size chart popup</span>
 </button>
 

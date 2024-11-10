@@ -55,7 +55,7 @@ $: showDebug = $page.url.searchParams.get('d') === 'true';
 				class="flex items-center justify-center gap-3 self-end rounded-md border border-primary-700 bg-primary-600 px-4 py-2 text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 enabled:hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
 				disabled={$tainted === undefined}
 			>
-				<Icon icon="solar:diskette-line-duotone" class="square-4" />
+				<Icon icon="ph:floppy-disk" class="square-4" />
 				<span>{$t('sizeChart.submit')}</span>
 			</button>
 		</svelte:fragment>

@@ -31,7 +31,7 @@ const toggleCollapsed = () => {
 			<div class="flex items-center gap-3">
 				<slot name="summary" />
 				<Icon
-					icon="lucide:chevron-down"
+					icon="ph:caret-down"
 					class="block transition-transform duration-200 square-6  {!isCollapsed
 						? '-rotate-180'
 						: 'rotate-0'}"

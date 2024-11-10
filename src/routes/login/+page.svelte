@@ -63,7 +63,7 @@ const { form, enhance, errors, constraints } = superForm(data.form, {
 		type="submit"
 		class="mt-4 flex w-full items-center justify-center gap-3 rounded-md border border-primary-700 bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500"
 	>
-		<Icon icon="solar:shield-keyhole-minimalistic-line-duotone" class="square-4" />
+		<Icon icon="ph:lock-key" class="square-4" />
 		<span>{$t('common.signIn')}</span>
 	</button>
 	{#if dev}

@@ -23,21 +23,21 @@ export let currentGroupId: LayoutServerData['currentGroupId'];
 
 type NavigationItem = { name: string; href: string; icon: string };
 const mainMenuNavigation: NavigationItem[] = [
-	{ name: 'common.navigation.overview', href: '/', icon: 'solar:home-2-line-duotone' },
+	{ name: 'common.navigation.overview', href: '/', icon: 'ph:house' },
 	{
 		name: 'common.navigation.wishList',
 		href: '/wish-list',
-		icon: 'solar:checklist-line-duotone',
+		icon: 'ph:list-checks',
 	},
 	{
 		name: 'common.navigation.ideas',
 		href: '/ideas',
-		icon: 'solar:clipboard-list-line-duotone',
+		icon: 'ph:clipboard-text',
 	},
 	{
 		name: 'common.navigation.sizeChart',
 		href: '/size-chart',
-		icon: 'solar:ruler-line-duotone',
+		icon: 'ph:ruler',
 	},
 ];
 const subMenuNavigation: NavigationItem[] = [];
@@ -88,9 +88,9 @@ const {
 					<span class="sr-only">Open main menu</span>
 
 					{#if $isCollapsibleOpen}
-						<Icon icon="lucide:x" class="block h-6 w-6" />
+						<Icon icon="ph:x" class="block h-6 w-6" />
 					{:else}
-						<Icon icon="solar:list-line-duotone" class="block h-6 w-6" />
+						<Icon icon="ph:list" class="block h-6 w-6" />
 					{/if}
 				</button>
 			</div>
@@ -177,7 +177,7 @@ const {
 									class="flex w-full cursor-pointer flex-row-reverse items-center justify-between rounded-md px-3 py-2 text-left text-sm font-medium text-danger-800 hover:bg-gray-300 hover:text-danger-900 dark:text-danger-300 dark:hover:bg-gray-700 dark:hover:text-danger-100"
 								>
 									<Icon
-										icon="solar:logout-2-line-duotone"
+										icon="ph:arrow-square-out"
 										class="block h-4 w-4"
 									/>
 									<span>{$t('common.signOut')}</span>
