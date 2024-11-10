@@ -1,7 +1,6 @@
 import { giftItems } from '$lib/db/schema/gift-item';
 import { Groups } from '$lib/db/schema/user';
 import { db } from '$lib/server/drizzle';
-import { getSupabaseURL, isFile, uploadFile } from '$lib/utils/file';
 import { fail } from '@sveltejs/kit';
 import { and, eq, sql } from 'drizzle-orm';
 import { superValidate } from 'sveltekit-superforms';
@@ -23,7 +22,6 @@ const schema = z.object({
 	recipientId: z.string(),
 	giftedById: z.string().nullish(),
 	link: z.string().url().nullish(),
-	pic: z.string().url().nullish(),
 	idea: z.boolean().default(false),
 	groups: z.enum(Groups).array(),
 });
@@ -38,7 +36,6 @@ export const load = (async ({ parent }) => {
 			price: giftItems.price,
 			notes: giftItems.notes,
 			link: giftItems.link,
-			pic: giftItems.pic,
 			recipientId: giftItems.recipientId,
 			giftedById: giftItems.giftedById,
 			idea: sql<boolean>`FALSE`,
@@ -63,14 +60,7 @@ export const load = (async ({ parent }) => {
 	return {
 		formData,
 		currentUserGroups: user.groups,
-		wishList: wishList.map((i) =>
-			i.pic
-				? {
-						...i,
-						pic: getSupabaseURL(i.pic),
-					}
-				: i,
-		),
+		wishList,
 	};
 }) satisfies PageServerLoad;
 
@@ -84,28 +74,9 @@ export const actions = {
 		}
 
 		try {
-			let data: typeof form.data;
-			const file = isFile(formData.get('pic'));
-			if (file) {
-				const pic = await uploadFile(form.data.id, file);
-				data = {
-					...form.data,
-					pic: pic.toString(),
-				};
-			} else {
-				data = {
-					...form.data,
-				};
-			}
-
-			const [newItem] = await db
-				.insert(giftItems)
-				.values({
-					...data,
-				})
-				.returning({
-					name: giftItems.name,
-				});
+			const [newItem] = await db.insert(giftItems).values(form.data).returning({
+				name: giftItems.name,
+			});
 
 			return { form, newItem };
 		} catch (error) {
@@ -122,20 +93,6 @@ export const actions = {
 		}
 
 		try {
-			let data: typeof form.data;
-			const file = isFile(formData.get('pic'));
-			if (file) {
-				const pic = await uploadFile(form.data.id, file);
-				data = {
-					...form.data,
-					pic: pic.toString(),
-				};
-			} else {
-				data = {
-					...form.data,
-				};
-			}
-
 			const [editedItem] = await db
 				.update(giftItems)
 				.set({
@@ -144,7 +101,6 @@ export const actions = {
 					price: form.data.price,
 					giftedById: form.data.giftedById,
 					link: form.data.link,
-					pic: form.data.pic,
 					notes: form.data.notes,
 					groups: form.data.groups,
 					updatedAt: new Date(),

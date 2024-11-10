@@ -12,7 +12,6 @@
 		"notes": "Notes",
 		"price": "Price",
 		"link": "Link",
-		"pic": "Picture",
 		"recipient": "Recipient",
 		"groups": "Groups",
 		"ideaLink": "Link idea to..."
@@ -20,11 +19,6 @@
 	"table": {
 		"purchased": "Purchased?",
 		"actions": "Actions"
-	},
-	"dropzone": {
-		"message": "Upload a file or drag and drop",
-		"help": "PNG, JPG and GIF are allowed",
-		"alt": "A picture uploaded via the Dropzone"
 	},
 	"navigation": {
 		"overview": "Overview",

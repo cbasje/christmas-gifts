@@ -40,7 +40,7 @@ const switchPurchased: CreateSwitchProps['onCheckedChange'] = ({ next }) => {
 			{
 				loading: 'Saving...',
 				success: `Changed purchase status of '${item.name}' successfully!`,
-				error: `Saving purchase status was not successful!`,
+				error: 'Saving purchase status was not successful!',
 			},
 		)
 		.then(() => {
@@ -64,11 +64,6 @@ const {
 		? 'decoration-current line-through decoration-2 opacity-30'
 		: ''}"
 >
-	<td class="flex items-center px-6 py-3">
-		{#if 'pic' in item && item.pic}
-			<img class="shrink-0 rounded-md object-cover square-24" src={item.pic} alt="" />
-		{/if}
-	</td>
 	<td class=" min-h-4rem px-6 py-4">
 		<h3 class="text-sm font-medium text-gray-900 dark:text-gray-100">
 			{item.name}

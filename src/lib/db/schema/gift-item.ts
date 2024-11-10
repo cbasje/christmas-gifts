@@ -16,7 +16,6 @@ export const giftItems = pgTable('gift_items', {
 		onUpdate: 'cascade',
 	}),
 	link: text('link'),
-	pic: text('pic'),
 	purchased: boolean('purchased').default(false).notNull(),
 	ideaId: text('idea_link_id'),
 	groups: jsonb('groups').$type<Group[]>(),

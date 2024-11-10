@@ -1,0 +1,1 @@
+ALTER TABLE "gift_items" DROP COLUMN IF EXISTS "pic";

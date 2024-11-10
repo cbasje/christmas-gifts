@@ -1,7 +1,6 @@
 import { ideas } from '$lib/db/schema/gift-item';
 import { users } from '$lib/db/schema/user';
 import { db } from '$lib/server/drizzle';
-import { isFile, uploadFile } from '$lib/utils/file';
 import { groupBy } from '$lib/utils/group-by';
 import { fail } from '@sveltejs/kit';
 import { and, asc, desc, eq, isNotNull, not, or, sql } from 'drizzle-orm';
@@ -97,28 +96,9 @@ export const actions = {
 		}
 
 		try {
-			let data: typeof form.data;
-			const file = isFile(formData.get('pic'));
-			if (file) {
-				const pic = await uploadFile(form.data.id, file);
-				data = {
-					...form.data,
-					pic: pic.toString(),
-				};
-			} else {
-				data = {
-					...form.data,
-				};
-			}
-
-			const [newItem] = await db
-				.insert(ideas)
-				.values({
-					...data,
-				})
-				.returning({
-					name: ideas.name,
-				});
+			const [newItem] = await db.insert(ideas).values(form.data).returning({
+				name: ideas.name,
+			});
 
 			return { form, newItem };
 		} catch (error) {

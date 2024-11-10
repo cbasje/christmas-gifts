@@ -1,7 +1,6 @@
 import { giftItems } from '$lib/db/schema/gift-item';
 import { users } from '$lib/db/schema/user';
 import { db } from '$lib/server/drizzle';
-import { getSupabaseURL } from '$lib/utils/file';
 import { groupBy } from '$lib/utils/group-by';
 import { and, asc, desc, eq, not, sql } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
@@ -16,7 +15,6 @@ export const load = (async ({ parent }) => {
 			price: giftItems.price,
 			notes: giftItems.notes,
 			link: giftItems.link,
-			pic: giftItems.pic,
 			purchased: giftItems.purchased,
 			recipientId: giftItems.recipientId,
 		})
@@ -43,16 +41,6 @@ export const load = (async ({ parent }) => {
 
 	return {
 		users: groupUsers,
-		overviewList: groupBy(
-			overviewList.map((i) =>
-				i.pic
-					? {
-							...i,
-							pic: getSupabaseURL(i.pic),
-						}
-					: i,
-			),
-			'recipientId',
-		),
+		overviewList: groupBy(overviewList, 'recipientId'),
 	};
 }) satisfies PageServerLoad;

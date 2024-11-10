@@ -24,7 +24,6 @@
 		"@melt-ui/svelte": "^0.86.0",
 		"@neondatabase/serverless": "^0.10.3",
 		"@node-rs/argon2": "^2.0.0",
-		"@supabase/supabase-js": "^2.46.1",
 		"drizzle-orm": "^0.36.1",
 		"drizzle-zod": "^0.5.1",
 		"lucia": "^3.2.2",

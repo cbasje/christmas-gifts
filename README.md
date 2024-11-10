@@ -9,7 +9,7 @@ A webapp to track Christmas gifts for my family and in-laws.
 -   Framework: [SvelteKit](https://kit.svelte.dev/)
 -   Styling: [TailwindCSS](https://tailwindcss.com/)
 -   Icons: [Iconify](https://iconify.com/)
--   Database: [Supabase](https://supabase.com/)
+-   Database: [Neon](https://neon.tech/)
 -   ORM: [Drizzle](https://orm.drizzle.team/)
 
 ## Development

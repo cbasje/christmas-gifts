@@ -48,7 +48,6 @@ const toggleCollapsed = () => {
 			'hidden'} {showBgColor ? `show-bg-color` : 'bg-gray-200 dark:bg-gray-700'}"
 		style="--color-hue: {headerHue}"
 	>
-		<th scope="col" class="w-36">{$t('common.item.pic')}</th>
 		<th scope="col">
 			{$t('common.item.name')} + {$t('common.item.notes')}
 		</th>

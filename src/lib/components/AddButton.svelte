@@ -11,7 +11,6 @@ import { fade, scale } from 'svelte/transition';
 import { superForm } from 'sveltekit-superforms/client';
 import type { PageData as IdeasData } from '../../routes/(auth)/ideas/$types';
 import type { PageData as WishData } from '../../routes/(auth)/wish-list/$types';
-import DropzoneArea from './DropzoneArea.svelte';
 import Input from './Input.svelte';
 
 // const localePath = useLocalePath();
@@ -155,16 +154,6 @@ const onRecipientChange = async (e: CustomEvent<{ value: string }>) => {
 					messages={$errors.link}
 					aria-invalid={$errors.link ? 'true' : undefined}
 					{...$constraints.link}
-				/>
-
-				<DropzoneArea
-					name="pic"
-					on:upload={() => {
-						form.update(($form) => {
-							$form.pic = 'updated';
-							return $form;
-						});
-					}}
 				/>
 
 				{#if $form.idea}

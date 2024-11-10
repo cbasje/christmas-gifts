@@ -12,7 +12,6 @@
 		"notes": "Opmerkingen",
 		"price": "Prijs",
 		"link": "Link",
-		"pic": "Plaatje",
 		"recipient": "Ontvanger",
 		"groups": "Groepen",
 		"ideaLink": "Link idee aan..."
@@ -20,11 +19,6 @@
 	"table": {
 		"purchased": "Gekocht?",
 		"actions": "Acties"
-	},
-	"dropzone": {
-		"message": "Upload een bestand of sleep het hier naartoe",
-		"help": "PNG, JPG en GIF zijn toegestaan",
-		"alt": "Een plaatjes geüpload via de Dropzone"
 	},
 	"navigation": {
 		"overview": "Overzicht",
