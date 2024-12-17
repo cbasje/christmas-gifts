@@ -1,4 +1,5 @@
-import { UserSizesSchema, users } from '$lib/db/schema/user';
+import { UserSizesSchema } from '$lib/db/models';
+import { users } from '$lib/db/schema/user';
 import { db } from '$lib/server/drizzle';
 import { error, fail } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';

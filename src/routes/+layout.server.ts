@@ -1,4 +1,4 @@
-import { defaultLocale, type Locale } from '$lib/translations';
+import { type Locale, defaultLocale } from '$lib/translations';
 import type { LayoutServerLoad } from './$types';
 
 export const load = (async ({ cookies }) => {

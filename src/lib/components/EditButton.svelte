@@ -5,7 +5,7 @@ import { t } from '$lib/translations';
 import type { LinkItem } from '$lib/types';
 import { capitaliseString } from '$lib/utils/capitalise';
 import Icon from '@iconify/svelte';
-import { createDialog, melt, type CreateDialogProps } from '@melt-ui/svelte';
+import { type CreateDialogProps, createDialog, melt } from '@melt-ui/svelte';
 import toast from 'svelte-french-toast';
 import { fade, scale } from 'svelte/transition';
 import { superForm } from 'sveltekit-superforms/client';

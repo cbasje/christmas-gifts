@@ -1,7 +1,7 @@
 import type { Group } from '$lib/db/schema/user';
+import { auth } from '$lib/server/lucia';
 import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { auth } from '$lib/server/lucia';
 
 export const PATCH = (async ({ request, cookies, locals }) => {
 	const form = await request.formData();

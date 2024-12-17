@@ -2,15 +2,15 @@
 import { invalidate } from '$app/navigation';
 import { page } from '$app/stores';
 import EditButton from '$lib/components/EditButton.svelte';
+import MarkdownDisplay from '$lib/components/MarkdownDisplay.svelte';
 import RemoveButton from '$lib/components/RemoveButton.svelte';
 import { formatLink } from '$lib/utils/link';
 import { formatPrice } from '$lib/utils/price';
-import { createSwitch, melt, type CreateSwitchProps } from '@melt-ui/svelte';
+import { type CreateSwitchProps, createSwitch, melt } from '@melt-ui/svelte';
 import toast from 'svelte-french-toast';
 import type { PageData as OverviewData } from '../../routes/(auth)/$types';
 import type { PageData as IdeasData } from '../../routes/(auth)/ideas/$types';
 import type { PageData as WishData } from '../../routes/(auth)/wish-list/$types';
-import MarkdownDisplay from '$lib/components/MarkdownDisplay.svelte';
 
 type EditGiftItem = (IdeasData['ideaList'][string] | WishData['wishList'])[number];
 type GiftItem = EditGiftItem | OverviewData['overviewList'][string][number];

@@ -7,11 +7,11 @@ import { t } from '$lib/translations';
 import { capitaliseString } from '$lib/utils/capitalise';
 import Icon from '@iconify/svelte';
 import {
+	type CreateRadioGroupProps,
 	createCollapsible,
 	createDropdownMenu,
 	createRadioGroup,
 	melt,
-	type CreateRadioGroupProps,
 } from '@melt-ui/svelte';
 import { fly, slide } from 'svelte/transition';
 import type { LayoutServerData } from './$types';

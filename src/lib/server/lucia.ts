@@ -1,5 +1,5 @@
 import { dev } from '$app/environment';
-import { users, type AuthSession, type User, authSessions } from '$lib/db/schema/user';
+import { type AuthSession, type User, authSessions, users } from '$lib/db/schema/user';
 import { DrizzlePostgreSQLAdapter } from '@lucia-auth/adapter-drizzle';
 import { Lucia, TimeSpan } from 'lucia';
 import { db } from './drizzle';

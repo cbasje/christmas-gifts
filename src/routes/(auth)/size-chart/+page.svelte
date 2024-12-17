@@ -1,16 +1,16 @@
 <script lang="ts">
 import { page } from '$app/stores';
 import Input from '$lib/components/Input.svelte';
+import SizeChart from '$lib/components/size-chart/SizeChart.svelte';
+import SizeChartEmpty from '$lib/components/size-chart/SizeChartEmpty.svelte';
+import SizeChartSimple from '$lib/components/size-chart/SizeChartSimple.svelte';
+import SizeChartSimpleEmpty from '$lib/components/size-chart/SizeChartSimpleEmpty.svelte';
 import { t } from '$lib/translations';
 import Icon from '@iconify/svelte';
 import { createTabs, melt } from '@melt-ui/svelte';
 import toast from 'svelte-french-toast';
 import { superForm } from 'sveltekit-superforms/client';
 import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
-import SizeChart from '$lib/components/size-chart/SizeChart.svelte';
-import SizeChartEmpty from '$lib/components/size-chart/SizeChartEmpty.svelte';
-import SizeChartSimple from '$lib/components/size-chart/SizeChartSimple.svelte';
-import SizeChartSimpleEmpty from '$lib/components/size-chart/SizeChartSimpleEmpty.svelte';
 import Header from '../Header.svelte';
 import type { PageData } from './$types';
 
