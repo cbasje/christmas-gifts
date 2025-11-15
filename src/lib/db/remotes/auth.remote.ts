@@ -1,3 +1,4 @@
+import { dev } from '$app/environment';
 import { form, getRequestEvent } from '$app/server';
 import { db } from '$lib/server/drizzle';
 import { error, redirect } from '@sveltejs/kit';
@@ -25,9 +26,11 @@ export const login = form(
 		const { cookies } = getRequestEvent();
 		cookies.set('user', user.id, {
 			path: '/',
+			secure: !dev,
 		});
 		cookies.set('family', user.families.at(0)!, {
 			path: '/',
+			secure: !dev,
 		});
 
 		redirect(302, '/');

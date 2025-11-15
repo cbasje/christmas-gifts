@@ -1,0 +1,73 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+
+	"title": "Gift tracker",
+
+	"sign_out": "Sign out",
+
+	"sign_in_title": "Sign in",
+	"sign_in_description": "Please enter your password.",
+
+	"sign_up_title": "Sign up",
+	"sign_up_description": "Please enter a name and password.",
+
+	"user_username": "Username",
+	"user_password": "Password",
+
+	"gift_name": "Name",
+	"gift_notes": "Notes",
+	"gift_price": "Price",
+	"gift_link": "Link",
+	"gift_recipient": "Recipient",
+	"gift_family": "Family",
+
+	"purchased": "Purchased?",
+	"actions": "Actions",
+
+	"overview_title": "Overview",
+	"overview_description": "This is an overview of all wish lists. Here you can find information/links and let everyone know you bought an item!",
+
+	"wish_list_title": "My wish list",
+	"wish_list_description": "Dit is je eigen verlanglijst. Je kunt items toevoegen, verwijderen of aanpassen.",
+
+	"ideas_title": "Ideas",
+	"ideas_description": "This is an overview where you can track all your ideas for gifts. If you tick something off in the overview page, it will also automatically be added here!",
+	"ideas_show_partner": "Collaborate with partner",
+
+	"gift_popup_create_title": "Create new item",
+	"gift_popup_create_description": "Create a new item here! Only things with a red star are required.",
+	"gift_popup_create_submit": "Create",
+	"gift_popup_create_submitTitle": "Please complete the form before creating",
+
+	"gift_popup_edit_title": "Edit '{item}'",
+	"description": "You can edit everything on this item and everything will stay linked!",
+	"gift_popup_edit_submitTitle": "Please change something before saving",
+
+	"size_chart_title": "My size chart",
+	"size_chart_description": "Let everyone know your size!",
+	"size_chart_areas_simple_top": "Top",
+	"size_chart_areas_simple_bottom": "Bottom",
+	"size_chart_areas_simple_shoe": "Shoe size",
+	"size_chart_areas_advanced_head": "Head",
+	"size_chart_areas_advanced_sleeve": "Sleeve",
+	"size_chart_areas_advanced_chest": "Chest",
+	"size_chart_areas_advanced_waist": "Waist",
+	"size_chart_areas_advanced_hip": "Hip",
+	"size_chart_areas_advanced_inseam": "Inseam",
+
+	"size_chart_popup_title": "{user}'s sizes",
+	"size_chart_popup_description": "These are all of {user}'s sizes",
+
+	"secret_santa_title": "Secret Santa",
+	"secret_santa_description": "",
+
+	"button_edit": "Edit",
+	"button_save": "Save",
+	"button_switch": "Switch",
+	"button_continue": "Continue",
+	"button_cancel": "Cancel",
+	"button_close": "Close",
+
+	"error_title": "Maintenance",
+	"error_description": "Unfortunately, there is either something wrong with this website or I am doing some maintenance!"
+}

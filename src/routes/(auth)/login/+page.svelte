@@ -1,16 +1,17 @@
 <script lang="ts">
 import { login } from '$lib/db/remotes/auth.remote';
+import { m } from '$lib/paraglide/messages';
 </script>
 
 <svelte:head>
-    <title>Sign in</title>
+    <title>{m.sign_in_title()}</title>
 </svelte:head>
 
 <main>
-    <h1>Sign in</h1>
+    <h1>{m.sign_in_title()}</h1>
 
     <form {...login}>
-        <label for="form-login.username">Username</label>
+        <label for="form-login.username">{m.user_username()}</label>
         <input
             type="text"
             name="username"
@@ -20,7 +21,7 @@ import { login } from '$lib/db/remotes/auth.remote';
         />
 
         <!-- FIXME:
-    <label for="form-login.password">Password</label>
+    <label for="form-login.password">{m.user_password()}</label>
     <input
       type="password"
       name="password"
@@ -29,6 +30,6 @@ import { login } from '$lib/db/remotes/auth.remote';
       aria-describedby="form-login.password-error"
     /> -->
 
-        <button type="submit">Continue</button>
+        <button type="submit">{m.button_continue()}</button>
     </form>
 </main>

@@ -3,6 +3,7 @@ import type { PageProps } from './$types';
 import IdeaCreateModal from '$components/IdeaCreateModal.svelte';
 import { getAllIdeas } from '$lib/db/remotes/ideas.remote';
 import { getUser } from '$lib/db/remotes/users.remote';
+import { m } from '$lib/paraglide/messages';
 
 let { data }: PageProps = $props();
 
@@ -10,7 +11,7 @@ const query = getAllIdeas();
 </script>
 
 <main>
-    <h1>Ideas</h1>
+    <h1>{m.ideas_title()}</h1>
 
     {#if query.loading}
         Loading...

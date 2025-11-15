@@ -3,6 +3,7 @@ import { page } from '$app/state';
 import type { Component } from 'svelte';
 import { getAllFamilies, updateFamily } from '$lib/db/remotes/users.remote';
 import { logout } from '$lib/db/remotes/auth.remote';
+import { m } from '$lib/paraglide/messages.js';
 
 import HomeIcon from '~icons/crush/home';
 import ListIcon from '~icons/crush/list';
@@ -15,9 +16,9 @@ type Link = {
 	icon: Component;
 };
 const links: Link[] = [
-	{ label: 'Home', path: '/', icon: HomeIcon },
-	{ label: 'Wish list', path: '/wish-list', icon: ListIcon },
-	{ label: 'Ideas', path: '/ideas', icon: ClipboardIcon },
+	{ label: m.overview_title(), path: '/', icon: HomeIcon },
+	{ label: m.wish_list_title(), path: '/wish-list', icon: ListIcon },
+	{ label: m.ideas_title(), path: '/ideas', icon: ClipboardIcon },
 ];
 
 const query = getAllFamilies();
@@ -68,14 +69,14 @@ $effect.pre(() => {
             {/each}
 
             <button {...updateFamily.buttonProps} bind:this={submitButtonRef}>
-                Switch
+                {m.button_switch()}
             </button>
         </form>
     {/if}
 
     <form {...logout} class="logout">
         <button {...logout.buttonProps} class="destructive">
-            <span>Sign out</span>
+            <span>{m.sign_out()}</span>
             <LogoutIcon />
         </button>
     </form>

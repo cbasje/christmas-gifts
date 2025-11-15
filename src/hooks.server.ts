@@ -1,9 +1,12 @@
+import { dev } from '$app/environment';
 import { familyUsers, users } from '$lib/db/schema/user';
+import { paraglideMiddleware } from '$lib/paraglide/server';
 import { db } from '$lib/server/drizzle';
 import { type Handle, redirect } from '@sveltejs/kit';
-import { getTableColumns, sql, eq } from 'drizzle-orm';
+import { sequence } from '@sveltejs/kit/hooks';
+import { eq, getTableColumns, sql } from 'drizzle-orm';
 
-export const handle = (async ({ event, resolve }) => {
+const routeHandle = (async ({ event, resolve }) => {
 	if (event.route.id?.startsWith('/(private)')) {
 		const family_id = event.cookies.get('family');
 		const user_id = event.cookies.get('user');
@@ -27,9 +30,11 @@ export const handle = (async ({ event, resolve }) => {
 
 		event.cookies.set('user', user.id, {
 			path: '/',
+			secure: !dev,
 		});
 		event.cookies.set('family', user.families.at(0)!, {
 			path: '/',
+			secure: !dev,
 		});
 
 		redirect(302, '/');
@@ -37,3 +42,15 @@ export const handle = (async ({ event, resolve }) => {
 
 	return resolve(event);
 }) satisfies Handle;
+
+const paraglideHandle: Handle = ({ event, resolve }) =>
+	paraglideMiddleware(event.request, ({ request: localizedRequest, locale }) => {
+		event.request = localizedRequest;
+		return resolve(event, {
+			transformPageChunk: ({ html }) => {
+				return html.replace('%lang%', locale);
+			},
+		});
+	});
+
+export const handle = sequence(routeHandle, paraglideHandle);

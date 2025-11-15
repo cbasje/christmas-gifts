@@ -2,13 +2,15 @@
 	"$schema": "https://biomejs.dev/schemas/2.3.5/schema.json",
 	"files": {
 		"includes": [
-			"./biome.jsonc",
-			"./package.json",
-			"./tsconfig.json",
-			"./drizzle.config.ts",
-			"./vite.config.ts",
-			"./svelte.config.js",
-			"./src/**/*"
+			"biome.jsonc",
+			"package.json",
+			"tsconfig.json",
+			"drizzle.config.ts",
+			"vite.config.ts",
+			"svelte.config.js",
+			"src/**/*",
+			"messages/*.json",
+			"!src/lib/paraglide"
 		]
 	},
 	"formatter": {

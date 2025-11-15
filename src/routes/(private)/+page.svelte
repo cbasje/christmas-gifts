@@ -1,6 +1,7 @@
 <script lang="ts">
 import { getHome, setGiftPurchased } from '$lib/db/remotes/gifts.remote';
 import { getUser } from '$lib/db/remotes/users.remote';
+import { m } from '$lib/paraglide/messages';
 import type { PageProps } from './$types';
 
 let { data }: PageProps = $props();
@@ -9,7 +10,7 @@ const query = getHome();
 </script>
 
 <main>
-    <h1>Christmas gifts</h1>
+    <h1>{m.title()}</h1>
 
     {#if query.loading}
         Loading...

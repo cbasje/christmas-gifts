@@ -1,9 +1,10 @@
+import { dev } from '$app/environment';
 import { form, getRequestEvent, query } from '$app/server';
 import { db } from '$lib/server/drizzle';
+import { error } from '@sveltejs/kit';
 import { and, eq, getTableColumns, inArray } from 'drizzle-orm';
 import z from 'zod';
 import { families, familyUsers, users } from '../schema/user';
-import { error } from '@sveltejs/kit';
 
 export const getUser = query.batch(z.string(), async (id) => {
 	const result = await db.select().from(users).where(inArray(users.id, id));
@@ -48,6 +49,7 @@ export const updateFamily = form(
 		const { cookies } = getRequestEvent();
 		cookies.set('family', data.family, {
 			path: '/',
+			secure: !dev,
 		});
 		return data.family;
 	}
