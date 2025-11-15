@@ -1,64 +1,39 @@
-import { auth } from '$lib/server/lucia';
-import { defaultLocale, locales } from '$lib/translations';
+import { familyUsers, users } from '$lib/db/schema/user';
+import { db } from '$lib/server/drizzle';
 import { type Handle, redirect } from '@sveltejs/kit';
-import { sequence } from '@sveltejs/kit/hooks';
+import { getTableColumns, sql, eq } from 'drizzle-orm';
 
-const lang = (async ({ event, resolve }) => {
-	const { headers } = event.request;
-
-	let currentLocale = event.cookies.get('locale');
-	if (!currentLocale) {
-		const headerLangs = headers.get('accept-language')?.split(/[;,]/g);
-		const localeSet = new Set(
-			headerLangs
-				?.filter((l) => locales.get().includes(l.split('-')[0]))
-				.map((l) => l.split('-')[0]),
-		);
-
-		currentLocale = [...localeSet][0];
-		event.cookies.set('locale', currentLocale, { path: '/' });
-		console.log('🗣️', headerLangs, localeSet);
+export const handle = (async ({ event, resolve }) => {
+	if (event.route.id?.startsWith('/(private)')) {
+		const family_id = event.cookies.get('family');
+		const user_id = event.cookies.get('user');
+		if (!family_id || !user_id) redirect(302, '/login');
 	}
+	if (event.route.id?.startsWith('/(auth)/login')) {
+		const user_id = new URL(event.request.url).searchParams.get('user_id');
+		if (!user_id) return resolve(event);
 
-	return resolve(event, {
-		transformPageChunk: ({ html }) => html.replace('%lang%', currentLocale ?? defaultLocale),
-	});
-}) satisfies Handle;
+		const [user] = await db
+			.select({
+				...getTableColumns(users),
+				families: sql<string[]>`jsonb_agg(${familyUsers.family})`,
+			})
+			.from(users)
+			.innerJoin(familyUsers, eq(familyUsers.user, users.id))
+			.where(eq(users.id, user_id))
+			.groupBy(users.id)
+			.limit(1);
+		if (!user) return resolve(event);
 
-function shouldProtectRoute(routeId: string | null) {
-	// The group '(auth)' should be protected
-	return !routeId || routeId?.startsWith('/(auth)') === true;
-}
-
-export const authorization = (async ({ event, resolve }) => {
-	const sessionId = event.cookies.get(auth.sessionCookieName);
-	if (!sessionId) {
-		event.locals.user = null;
-		event.locals.session = null;
-
-		if (shouldProtectRoute(event.route.id)) redirect(302, '/login');
-		else return resolve(event);
-	}
-
-	const { session, user } = await auth.validateSession(sessionId);
-	if (session?.fresh) {
-		const sessionCookie = auth.createSessionCookie(session.id);
-		event.cookies.set(sessionCookie.name, sessionCookie.value, {
-			path: '.',
-			...sessionCookie.attributes,
+		event.cookies.set('user', user.id, {
+			path: '/',
 		});
-	}
-	if (!session) {
-		const sessionCookie = auth.createBlankSessionCookie();
-		event.cookies.set(sessionCookie.name, sessionCookie.value, {
-			path: '.',
-			...sessionCookie.attributes,
+		event.cookies.set('family', user.families.at(0)!, {
+			path: '/',
 		});
+
+		redirect(302, '/');
 	}
 
-	event.locals.user = user;
-	event.locals.session = session;
 	return resolve(event);
 }) satisfies Handle;
-
-export const handle = sequence(authorization, lang);

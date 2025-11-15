@@ -1,42 +1,55 @@
-import { integer, jsonb, pgEnum, pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { index, integer, jsonb, pgTable, primaryKey, serial, text } from 'drizzle-orm/pg-core';
 import type { UserSizes } from '../models';
+import { createdAt, updatedAt } from './timestamp-columns';
 
-export const Groups = ['BENJAMINS', 'HAUGEN'] as const;
-export type Group = (typeof Groups)[number];
+export const users = pgTable(
+	'users',
+	{
+		id: text().primaryKey(),
+		name: text().notNull(),
+		username: text('user_name').notNull().unique(),
+		partnerId: text('partner_id'),
+		hue: integer().default(145).notNull(),
+		sizes: jsonb().$type<UserSizes>(),
+		createdAt,
+		updatedAt,
+	},
+	(table) => ({
+		usernameIdx: index().on(table.username),
+	})
+);
 
-const groupEnum = pgEnum('Group', Groups);
+export const families = pgTable(
+	'families',
+	{
+		id: serial().primaryKey(),
+		name: text(),
+		slug: text().unique(),
+	},
+	(table) => ({
+		slugIdx: index().on(table.slug),
+	})
+);
 
-export const users = pgTable('users', {
-	id: text().primaryKey().notNull(),
-	name: text().unique(),
-	username: text('user_name').notNull().unique(),
-	partnerId: text('partner_id'),
-	groups: jsonb().notNull().$type<Group[]>(),
-	hue: integer().default(145).notNull(),
-	sizes: jsonb().$type<UserSizes>(),
-	hashedPassword: varchar('hashed_password', {
-		length: 255,
-	}),
-	createdAt: timestamp('created_at').defaultNow(),
-	updatedAt: timestamp('updated_at').defaultNow(),
-});
-
-export type User = typeof users.$inferSelect;
-export type NewUser = typeof users.$inferInsert;
-
-export const authSessions = pgTable('sessions', {
-	id: text().primaryKey().notNull(),
-	group: groupEnum().notNull(),
-	userId: text('user_id')
-		.notNull()
-		.references(() => users.id, {
-			onDelete: 'cascade',
-			onUpdate: 'cascade',
+export const familyUsers = pgTable(
+	'family_users',
+	{
+		family: integer()
+			.notNull()
+			.references(() => families.id, {
+				onDelete: 'cascade',
+				onUpdate: 'cascade',
+			}),
+		user: text()
+			.notNull()
+			.references(() => users.id, {
+				onDelete: 'cascade',
+				onUpdate: 'cascade',
+			}),
+	},
+	(table) => ({
+		key: primaryKey({
+			columns: [table.family, table.user],
 		}),
-	expiresAt: timestamp('expires_at', {
-		withTimezone: true,
-		mode: 'date',
-	}).notNull(),
-});
-
-export type AuthSession = typeof authSessions.$inferSelect;
+	})
+);

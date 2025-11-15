@@ -4,9 +4,6 @@ import icons from 'unplugin-icons/vite';
 import { FileSystemIconLoader } from 'unplugin-icons/loaders';
 
 export default defineConfig({
-	define: {
-		SUPERFORMS_LEGACY: true,
-	}
 	plugins: [
 		sveltekit(),
 		icons({

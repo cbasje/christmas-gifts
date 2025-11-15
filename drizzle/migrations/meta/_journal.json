@@ -29,6 +29,13 @@
       "when": 1731238865247,
       "tag": "0003_plain_sandman",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1763164958956,
+      "tag": "0004_perfect_daredevil",
+      "breakpoints": true
     }
   ]
 }

@@ -5,5 +5,5 @@ export default defineConfig({
 	schema: './src/lib/db/schema/*',
 	out: './drizzle/migrations',
 	verbose: true,
-	strict: true
+	strict: true,
 });
