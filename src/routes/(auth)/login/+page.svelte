@@ -1,6 +1,7 @@
 <script lang="ts">
 import { login } from '$lib/db/remotes/auth.remote';
 import { m } from '$lib/paraglide/messages';
+import toast from 'svelte-french-toast';
 </script>
 
 <svelte:head>
@@ -10,7 +11,18 @@ import { m } from '$lib/paraglide/messages';
 <main>
     <h1>{m.sign_in_title()}</h1>
 
-    <form {...login}>
+    <form
+        {...login.enhance(async ({ form, data, submit }) => {
+            try {
+                await submit();
+                form.reset();
+
+                toast.success("Successfully logged in!");
+            } catch (error) {
+                toast.error("Oh no! Something went wrong");
+            }
+        })}
+    >
         <label for="form-login.username">{m.user_username()}</label>
         <input
             type="text"

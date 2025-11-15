@@ -4,6 +4,7 @@ import type { Component } from 'svelte';
 import { getAllFamilies, updateFamily } from '$lib/db/remotes/users.remote';
 import { logout } from '$lib/db/remotes/auth.remote';
 import { m } from '$lib/paraglide/messages.js';
+import toast from 'svelte-french-toast';
 
 import HomeIcon from '~icons/crush/home';
 import ListIcon from '~icons/crush/list';
@@ -74,7 +75,19 @@ $effect.pre(() => {
         </form>
     {/if}
 
-    <form {...logout} class="logout">
+    <form
+        {...logout.enhance(async ({ form, data, submit }) => {
+            try {
+                await submit();
+                form.reset();
+
+                toast.success("Successfully logged out!");
+            } catch (error) {
+                toast.error("Oh no! Something went wrong");
+            }
+        })}
+        class="logout"
+    >
         <button {...logout.buttonProps} class="destructive">
             <span>{m.sign_out()}</span>
             <LogoutIcon />
@@ -92,7 +105,7 @@ $effect.pre(() => {
         position: sticky;
         top: 0;
         inset-inline: 0;
-        z-index: 9999;
+        z-index: 9998;
 
         background-color: var(--surface-1);
 

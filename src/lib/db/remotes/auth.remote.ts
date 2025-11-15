@@ -10,7 +10,7 @@ export const login = form(
 	z.object({
 		username: z.string(),
 	}),
-	async (data) => {
+	async (data, invalid) => {
 		const [user] = await db
 			.select({
 				...getTableColumns(users),
@@ -21,7 +21,10 @@ export const login = form(
 			.where(eq(users.username, data.username))
 			.groupBy(users.id)
 			.limit(1);
-		if (!user) error(401);
+		if (!user) {
+			invalid(invalid.username('Incorrect username'));
+			return;
+		}
 
 		const { cookies } = getRequestEvent();
 		cookies.set('user', user.id, {
