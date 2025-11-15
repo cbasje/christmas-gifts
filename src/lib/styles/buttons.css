@@ -1,6 +1,7 @@
 :where(.btn, button, input:is([type="button"], [type="submit"], [type="reset"])) {
 	--_size: 0.9rem;
 	--_bg: var(--surface-1);
+	--_border: var(--surface-2);
 	box-shadow: none;
 	align-self: start;
 
@@ -12,14 +13,27 @@
 	&.destructive {
 		--_text: var(--red-6);
 		--_border: var(--red-3);
+
+		&:focus-visible {
+			outline-color: var(--red-6);
+		}
 	}
-	&.destructive:focus-visible {
-		outline-color: var(--red-6);
+	&.grey,
+	&[value="cancel"] {
+		--_text: var(--gray-8);
+
+		&:focus-visible {
+			outline-color: var(--red-5);
+		}
 	}
 	@media (prefers-color-scheme: dark) {
 		&.destructive {
 			--_text: var(--red-2);
-			--_border: var(--surface-3);
+			--_border: var(--red-12);
+		}
+		&.grey,
+		&[value="cancel"] {
+			--_text: var(--gray-5);
 		}
 	}
 }

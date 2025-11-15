@@ -14,9 +14,7 @@ const query = getWishList();
     <h1>{m.wish_list_title()}</h1>
 
     {#if query.loading}
-        Loading...
-    {:else if query.error}
-        failed to load: {query.error.toString()}
+        {m.loading()}.
     {:else if query.current}
         <ul>
             {#each query.current as gift}

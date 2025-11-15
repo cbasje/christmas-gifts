@@ -2,6 +2,7 @@
 	"$schema": "https://inlang.com/schema/inlang-message-format",
 
 	"title": "Kerstcadeautracker",
+	"loading": "Aan het laden...",
 
 	"sign_out": "Uitloggen",
 
@@ -37,11 +38,11 @@
 	"gift_popup_create_title": "Voeg nieuw item toe",
 	"gift_popup_create_description": "Maak hier een nieuw item aan! Alleen dingen met een rode ster zijn verplicht.",
 	"gift_popup_create_submit": "Toevoegen",
-	"gift_popup_create_submitTitle": "Vul alles in voordat je het opslaat",
+	"gift_popup_create_submit_title": "Vul alles in voordat je het opslaat",
 
 	"gift_popup_edit_title": "Pas '{item}' aan",
-	"description": "Je kunt alles van dit item bewerken en alles blijft gekoppeld!",
-	"gift_popup_edit_submitTitle": "Pas eerst iets aan voordat je het opslaat",
+	"gift_popup_edit_description": "Je kunt alles van dit item bewerken en alles blijft gekoppeld!",
+	"gift_popup_edit_submit_title": "Pas eerst iets aan voordat je het opslaat",
 
 	"size_chart_title": "Mijn maattabel",
 	"size_chart_description": "Geef hier je maten aan!",

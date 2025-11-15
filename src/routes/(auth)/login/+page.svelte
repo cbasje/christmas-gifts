@@ -25,12 +25,16 @@ import toast from 'svelte-french-toast';
     >
         <label for="form-login.username">{m.user_username()}</label>
         <input
-            type="text"
-            name="username"
+            {...login.fields.username.as("text")}
             autocomplete="username"
             required
-            aria-describedby="form-login.username-error"
+            aria-errormessage="form-login.username-error"
         />
+        <div id="form-login.username-error">
+            {#each login.fields.username.issues() as issue}
+                <p class="issue">{issue.message}</p>
+            {/each}
+        </div>
 
         <!-- FIXME:
     <label for="form-login.password">{m.user_password()}</label>
@@ -39,9 +43,16 @@ import toast from 'svelte-french-toast';
       name="password"
       autocomplete="current-password"
       required
-      aria-describedby="form-login.password-error"
+      aria-errormessage="form-login.password-error"
     /> -->
 
         <button type="submit">{m.button_continue()}</button>
     </form>
 </main>
+
+<style>
+    .issue {
+        font-size: var(--font-size-0);
+        color: var(--red-6);
+    }
+</style>

@@ -27,6 +27,8 @@ let formRef = $state<HTMLFormElement>();
     }}
 >
     <form method="dialog" bind:this={formRef}>
+        <header>{m.gift_popup_edit_title({ item: idea.text })}</header>
+
         <input type="hidden" name="idea" value={idea.id} />
 
         <label>
@@ -45,10 +47,10 @@ let formRef = $state<HTMLFormElement>();
             </select>
         </label>
 
-        <div>
+        <footer>
             <button type="submit" value="default">{m.button_save()}</button>
             <button value="cancel">{m.button_cancel()}</button>
-        </div>
+        </footer>
     </form>
 </dialog>
 

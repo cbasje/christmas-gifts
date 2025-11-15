@@ -2,6 +2,7 @@
 	"$schema": "https://inlang.com/schema/inlang-message-format",
 
 	"title": "Gift tracker",
+	"loading": "Loading...",
 
 	"sign_out": "Sign out",
 
@@ -37,11 +38,11 @@
 	"gift_popup_create_title": "Create new item",
 	"gift_popup_create_description": "Create a new item here! Only things with a red star are required.",
 	"gift_popup_create_submit": "Create",
-	"gift_popup_create_submitTitle": "Please complete the form before creating",
+	"gift_popup_create_submit_title": "Please complete the form before creating",
 
 	"gift_popup_edit_title": "Edit '{item}'",
-	"description": "You can edit everything on this item and everything will stay linked!",
-	"gift_popup_edit_submitTitle": "Please change something before saving",
+	"gift_popup_edit_description": "You can edit everything on this item and everything will stay linked!",
+	"gift_popup_edit_submit_title": "Please change something before saving",
 
 	"size_chart_title": "My size chart",
 	"size_chart_description": "Let everyone know your size!",

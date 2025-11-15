@@ -13,9 +13,7 @@ const query = getHome();
     <h1>{m.title()}</h1>
 
     {#if query.loading}
-        Loading...
-    {:else if query.error}
-        failed to load: {query.error.toString()}
+        {m.loading()}
     {:else if query.current}
         {#each Object.entries(query.current) as [recipient, gifts]}
             <details>
