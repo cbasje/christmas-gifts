@@ -1,0 +1,73 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+
+	"title": "Kerstcadeautracker",
+
+	"sign_out": "Uitloggen",
+
+	"sign_in_title": "Inloggen",
+	"sign_in_description": "Voer alstublieft je wachtwoord in.",
+
+	"sign_up_title": "Aanmelden",
+	"sign_up_description": "Voer alstublieft een naam en wachtwoord in.",
+
+	"user_username": "Gebruikersnaam",
+	"user_password": "Wachtwoord",
+
+	"gift_name": "Naam",
+	"gift_notes": "Opmerkingen",
+	"gift_price": "Prijs",
+	"gift_link": "Link",
+	"gift_recipient": "Ontvanger",
+	"gift_family": "Familie",
+
+	"purchased": "Gekocht?",
+	"actions": "Acties",
+
+	"overview_title": "Overzicht",
+	"overview_description": "Dit is een overzicht van alle verlanglijsten. Op deze manier kun je informatie/links vinden en aan iedereen laten weten dat je iets hebt gekocht!",
+
+	"wish_list_title": "Mijn verlanglijst",
+	"wish_list_description": "Dit is je eigen verlanglijst. Je kunt items toevoegen, verwijderen of aanpassen.",
+
+	"ideas_title": "Ideeën",
+	"ideas_description": "Dit is een overzicht waar je alle ideeën voor cadeau's kunt neerzetten. Als je iets afvinkt op de overzichtpagina verschijnt het hier ook automatisch!",
+	"ideas_show_partner": "Werk samen met partner",
+
+	"gift_popup_create_title": "Voeg nieuw item toe",
+	"gift_popup_create_description": "Maak hier een nieuw item aan! Alleen dingen met een rode ster zijn verplicht.",
+	"gift_popup_create_submit": "Toevoegen",
+	"gift_popup_create_submitTitle": "Vul alles in voordat je het opslaat",
+
+	"gift_popup_edit_title": "Pas '{item}' aan",
+	"description": "Je kunt alles van dit item bewerken en alles blijft gekoppeld!",
+	"gift_popup_edit_submitTitle": "Pas eerst iets aan voordat je het opslaat",
+
+	"size_chart_title": "Mijn maattabel",
+	"size_chart_description": "Geef hier je maten aan!",
+	"size_chart_areas_simple_top": "Boven",
+	"size_chart_areas_simple_bottom": "Beneden",
+	"size_chart_areas_simple_shoe": "Schoenmaat",
+	"size_chart_areas_advanced_head": "Hoofd",
+	"size_chart_areas_advanced_sleeve": "Mouw",
+	"size_chart_areas_advanced_chest": "Borst",
+	"size_chart_areas_advanced_waist": "Taille",
+	"size_chart_areas_advanced_hip": "Heup",
+	"size_chart_areas_advanced_inseam": "Binnenbeenlengte",
+
+	"size_chart_popup_title": "{user}'s maten",
+	"size_chart_popup_description": "Dit zijn alle maten van {user}",
+
+	"secret_santa_title": "Lootjes trekken",
+	"secret_santa_description": "",
+
+	"button_edit": "Bewerken",
+	"button_save": "Opslaan",
+	"button_switch": "Veranderen",
+	"button_continue": "Verder",
+	"button_cancel": "Annuleren",
+	"button_close": "Sluiten",
+
+	"error_title": "Onderhoud",
+	"error_description": "Helaas is er óf iets mis met deze website óf ik ben bezig met onderhoud!"
+}

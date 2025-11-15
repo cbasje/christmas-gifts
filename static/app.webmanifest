@@ -5,7 +5,7 @@
 	"author": "Sebastiaan Benjamins",
 	"orientation": "portrait-primary",
 	"display": "fullscreen",
-	"background_color": "#F4F4F5",
+	"background_color": "#fff",
 	"theme_color": "white",
 	"lang": "en-US",
 	"id": "/",

@@ -1,55 +1,88 @@
-import { boolean, jsonb, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
-import { type Group, users } from './user';
+import { boolean, index, integer, pgTable, primaryKey, serial, text } from 'drizzle-orm/pg-core';
+import { createdAt, updatedAt } from './timestamp-columns';
+import { families, users } from './user';
 
-export const giftItems = pgTable('gift_items', {
-	id: text().primaryKey().notNull(),
-	name: text().notNull(),
-	price: text(),
-	notes: text(),
-	recipientId: text('recipient_id')
-		.notNull()
-		.references(() => users.id, {
-			onDelete: 'restrict',
+export const gifts = pgTable(
+	'gift_items',
+	{
+		id: serial().primaryKey(),
+		text: text('name').notNull(),
+		price: text(),
+		notes: text(),
+		link: text(),
+		recipientId: text('recipient_id')
+			.notNull()
+			.references(() => users.id, {
+				onDelete: 'cascade',
+				onUpdate: 'cascade',
+			}),
+		giverId: text('gifted_by_id').references(() => users.id, {
+			onDelete: 'set null',
 			onUpdate: 'cascade',
 		}),
-	giftedById: text('gifted_by_id').references(() => users.id, {
-		onDelete: 'set null',
-		onUpdate: 'cascade',
-	}),
-	link: text(),
-	purchased: boolean().default(false).notNull(),
-	ideaId: text('idea_link_id'),
-	groups: jsonb().$type<Group[]>(),
-	createdAt: timestamp('created_at').defaultNow(),
-	updatedAt: timestamp('updated_at').defaultNow(),
-});
+		ideaId: integer('idea_link_id').references(() => ideas.id, {
+			onDelete: 'set null',
+			onUpdate: 'set null',
+		}),
+		purchased: boolean().default(false).notNull(),
+		createdAt,
+		updatedAt,
+	},
+	(table) => ({
+		recipientIdx: index().on(table.recipientId),
+	})
+);
 
-export type GiftItem = typeof giftItems.$inferSelect;
-export type NewGiftItem = typeof giftItems.$inferInsert;
+export const familyGifts = pgTable(
+	'family_gifts',
+	{
+		family: integer()
+			.notNull()
+			.references(() => families.id, {
+				onDelete: 'cascade',
+				onUpdate: 'cascade',
+			}),
+		gift: integer()
+			.notNull()
+			.references(() => gifts.id, {
+				onDelete: 'cascade',
+				onUpdate: 'cascade',
+			}),
+	},
+	(table) => ({
+		key: primaryKey({
+			columns: [table.family, table.gift],
+		}),
+	})
+);
 
-export const ideas = pgTable('ideas', {
-	id: text().primaryKey().notNull(),
-	name: text().notNull(),
-	price: text(),
-	recipientId: text('recipient_id')
-		.notNull()
-		.references(() => users.id, {
-			onDelete: 'restrict',
+export const ideas = pgTable(
+	'ideas',
+	{
+		id: serial().primaryKey(),
+		text: text('name').notNull(),
+		link: text(),
+		recipientId: text('recipient_id')
+			.notNull()
+			.references(() => users.id, {
+				onDelete: 'cascade',
+				onUpdate: 'cascade',
+			}),
+		giverId: text('gifted_by_id').references(() => users.id, {
+			onDelete: 'set null',
 			onUpdate: 'cascade',
 		}),
-	giftedById: text('gifted_by_id').references(() => users.id, {
-		onDelete: 'set null',
-		onUpdate: 'cascade',
-	}),
-	link: text(),
-	giftItemId: text('gift_item_id').references(() => giftItems.id, {
-		onDelete: 'set null',
-		onUpdate: 'cascade',
-	}),
-	purchased: boolean().default(false).notNull(),
-	createdAt: timestamp('created_at').defaultNow(),
-	updatedAt: timestamp('updated_at').defaultNow(),
-});
-
-export type Idea = typeof ideas.$inferSelect;
-export type NewIdea = typeof ideas.$inferInsert;
+		familyId: integer('family_id')
+			.notNull()
+			.references(() => families.id, {
+				onDelete: 'cascade',
+				onUpdate: 'cascade',
+			}),
+		createdAt,
+		updatedAt,
+	},
+	(table) => ({
+		giverIdx: index().on(table.giverId),
+		familyIdx: index().on(table.familyId),
+	})
+);
