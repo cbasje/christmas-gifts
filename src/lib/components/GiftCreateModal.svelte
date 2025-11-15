@@ -1,8 +1,9 @@
 <script lang="ts">
+import { page } from '$app/state';
 import { addGift } from '$lib/db/remotes/gifts.remote';
 import { getAllFamilies } from '$lib/db/remotes/users.remote';
 
-const query = getAllFamilies();
+const families = getAllFamilies();
 
 let dialogRef = $state<HTMLDialogElement>();
 let formRef = $state<HTMLFormElement>();
@@ -27,16 +28,20 @@ let formRef = $state<HTMLFormElement>();
             <input type="text" name="text" required />
         </label>
 
-        <label>
-            <span>Family</span>
-            <select multiple name="families" required>
-                {#each query.current ?? [] as f}
-                    <option value={f.id}>
-                        {f.name}
-                    </option>
-                {/each}
-            </select>
-        </label>
+        {#if families.current && families.current.length > 1}
+            <label>
+                <span>Family</span>
+                <select multiple name="families" required>
+                    {#each families.current ?? [] as f}
+                        <option value={f.id}>
+                            {f.name}
+                        </option>
+                    {/each}
+                </select>
+            </label>
+        {:else}
+            <input type="hidden" name="families" value={page.data.family} />
+        {/if}
 
         <div>
             <button type="submit" value="default">Confirm</button>

@@ -1,8 +1,9 @@
 <script lang="ts">
+import { page } from '$app/state';
 import { addIdea } from '$lib/db/remotes/ideas.remote';
 import { getAllUsers, getAllFamilies } from '$lib/db/remotes/users.remote';
 
-let family = $state<number>();
+let family = $state<number>(page.data.family);
 
 const families = getAllFamilies();
 const recipients = getAllUsers((() => family)());
@@ -29,16 +30,20 @@ let formRef = $state<HTMLFormElement>();
             <input type="text" name="text" required />
         </label>
 
-        <label>
-            <span>Family</span>
-            <select bind:value={family} name="family" required>
-                {#each families.current ?? [] as f}
-                    <option value={f.id}>
-                        {f.name}
-                    </option>
-                {/each}
-            </select>
-        </label>
+        {#if families.current && families.current.length > 1}
+            <label>
+                <span>Family</span>
+                <select bind:value={family} name="family" required>
+                    {#each families.current ?? [] as f}
+                        <option value={f.id}>
+                            {f.name}
+                        </option>
+                    {/each}
+                </select>
+            </label>
+        {:else}
+            <input type="hidden" name="families" value={page.data.family} />
+        {/if}
 
         <label>
             <span>Recipient</span>
