@@ -17,7 +17,13 @@ export const getAllIdeas = query(async () => {
 		.select(getTableColumns(ideas))
 		.from(ideas)
 		.innerJoin(users, eq(users.id, ideas.recipientId))
-		.where(and(eq(ideas.familyId, Number(family)), not(eq(ideas.recipientId, user))))
+		.where(
+			and(
+				eq(ideas.familyId, Number(family)),
+				not(eq(ideas.recipientId, user)),
+				eq(ideas.giverId, user)
+			)
+		)
 		.orderBy(users.hue, asc(ideas.createdAt));
 	return Object.groupBy(result, ({ recipientId }) => recipientId);
 });
@@ -25,7 +31,7 @@ export const getAllIdeas = query(async () => {
 export const addIdea = command(
 	z.object({
 		recipient: z.string(),
-		family: z.number(),
+		family: z.string().transform(Number),
 		text: z.string(),
 	}),
 	async (data) => {
@@ -40,5 +46,32 @@ export const addIdea = command(
 			giverId: user,
 			recipientId: data.recipient,
 		});
+
+		getAllIdeas().refresh();
 	}
 );
+
+export const editIdea = command(
+	z.object({
+		idea: z.coerce.number(),
+		recipient: z.string(),
+		text: z.string(),
+	}),
+	async (data) => {
+		await db
+			.update(ideas)
+			.set({
+				text: data.text,
+				recipientId: data.recipient,
+			})
+			.where(eq(ideas.id, data.idea));
+
+		getAllIdeas().refresh();
+	}
+);
+
+export const removeIdea = command(z.number(), async (id) => {
+	await db.delete(ideas).where(eq(ideas.id, id));
+
+	getAllIdeas().refresh();
+});

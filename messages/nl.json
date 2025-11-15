@@ -14,7 +14,7 @@
 	"user_username": "Gebruikersnaam",
 	"user_password": "Wachtwoord",
 
-	"gift_name": "Naam",
+	"gift_text": "Tekst",
 	"gift_notes": "Opmerkingen",
 	"gift_price": "Prijs",
 	"gift_link": "Link",
@@ -61,6 +61,7 @@
 	"secret_santa_title": "Lootjes trekken",
 	"secret_santa_description": "",
 
+	"button_create": "Aanmaken",
 	"button_edit": "Bewerken",
 	"button_save": "Opslaan",
 	"button_switch": "Veranderen",

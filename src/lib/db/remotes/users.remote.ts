@@ -2,7 +2,7 @@ import { dev } from '$app/environment';
 import { form, getRequestEvent, query } from '$app/server';
 import { db } from '$lib/server/drizzle';
 import { error } from '@sveltejs/kit';
-import { and, eq, getTableColumns, inArray } from 'drizzle-orm';
+import { and, eq, getTableColumns, inArray, not } from 'drizzle-orm';
 import z from 'zod';
 import { families, familyUsers, users } from '../schema/user';
 
@@ -15,12 +15,21 @@ export const getUser = query.batch(z.string(), async (id) => {
 export const getAllUsers = query(z.number().optional(), async (familyId) => {
 	if (!familyId) return;
 
+	const { cookies } = getRequestEvent();
+	const user = cookies.get('user');
+
+	if (!user) error(401);
+
 	const result = await db
 		.select(getTableColumns(users))
 		.from(users)
 		.innerJoin(
 			familyUsers,
-			and(eq(familyUsers.user, users.id), eq(familyUsers.family, familyId))
+			and(
+				not(eq(familyUsers.user, user)),
+				eq(familyUsers.user, users.id),
+				eq(familyUsers.family, familyId)
+			)
 		);
 	return result;
 });

@@ -1,12 +1,16 @@
 <script lang="ts">
-import { editGift } from '$lib/db/remotes/gifts.remote';
-import type { gifts } from '$lib/db/schema/gift-item';
+import { page } from '$app/state';
+import { editIdea } from '$lib/db/remotes/ideas.remote';
+import { getAllUsers } from '$lib/db/remotes/users.remote';
+import type { ideas } from '$lib/db/schema/gift-item';
 import { m } from '$lib/paraglide/messages';
 
 type Props = {
-	gift: typeof gifts.$inferSelect;
+	idea: typeof ideas.$inferSelect;
 };
-let { gift }: Props = $props();
+let { idea }: Props = $props();
+
+const recipients = getAllUsers(page.data.family);
 
 let dialogRef = $state<HTMLDialogElement>();
 let formRef = $state<HTMLFormElement>();
@@ -19,15 +23,26 @@ let formRef = $state<HTMLFormElement>();
 
         const formData = new FormData(formRef);
         const data = Object.fromEntries(formData.entries());
-        editGift(data);
+        editIdea(data);
     }}
 >
     <form method="dialog" bind:this={formRef}>
-        <input type="hidden" name="gift" value={gift.id} />
+        <input type="hidden" name="idea" value={idea.id} />
 
         <label>
             <span>{m.gift_text()}</span>
-            <input type="text" name="text" value={gift.text} />
+            <input type="text" name="text" value={idea.text} />
+        </label>
+
+        <label>
+            <span>Recipient</span>
+            <select name="recipient" required>
+                {#each recipients.current ?? [] as r}
+                    <option value={r.id}>
+                        {r.name}
+                    </option>
+                {/each}
+            </select>
         </label>
 
         <div>

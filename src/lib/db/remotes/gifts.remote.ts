@@ -82,10 +82,6 @@ export const addGift = command(
 export const editGift = command(
 	z.object({
 		gift: z.coerce.number(),
-		families: z
-			.string()
-			.array()
-			.transform((f) => f.map(Number)),
 		text: z.string(),
 	}),
 	async (data) => {

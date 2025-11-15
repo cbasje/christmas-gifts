@@ -14,7 +14,7 @@
 	"user_username": "Username",
 	"user_password": "Password",
 
-	"gift_name": "Name",
+	"gift_text": "Text",
 	"gift_notes": "Notes",
 	"gift_price": "Price",
 	"gift_link": "Link",
@@ -61,6 +61,7 @@
 	"secret_santa_title": "Secret Santa",
 	"secret_santa_description": "",
 
+	"button_create": "Create",
 	"button_edit": "Edit",
 	"button_save": "Save",
 	"button_switch": "Switch",

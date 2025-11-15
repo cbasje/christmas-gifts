@@ -2,6 +2,7 @@
 import { page } from '$app/state';
 import { addGift } from '$lib/db/remotes/gifts.remote';
 import { getAllFamilies } from '$lib/db/remotes/users.remote';
+import { m } from '$lib/paraglide/messages';
 
 const families = getAllFamilies();
 
@@ -24,7 +25,7 @@ let formRef = $state<HTMLFormElement>();
 >
     <form method="dialog" bind:this={formRef}>
         <label>
-            <span>Text</span>
+            <span>{m.gift_text()}</span>
             <input type="text" name="text" required />
         </label>
 
@@ -44,8 +45,8 @@ let formRef = $state<HTMLFormElement>();
         {/if}
 
         <div>
-            <button type="submit" value="default">Confirm</button>
-            <button value="cancel">Cancel</button>
+            <button type="submit" value="default">{m.button_save()}</button>
+            <button value="cancel">{m.button_cancel()}</button>
         </div>
     </form>
 </dialog>
@@ -55,5 +56,5 @@ let formRef = $state<HTMLFormElement>();
         dialogRef?.showModal();
     }}
 >
-    Create
+    {m.button_create()}
 </button>

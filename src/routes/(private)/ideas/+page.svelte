@@ -1,9 +1,10 @@
 <script lang="ts">
 import type { PageProps } from './$types';
 import IdeaCreateModal from '$components/IdeaCreateModal.svelte';
-import { getAllIdeas } from '$lib/db/remotes/ideas.remote';
+import { getAllIdeas, removeIdea } from '$lib/db/remotes/ideas.remote';
 import { getUser } from '$lib/db/remotes/users.remote';
 import { m } from '$lib/paraglide/messages';
+import IdeaEditModal from '$components/IdeaEditModal.svelte';
 
 let { data }: PageProps = $props();
 
@@ -18,7 +19,7 @@ const query = getAllIdeas();
     {:else if query.error}
         failed to load: {query.error.toString()}
     {:else if query.current}
-        {#each Object.entries(query.current) as [recipient, gifts]}
+        {#each Object.entries(query.current) as [recipient, ideas]}
             <details>
                 {#await getUser(recipient) then user}
                     <summary style:--color-hue={user?.hue}>{user?.name}</summary
@@ -26,9 +27,19 @@ const query = getAllIdeas();
                 {/await}
 
                 <ul>
-                    {#each gifts ?? [] as gift}
+                    {#each ideas ?? [] as idea}
                         <li>
-                            <span>{gift.text}</span>
+                            <span>{idea.text}</span>
+                            <IdeaEditModal {idea} />
+                            <button
+                                type="button"
+                                onclick={(e) => {
+                                    removeIdea(idea.id);
+                                }}
+                                class="destructive"
+                            >
+                                Remove
+                            </button>
                         </li>
                     {/each}
                 </ul>

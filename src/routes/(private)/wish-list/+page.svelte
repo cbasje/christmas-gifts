@@ -28,8 +28,9 @@ const query = getWishList();
                         onclick={(e) => {
                             removeGift(gift.id);
                         }}
+                        class="destructive"
                     >
-                        X
+                        Remove
                     </button>
                 </li>
             {/each}
