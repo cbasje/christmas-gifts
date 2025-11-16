@@ -54,6 +54,9 @@ h6 {
 	/* biome-ignore lint/a11y/useGenericFontNames: --font-system-ui gives generic fonts */
 	font-family: "Departure Mono", var(--font-system-ui);
 }
+p {
+	font-size: unset;
+}
 
 main {
 	padding: var(--size-relative-3);

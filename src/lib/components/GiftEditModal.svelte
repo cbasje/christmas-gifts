@@ -2,6 +2,7 @@
 import { editGift } from '$lib/db/remotes/gifts.remote';
 import type { gifts } from '$lib/db/schema/gift-item';
 import { m } from '$lib/paraglide/messages';
+import LinkPreview from './LinkPreview.svelte';
 
 type Props = {
 	gift: typeof gifts.$inferSelect;
@@ -10,6 +11,8 @@ let { gift }: Props = $props();
 
 let dialogRef = $state<HTMLDialogElement>();
 let formRef = $state<HTMLFormElement>();
+
+let link = $state<string | null>(gift.link);
 </script>
 
 <dialog
@@ -29,8 +32,15 @@ let formRef = $state<HTMLFormElement>();
 
         <label>
             <span>{m.gift_text()}</span>
-            <input type="text" name="text" value={gift.text} />
+            <input type="text" name="text" value={gift.text} required />
         </label>
+
+        <label>
+            <span>{m.gift_link()}</span>
+            <input type="link" name="link" bind:value={link} />
+        </label>
+
+        <LinkPreview {link} />
 
         <footer>
             <button type="submit" value="default">{m.button_save()}</button>

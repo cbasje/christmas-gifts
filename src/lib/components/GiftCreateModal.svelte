@@ -3,11 +3,14 @@ import { page } from '$app/state';
 import { addGift } from '$lib/db/remotes/gifts.remote';
 import { getAllFamilies } from '$lib/db/remotes/users.remote';
 import { m } from '$lib/paraglide/messages';
+import LinkPreview from './LinkPreview.svelte';
 
 const families = getAllFamilies();
 
 let dialogRef = $state<HTMLDialogElement>();
 let formRef = $state<HTMLFormElement>();
+
+let link = $state<string | null>();
 </script>
 
 <dialog
@@ -30,6 +33,13 @@ let formRef = $state<HTMLFormElement>();
             <span>{m.gift_text()}</span>
             <input type="text" name="text" required />
         </label>
+
+        <label>
+            <span>{m.gift_link()}</span>
+            <input type="link" name="link" bind:value={link} />
+        </label>
+
+        <LinkPreview {link} />
 
         {#if families.current && families.current.length > 1}
             <label>

@@ -23,6 +23,7 @@
 	"dependencies": {
 		"@neondatabase/serverless": "^1.0.2",
 		"drizzle-orm": "^0.44.7",
+		"open-graph-scraper-lite": "^2.1.0",
 		"svelte-french-toast": "^2.0.0-alpha.0"
 	},
 	"devDependencies": {

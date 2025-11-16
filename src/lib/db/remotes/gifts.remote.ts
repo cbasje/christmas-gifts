@@ -52,6 +52,7 @@ export const addGift = command(
 			.array()
 			.transform((f) => f.map(Number)),
 		text: z.string(),
+		link: z.string(),
 	}),
 	async (data) => {
 		const { cookies } = getRequestEvent();
@@ -63,6 +64,7 @@ export const addGift = command(
 			.insert(gifts)
 			.values({
 				text: data.text,
+				link: data.link,
 				purchased: false,
 				recipientId: user,
 			})
@@ -83,12 +85,14 @@ export const editGift = command(
 	z.object({
 		gift: z.coerce.number(),
 		text: z.string(),
+		link: z.string(),
 	}),
 	async (data) => {
 		await db
 			.update(gifts)
 			.set({
 				text: data.text,
+				link: data.link,
 			})
 			.where(eq(gifts.id, data.gift));
 

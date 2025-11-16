@@ -1,7 +1,7 @@
 import { dev } from '$app/environment';
 import { form, getRequestEvent } from '$app/server';
 import { db } from '$lib/server/drizzle';
-import { error, redirect } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 import { eq, getTableColumns, sql } from 'drizzle-orm';
 import z from 'zod';
 import { familyUsers, users } from '../schema/user';

@@ -33,7 +33,7 @@ let formRef = $state<HTMLFormElement>();
 
         <label>
             <span>{m.gift_text()}</span>
-            <input type="text" name="text" value={idea.text} />
+            <input type="text" name="text" value={idea.text} required />
         </label>
 
         <label>

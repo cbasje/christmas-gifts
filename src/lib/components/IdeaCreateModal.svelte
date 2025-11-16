@@ -7,7 +7,7 @@ import { m } from '$lib/paraglide/messages';
 let family = $state<number>(page.data.family);
 
 const families = getAllFamilies();
-const recipients = getAllUsers((() => family)());
+const recipients = $derived(getAllUsers(family));
 
 let dialogRef = $state<HTMLDialogElement>();
 let formRef = $state<HTMLFormElement>();
