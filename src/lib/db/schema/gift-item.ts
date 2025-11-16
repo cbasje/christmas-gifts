@@ -1,5 +1,5 @@
 import { boolean, index, integer, pgTable, primaryKey, serial, text } from 'drizzle-orm/pg-core';
-import { createdAt, updatedAt } from './timestamp-columns';
+import { createdAt, currency, updatedAt } from './custom-columns';
 import { families, users } from './user';
 
 export const gifts = pgTable(
@@ -7,7 +7,7 @@ export const gifts = pgTable(
 	{
 		id: serial().primaryKey(),
 		text: text('name').notNull(),
-		price: text(),
+		price: currency(),
 		notes: text(),
 		link: text(),
 		recipientId: text('recipient_id')

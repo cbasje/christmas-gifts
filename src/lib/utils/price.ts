@@ -1,81 +1,67 @@
-const priceRegex = /(?<code>(?:[$€])?)\s?(?<price>\d+(?:[,.]\d+)?)/g;
+/**
+ * Adapted from https://github.com/mktj/parsecurrency/blob/master/index.js
+ */
 
-export const sum = (arr: number[]): number => arr.reduce((a, b) => a + b, 0);
-
-export const getPriceNumber = (priceString: string | null): number => {
-	if (!priceString) return 0;
-
-	const matches = [...priceString.matchAll(priceRegex)];
-
-	if (!matches || !matches.length) return 0;
-	// const code = matches[0][1];
-	const price = matches[0][2];
-
-	const priceNumber = price.replace(',', '.');
-
-	return Number(priceNumber) ?? 0;
+const currencyMatcher =
+	/^(?:([-+]{1}) ?)?(?:([A-Z]{3}) ?)?(?:([^\d ]+?) ?)?(?:([-+]{1}) ?)?(((?:\d{1,3}([,. ’'\u00A0\u202F]))*?\d{1,})(([,.])\d{1,2})?)(?: ?([^\d]+?))??(?: ?([A-Z]{3}))?$/;
+const gr = /^\d{1,3}([,. ’'\u00A0\u202F]\d{3})*$/; // validate groups
+const ind = /^\d{1,2}(,\d{2})*(,\d{3})?$/; // exception for Indian number format
+const symbolToCurrency = {
+	$: 'USD',
+	'€': 'EUR',
+	'£': 'GBP',
+	'¥': 'JPY',
+	'₹': 'INR',
+	'₽': 'RUB',
+	'₩': 'KRW',
+	Fr: 'CHF',
+	'₪': 'ILS',
+	'₺': 'TRY',
+	R$: 'BRL',
+	A$: 'AUD',
+	C$: 'CAD',
 };
 
-// export const formatPrice = (priceNumber: number) => {
-// 	const defaultReturn = '-';
+function getCurrencyCode(symbol: string) {
+	return symbolToCurrency[symbol as keyof typeof symbolToCurrency];
+}
 
-// 	if (!priceNumber) return defaultReturn;
-
-// 	const defaultFormatter = new Intl.NumberFormat('default', {
-// 		style: 'currency',
-// 		currency: 'EUR',
-// 		maximumFractionDigits: 2
-// 	});
-
-// 	return defaultFormatter.format(priceNumber);
-// };
-export const formatPrice = (priceString: string | number | null) => {
-	const defaultReturn = '-';
-
-	if (!priceString) return defaultReturn;
-
-	const sekFormatter = new Intl.NumberFormat('nl-NL', {
-		style: 'currency',
-		currency: 'SEK',
-		maximumFractionDigits: 2,
-	});
-	const eurFormatter = new Intl.NumberFormat('nl-NL', {
-		style: 'currency',
-		currency: 'EUR',
-		maximumFractionDigits: 2,
-	});
-	const usdFormatter = new Intl.NumberFormat('en-US', {
-		style: 'currency',
-		currency: 'USD',
-		maximumFractionDigits: 2,
-	});
-	const defaultFormatter = new Intl.NumberFormat('default', {
-		style: 'decimal',
-		minimumFractionDigits: 2,
-		maximumFractionDigits: 2,
-	});
-
-	let currencyCode = '';
-	let priceNumber: number;
-	if (typeof priceString === 'string') {
-		const matches = [...priceString.matchAll(priceRegex)];
-
-		if (!matches || !matches.length) return defaultReturn;
-
-		currencyCode = matches[0][1];
-		priceNumber = Number(matches[0][2].replace(',', '.'));
-	} else {
-		priceNumber = priceString;
+export function parseCurrency(priceStr: string) {
+	if (!priceStr || !priceStr.match) return null;
+	priceStr = priceStr.trim();
+	const match = priceStr.match(currencyMatcher);
+	if (!match) return null;
+	const groupSeparator = match[7] || '';
+	const decimalSeparator = match[9] || '';
+	if (groupSeparator === decimalSeparator && decimalSeparator) {
+		return null;
 	}
-
-	switch (currencyCode) {
-		case 'SEK':
-			return sekFormatter.format(priceNumber);
-		case '€':
-			return eurFormatter.format(priceNumber);
-		case '$':
-			return usdFormatter.format(priceNumber);
-		default:
-			return defaultFormatter.format(priceNumber);
+	const isNeg = match[1] === '-' || match[4] === '-';
+	const integer = isNeg ? '-' + match[6] : match[6];
+	if (groupSeparator && !match[6].match(gr) && !match[6].match(ind)) {
+		return null;
 	}
-};
+	let value = match[5];
+	if (!value) return null;
+	if (groupSeparator) {
+		value = value.replace(RegExp('\\' + groupSeparator, 'g'), '');
+	}
+	if (decimalSeparator) {
+		value = value.replace(decimalSeparator, '.');
+	}
+	const numericVal = isNeg ? Number(value) * -1 : Number(value);
+	if (typeof numericVal !== 'number' || Number.isNaN(numericVal)) {
+		return null;
+	}
+	return {
+		raw: priceStr,
+		value: numericVal,
+		integer: integer || '',
+		decimals: match[8] || '',
+		symbol: match[3] || match[10] || '',
+		currency: match[2] || match[11] || getCurrencyCode(match[3] || match[10]),
+		decimalSeparator: decimalSeparator,
+		groupSeparator: groupSeparator,
+		sign: match[1] || match[4] || '',
+	};
+}

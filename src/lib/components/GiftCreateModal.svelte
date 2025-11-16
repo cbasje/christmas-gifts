@@ -41,6 +41,11 @@ let link = $state<string | null>();
         </label>
 
         <label>
+            <span>{m.gift_price()}</span>
+            <input type="price" name="price" />
+        </label>
+
+        <label>
             <span>{m.gift_link()}</span>
             <input type="link" name="link" bind:value={link} />
         </label>

@@ -20,6 +20,14 @@ const query = getWishList();
             {#each query.current as gift}
                 <li>
                     <span>{gift.text}</span>
+                    {#if gift.price}
+                        <span>
+                            {Intl.NumberFormat(undefined, {
+                                style: "currency",
+                                currency: gift.price.currency,
+                            }).format(gift.price.value)}
+                        </span>
+                    {/if}
                     <GiftEditModal {gift} />
                     <button
                         type="button"

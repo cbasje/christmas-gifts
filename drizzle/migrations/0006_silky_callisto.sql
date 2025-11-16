@@ -1,0 +1,1 @@
+ALTER TABLE "gift_items" ALTER COLUMN "price" SET DATA TYPE jsonb;

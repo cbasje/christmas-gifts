@@ -1,9 +1,10 @@
 import { command, getRequestEvent, query } from '$app/server';
 import { db } from '$lib/server/drizzle';
+import { parseCurrency } from '$lib/utils/price';
+import { error } from '@sveltejs/kit';
 import { and, asc, eq, getTableColumns, not } from 'drizzle-orm';
 import z from 'zod';
 import { familyGifts, gifts } from '../schema/gift-item';
-import { error } from '@sveltejs/kit';
 import { users } from '../schema/user';
 
 export const getHome = query(async () => {
@@ -52,6 +53,7 @@ export const addGift = command(
 			.array()
 			.transform((f) => f.map(Number)),
 		text: z.string(),
+		price: z.string().nullish(),
 		link: z.string(),
 	}),
 	async (data) => {
@@ -60,10 +62,19 @@ export const addGift = command(
 
 		if (!user) error(401);
 
+		const price = data.price ? parseCurrency(data.price) : undefined;
+
 		const [newGift] = await db
 			.insert(gifts)
 			.values({
 				text: data.text,
+				price: price
+					? {
+							value: price.value,
+							currency: price.currency,
+							symbol: price.symbol,
+						}
+					: undefined,
 				link: data.link,
 				purchased: false,
 				recipientId: user,
@@ -85,13 +96,23 @@ export const editGift = command(
 	z.object({
 		gift: z.coerce.number(),
 		text: z.string(),
+		price: z.string().nullish(),
 		link: z.string(),
 	}),
 	async (data) => {
+		const price = data.price ? parseCurrency(data.price) : undefined;
+
 		await db
 			.update(gifts)
 			.set({
 				text: data.text,
+				price: price
+					? {
+							value: price.value,
+							currency: price.currency,
+							symbol: price.symbol,
+						}
+					: undefined,
 				link: data.link,
 			})
 			.where(eq(gifts.id, data.gift));

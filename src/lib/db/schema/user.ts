@@ -1,6 +1,6 @@
 import { index, integer, jsonb, pgTable, primaryKey, serial, text } from 'drizzle-orm/pg-core';
 import type { UserSizes } from '../models';
-import { createdAt, updatedAt } from './timestamp-columns';
+import { createdAt, updatedAt } from './custom-columns';
 
 export const users = pgTable(
 	'users',
