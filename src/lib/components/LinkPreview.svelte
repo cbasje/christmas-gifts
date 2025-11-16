@@ -10,9 +10,15 @@ let preview = $derived(getPreview(link));
 
 {#if preview.loading}
     {m.loading()}
-{:else if preview.current}
+{:else if preview.current && link}
     {@const header = preview.current.ogImage?.at(0)}
-    <div class="preview">
+    {@const url = new URL(preview.current.ogUrl || link)}
+    <a
+        href={url.toString()}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="preview"
+    >
         {#if header}
             <img
                 src={new URL(
@@ -39,8 +45,8 @@ let preview = $derived(getPreview(link));
         {#if preview.current.ogDescription}
             <p class="description">{preview.current.ogDescription}</p>
         {/if}
-        <p class="url">{preview.current.ogUrl || link}</p>
-    </div>
+        <p class="url">{url.host}</p>
+    </a>
 {/if}
 
 <style>
