@@ -28,13 +28,18 @@ const routeHandle = (async ({ event, resolve }) => {
 			.limit(1);
 		if (!user) return resolve(event);
 
+		const timestamp = Date.now() + 365 * 24 * 60 * 60 * 1000;
 		event.cookies.set('user', user.id, {
 			path: '/',
 			secure: !dev,
+			maxAge: timestamp / 1000,
+			expires: new Date(timestamp),
 		});
 		event.cookies.set('family', user.families.at(0)!, {
 			path: '/',
 			secure: !dev,
+			maxAge: timestamp / 1000,
+			expires: new Date(timestamp),
 		});
 
 		redirect(302, '/');

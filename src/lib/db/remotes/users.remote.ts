@@ -56,9 +56,13 @@ export const updateFamily = form(
 	}),
 	async (data) => {
 		const { cookies } = getRequestEvent();
+
+		const timestamp = Date.now() + 365 * 24 * 60 * 60 * 1000;
 		cookies.set('family', data.family, {
 			path: '/',
 			secure: !dev,
+			maxAge: timestamp / 1000,
+			expires: new Date(timestamp),
 		});
 		return data.family;
 	}
