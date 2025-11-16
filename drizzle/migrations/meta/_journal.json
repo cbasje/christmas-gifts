@@ -36,6 +36,13 @@
       "when": 1763164958956,
       "tag": "0004_perfect_daredevil",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1763299192511,
+      "tag": "0005_famous_hellfire_club",
+      "breakpoints": true
     }
   ]
 }

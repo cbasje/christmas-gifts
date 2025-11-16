@@ -60,7 +60,7 @@
 	"size_chart_popup_description": "These are all of {user}'s sizes",
 
 	"secret_santa_title": "Secret Santa",
-	"secret_santa_description": "",
+	"secret_santa_description": "You are buying for {name}",
 
 	"button_create": "Create",
 	"button_edit": "Edit",

@@ -60,7 +60,7 @@
 	"size_chart_popup_description": "Dit zijn alle maten van {user}",
 
 	"secret_santa_title": "Lootjes trekken",
-	"secret_santa_description": "",
+	"secret_santa_description": "Jij hebt {name}",
 
 	"button_create": "Aanmaken",
 	"button_edit": "Bewerken",

@@ -53,3 +53,25 @@ export const familyUsers = pgTable(
 		}),
 	})
 );
+
+export const secretSantaAssignments = pgTable('secret_santa_assignments', {
+	id: serial().primaryKey(),
+	family: integer()
+		.notNull()
+		.references(() => families.id, {
+			onDelete: 'cascade',
+			onUpdate: 'cascade',
+		}),
+	giver: text()
+		.notNull()
+		.references(() => users.id, {
+			onDelete: 'cascade',
+			onUpdate: 'cascade',
+		}),
+	receiver: text()
+		.notNull()
+		.references(() => users.id, {
+			onDelete: 'cascade',
+			onUpdate: 'cascade',
+		}),
+});

@@ -17,12 +17,16 @@ let link = $state<string | null>(gift.link);
 
 <dialog
     bind:this={dialogRef}
-    onclose={(e) => {
+    onclose={async (e) => {
         if (e.currentTarget.returnValue !== "default") return;
 
-        const formData = new FormData(formRef);
-        const data = Object.fromEntries(formData.entries());
-        editGift(data);
+        try {
+            const formData = new FormData(formRef);
+            const data = Object.fromEntries(formData.entries());
+            await editGift(data);
+        } catch (error_) {
+            console.error(error_.message);
+        }
     }}
 >
     <form method="dialog" bind:this={formRef}>

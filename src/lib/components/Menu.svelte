@@ -9,6 +9,8 @@ import toast from 'svelte-french-toast';
 import HomeIcon from '~icons/chunk/home';
 import ListIcon from '~icons/chunk/list';
 import ClipboardIcon from '~icons/chunk/clipboard';
+import RulerIcon from '~icons/chunk/ruler';
+import GiftIcon from '~icons/chunk/gift';
 import LogoutIcon from '~icons/chunk/logout';
 
 type Link = {
@@ -20,9 +22,15 @@ const links: Link[] = [
 	{ label: m.overview_title(), path: '/', icon: HomeIcon },
 	{ label: m.wish_list_title(), path: '/wish-list', icon: ListIcon },
 	{ label: m.ideas_title(), path: '/ideas', icon: ClipboardIcon },
+	{ label: m.size_chart_title(), path: '/size-chart', icon: RulerIcon },
+	{
+		label: m.secret_santa_title(),
+		path: '/secret-santa',
+		icon: GiftIcon,
+	},
 ];
 
-const query = getAllFamilies();
+const families = getAllFamilies();
 
 let submitButtonRef = $state<HTMLButtonElement>();
 
@@ -52,9 +60,9 @@ $effect.pre(() => {
         {/each}
     </ul>
 
-    {#if query.current && query.current.length > 1}
+    {#if families.current && families.current.length > 1}
         <form {...updateFamily} class="family-selector">
-            {#each query.current as f}
+            {#each families.current as f}
                 <label class="btn">
                     <span>{f.name}</span>
                     <input

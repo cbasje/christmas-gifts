@@ -17,14 +17,18 @@ let formRef = $state<HTMLFormElement>();
 
 <dialog
     bind:this={dialogRef}
-    onclose={(e) => {
+    onclose={async (e) => {
         if (e.currentTarget.returnValue !== "default") return;
 
-        const formData = new FormData(formRef);
-        const data = Object.fromEntries(formData.entries());
-        addIdea(data);
+        try {
+            const formData = new FormData(formRef);
+            const data = Object.fromEntries(formData.entries());
+            await addIdea(data);
 
-        formRef?.reset();
+            formRef?.reset();
+        } catch (error_) {
+            console.error(error_.message);
+        }
     }}
 >
     <form method="dialog" bind:this={formRef}>
