@@ -1,8 +1,8 @@
 <script lang="ts">
-import { generateList, getList } from '$lib/db/remotes/secret-santa.remote';
+import { generateList, getAssignment } from '$lib/db/remotes/secret-santa.remote';
 import { m } from '$lib/paraglide/messages';
 
-const secretSanta = getList();
+const secretSanta = getAssignment();
 </script>
 
 <main>
@@ -16,7 +16,7 @@ const secretSanta = getList();
         </p>
     {:else}
         <form {...generateList}>
-            <button type="submit"> Generate! </button>
+            <button {...generateList.buttonProps}>Generate!</button>
         </form>
     {/if}
 </main>

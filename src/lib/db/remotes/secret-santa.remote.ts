@@ -5,7 +5,7 @@ import { error } from '@sveltejs/kit';
 import { eq, and, getTableColumns } from 'drizzle-orm';
 import { familyUsers, secretSantaAssignments, users } from '../schema/user';
 
-export const getList = query(async () => {
+export const getAssignment = query(async () => {
 	const { cookies } = getRequestEvent();
 	const family = cookies.get('family');
 	const user = cookies.get('user');
