@@ -97,8 +97,8 @@ $effect.pre(() => {
 
 <style>
     nav {
-        display: grid;
-        grid-template-columns: auto 1fr auto auto;
+        display: flex;
+        flex-direction: column;
         padding: var(--size-relative-3);
         gap: var(--size-relative-2);
 
@@ -116,20 +116,29 @@ $effect.pre(() => {
 
             display: flex;
             flex-direction: row;
+            flex-wrap: wrap;
             gap: inherit;
 
             li {
                 display: contents;
             }
+        }
 
-            &.links {
-                grid-column: 1;
-            }
-            &.family-selector {
-                grid-column: 3;
-            }
-            &.logout {
-                grid-column: 4;
+        @media (min-width: 768px) {
+            display: grid;
+            grid-template-columns: auto 1fr auto auto;
+
+            ul,
+            form {
+                &.links {
+                    grid-column: 1;
+                }
+                &.family-selector {
+                    grid-column: 3;
+                }
+                &.logout {
+                    grid-column: 4;
+                }
             }
         }
     }
