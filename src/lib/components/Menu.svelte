@@ -6,10 +6,10 @@ import { logout } from '$lib/db/remotes/auth.remote';
 import { m } from '$lib/paraglide/messages.js';
 import toast from 'svelte-french-toast';
 
-import HomeIcon from '~icons/crush/home';
-import ListIcon from '~icons/crush/list';
-import ClipboardIcon from '~icons/crush/clipboard';
-import LogoutIcon from '~icons/crush/logout';
+import HomeIcon from '~icons/chunk/home';
+import ListIcon from '~icons/chunk/list';
+import ClipboardIcon from '~icons/chunk/clipboard';
+import LogoutIcon from '~icons/chunk/logout';
 
 type Link = {
 	label: string;
@@ -97,6 +97,8 @@ $effect.pre(() => {
 
 <style>
     nav {
+        view-transition-name: menu;
+
         display: flex;
         flex-direction: column;
         padding: var(--size-relative-3);

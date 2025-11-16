@@ -15,7 +15,7 @@ export default defineConfig({
 		icons({
 			compiler: 'svelte',
 			customCollections: {
-				crush: FileSystemIconLoader('./assets/icons', (svg) =>
+				chunk: FileSystemIconLoader('./assets/icons', (svg) =>
 					svg.replace(/fill="black"/gi, 'fill="currentColor"')
 				),
 			},

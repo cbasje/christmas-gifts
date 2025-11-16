@@ -4,6 +4,8 @@ import { addIdea } from '$lib/db/remotes/ideas.remote';
 import { getAllUsers, getAllFamilies } from '$lib/db/remotes/users.remote';
 import { m } from '$lib/paraglide/messages';
 
+import PlusIcon from '~icons/chunk/plus';
+
 let family = $state<number>(page.data.family);
 
 const families = getAllFamilies();
@@ -70,6 +72,8 @@ let formRef = $state<HTMLFormElement>();
     onclick={() => {
         dialogRef?.showModal();
     }}
+    style="width: 100%;"
 >
-    {m.button_create()}
+    <PlusIcon />
+    <span>{m.button_create()}</span>
 </button>

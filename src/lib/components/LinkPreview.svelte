@@ -54,11 +54,12 @@ let preview = $derived(getPreview(link));
         display: grid;
         grid-template-columns: 32px 1fr;
         align-items: center;
-        row-gap: var(--size-1);
-        column-gap: var(--size-2);
-        padding: var(--size-2);
+        row-gap: var(--size-relative-2);
+        column-gap: var(--size-relative-3);
+        padding: var(--size-relative-3);
 
-        background: var(--surface-1);
+        background: var(--surface-2);
+        color: var(--text-1);
         font-size: var(--font-size-0);
 
         img.header {
@@ -87,8 +88,12 @@ let preview = $derived(getPreview(link));
             overflow: hidden;
             text-overflow: ellipsis;
 
+            &.description {
+                color: var(--text-2);
+            }
             &.url {
                 font-size: var(--font-size-00);
+                color: var(--text-2);
             }
         }
     }

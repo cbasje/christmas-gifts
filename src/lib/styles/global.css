@@ -23,16 +23,27 @@
 		--font-size-6: calc(2.5 * var(--font-size-1));
 		--font-size-7: calc(3 * var(--font-size-1));
 		--font-size-8: calc(3.5 * var(--font-size-1));
-		--text-1: CanvasText;
-		--text-2: CanvasText;
+		/*--text-1: CanvasText;
+		--text-2: GrayText;
 		--surface-1: Canvas;
 		--surface-2: ButtonFace;
 		--surface-3: ButtonFace;
-		--surface-4: ButtonFace;
+		--surface-4: ButtonFace;*/
+		--link: var(--violet-6);
 
 		--border-width: 2px;
 		--padding: var(--size-fluid-1);
 	}
+}
+
+@view-transition {
+	navigation: auto;
+}
+::view-transition-old(root) {
+	animation: 200ms ease-in forwards fade-out;
+}
+::view-transition-new(root) {
+	animation: 200ms ease-in forwards fade-in;
 }
 
 body {
@@ -81,6 +92,7 @@ main {
 	}
 
 	dialog {
+		background-color: var(--surface-1);
 		inline-size: var(--size-content-3);
 
 		header {
@@ -89,13 +101,19 @@ main {
 		footer {
 			display: flex;
 			flex-direction: row;
-			justify-content: space-between;
+			justify-content: flex-end;
+			gap: var(--size-relative-2);
+
+			button[type="submit"] {
+				order: 2;
+			}
 		}
 	}
 }
 
 :where(textarea, select, input:not(:is([type="button"], [type="submit"], [type="reset"]))) {
 	font-size: var(--font-size-1);
+	background-color: var(--surface-2);
 	border-radius: 0;
 	font-weight: normal;
 }

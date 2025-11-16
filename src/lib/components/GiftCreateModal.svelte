@@ -5,6 +5,8 @@ import { getAllFamilies } from '$lib/db/remotes/users.remote';
 import { m } from '$lib/paraglide/messages';
 import LinkPreview from './LinkPreview.svelte';
 
+import PlusIcon from '~icons/chunk/plus';
+
 const families = getAllFamilies();
 
 let dialogRef = $state<HTMLDialogElement>();
@@ -67,6 +69,8 @@ let link = $state<string | null>();
     onclick={() => {
         dialogRef?.showModal();
     }}
+    style="width: 100%;"
 >
-    {m.button_create()}
+    <PlusIcon />
+    <span>{m.button_create()}</span>
 </button>
