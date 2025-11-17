@@ -35,14 +35,19 @@
 	"ideas_description": "Dit is een overzicht waar je alle ideeën voor cadeau's kunt neerzetten. Als je iets afvinkt op de overzichtpagina verschijnt het hier ook automatisch!",
 	"ideas_show_partner": "Werk samen met partner",
 
-	"gift_popup_create_title": "Voeg nieuw item toe",
+	"gift_popup_create_title": "Voeg iets toe",
 	"gift_popup_create_description": "Maak hier een nieuw item aan! Alleen dingen met een rode ster zijn verplicht.",
-	"gift_popup_create_submit": "Toevoegen",
-	"gift_popup_create_submit_title": "Vul alles in voordat je het opslaat",
+	"gift_popup_create_toast_success": "Je wens is opgeslagen!",
 
 	"gift_popup_edit_title": "Pas '{item}' aan",
 	"gift_popup_edit_description": "Je kunt alles van dit item bewerken en alles blijft gekoppeld!",
-	"gift_popup_edit_submit_title": "Pas eerst iets aan voordat je het opslaat",
+	"gift_popup_edit_toast_success": "Je wens is aangepast!",
+
+	"idea_popup_create_title": "Voeg een idee toe",
+	"idea_popup_create_toast_success": "Je idee is opgeslagen!",
+
+	"idea_popup_edit_title": "Pas '{item}' aan",
+	"idea_popup_edit_toast_success": "Je idee is aangepast!",
 
 	"size_chart_title": "Mijn maattabel",
 	"size_chart_description": "Geef hier je maten aan!",

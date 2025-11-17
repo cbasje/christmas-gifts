@@ -2,6 +2,7 @@
 import { editGift } from '$lib/db/remotes/gifts.remote';
 import type { gifts } from '$lib/db/schema/gift-item';
 import { m } from '$lib/paraglide/messages';
+import toast from 'svelte-french-toast';
 import LinkPreview from './LinkPreview.svelte';
 
 type Props = {
@@ -24,6 +25,8 @@ let link = $state<string | null>(gift.link);
             const formData = new FormData(formRef);
             const data = Object.fromEntries(formData.entries());
             await editGift(data);
+
+            toast.success(m.gift_popup_edit_toast_success());
         } catch (error_) {
             console.error(error_.message);
         }

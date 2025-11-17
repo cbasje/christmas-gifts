@@ -3,6 +3,7 @@ import { page } from '$app/state';
 import { addIdea } from '$lib/db/remotes/ideas.remote';
 import { getAllUsers, getAllFamilies } from '$lib/db/remotes/users.remote';
 import { m } from '$lib/paraglide/messages';
+import toast from 'svelte-french-toast';
 
 import PlusIcon from '~icons/chunk/plus';
 
@@ -25,6 +26,8 @@ let formRef = $state<HTMLFormElement>();
             const data = Object.fromEntries(formData.entries());
             await addIdea(data);
 
+            toast.success(m.idea_popup_create_toast_success());
+
             formRef?.reset();
         } catch (error_) {
             console.error(error_.message);
@@ -32,7 +35,7 @@ let formRef = $state<HTMLFormElement>();
     }}
 >
     <form method="dialog" bind:this={formRef}>
-        <header>{m.gift_popup_create_title()}</header>
+        <header>{m.idea_popup_create_title()}</header>
 
         <label>
             <span>{m.gift_text()}</span>

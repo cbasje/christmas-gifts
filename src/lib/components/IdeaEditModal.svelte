@@ -1,9 +1,9 @@
 <script lang="ts">
-import { page } from '$app/state';
 import { editIdea } from '$lib/db/remotes/ideas.remote';
 import { getAllUsers } from '$lib/db/remotes/users.remote';
 import type { ideas } from '$lib/db/schema/gift-item';
 import { m } from '$lib/paraglide/messages';
+import toast from 'svelte-french-toast';
 
 type Props = {
 	idea: typeof ideas.$inferSelect;
@@ -25,13 +25,15 @@ let formRef = $state<HTMLFormElement>();
             const formData = new FormData(formRef);
             const data = Object.fromEntries(formData.entries());
             await editIdea(data);
+
+            toast.success(m.idea_popup_edit_toast_success());
         } catch (error_) {
             console.error(error_.message);
         }
     }}
 >
     <form method="dialog" bind:this={formRef}>
-        <header>{m.gift_popup_edit_title({ item: idea.text })}</header>
+        <header>{m.idea_popup_edit_title({ item: idea.text })}</header>
 
         <input type="hidden" name="idea" value={idea.id} />
 
