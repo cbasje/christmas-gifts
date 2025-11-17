@@ -8,16 +8,16 @@ import IdeaEditModal from '$components/IdeaEditModal.svelte';
 
 let { data }: PageProps = $props();
 
-const query = getAllIdeas();
+const ideas = getAllIdeas();
 </script>
 
 <main>
     <h1>{m.ideas_title()}</h1>
 
-    {#if query.loading}
+    {#if ideas.loading}
         {m.loading()}
-    {:else if query.current}
-        {#each Object.entries(query.current) as [recipient, ideas]}
+    {:else if ideas.current}
+        {#each Object.entries(ideas.current) as [recipient, ideas]}
             <details>
                 {#await getUser(recipient) then user}
                     <summary style:--color-hue={user?.hue}>{user?.name}</summary

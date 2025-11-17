@@ -13,12 +13,11 @@ export const getUser = query.batch(z.string(), async (id) => {
 });
 
 export const getAllUsers = query(z.number().optional(), async (familyId) => {
-	if (!familyId) return;
-
 	const { cookies } = getRequestEvent();
+	const family = cookies.get('family');
 	const user = cookies.get('user');
 
-	if (!user) error(401);
+	if (!user || !family) error(401);
 
 	const result = await db
 		.select(getTableColumns(users))
@@ -28,7 +27,7 @@ export const getAllUsers = query(z.number().optional(), async (familyId) => {
 			and(
 				not(eq(familyUsers.user, user)),
 				eq(familyUsers.user, users.id),
-				eq(familyUsers.family, familyId)
+				eq(familyUsers.family, familyId || Number(family))
 			)
 		);
 	return result;

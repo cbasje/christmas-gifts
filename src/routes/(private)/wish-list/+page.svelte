@@ -7,17 +7,17 @@ import type { PageProps } from './$types';
 
 let { data }: PageProps = $props();
 
-const query = getWishList();
+const list = getWishList();
 </script>
 
 <main>
     <h1>{m.wish_list_title()}</h1>
 
-    {#if query.loading}
+    {#if list.loading}
         {m.loading()}.
-    {:else if query.current}
+    {:else if list.current}
         <ul>
-            {#each query.current as gift}
+            {#each list.current as gift}
                 <li>
                     <span>{gift.text}</span>
                     {#if gift.price}

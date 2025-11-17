@@ -10,7 +10,7 @@ type Props = {
 };
 let { idea }: Props = $props();
 
-const recipients = getAllUsers(page.data.family);
+const recipients = getAllUsers(undefined);
 
 let dialogRef = $state<HTMLDialogElement>();
 let formRef = $state<HTMLFormElement>();
