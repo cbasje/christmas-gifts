@@ -41,7 +41,17 @@ let link = $state<string | null>(gift.link);
 
         <label>
             <span>{m.gift_price()}</span>
-            <input type="price" name="price" value={gift.price?.value} />
+            <input
+                type="price"
+                name="price"
+                value={gift.price
+                    ? Intl.NumberFormat(undefined, {
+                          style: "currency",
+                          currency: gift.price.currency,
+                          currencyDisplay: "narrowSymbol",
+                      }).format(gift.price.value)
+                    : ""}
+            />
         </label>
 
         <label>

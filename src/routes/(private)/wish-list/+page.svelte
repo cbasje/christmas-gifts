@@ -21,10 +21,11 @@ const query = getWishList();
                 <li>
                     <span>{gift.text}</span>
                     {#if gift.price}
-                        <span>
+                        <span style="color: var(--text-2)">
                             {Intl.NumberFormat(undefined, {
                                 style: "currency",
                                 currency: gift.price.currency,
+                                currencyDisplay: "narrowSymbol",
                             }).format(gift.price.value)}
                         </span>
                     {/if}

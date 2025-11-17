@@ -41,7 +41,7 @@ const query = getHome();
                             <label for="gift-{gift.id}">
                                 <span>{gift.text}</span>
                                 {#if gift.price}
-                                    <span>
+                                    <span style="color: var(--text-2)">
                                         {Intl.NumberFormat(undefined, {
                                             style: "currency",
                                             currency: gift.price.currency,
