@@ -54,7 +54,8 @@ export const addGift = command(
 			.transform((f) => f.map(Number)),
 		text: z.string(),
 		price: z.string().nullish(),
-		link: z.string(),
+		notes: z.string().nullish(),
+		link: z.string().nullish(),
 	}),
 	async (data) => {
 		const { cookies } = getRequestEvent();
@@ -75,6 +76,7 @@ export const addGift = command(
 							symbol: price.symbol,
 						}
 					: undefined,
+				notes: data.notes,
 				link: data.link,
 				purchased: false,
 				recipientId: user,
@@ -97,7 +99,8 @@ export const editGift = command(
 		gift: z.coerce.number(),
 		text: z.string(),
 		price: z.string().nullish(),
-		link: z.string(),
+		notes: z.string().nullish(),
+		link: z.string().nullish(),
 	}),
 	async (data) => {
 		const price = data.price ? parseCurrency(data.price) : undefined;
@@ -113,6 +116,7 @@ export const editGift = command(
 							symbol: price.symbol,
 						}
 					: undefined,
+				notes: data.notes,
 				link: data.link,
 			})
 			.where(eq(gifts.id, data.gift));

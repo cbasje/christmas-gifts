@@ -46,6 +46,11 @@ let link = $state<string | null>();
         </label>
 
         <label>
+            <span>{m.gift_notes()}</span>
+            <textarea name="notes"></textarea>
+        </label>
+
+        <label>
             <span>{m.gift_link()}</span>
             <input type="link" name="link" bind:value={link} />
         </label>
