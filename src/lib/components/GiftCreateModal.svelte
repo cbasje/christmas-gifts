@@ -3,7 +3,7 @@ import { page } from '$app/state';
 import { addGift } from '$lib/db/remotes/gifts.remote';
 import { getAllFamilies } from '$lib/db/remotes/users.remote';
 import { m } from '$lib/paraglide/messages';
-import toast from 'svelte-french-toast';
+import { confetti } from '../../routes/+layout.svelte';
 import LinkPreview from './LinkPreview.svelte';
 
 import PlusIcon from '~icons/chunk/plus';
@@ -27,7 +27,7 @@ let link = $state<string | null>();
             data.families = formData.getAll("families");
             await addGift(data);
 
-            toast.success(m.gift_popup_create_toast_success());
+            confetti.success(m.gift_popup_create_toast_success());
 
             formRef?.reset();
         } catch (error_) {

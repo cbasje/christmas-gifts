@@ -44,5 +44,5 @@ export const generateList = form(async () => {
 		.insert(secretSantaAssignments)
 		.values(assignments.map((ass) => ({ ...ass, family: Number(family) })));
 
-	getList().refresh();
+	getAssignment().refresh();
 });

@@ -3,7 +3,7 @@ import { page } from '$app/state';
 import { addIdea } from '$lib/db/remotes/ideas.remote';
 import { getAllUsers, getAllFamilies } from '$lib/db/remotes/users.remote';
 import { m } from '$lib/paraglide/messages';
-import toast from 'svelte-french-toast';
+import { confetti } from '../../routes/+layout.svelte';
 
 import PlusIcon from '~icons/chunk/plus';
 
@@ -26,7 +26,7 @@ let formRef = $state<HTMLFormElement>();
             const data = Object.fromEntries(formData.entries());
             await addIdea(data);
 
-            toast.success(m.idea_popup_create_toast_success());
+            confetti.success(m.idea_popup_create_toast_success());
 
             formRef?.reset();
         } catch (error_) {

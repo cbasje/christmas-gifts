@@ -1,7 +1,7 @@
 <script lang="ts">
 import { login } from '$lib/db/remotes/auth.remote';
 import { m } from '$lib/paraglide/messages';
-import toast from 'svelte-french-toast';
+import { confetti } from '../../+layout.svelte';
 </script>
 
 <svelte:head>
@@ -17,9 +17,9 @@ import toast from 'svelte-french-toast';
                 await submit();
                 form.reset();
 
-                toast.success("Successfully logged in!");
+                confetti.success("Successfully logged in!");
             } catch (error) {
-                toast.error("Oh no! Something went wrong");
+                confetti.error("Oh no! Something went wrong");
             }
         })}
     >

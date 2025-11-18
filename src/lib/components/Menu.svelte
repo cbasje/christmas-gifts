@@ -4,7 +4,7 @@ import type { Component } from 'svelte';
 import { getAllFamilies, updateFamily } from '$lib/db/remotes/users.remote';
 import { logout } from '$lib/db/remotes/auth.remote';
 import { m } from '$lib/paraglide/messages.js';
-import toast from 'svelte-french-toast';
+import { confetti } from '../../routes/+layout.svelte';
 
 import HomeIcon from '~icons/chunk/home';
 import ListIcon from '~icons/chunk/list';
@@ -89,9 +89,9 @@ $effect.pre(() => {
                 await submit();
                 form.reset();
 
-                toast.success("Successfully logged out!");
+                confetti.success("Successfully logged out!");
             } catch (error) {
-                toast.error("Oh no! Something went wrong");
+                confetti.error("Oh no! Something went wrong");
             }
         })}
         class="logout"

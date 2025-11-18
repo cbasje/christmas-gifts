@@ -3,7 +3,7 @@ import { editIdea } from '$lib/db/remotes/ideas.remote';
 import { getAllUsers } from '$lib/db/remotes/users.remote';
 import type { ideas } from '$lib/db/schema/gift-item';
 import { m } from '$lib/paraglide/messages';
-import toast from 'svelte-french-toast';
+import { confetti } from '../../routes/+layout.svelte';
 
 type Props = {
 	idea: typeof ideas.$inferSelect;
@@ -26,7 +26,7 @@ let formRef = $state<HTMLFormElement>();
             const data = Object.fromEntries(formData.entries());
             await editIdea(data);
 
-            toast.success(m.idea_popup_edit_toast_success());
+            confetti.success(m.idea_popup_edit_toast_success());
         } catch (error_) {
             console.error(error_.message);
         }
