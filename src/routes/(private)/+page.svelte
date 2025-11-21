@@ -1,4 +1,5 @@
 <script lang="ts">
+import { page } from '$app/state';
 import { getHome, setGiftPurchased } from '$lib/db/remotes/gifts.remote';
 import { getUser } from '$lib/db/remotes/users.remote';
 import { m } from '$lib/paraglide/messages';
@@ -6,23 +7,24 @@ import type { PageProps } from './$types';
 
 let { data }: PageProps = $props();
 
-const query = getHome();
+const home = getHome();
+const currentUser = getUser(page.data.user);
 </script>
 
 <main>
-    <h1>{m.title()}</h1>
+    <h1>{m.overview_title({ name: currentUser.current?.name })}</h1>
 
-    {#if query.loading}
+    {#if home.loading}
         {m.loading()}
-    {:else if query.current}
-        {#each Object.entries(query.current) as [recipient, gifts]}
+    {:else if home.current}
+        {#each Object.entries(home.current) as [recipient, gifts]}
             <details>
                 {#await getUser(recipient) then user}
                     <summary style:--color-hue={user?.hue}>{user?.name}</summary
                     >
                 {/await}
 
-                <ul>
+                <ul class="gifts">
                     {#each gifts ?? [] as gift}
                         <li class:purchased={gift.purchased}>
                             <input
@@ -45,8 +47,18 @@ const query = getHome();
                                         {Intl.NumberFormat(undefined, {
                                             style: "currency",
                                             currency: gift.price.currency,
+                                            currencyDisplay: "narrowSymbol",
                                         }).format(gift.price.value)}
                                     </span>
+                                {/if}
+                                {#if gift.link}
+                                    <a
+                                        href={gift.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        {gift.link}
+                                    </a>
                                 {/if}
                             </label>
                         </li>
@@ -68,8 +80,32 @@ const query = getHome();
         }
     }
 
-    li.purchased {
-        text-decoration: line-through;
-        opacity: 0.5;
+    ul.gifts {
+        display: flex;
+        flex-direction: column;
+        row-gap: var(--size-3);
+        list-style: none;
+        padding: 0;
+
+        > li {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            column-gap: var(--size-3);
+            align-items: center;
+            padding: 0;
+
+            &.purchased {
+                text-decoration: line-through;
+                opacity: 0.5;
+            }
+
+            > input[type="checkbox"] {
+                grid-column: 1;
+                grid-row: 1 / span 3;
+            }
+            > label {
+                display: contents;
+            }
+        }
     }
 </style>
