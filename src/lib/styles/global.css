@@ -11,18 +11,15 @@
 @import "./buttons.css" layer(components);
 @import "./utils.css" layer(components);
 
-@layer reset {
+@layer style {
 	:root {
-		--font-size-00: calc(0.5 * var(--font-size-1));
-		--font-size-0: calc(0.75 * var(--font-size-1));
-		--font-size-1: 1rem;
-		--font-size-2: calc(1.1 * var(--font-size-1));
-		--font-size-3: calc(1.25 * var(--font-size-1));
-		--font-size-4: calc(1.5 * var(--font-size-1));
-		--font-size-5: calc(2 * var(--font-size-1));
-		--font-size-6: calc(2.5 * var(--font-size-1));
-		--font-size-7: calc(3 * var(--font-size-1));
-		--font-size-8: calc(3.5 * var(--font-size-1));
+		--font-size-fluid--3: clamp(0.475rem, 0.5281rem + -0.0685vi, 0.512rem);
+		--font-size-fluid--2: clamp(0.6331rem, 0.643rem + -0.0127vi, 0.64rem);
+		--font-size-fluid--1: clamp(0.8rem, 0.7809rem + 0.0813vi, 0.844rem);
+		--font-size-fluid-0: clamp(1rem, 0.9458rem + 0.2312vi, 1.125rem);
+		--font-size-fluid-1: clamp(1.25rem, 1.1418rem + 0.4617vi, 1.4996rem);
+		--font-size-fluid-2: clamp(1.5625rem, 1.3733rem + 0.8074vi, 1.999rem);
+		--font-size-fluid-3: clamp(1.9531rem, 1.6447rem + 1.3161vi, 2.6647rem);
 		/*--text-1: CanvasText;
 		--text-2: GrayText;
 		--surface-1: Canvas;
@@ -55,6 +52,7 @@ body {
 
 	/* biome-ignore lint/a11y/useGenericFontNames: --font-system-ui gives generic fonts */
 	font-family: "Departure Mono", var(--font-system-ui);
+	font-size: var(--font-size-fluid-0);
 }
 
 h1,
@@ -65,6 +63,16 @@ h5,
 h6 {
 	/* biome-ignore lint/a11y/useGenericFontNames: --font-system-ui gives generic fonts */
 	font-family: "Departure Mono", var(--font-system-ui);
+	font-size: var(--font-size-fluid-1);
+}
+h1 {
+	font-size: var(--font-size-fluid-3);
+}
+h2 {
+	font-size: var(--font-size-fluid-2);
+}
+:where(ul, ol, dl, h6) {
+	font-size: var(--font-size-fluid-0);
 }
 p {
 	font-size: unset;
@@ -86,6 +94,10 @@ main {
 
 	details {
 		margin-bottom: var(--size-relative-3);
+
+		summary {
+			font-size: unset;
+		}
 	}
 
 	li {
@@ -97,7 +109,7 @@ main {
 		inline-size: var(--size-content-3);
 
 		header {
-			font-size: var(--font-size-3);
+			font-size: var(--font-size-fluid-2);
 		}
 		footer {
 			display: flex;
@@ -113,7 +125,7 @@ main {
 }
 
 :where(textarea, select, input:not(:is([type="button"], [type="submit"], [type="reset"]))) {
-	font-size: var(--font-size-1);
+	font-size: var(--font-size-fluid-0);
 	background-color: var(--surface-2);
 	border-radius: 0;
 	font-weight: normal;

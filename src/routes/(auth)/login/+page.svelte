@@ -52,7 +52,7 @@ import { confetti } from '../../+layout.svelte';
 
 <style>
     .issue {
-        font-size: var(--font-size-0);
+        font-size: var(--font-size-fluid-0);
         color: var(--red-6);
     }
 </style>

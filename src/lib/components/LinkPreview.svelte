@@ -60,7 +60,7 @@ let preview = $derived(getPreview(link));
 
         background: var(--surface-2);
         color: var(--text-1);
-        font-size: var(--font-size-0);
+        font-size: var(--font-size-fluid-0);
 
         img.header {
             grid-column: 1 / -1;
@@ -92,7 +92,7 @@ let preview = $derived(getPreview(link));
                 color: var(--text-2);
             }
             &.url {
-                font-size: var(--font-size-00);
+                font-size: var(--font-size-fluid--1);
                 color: var(--text-2);
             }
         }
