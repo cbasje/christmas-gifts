@@ -1,11 +1,24 @@
-export const formatLink = (linkString: string | null) => {
-	if (!linkString) return '';
+function isValidURL(input: string | null | undefined) {
+	if (!input || !URL.canParse(input)) return false;
+	const url = new URL(input);
+	return /.+\..+/g.test(url.host); // Make sure the host includes a dot, e.g. 'embrosa.com'
+}
 
-	const regex = /\b(?:http(?:s)?:\/\/)?((?:\w+\.)?\w+\.[\w/.\-_]*)/g;
-	const matches = [...linkString.matchAll(regex)];
+export function forceToValidURL(input: string | null | undefined) {
+	if (!input) return;
 
-	if (!matches || !matches.length) return linkString;
-	const extractedLink = matches[0][1];
+	let url = input.trim().replace('http://', 'https://');
 
-	return extractedLink.replace('www.', '');
-};
+	// If already valid, return as-is
+	if (isValidURL(url)) {
+		return url;
+	}
+
+	// Add protocol if missing
+	if (!url.startsWith('https://')) {
+		url = 'https://' + url;
+		if (isValidURL(url)) {
+			return url;
+		}
+	}
+}

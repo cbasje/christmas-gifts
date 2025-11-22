@@ -3,6 +3,7 @@ import { page } from '$app/state';
 import { addGift } from '$lib/db/remotes/gifts.remote';
 import { getAllFamilies } from '$lib/db/remotes/users.remote';
 import { m } from '$lib/paraglide/messages';
+import { forceToValidURL } from '$lib/utils/link';
 import { confetti } from '../../routes/+layout.svelte';
 import LinkPreview from './LinkPreview.svelte';
 
@@ -13,7 +14,7 @@ const families = getAllFamilies();
 let dialogRef = $state<HTMLDialogElement>();
 let formRef = $state<HTMLFormElement>();
 
-let link = $state<string | null>();
+let link = $state<string>();
 </script>
 
 <dialog
@@ -55,7 +56,16 @@ let link = $state<string | null>();
 
         <label>
             <span>{m.gift_link()}</span>
-            <input type="link" name="link" bind:value={link} />
+            <input
+                type="link"
+                name="link"
+                bind:value={
+                    () => link,
+                    (val) => {
+                        link = forceToValidURL(val);
+                    }
+                }
+            />
         </label>
 
         <LinkPreview {link} />

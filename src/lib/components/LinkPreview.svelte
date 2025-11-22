@@ -2,7 +2,7 @@
 import { getPreview } from '$lib/db/remotes/link.remote';
 import { m } from '$lib/paraglide/messages';
 
-type Props = { link: string | null | undefined };
+type Props = { link: string | undefined };
 let { link }: Props = $props();
 
 let preview = $derived(getPreview(link));
