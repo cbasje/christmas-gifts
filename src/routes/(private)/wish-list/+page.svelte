@@ -16,9 +16,10 @@ const list = getWishList();
     {#if list.loading}
         {m.loading()}.
     {:else if list.current}
-        <ul>
+        <ul class="wishes">
             {#each list.current as gift}
                 <li>
+                    <span class="dot" aria-hidden="true">·</span>
                     <span>{gift.text}</span>
                     {#if gift.price}
                         <span style="color: var(--text-2)">
@@ -37,7 +38,7 @@ const list = getWishList();
                         }}
                         class="destructive"
                     >
-                        Remove
+                        {m.button_remove()}
                     </button>
                 </li>
             {/each}
@@ -46,3 +47,35 @@ const list = getWishList();
 
     <GiftCreateModal />
 </main>
+
+<style>
+    ul.wishes {
+        display: flex;
+        flex-direction: column;
+        row-gap: var(--size-3);
+        list-style: none;
+        padding: 0;
+
+        > li {
+            display: grid;
+            grid-template-columns: auto 1fr 1fr;
+            column-gap: var(--size-3);
+            row-gap: var(--size-1);
+            align-items: baseline;
+            padding: 0;
+
+            &:not(:last-child) {
+                padding-bottom: var(--size-fluid-1);
+                border-bottom: var(--border-size-2) solid var(--surface-3);
+            }
+
+            > .dot {
+                grid-column: 1;
+                grid-row: 1 / span 3;
+            }
+            > :not(.dot, button) {
+                grid-column: span 2;
+            }
+        }
+    }
+</style>

@@ -16,7 +16,9 @@ const secretSanta = getAssignment();
         </p>
     {:else}
         <form {...generateList}>
-            <button {...generateList.buttonProps}>Generate!</button>
+            <div class="page-cta">
+                <button {...generateList.buttonProps}>Generate!</button>
+            </div>
         </form>
     {/if}
 </main>

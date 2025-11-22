@@ -37,3 +37,21 @@
 		}
 	}
 }
+
+:where(.page-cta > button, [type="submit"], form button:not([type], [disabled])) {
+	--_text: var(--_accent, var(--link));
+	--_border: oklch(from var(--_text) l c h / 0.5);
+}
+
+.page-cta {
+	width: 100%;
+	position: sticky;
+	padding: var(--size-relative-3);
+	inset-inline: 0px;
+	bottom: 0px;
+	background-color: var(--surface-1);
+
+	> button {
+		width: 100%;
+	}
+}

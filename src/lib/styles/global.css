@@ -26,7 +26,7 @@
 		--surface-2: ButtonFace;
 		--surface-3: ButtonFace;
 		--surface-4: ButtonFace;*/
-		--link: var(--violet-6);
+		--link: var(--violet-4);
 
 		--border-width: 2px;
 		--padding: var(--size-fluid-1);
@@ -75,6 +75,12 @@ h2 {
 }
 p {
 	font-size: unset;
+}
+a[href]:not(.btn) {
+	color: var(--_accent, var(--link));
+	text-decoration: underline wavy;
+	text-overflow: ellipsis;
+	overflow: hidden;
 }
 
 main {

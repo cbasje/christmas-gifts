@@ -18,30 +18,30 @@ const ideas = getAllIdeas();
         {m.loading()}
     {:else if ideas.current}
         {#each Object.entries(ideas.current) as [recipient, ideas]}
-            <details>
-                {#await getUser(recipient) then user}
+            {#await getUser(recipient) then user}
+                <details style:--_accent="oklch(68% 0.21 {user?.hue})">
                     <summary style:--color-hue={user?.hue}>{user?.name}</summary
                     >
-                {/await}
 
-                <ul>
-                    {#each ideas ?? [] as idea}
-                        <li>
-                            <span>{idea.text}</span>
-                            <IdeaEditModal {idea} />
-                            <button
-                                type="button"
-                                onclick={(e) => {
-                                    removeIdea(idea.id);
-                                }}
-                                class="destructive"
-                            >
-                                Remove
-                            </button>
-                        </li>
-                    {/each}
-                </ul>
-            </details>
+                    <ul>
+                        {#each ideas ?? [] as idea}
+                            <li>
+                                <span>{idea.text}</span>
+                                <IdeaEditModal {idea} />
+                                <button
+                                    type="button"
+                                    onclick={(e) => {
+                                        removeIdea(idea.id);
+                                    }}
+                                    class="destructive"
+                                >
+                                    Remove
+                                </button>
+                            </li>
+                        {/each}
+                    </ul>
+                </details>
+            {/await}
         {/each}
     {/if}
 

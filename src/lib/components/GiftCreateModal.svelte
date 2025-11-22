@@ -92,12 +92,13 @@ let link = $state<string>();
     </form>
 </dialog>
 
-<button
-    onclick={() => {
-        dialogRef?.showModal();
-    }}
-    style="width: 100%;"
->
-    <PlusIcon />
-    <span>{m.button_create()}</span>
-</button>
+<div class="page-cta">
+    <button
+        onclick={() => {
+            dialogRef?.showModal();
+        }}
+    >
+        <PlusIcon />
+        <span>{m.button_create()}</span>
+    </button>
+</div>

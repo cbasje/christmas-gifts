@@ -18,53 +18,53 @@ const currentUser = getUser(page.data.user);
         {m.loading()}
     {:else if home.current}
         {#each Object.entries(home.current) as [recipient, gifts]}
-            <details>
-                {#await getUser(recipient) then user}
+            {#await getUser(recipient) then user}
+                <details style:--_accent="oklch(68% 0.21 {user?.hue})">
                     <summary style:--color-hue={user?.hue}>{user?.name}</summary
                     >
-                {/await}
 
-                <ul class="gifts">
-                    {#each gifts ?? [] as gift}
-                        <li class:purchased={gift.purchased}>
-                            <input
-                                id="gift-{gift.id}"
-                                type="checkbox"
-                                bind:checked={
-                                    () => gift.purchased,
-                                    (val) => {
-                                        setGiftPurchased({
-                                            gift: gift.id,
-                                            purchased: val,
-                                        });
+                    <ul class="gifts">
+                        {#each gifts ?? [] as gift}
+                            <li class:purchased={gift.purchased}>
+                                <input
+                                    id="gift-{gift.id}"
+                                    type="checkbox"
+                                    bind:checked={
+                                        () => gift.purchased,
+                                        (val) => {
+                                            setGiftPurchased({
+                                                gift: gift.id,
+                                                purchased: val,
+                                            });
+                                        }
                                     }
-                                }
-                            />
-                            <label for="gift-{gift.id}">
-                                <span>{gift.text}</span>
-                                {#if gift.price}
-                                    <span style="color: var(--text-2)">
-                                        {Intl.NumberFormat(undefined, {
-                                            style: "currency",
-                                            currency: gift.price.currency,
-                                            currencyDisplay: "narrowSymbol",
-                                        }).format(gift.price.value)}
-                                    </span>
-                                {/if}
-                                {#if gift.link}
-                                    <a
-                                        href={gift.link}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        {gift.link}
-                                    </a>
-                                {/if}
-                            </label>
-                        </li>
-                    {/each}
-                </ul>
-            </details>
+                                />
+                                <label for="gift-{gift.id}">
+                                    <span>{gift.text}</span>
+                                    {#if gift.price}
+                                        <span style="color: var(--text-2)">
+                                            {Intl.NumberFormat(undefined, {
+                                                style: "currency",
+                                                currency: gift.price.currency,
+                                                currencyDisplay: "narrowSymbol",
+                                            }).format(gift.price.value)}
+                                        </span>
+                                    {/if}
+                                    {#if gift.link}
+                                        <a
+                                            href={gift.link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            {gift.link}
+                                        </a>
+                                    {/if}
+                                </label>
+                            </li>
+                        {/each}
+                    </ul>
+                </details>
+            {/await}
         {/each}
     {/if}
 </main>
@@ -91,6 +91,7 @@ const currentUser = getUser(page.data.user);
             display: grid;
             grid-template-columns: auto 1fr;
             column-gap: var(--size-3);
+            row-gap: var(--size-1);
             align-items: baseline;
             padding: 0;
 
