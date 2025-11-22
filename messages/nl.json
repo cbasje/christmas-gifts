@@ -3,6 +3,7 @@
 
 	"title": "Kerstcadeautracker",
 	"loading": "Aan het laden...",
+	"greeting": "Hoi, {name}",
 
 	"sign_out": "Uitloggen",
 
@@ -25,7 +26,7 @@
 	"purchased": "Gekocht?",
 	"actions": "Acties",
 
-	"overview_title": "Hoi, {name}",
+	"overview_title": "Overzicht",
 	"overview_description": "Dit is een overzicht van alle verlanglijsten. Op deze manier kun je informatie/links vinden en aan iedereen laten weten dat je iets hebt gekocht!",
 
 	"wish_list_title": "Mijn verlanglijst",

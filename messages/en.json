@@ -3,6 +3,7 @@
 
 	"title": "Gift tracker",
 	"loading": "Loading...",
+	"greeting": "Hi, {name}",
 
 	"sign_out": "Sign out",
 
@@ -25,7 +26,7 @@
 	"purchased": "Purchased?",
 	"actions": "Actions",
 
-	"overview_title": "Hi, {name}",
+	"overview_title": "Overview",
 	"overview_description": "This is an overview of all wish lists. Here you can find information/links and let everyone know you bought an item!",
 
 	"wish_list_title": "My wish list",

@@ -12,7 +12,7 @@ const currentUser = getUser(page.data.user);
 </script>
 
 <main>
-    <h1>{m.overview_title({ name: currentUser.current?.name ?? "" })}</h1>
+    <h1>{m.greeting({ name: currentUser.current?.name || "" })}</h1>
 
     {#if home.loading}
         {m.loading()}
