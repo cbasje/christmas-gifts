@@ -91,12 +91,17 @@ const currentUser = getUser(page.data.user);
             display: grid;
             grid-template-columns: auto 1fr;
             column-gap: var(--size-3);
-            align-items: center;
+            align-items: baseline;
             padding: 0;
 
             &.purchased {
                 text-decoration: line-through;
                 opacity: 0.5;
+            }
+
+            &:not(:last-child) {
+                padding-bottom: var(--size-fluid-1);
+                border-bottom: var(--border-size-2) solid var(--surface-3);
             }
 
             > input[type="checkbox"] {
