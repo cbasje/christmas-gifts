@@ -1,4 +1,13 @@
-import { boolean, index, integer, pgTable, primaryKey, serial, text } from 'drizzle-orm/pg-core';
+import {
+	boolean,
+	index,
+	integer,
+	pgTable,
+	primaryKey,
+	serial,
+	text,
+	uuid,
+} from 'drizzle-orm/pg-core';
 import { createdAt, currency, updatedAt } from './custom-columns';
 import { families, users } from './user';
 
@@ -10,13 +19,13 @@ export const gifts = pgTable(
 		price: currency(),
 		notes: text(),
 		link: text(),
-		recipientId: text('recipient_id')
+		recipientId: uuid('recipient_id')
 			.notNull()
 			.references(() => users.id, {
 				onDelete: 'cascade',
 				onUpdate: 'cascade',
 			}),
-		giverId: text('gifted_by_id').references(() => users.id, {
+		giverId: uuid('gifted_by_id').references(() => users.id, {
 			onDelete: 'set null',
 			onUpdate: 'cascade',
 		}),
@@ -62,13 +71,13 @@ export const ideas = pgTable(
 		id: serial().primaryKey(),
 		text: text('name').notNull(),
 		link: text(),
-		recipientId: text('recipient_id')
+		recipientId: uuid('recipient_id')
 			.notNull()
 			.references(() => users.id, {
 				onDelete: 'cascade',
 				onUpdate: 'cascade',
 			}),
-		giverId: text('gifted_by_id').references(() => users.id, {
+		giverId: uuid('gifted_by_id').references(() => users.id, {
 			onDelete: 'set null',
 			onUpdate: 'cascade',
 		}),

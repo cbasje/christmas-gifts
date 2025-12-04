@@ -1,11 +1,20 @@
-import { index, integer, jsonb, pgTable, primaryKey, serial, text } from 'drizzle-orm/pg-core';
+import {
+	index,
+	integer,
+	jsonb,
+	pgTable,
+	primaryKey,
+	serial,
+	text,
+	uuid,
+} from 'drizzle-orm/pg-core';
 import type { UserSizes } from '../models';
 import { createdAt, updatedAt } from './custom-columns';
 
 export const users = pgTable(
 	'users',
 	{
-		id: text().primaryKey(),
+		id: uuid().defaultRandom().primaryKey(),
 		name: text().notNull(),
 		username: text('user_name').notNull().unique(),
 		partnerId: text('partner_id'),
@@ -40,7 +49,7 @@ export const familyUsers = pgTable(
 				onDelete: 'cascade',
 				onUpdate: 'cascade',
 			}),
-		user: text()
+		user: uuid()
 			.notNull()
 			.references(() => users.id, {
 				onDelete: 'cascade',
@@ -62,13 +71,13 @@ export const secretSantaAssignments = pgTable('secret_santa_assignments', {
 			onDelete: 'cascade',
 			onUpdate: 'cascade',
 		}),
-	giver: text()
+	giver: uuid()
 		.notNull()
 		.references(() => users.id, {
 			onDelete: 'cascade',
 			onUpdate: 'cascade',
 		}),
-	receiver: text()
+	receiver: uuid()
 		.notNull()
 		.references(() => users.id, {
 			onDelete: 'cascade',
