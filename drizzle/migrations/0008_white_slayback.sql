@@ -1,0 +1,1 @@
+ALTER TABLE "gift_items" ADD COLUMN "is_deleted" boolean DEFAULT false NOT NULL;

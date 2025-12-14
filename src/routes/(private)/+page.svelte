@@ -25,16 +25,16 @@ const currentUser = getUser(page.data.user);
 
                     <ul class="gifts">
                         {#each gifts ?? [] as gift}
-                            <li class:purchased={gift.purchased}>
+                            <li class:purchased={gift.isPurchased}>
                                 <input
                                     id="gift-{gift.id}"
                                     type="checkbox"
                                     bind:checked={
-                                        () => gift.purchased,
+                                        () => gift.isPurchased,
                                         (val) => {
                                             setGiftPurchased({
                                                 gift: gift.id,
-                                                purchased: val,
+                                                isPurchased: val,
                                             });
                                         }
                                     }

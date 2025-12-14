@@ -2,7 +2,7 @@ import { command, getRequestEvent, query } from '$app/server';
 import { db } from '$lib/server/drizzle';
 import { parseCurrency } from '$lib/utils/price';
 import { error } from '@sveltejs/kit';
-import { and, asc, eq, getTableColumns, not } from 'drizzle-orm';
+import { and, asc, eq, getTableColumns, not, or } from 'drizzle-orm';
 import z from 'zod';
 import { familyGifts, gifts } from '../schema/gift-item';
 import { users } from '../schema/user';
@@ -22,7 +22,12 @@ export const getHome = query(async () => {
 			and(eq(familyGifts.gift, gifts.id), eq(familyGifts.family, Number(family)))
 		)
 		.innerJoin(users, eq(users.id, gifts.recipientId))
-		.where(not(eq(gifts.recipientId, user)))
+		.where(
+			and(
+				not(eq(gifts.recipientId, user)),
+				or(eq(gifts.isDeleted, false), eq(gifts.isPurchased, true))
+			)
+		)
 		.orderBy(users.hue, asc(gifts.createdAt));
 	return Object.groupBy(result, ({ recipientId }) => recipientId);
 });
@@ -41,7 +46,7 @@ export const getWishList = query(async () => {
 			familyGifts,
 			and(eq(familyGifts.gift, gifts.id), eq(familyGifts.family, Number(family)))
 		)
-		.where(eq(gifts.recipientId, user))
+		.where(and(eq(gifts.recipientId, user), eq(gifts.isDeleted, false)))
 		.orderBy(asc(gifts.createdAt));
 	return result;
 });
@@ -78,7 +83,6 @@ export const addGift = command(
 					: undefined,
 				notes: data.notes,
 				link: data.link,
-				purchased: false,
 				recipientId: user,
 			})
 			.returning();
@@ -126,7 +130,7 @@ export const editGift = command(
 );
 
 export const removeGift = command(z.number(), async (id) => {
-	await db.delete(gifts).where(eq(gifts.id, id));
+	await db.update(gifts).set({ isDeleted: true }).where(eq(gifts.id, id));
 
 	getWishList().refresh();
 });
@@ -134,7 +138,7 @@ export const removeGift = command(z.number(), async (id) => {
 export const setGiftPurchased = command(
 	z.object({
 		gift: z.number(),
-		purchased: z.boolean(),
+		isPurchased: z.boolean(),
 	}),
 	async (data) => {
 		const { cookies } = getRequestEvent();
@@ -145,8 +149,8 @@ export const setGiftPurchased = command(
 		await db
 			.update(gifts)
 			.set({
-				giverId: data.purchased ? user : null,
-				purchased: data.purchased,
+				giverId: data.isPurchased ? user : null,
+				isPurchased: data.isPurchased,
 			})
 			.where(eq(gifts.id, data.gift));
 
