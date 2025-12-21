@@ -1,4 +1,5 @@
 import {
+	boolean,
 	index,
 	integer,
 	jsonb,
@@ -23,9 +24,7 @@ export const users = pgTable(
 		createdAt,
 		updatedAt,
 	},
-	(table) => ({
-		usernameIdx: index().on(table.username),
-	})
+	(table) => [index().on(table.username)]
 );
 
 export const families = pgTable(
@@ -34,10 +33,9 @@ export const families = pgTable(
 		id: serial().primaryKey(),
 		name: text(),
 		slug: text().unique(),
+		enableSecretSanta: boolean('secret_santa').notNull().default(false),
 	},
-	(table) => ({
-		slugIdx: index().on(table.slug),
-	})
+	(table) => [index().on(table.slug)]
 );
 
 export const familyUsers = pgTable(
@@ -56,11 +54,11 @@ export const familyUsers = pgTable(
 				onUpdate: 'cascade',
 			}),
 	},
-	(table) => ({
-		key: primaryKey({
+	(table) => [
+		primaryKey({
 			columns: [table.family, table.user],
 		}),
-	})
+	]
 );
 
 export const secretSantaAssignments = pgTable('secret_santa_assignments', {

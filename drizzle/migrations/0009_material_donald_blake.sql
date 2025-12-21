@@ -1,0 +1,1 @@
+ALTER TABLE "families" ADD COLUMN "secret_santa" boolean DEFAULT false NOT NULL;

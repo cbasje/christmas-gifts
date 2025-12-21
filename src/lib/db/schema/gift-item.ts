@@ -38,9 +38,7 @@ export const gifts = pgTable(
 		createdAt,
 		updatedAt,
 	},
-	(table) => ({
-		recipientIdx: index().on(table.recipientId),
-	})
+	(table) => [index().on(table.recipientId)]
 );
 
 export const familyGifts = pgTable(
@@ -59,11 +57,11 @@ export const familyGifts = pgTable(
 				onUpdate: 'cascade',
 			}),
 	},
-	(table) => ({
-		key: primaryKey({
+	(table) => [
+		primaryKey({
 			columns: [table.family, table.gift],
 		}),
-	})
+	]
 );
 
 export const ideas = pgTable(
@@ -91,8 +89,5 @@ export const ideas = pgTable(
 		createdAt,
 		updatedAt,
 	},
-	(table) => ({
-		giverIdx: index().on(table.giverId),
-		familyIdx: index().on(table.familyId),
-	})
+	(table) => [index().on(table.giverId), index().on(table.familyId)]
 );

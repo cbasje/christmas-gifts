@@ -13,12 +13,17 @@ import RulerIcon from '~icons/chunk/ruler';
 import GiftIcon from '~icons/chunk/gift';
 import LogoutIcon from '~icons/chunk/logout';
 
+const families = getAllFamilies();
+let enableSecretSanta = $state<boolean>(false);
+let submitButtonRef = $state<HTMLButtonElement>();
+
 type Link = {
 	label: string;
 	path: `/${string}`;
 	icon: Component;
+	disabled?: boolean;
 };
-const links: Link[] = [
+let links = $derived<Link[]>([
 	{ label: m.overview_title(), path: '/', icon: HomeIcon },
 	{ label: m.wish_list_title(), path: '/wish-list', icon: ListIcon },
 	{ label: m.ideas_title(), path: '/ideas', icon: ClipboardIcon },
@@ -27,12 +32,9 @@ const links: Link[] = [
 		label: m.secret_santa_title(),
 		path: '/secret-santa',
 		icon: GiftIcon,
+		disabled: !enableSecretSanta,
 	},
-];
-
-const families = getAllFamilies();
-
-let submitButtonRef = $state<HTMLButtonElement>();
+]);
 
 $effect.pre(() => {
 	if (submitButtonRef) submitButtonRef.style.display = 'none';
@@ -40,23 +42,29 @@ $effect.pre(() => {
 $effect.pre(() => {
 	updateFamily.fields.family.set(page.data.family.toString());
 });
+$effect.pre(() => {
+	enableSecretSanta =
+		families.current?.find((f) => f.id === page.data.family)?.enableSecretSanta ?? false;
+});
 </script>
 
 <nav>
     <ul class="links">
         {#each links as l}
-            <li>
-                <a
-                    href={l.path}
-                    aria-current={page.url.pathname === l.path
-                        ? "page"
-                        : undefined}
-                    class="btn"
-                >
-                    <l.icon />
-                    <span>{l.label}</span>
-                </a>
-            </li>
+            {#if l.disabled !== false}
+                <li>
+                    <a
+                        href={l.path}
+                        aria-current={page.url.pathname === l.path
+                            ? "page"
+                            : undefined}
+                        class="btn"
+                    >
+                        <l.icon />
+                        <span>{l.label}</span>
+                    </a>
+                </li>
+            {/if}
         {/each}
     </ul>
 
