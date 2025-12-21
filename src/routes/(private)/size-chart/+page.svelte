@@ -10,5 +10,9 @@ const user = getUser(page.data.user);
     <h1>{m.size_chart_title()}</h1>
     <p>{m.size_chart_description()}</p>
 
-    <pre>{JSON.stringify(user.current?.sizes)}</pre>
+    {#if user.loading}
+        {m.loading()}
+    {:else if user.current}
+        <pre>{JSON.stringify(user.current.sizes)}</pre>
+    {/if}
 </main>

@@ -14,7 +14,7 @@ const list = getWishList();
     <h1>{m.wish_list_title()}</h1>
 
     {#if list.loading}
-        {m.loading()}.
+        {m.loading()}
     {:else if list.current}
         <ul class="wishes">
             {#each list.current as gift}

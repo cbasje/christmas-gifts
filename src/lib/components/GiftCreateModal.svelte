@@ -78,6 +78,8 @@ let link = $state<string>();
                         <option value={f.id}>
                             {f.name}
                         </option>
+                    {:else}
+                        {m.loading()}
                     {/each}
                 </select>
             </label>

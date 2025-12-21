@@ -17,14 +17,15 @@ const ideas = getAllIdeas();
     {#if ideas.loading}
         {m.loading()}
     {:else if ideas.current}
-        {#each Object.entries(ideas.current) as [recipient, ideas]}
+        {#each Object.entries(ideas.current) as [recipient, items]}
             {#await getUser(recipient) then user}
                 <details style:--_accent="oklch(68% 0.21 {user?.hue})">
-                    <summary style:--color-hue={user?.hue}>{user?.name}</summary
-                    >
+                    <summary style:--color-hue={user?.hue}>
+                        <span>{user?.name}</span>
+                    </summary>
 
                     <ul>
-                        {#each ideas ?? [] as idea}
+                        {#each items as idea}
                             <li>
                                 <span>{idea.text}</span>
                                 <IdeaEditModal {idea} />

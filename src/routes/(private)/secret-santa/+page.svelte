@@ -8,7 +8,9 @@ const secretSanta = getAssignment();
 <main>
     <h1>{m.secret_santa_title()}</h1>
 
-    {#if secretSanta.current}
+    {#if secretSanta.loading}
+        {m.loading()}
+    {:else if secretSanta.current}
         <p>
             {m.secret_santa_description({
                 name: secretSanta.current?.name,

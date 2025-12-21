@@ -49,6 +49,8 @@ let formRef = $state<HTMLFormElement>();
                     <option value={r.id}>
                         {r.name}
                     </option>
+                {:else}
+                    {m.loading()}
                 {/each}
             </select>
         </label>
