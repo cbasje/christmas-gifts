@@ -5,7 +5,18 @@ import { familyUsers, users } from '#db/schema/user.js';
 import { getTextDirection } from '#lib/paraglide/runtime.js';
 import { paraglideMiddleware } from '#lib/paraglide/server.js';
 import { db } from '#lib/server/drizzle.js';
+import { runMigrations } from '#lib/server/migrate.js';
 import { dev } from '$app/env';
+
+let migrationsStarted = false;
+
+const migrationHandle: Handle = async ({ event, resolve }) => {
+	if (!migrationsStarted) {
+		migrationsStarted = true;
+		await runMigrations();
+	}
+	return resolve(event);
+};
 
 const routeHandle = (async ({ event, resolve }) => {
 	if (event.route.id?.startsWith('/(private)')) {
@@ -63,4 +74,4 @@ const paraglideHandle: Handle = ({ event, resolve }) =>
 		);
 	});
 
-export const handle = sequence(routeHandle, paraglideHandle);
+export const handle = sequence(migrationHandle, routeHandle, paraglideHandle);
