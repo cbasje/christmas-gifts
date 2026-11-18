@@ -20,8 +20,9 @@ const currentUser = getUser(page.data.user);
         {#each Object.entries(home.current) as [recipient, gifts]}
             {#await getUser(recipient) then user}
                 <details style:--_accent="oklch(68% 0.21 {user?.hue})">
-                    <summary style:--color-hue={user?.hue}>{user?.name}</summary
-                    >
+                    <summary style:--color-hue={user?.hue}>
+                        <span>{user?.name}</span>
+                    </summary>
 
                     <ul class="gifts">
                         {#each gifts ?? [] as gift}
