@@ -1,6 +1,6 @@
 <script lang="ts">
-import { generateList, getAssignment } from '$lib/db/remotes/secret-santa.remote';
-import { m } from '$lib/paraglide/messages';
+import { generateList, getAssignment } from '#db/remotes/secret-santa.remote.js';
+import { m } from '#lib/paraglide/messages.js';
 
 const secretSanta = getAssignment();
 </script>

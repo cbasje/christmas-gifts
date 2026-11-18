@@ -1,6 +1,6 @@
 import { form, getRequestEvent, query } from '$app/server';
-import { db } from '$lib/server/drizzle';
-import { SecretSanta } from '$lib/utils/secret-santa';
+import { db } from '#lib/server/drizzle.ts';
+import { SecretSanta } from '#lib/utils/secret-santa.ts';
 import { error } from '@sveltejs/kit';
 import { eq, and, getTableColumns } from 'drizzle-orm';
 import { familyUsers, secretSantaAssignments, users } from '../schema/user';

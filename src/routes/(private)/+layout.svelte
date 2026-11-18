@@ -1,6 +1,6 @@
 <script lang="ts">
-import Menu from '$components/Menu.svelte';
-import { m } from '$lib/paraglide/messages';
+import Menu from '#components/Menu.svelte';
+import { m } from '#lib/paraglide/messages.js';
 import type { LayoutProps } from './$types';
 
 let { data, children }: LayoutProps = $props();

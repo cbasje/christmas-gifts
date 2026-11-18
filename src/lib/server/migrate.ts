@@ -1,7 +1,7 @@
-import { DATABASE_URL } from '$env/static/private';
 import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
 import { migrate } from 'drizzle-orm/neon-http/migrator';
+import { DATABASE_URL } from '$app/env/private';
 
 // This will run migrations on the database, skipping the ones already applied
 // for migrations

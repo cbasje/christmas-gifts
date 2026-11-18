@@ -1,8 +1,8 @@
 <script lang="ts">
-import { editIdea } from '$lib/db/remotes/ideas.remote';
-import { getAllUsers } from '$lib/db/remotes/users.remote';
-import type { ideas } from '$lib/db/schema/gift-item';
-import { m } from '$lib/paraglide/messages';
+import { editIdea } from '#db/remotes/ideas.remote.js';
+import { getAllUsers } from '#db/remotes/users.remote.js';
+import type { ideas } from '#db/schema/gift-item.js';
+import { m } from '#lib/paraglide/messages.js';
 import { confetti } from '../../routes/+layout.svelte';
 
 type Props = {

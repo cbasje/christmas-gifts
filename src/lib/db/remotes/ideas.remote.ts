@@ -1,8 +1,8 @@
-import { command, getRequestEvent, query } from '$app/server';
-import { db } from '$lib/server/drizzle';
 import { error } from '@sveltejs/kit';
 import { and, asc, eq, getTableColumns, not } from 'drizzle-orm';
 import z from 'zod';
+import { db } from '#lib/server/drizzle.js';
+import { command, getRequestEvent, query } from '$app/server';
 import { ideas } from '../schema/gift-item';
 import { users } from '../schema/user';
 

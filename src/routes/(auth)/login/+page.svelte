@@ -1,6 +1,6 @@
 <script lang="ts">
-import { login } from '$lib/db/remotes/auth.remote';
-import { m } from '$lib/paraglide/messages';
+import { login } from '#db/remotes/auth.remote.js';
+import { m } from '#lib/paraglide/messages.js';
 import { confetti } from '../../+layout.svelte';
 </script>
 

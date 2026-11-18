@@ -1,11 +1,10 @@
 <script lang="ts">
+import { addIdea } from '#db/remotes/ideas.remote.js';
+import { getAllFamilies, getAllUsers } from '#db/remotes/users.remote.js';
+import { m } from '#lib/paraglide/messages.js';
 import { page } from '$app/state';
-import { addIdea } from '$lib/db/remotes/ideas.remote';
-import { getAllUsers, getAllFamilies } from '$lib/db/remotes/users.remote';
-import { m } from '$lib/paraglide/messages';
-import { confetti } from '../../routes/+layout.svelte';
-
 import PlusIcon from '~icons/chunk/plus';
+import { confetti } from '../../routes/+layout.svelte';
 
 let family = $state<number>(page.data.family);
 

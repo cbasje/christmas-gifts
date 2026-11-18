@@ -1,10 +1,10 @@
 <script lang="ts">
+import IdeaCreateModal from '#components/IdeaCreateModal.svelte';
+import IdeaEditModal from '#components/IdeaEditModal.svelte';
+import { getAllIdeas, removeIdea } from '#db/remotes/ideas.remote.js';
+import { getUser } from '#db/remotes/users.remote.js';
+import { m } from '#lib/paraglide/messages.js';
 import type { PageProps } from './$types';
-import IdeaCreateModal from '$components/IdeaCreateModal.svelte';
-import { getAllIdeas, removeIdea } from '$lib/db/remotes/ideas.remote';
-import { getUser } from '$lib/db/remotes/users.remote';
-import { m } from '$lib/paraglide/messages';
-import IdeaEditModal from '$components/IdeaEditModal.svelte';
 
 let { data }: PageProps = $props();
 

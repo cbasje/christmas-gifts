@@ -1,6 +1,6 @@
 import { command, getRequestEvent, query } from '$app/server';
-import { db } from '$lib/server/drizzle';
-import { parseCurrency } from '$lib/utils/price';
+import { db } from '#lib/server/drizzle.ts';
+import { parseCurrency } from '#lib/utils/price.ts';
 import { error } from '@sveltejs/kit';
 import { and, asc, eq, getTableColumns, not, or } from 'drizzle-orm';
 import z from 'zod';

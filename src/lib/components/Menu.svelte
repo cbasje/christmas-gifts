@@ -1,17 +1,16 @@
 <script lang="ts">
-import { page } from '$app/state';
 import type { Component } from 'svelte';
-import { getAllFamilies, updateFamily } from '$lib/db/remotes/users.remote';
-import { logout } from '$lib/db/remotes/auth.remote';
-import { m } from '$lib/paraglide/messages.js';
-import { confetti } from '../../routes/+layout.svelte';
-
+import { logout } from '#db/remotes/auth.remote.js';
+import { getAllFamilies, updateFamily } from '#db/remotes/users.remote.js';
+import { m } from '#lib/paraglide/messages.js';
+import { page } from '$app/state';
+import ClipboardIcon from '~icons/chunk/clipboard';
+import GiftIcon from '~icons/chunk/gift';
 import HomeIcon from '~icons/chunk/home';
 import ListIcon from '~icons/chunk/list';
-import ClipboardIcon from '~icons/chunk/clipboard';
-import RulerIcon from '~icons/chunk/ruler';
-import GiftIcon from '~icons/chunk/gift';
 import LogoutIcon from '~icons/chunk/logout';
+import RulerIcon from '~icons/chunk/ruler';
+import { confetti } from '../../routes/+layout.svelte';
 
 const families = getAllFamilies();
 let enableSecretSanta = $state<boolean>(false);

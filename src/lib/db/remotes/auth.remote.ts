@@ -1,16 +1,16 @@
-import { dev } from '$app/environment';
-import { form, getRequestEvent } from '$app/server';
-import { db } from '$lib/server/drizzle';
-import { redirect } from '@sveltejs/kit';
+import { invalid, redirect } from '@sveltejs/kit';
 import { eq, getTableColumns, sql } from 'drizzle-orm';
 import z from 'zod';
+import { db } from '#lib/server/drizzle.js';
+import { dev } from '$app/env';
+import { form, getRequestEvent } from '$app/server';
 import { familyUsers, users } from '../schema/user';
 
 export const login = form(
 	z.object({
 		username: z.string(),
 	}),
-	async (data, invalid) => {
+	async (data, issue) => {
 		const [user] = await db
 			.select({
 				...getTableColumns(users),
@@ -22,8 +22,7 @@ export const login = form(
 			.groupBy(users.id)
 			.limit(1);
 		if (!user) {
-			invalid(invalid.username('Incorrect username'));
-			return;
+			invalid(issue.username('Incorrect username'));
 		}
 
 		const { cookies } = getRequestEvent();
@@ -32,13 +31,13 @@ export const login = form(
 		cookies.set('user', user.id, {
 			path: '/',
 			secure: !dev,
-			maxAge: timestamp / 1000,
+			maxAge: Math.round(timestamp / 1000),
 			expires: new Date(timestamp),
 		});
 		cookies.set('family', user.families.at(0)!, {
 			path: '/',
 			secure: !dev,
-			maxAge: timestamp / 1000,
+			maxAge: Math.round(timestamp / 1000),
 			expires: new Date(timestamp),
 		});
 

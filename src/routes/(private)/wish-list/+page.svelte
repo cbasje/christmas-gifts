@@ -1,8 +1,8 @@
 <script lang="ts">
-import GiftCreateModal from '$components/GiftCreateModal.svelte';
-import GiftEditModal from '$components/GiftEditModal.svelte';
-import { getWishList, removeGift } from '$lib/db/remotes/gifts.remote';
-import { m } from '$lib/paraglide/messages';
+import GiftCreateModal from '#components/GiftCreateModal.svelte';
+import GiftEditModal from '#components/GiftEditModal.svelte';
+import { getWishList, removeGift } from '#db/remotes/gifts.remote.js';
+import { m } from '#lib/paraglide/messages.js';
 import type { PageProps } from './$types';
 
 let { data }: PageProps = $props();

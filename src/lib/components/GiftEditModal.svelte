@@ -1,7 +1,7 @@
 <script lang="ts">
-import { editGift } from '$lib/db/remotes/gifts.remote';
-import type { gifts } from '$lib/db/schema/gift-item';
-import { m } from '$lib/paraglide/messages';
+import { editGift } from '#db/remotes/gifts.remote.js';
+import type { gifts } from '#db/schema/gift-item.js';
+import { m } from '#lib/paraglide/messages.js';
 import { confetti } from '../../routes/+layout.svelte';
 import LinkPreview from './LinkPreview.svelte';
 

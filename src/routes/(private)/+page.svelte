@@ -1,8 +1,8 @@
 <script lang="ts">
+import { getHome, setGiftPurchased } from '#db/remotes/gifts.remote.js';
+import { getUser } from '#db/remotes/users.remote.js';
+import { m } from '#lib/paraglide/messages.js';
 import { page } from '$app/state';
-import { getHome, setGiftPurchased } from '$lib/db/remotes/gifts.remote';
-import { getUser } from '$lib/db/remotes/users.remote';
-import { m } from '$lib/paraglide/messages';
 import type { PageProps } from './$types';
 
 let { data }: PageProps = $props();

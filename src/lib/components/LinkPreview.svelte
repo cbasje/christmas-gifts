@@ -1,6 +1,6 @@
 <script lang="ts">
-import { getPreview } from '$lib/db/remotes/link.remote';
-import { m } from '$lib/paraglide/messages';
+import { getPreview } from '#db/remotes/link.remote.js';
+import { m } from '#lib/paraglide/messages.js';
 
 type Props = { link: string | undefined };
 let { link }: Props = $props();

@@ -1,13 +1,12 @@
 <script lang="ts">
+import { addGift } from '#db/remotes/gifts.remote.js';
+import { getAllFamilies } from '#db/remotes/users.remote.js';
+import { m } from '#lib/paraglide/messages.js';
+import { forceToValidURL } from '#lib/utils/link.js';
 import { page } from '$app/state';
-import { addGift } from '$lib/db/remotes/gifts.remote';
-import { getAllFamilies } from '$lib/db/remotes/users.remote';
-import { m } from '$lib/paraglide/messages';
-import { forceToValidURL } from '$lib/utils/link';
+import PlusIcon from '~icons/chunk/plus';
 import { confetti } from '../../routes/+layout.svelte';
 import LinkPreview from './LinkPreview.svelte';
-
-import PlusIcon from '~icons/chunk/plus';
 
 const families = getAllFamilies();
 
