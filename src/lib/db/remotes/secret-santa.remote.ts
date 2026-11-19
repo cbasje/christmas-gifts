@@ -1,11 +1,15 @@
-import { form, getRequestEvent, query } from '$app/server';
+import { command, form, getRequestEvent, query } from '$app/server';
 import { db } from '#lib/server/drizzle.js';
 import { m } from '#lib/paraglide/messages.js';
 import { SecretSanta } from '#lib/utils/secret-santa.js';
 import { error, invalid } from '@sveltejs/kit';
-import { and, eq, getTableColumns, inArray } from 'drizzle-orm';
+import { and, eq, getTableColumns, inArray, or } from 'drizzle-orm';
+import { alias } from 'drizzle-orm/pg-core';
 import z from 'zod';
 import { families, familyUsers, partners, secretSantaAssignments, users } from '../schema/user';
+
+const partnerUserA = alias(users, 'partner_user_a');
+const partnerUserB = alias(users, 'partner_user_b');
 
 const currentSeason = () => new Date().getFullYear();
 
@@ -203,3 +207,94 @@ export const getDrawMembers = query(async () => {
 
 	return { season, members };
 });
+
+/**
+ * The family's partner pairs plus all members (for the add-pair form).
+ * Admin-only: this backs the dedicated partner management page.
+ */
+export const getPartners = query(async () => {
+	const { family, isAdmin } = await requireFamily();
+	if (!isAdmin) error(403, 'Only the organizer can manage partners');
+
+	const members = await db
+		.select({ id: users.id, name: users.name })
+		.from(users)
+		.innerJoin(familyUsers, eq(familyUsers.user, users.id))
+		.where(eq(familyUsers.family, family))
+		.orderBy(users.name);
+
+	const memberIds = members.map((member) => member.id);
+	const pairs = await db
+		.select({
+			userA: partners.userA,
+			userB: partners.userB,
+			nameA: partnerUserA.name,
+			nameB: partnerUserB.name,
+		})
+		.from(partners)
+		.innerJoin(partnerUserA, eq(partnerUserA.id, partners.userA))
+		.innerJoin(partnerUserB, eq(partnerUserB.id, partners.userB))
+		.where(and(inArray(partners.userA, memberIds), inArray(partners.userB, memberIds)))
+		.orderBy(partnerUserA.name);
+
+	return { members, pairs };
+});
+
+export const addPartner = form(
+	z.object({
+		userA: z.string(),
+		userB: z.string(),
+	}),
+	async (data) => {
+		const { family, isAdmin } = await requireFamily();
+		if (!isAdmin) error(403, 'Only the organizer can manage partners');
+
+		if (data.userA === data.userB) invalid(m.secret_santa_partner_same());
+
+		// Both people must be members of this family (also catches tampering)
+		const members = await db
+			.select({ id: users.id })
+			.from(users)
+			.innerJoin(familyUsers, eq(familyUsers.user, users.id))
+			.where(
+				and(eq(familyUsers.family, family), inArray(users.id, [data.userA, data.userB]))
+			);
+		if (members.length !== 2) invalid(m.secret_santa_partner_member());
+
+		// No duplicate pair in either direction
+		const [existing] = await db
+			.select({ userA: partners.userA })
+			.from(partners)
+			.where(
+				or(
+					and(eq(partners.userA, data.userA), eq(partners.userB, data.userB)),
+					and(eq(partners.userA, data.userB), eq(partners.userB, data.userA))
+				)
+			)
+			.limit(1);
+		if (existing) invalid(m.secret_santa_partner_exists());
+
+		// Store in canonical order (user_a < user_b), as the table CHECK requires
+		const [a, b] = [data.userA, data.userB].sort();
+		await db.insert(partners).values({ userA: a, userB: b });
+
+		getPartners().refresh();
+	}
+);
+
+export const removePartner = command(
+	z.object({
+		userA: z.string(),
+		userB: z.string(),
+	}),
+	async (data) => {
+		const { isAdmin } = await requireFamily();
+		if (!isAdmin) error(403, 'Only the organizer can manage partners');
+
+		await db
+			.delete(partners)
+			.where(and(eq(partners.userA, data.userA), eq(partners.userB, data.userB)));
+
+		getPartners().refresh();
+	}
+);

@@ -12,6 +12,21 @@ export const getUser = query.batch(z.string(), async (id) => {
 	return (id) => lookup.get(id);
 });
 
+/** The signed-in user, so the menu can show admin-only links. */
+export const getCurrentUser = query(async () => {
+	const { cookies } = getRequestEvent();
+	const user = cookies.get('user');
+	if (!user) error(401);
+
+	const [me] = await db
+		.select({ id: users.id, name: users.name, isAdmin: users.isAdmin })
+		.from(users)
+		.where(eq(users.id, user));
+	if (!me) error(401);
+
+	return me;
+});
+
 export const getAllUsers = query(z.number().optional(), async (familyId) => {
 	const { cookies } = getRequestEvent();
 	const family = cookies.get('family');

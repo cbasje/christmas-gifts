@@ -1,11 +1,12 @@
 <script lang="ts">
 import type { Component } from 'svelte';
 import { logout } from '#db/remotes/auth.remote.js';
-import { getAllFamilies, updateFamily } from '#db/remotes/users.remote.js';
+import { getAllFamilies, getCurrentUser, updateFamily } from '#db/remotes/users.remote.js';
 import { m } from '#lib/paraglide/messages.js';
 import { page } from '$app/state';
 import ClipboardIcon from '~icons/chunk/clipboard';
 import GiftIcon from '~icons/chunk/gift';
+import HeartIcon from '~icons/chunk/heart';
 import HomeIcon from '~icons/chunk/home';
 import ListIcon from '~icons/chunk/list';
 import LogoutIcon from '~icons/chunk/logout';
@@ -13,6 +14,7 @@ import RulerIcon from '~icons/chunk/ruler';
 import { confetti } from '../../routes/+layout.svelte';
 
 const families = getAllFamilies();
+const me = getCurrentUser();
 const enableSecretSanta = $derived(
 	families.current?.find((f) => f.id === page.data.family)?.enableSecretSanta ?? false
 );
@@ -36,6 +38,12 @@ const links = $derived.by<Link[]>(() => [
 		path: '/secret-santa',
 		icon: GiftIcon,
 		disabled: !enableSecretSanta,
+	},
+	{
+		label: m.partners_title(),
+		path: '/partners',
+		icon: HeartIcon,
+		disabled: !me.current?.isAdmin,
 	},
 ]);
 
