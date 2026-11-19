@@ -49,21 +49,23 @@ $effect.pre(() => {
                 <p>{m.secret_santa_no_assignment()}</p>
             {/if}
 
-            <form
-                {...finishSeason.enhance(async (form) => {
-                    if (!confirm(m.secret_santa_confirm_finish())) return;
-                    try {
-                        if (await form.submit()) {
-                            confetti.success(m.secret_santa_finished());
+            {#if secretSanta.current?.isAdmin}
+                <form
+                    {...finishSeason.enhance(async (form) => {
+                        if (!confirm(m.secret_santa_confirm_finish())) return;
+                        try {
+                            if (await form.submit()) {
+                                confetti.success(m.secret_santa_finished());
+                            }
+                        } catch {
+                            confetti.error(m.secret_santa_failed());
                         }
-                    } catch {
-                        confetti.error(m.secret_santa_failed());
-                    }
-                })}
-            >
-                <button class="destructive">{m.secret_santa_finish()}</button>
-            </form>
-        {:else}
+                    })}
+                >
+                    <button class="destructive">{m.secret_santa_finish()}</button>
+                </form>
+            {/if}
+        {:else if secretSanta.current?.isAdmin}
             <form
                 {...generateList.enhance(async (form) => {
                     try {
@@ -106,6 +108,8 @@ $effect.pre(() => {
                     <p class="issue">{issue.message}</p>
                 {/each}
             </form>
+        {:else}
+            <p>{m.secret_santa_not_drawn()}</p>
         {/if}
     {/if}
 </main>

@@ -20,6 +20,7 @@ export const users = pgTable(
 		name: text().notNull(),
 		username: text('user_name').notNull().unique(),
 		partnerId: text('partner_id'),
+		isAdmin: boolean('is_admin').notNull().default(false),
 		hue: integer().default(145).notNull(),
 		sizes: jsonb().$type<UserSizes>(),
 		createdAt,

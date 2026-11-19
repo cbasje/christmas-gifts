@@ -28,16 +28,17 @@ async function requireFamily() {
 	if (!Number.isInteger(family) || !user) error(401);
 
 	const [membership] = await db
-		.select({ family: familyUsers.family })
+		.select({ family: familyUsers.family, isAdmin: users.isAdmin })
 		.from(familyUsers)
+		.innerJoin(users, eq(users.id, familyUsers.user))
 		.where(and(eq(familyUsers.family, family), eq(familyUsers.user, user)));
 	if (!membership) error(401);
 
-	return { family, user };
+	return { family, user, isAdmin: membership.isAdmin };
 }
 
 export const getAssignment = query(async () => {
-	const { family, user } = await requireFamily();
+	const { family, user, isAdmin } = await requireFamily();
 	const season = await getActiveSeason(family);
 
 	const [assignment] = await db
@@ -64,7 +65,7 @@ export const getAssignment = query(async () => {
 		)
 		.limit(1);
 
-	return { season, drawn: Boolean(drawn), assignment };
+	return { season, drawn: Boolean(drawn), assignment, isAdmin };
 });
 
 export const generateList = form(
@@ -74,7 +75,8 @@ export const generateList = form(
 		participants: z.array(z.string()),
 	}),
 	async (data) => {
-		const { family } = await requireFamily();
+		const { family, isAdmin } = await requireFamily();
+		if (!isAdmin) error(403, 'Only the organizer can start the draw');
 
 		const [familyRow] = await db
 			.select({ enabled: families.enableSecretSanta })
@@ -139,7 +141,9 @@ export const generateList = form(
 );
 
 export const finishSeason = form(async () => {
-	const { family } = await requireFamily();
+	const { family, isAdmin } = await requireFamily();
+	if (!isAdmin) error(403, 'Only the organizer can finish the season');
+
 	const season = await getActiveSeason(family);
 
 	// Only a season that has actually been drawn can be finished
