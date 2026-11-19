@@ -5,7 +5,7 @@ import { SecretSanta } from '#lib/utils/secret-santa.js';
 import { error, invalid } from '@sveltejs/kit';
 import { and, eq, getTableColumns, inArray } from 'drizzle-orm';
 import z from 'zod';
-import { families, familyUsers, secretSantaAssignments, users } from '../schema/user';
+import { families, familyUsers, partners, secretSantaAssignments, users } from '../schema/user';
 
 const currentSeason = () => new Date().getFullYear();
 
@@ -105,7 +105,7 @@ export const generateList = form(
 		// Only actual members of the family can participate; this also catches
 		// tampered form data and duplicate ids.
 		const players = await db
-			.select({ id: users.id, partnerId: users.partnerId })
+			.select({ id: users.id })
 			.from(users)
 			.innerJoin(familyUsers, eq(familyUsers.user, users.id))
 			.where(and(eq(familyUsers.family, family), inArray(users.id, data.participants)));
@@ -113,9 +113,31 @@ export const generateList = form(
 			invalid(m.secret_santa_too_few());
 		}
 
+		// Partners: symmetric pairs from the partners table, but only pairs where
+		// BOTH members are participating count (someone whose partner sits out is
+		// effectively single for this draw). Build a per-player list so that even
+		// a player in several pairs gets every partner excluded.
+		const ids = players.map((p) => p.id);
+		const pairs = await db
+			.select({ userA: partners.userA, userB: partners.userB })
+			.from(partners)
+			.where(and(inArray(partners.userA, ids), inArray(partners.userB, ids)));
+		const partnerBy = new Map<string, string[]>();
+		for (const { userA, userB } of pairs) {
+			for (const [a, b] of [
+				[userA, userB],
+				[userB, userA],
+			]) {
+				const list = partnerBy.get(a) ?? [];
+				list.push(b);
+				partnerBy.set(a, list);
+			}
+		}
+		const roster = players.map((p) => ({ id: p.id, excludes: partnerBy.get(p.id) ?? [] }));
+
 		let assignments;
 		try {
-			assignments = new SecretSanta(players).generate();
+			assignments = new SecretSanta(roster).generate();
 		} catch {
 			invalid(m.secret_santa_impossible());
 		}

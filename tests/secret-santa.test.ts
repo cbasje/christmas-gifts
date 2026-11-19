@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { SecretSanta } from '#lib/utils/secret-santa.ts';
 
-type Player = { id: string; partnerId: string | null };
+type Player = { id: string; excludes: string[] };
 type Assignment = { giver: string; receiver: string };
 
 const players = (n: number): Player[] =>
-	Array.from({ length: n }, (_, i) => ({ id: `u${i}`, partnerId: null }));
+	Array.from({ length: n }, (_, i) => ({ id: `u${i}`, excludes: [] }));
 
 function expectValidDraw(assignments: Assignment[], roster: Player[]) {
 	// Complete permutation: everyone gives and receives exactly once
@@ -20,7 +20,7 @@ function expectValidDraw(assignments: Assignment[], roster: Player[]) {
 	const byId = new Map(roster.map((p) => [p.id, p]));
 	for (const a of assignments) {
 		expect(a.giver).not.toBe(a.receiver); // no self-pick
-		expect(byId.get(a.giver)?.partnerId).not.toBe(a.receiver); // no partner-pick
+		expect(byId.get(a.giver)?.excludes).not.toContain(a.receiver); // no excluded pick
 	}
 }
 
@@ -37,29 +37,29 @@ describe('SecretSanta', () => {
 
 	it('keeps two couples apart', () => {
 		const roster: Player[] = [
-			{ id: 'a', partnerId: 'b' },
-			{ id: 'b', partnerId: 'a' },
-			{ id: 'c', partnerId: 'd' },
-			{ id: 'd', partnerId: 'c' },
+			{ id: 'a', excludes: ['b'] },
+			{ id: 'b', excludes: ['a'] },
+			{ id: 'c', excludes: ['d'] },
+			{ id: 'd', excludes: ['c'] },
 		];
 		expectValidDraw(new SecretSanta(roster).generate(), roster);
 	});
 
 	it('solves the two-couples swap', () => {
 		const roster: Player[] = [
-			{ id: 'a', partnerId: 'b' },
-			{ id: 'b', partnerId: 'a' },
-			{ id: 'c', partnerId: 'd' },
-			{ id: 'd', partnerId: 'c' },
+			{ id: 'a', excludes: ['b'] },
+			{ id: 'b', excludes: ['a'] },
+			{ id: 'c', excludes: ['d'] },
+			{ id: 'd', excludes: ['c'] },
 		];
 		expectValidDraw(new SecretSanta(roster).generate(), roster);
 	});
 
 	it('throws when no valid assignment exists (mutual couple among 3 players)', () => {
 		const roster: Player[] = [
-			{ id: 'a', partnerId: 'b' },
-			{ id: 'b', partnerId: 'a' },
-			{ id: 'c', partnerId: null },
+			{ id: 'a', excludes: ['b'] },
+			{ id: 'b', excludes: ['a'] },
+			{ id: 'c', excludes: [] },
 		];
 		expect(() => new SecretSanta(roster).generate()).toThrow();
 	});
@@ -78,8 +78,8 @@ describe('SecretSanta', () => {
 			const roster = players(20);
 			for (let i = 0; i < 20; i += 2) {
 				if (Math.random() < 0.6) {
-					roster[i].partnerId = roster[i + 1].id;
-					roster[i + 1].partnerId = roster[i].id;
+					roster[i].excludes = [roster[i + 1].id];
+					roster[i + 1].excludes = [roster[i].id];
 				}
 			}
 			expectValidDraw(new SecretSanta(roster).generate(), roster);

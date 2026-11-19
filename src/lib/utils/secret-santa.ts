@@ -1,4 +1,4 @@
-type Player = { id: string; partnerId: string | null };
+type Player = { id: string; excludes: string[] };
 
 type Assignment = { giver: string; receiver: string };
 
@@ -6,7 +6,8 @@ export class SecretSanta {
 	private restrictions = new Map<Player['id'], Set<Player['id']>>();
 
 	/**
-	 * Generates a Secret Santa list ensuring partners don't pick each other.
+	 * Generates a Secret Santa list: nobody picks themselves or anyone on
+	 * their exclude list (e.g. partners).
 	 */
 	constructor(players: Player[]) {
 		// Validate input
@@ -16,13 +17,11 @@ export class SecretSanta {
 
 		// Create a map of who can't be assigned to whom
 		for (const player of players) {
-			const forbidden = new Set<Player['id']>();
-			forbidden.add(player.id); // Can't pick yourself
-			if (player.partnerId) {
-				forbidden.add(player.partnerId); // Can't pick your partner
-			}
-
-			this.restrictions.set(player.id, forbidden);
+			this.restrictions.set(
+				player.id,
+				// Can't pick yourself, and can't pick anyone on your exclude list
+				new Set([player.id, ...player.excludes])
+			);
 		}
 	}
 

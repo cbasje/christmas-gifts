@@ -85,6 +85,13 @@
       "when": 1795047689810,
       "tag": "0011_dizzy_scrambler",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1795090961163,
+      "tag": "0012_low_wallflower",
+      "breakpoints": true
     }
   ]
 }

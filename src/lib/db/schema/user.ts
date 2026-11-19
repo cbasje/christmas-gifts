@@ -1,5 +1,7 @@
+import { sql } from 'drizzle-orm';
 import {
 	boolean,
+	check,
 	index,
 	integer,
 	jsonb,
@@ -19,7 +21,6 @@ export const users = pgTable(
 		id: uuid().defaultRandom().primaryKey(),
 		name: text().notNull(),
 		username: text('user_name').notNull().unique(),
-		partnerId: text('partner_id'),
 		isAdmin: boolean('is_admin').notNull().default(false),
 		hue: integer().default(145).notNull(),
 		sizes: jsonb().$type<UserSizes>(),
@@ -61,6 +62,37 @@ export const familyUsers = pgTable(
 		primaryKey({
 			columns: [table.family, table.user],
 		}),
+	]
+);
+
+/**
+ * Partner pairs (e.g. couples) for the Secret Santa draw: partners can't pick
+ * each other. Symmetric relationship stored as one row per pair — the CHECK
+ * forces a canonical order (user_a < user_b) so a pair can't exist twice or in
+ * both directions.
+ */
+export const partners = pgTable(
+	'partners',
+	{
+		userA: uuid('user_a')
+			.notNull()
+			.references(() => users.id, {
+				onDelete: 'cascade',
+				onUpdate: 'cascade',
+			}),
+		userB: uuid('user_b')
+			.notNull()
+			.references(() => users.id, {
+				onDelete: 'cascade',
+				onUpdate: 'cascade',
+			}),
+		createdAt,
+	},
+	(table) => [
+		primaryKey({
+			columns: [table.userA, table.userB],
+		}),
+		check('partners_order', sql`${table.userA} < ${table.userB}`),
 	]
 );
 
