@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit';
 import { and, eq, getTableColumns, inArray, not } from 'drizzle-orm';
 import z from 'zod';
-import { db } from '#lib/server/drizzle.ts';
+import { db } from '#lib/server/drizzle.js';
 import { dev } from '$app/env';
 import { form, getRequestEvent, query } from '$app/server';
 import { families, familyUsers, users } from '../schema/user';

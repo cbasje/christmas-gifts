@@ -22,14 +22,17 @@ let formRef = $state<HTMLFormElement>();
 
         try {
             const formData = new FormData(formRef);
-            const data = Object.fromEntries(formData.entries());
-            await addIdea(data);
+            await addIdea({
+                recipient: String(formData.get("recipient") ?? ""),
+                family: String(formData.get("family") ?? ""),
+                text: String(formData.get("text") ?? ""),
+            });
 
             confetti.success(m.idea_popup_create_toast_success());
 
             formRef?.reset();
         } catch (error_) {
-            console.error(error_.message);
+            console.error(error_);
         }
     }}
 >

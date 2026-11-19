@@ -23,12 +23,17 @@ let link = $state<string | null>(gift.link);
 
         try {
             const formData = new FormData(formRef);
-            const data = Object.fromEntries(formData.entries());
-            await editGift(data);
+            await editGift({
+                gift: Number(formData.get("gift")),
+                text: String(formData.get("text") ?? ""),
+                price: formData.get("price") ? String(formData.get("price")) : null,
+                notes: formData.get("notes") ? String(formData.get("notes")) : null,
+                link: formData.get("link") ? String(formData.get("link")) : null,
+            });
 
             confetti.success(m.gift_popup_edit_toast_success());
         } catch (error_) {
-            console.error(error_.message);
+            console.error(error_);
         }
     }}
 >
@@ -67,7 +72,7 @@ let link = $state<string | null>(gift.link);
             <input type="link" name="link" bind:value={link} />
         </label>
 
-        <LinkPreview {link} />
+        <LinkPreview link={link ?? undefined} />
 
         <footer>
             <button type="submit" value="default">{m.button_save()}</button>

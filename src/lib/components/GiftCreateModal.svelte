@@ -23,15 +23,19 @@ let link = $state<string>();
 
         try {
             const formData = new FormData(formRef);
-            const data = Object.fromEntries(formData.entries());
-            data.families = formData.getAll("families");
-            await addGift(data);
+            await addGift({
+                families: formData.getAll("families").map(String),
+                text: String(formData.get("text") ?? ""),
+                price: formData.get("price") ? String(formData.get("price")) : null,
+                notes: formData.get("notes") ? String(formData.get("notes")) : null,
+                link: formData.get("link") ? String(formData.get("link")) : null,
+            });
 
             confetti.success(m.gift_popup_create_toast_success());
 
             formRef?.reset();
         } catch (error_) {
-            console.error(error_.message);
+            console.error(error_);
         }
     }}
 >

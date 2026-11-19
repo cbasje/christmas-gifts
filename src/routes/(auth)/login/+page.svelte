@@ -12,10 +12,10 @@ import { confetti } from '../../+layout.svelte';
     <h1>{m.sign_in_title()}</h1>
 
     <form
-        {...login.enhance(async ({ form, data, submit }) => {
+        {...login.enhance(async ({ element, submit }) => {
             try {
                 await submit();
-                form.reset();
+                element.reset();
 
                 confetti.success("Successfully logged in!");
             } catch (error) {

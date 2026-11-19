@@ -4,7 +4,8 @@
 		"rewriteRelativeImportExtensions": true,
 		"allowArbitraryExtensions": false,
 		"sourceMap": false,
-		"strict": true
+		"strict": true,
+		"types": ["$app/types", "node"]
 	},
 	"include": ["src"]
 }

@@ -23,12 +23,15 @@ let formRef = $state<HTMLFormElement>();
 
         try {
             const formData = new FormData(formRef);
-            const data = Object.fromEntries(formData.entries());
-            await editIdea(data);
+            await editIdea({
+                idea: formData.get("idea") ?? "",
+                recipient: String(formData.get("recipient") ?? ""),
+                text: String(formData.get("text") ?? ""),
+            });
 
             confetti.success(m.idea_popup_edit_toast_success());
         } catch (error_) {
-            console.error(error_.message);
+            console.error(error_);
         }
     }}
 >
