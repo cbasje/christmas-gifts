@@ -10,14 +10,6 @@ import { confetti } from '../../+layout.svelte';
 
 const secretSanta = getAssignment();
 const drawMembers = getDrawMembers();
-
-// Default everyone to "participates" once the roster is known, unless the
-// user has already started editing the checkboxes.
-$effect.pre(() => {
-	if (!drawMembers.ready || !drawMembers.current) return;
-	if (generateList.fields.participants.touched()) return;
-	generateList.fields.participants.set(drawMembers.current.members.map((member) => member.id));
-});
 </script>
 
 <main>
@@ -91,6 +83,7 @@ $effect.pre(() => {
                                         {...generateList.fields.participants.as(
                                             "checkbox",
                                             member.id,
+                                            true,
                                         )}
                                     />
                                     <span>{member.name}</span>
