@@ -3,6 +3,7 @@ import { snakeCase } from 'change-case';
 import { and, eq, getTableColumns } from 'drizzle-orm';
 import z from 'zod';
 import { db } from '#lib/server/drizzle.js';
+import { sendInviteEmail } from '#lib/server/email.js';
 import { form, getRequestEvent, query } from '$app/server';
 import { families, familyUsers, users } from '../schema/user';
 
@@ -76,6 +77,14 @@ export const inviteMember = form(
 
 		try {
 			await db.insert(familyUsers).values({ family: familyId, user: created.id });
+			await sendInviteEmail({
+				to: data.email,
+				name: data.name,
+				username,
+				familyName: family?.name ?? `#${familyId}`,
+				inviterName: admin.name,
+				origin: getRequestEvent().url.origin,
+			});
 		} catch (cause) {
 			await db.delete(users).where(eq(users.id, created.id));
 			throw cause;

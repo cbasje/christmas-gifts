@@ -21,6 +21,7 @@ export const users = pgTable(
 		id: uuid().defaultRandom().primaryKey(),
 		name: text().notNull(),
 		username: text('user_name').notNull().unique(),
+		email: text().unique(),
 		isAdmin: boolean('is_admin').notNull().default(false),
 		hue: integer().default(145).notNull(),
 		sizes: jsonb().$type<UserSizes>(),

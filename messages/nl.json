@@ -112,6 +112,11 @@
 	"members_invite_family": "Familie",
 	"members_invite_button": "Uitnodigen",
 
+	"email_invite_subject": "Je bent toegevoegd aan {family} 🎄",
+	"email_invite_greeting": "Hoi {name},",
+	"email_invite_body": "{inviter} heeft je toegevoegd aan de familie {family}. Log in op {url} met gebruikersnaam {username}.",
+	"email_invite_signoff": "Veel plezier met cadeautjes!",
+
 	"button_create": "Aanmaken",
 	"button_edit": "Bewerken",
 	"button_save": "Opslaan",

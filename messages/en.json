@@ -112,6 +112,11 @@
 	"members_invite_family": "Family",
 	"members_invite_button": "Invite",
 
+	"email_invite_subject": "You've been added to {family} 🎄",
+	"email_invite_greeting": "Hi {name},",
+	"email_invite_body": "{inviter} added you to the {family} family. Sign in at {url} with username {username}.",
+	"email_invite_signoff": "Happy gifting!",
+
 	"button_create": "Create",
 	"button_edit": "Edit",
 	"button_save": "Save",
