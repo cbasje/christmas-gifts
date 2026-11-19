@@ -29,6 +29,7 @@ import { confetti } from '../../+layout.svelte';
             autocomplete="username"
             required
             aria-errormessage="form-login.username-error"
+            data-foley-type
         />
         <div id="form-login.username-error">
             {#each login.fields.username.issues() as issue}
@@ -46,7 +47,7 @@ import { confetti } from '../../+layout.svelte';
       aria-errormessage="form-login.password-error"
     /> -->
 
-        <button type="submit">{m.button_continue()}</button>
+        <button type="submit" data-foley-press data-foley-release>{m.button_continue()}</button>
     </form>
 </main>
 

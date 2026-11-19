@@ -54,7 +54,7 @@ const partnersQuery = getPartners();
                 </select>
             </label>
 
-            <button>{m.secret_santa_partner_add()}</button>
+            <button data-foley-press data-foley-release>{m.secret_santa_partner_add()}</button>
 
             {#each addPartner.fields.allIssues() ?? [] as issue}
                 <p class="issue">{issue.message}</p>
@@ -66,7 +66,7 @@ const partnersQuery = getPartners();
         {:else}
             <ul class="pairs">
                 {#each partnersQuery.current.pairs as pair}
-                    <li>
+                    <li data-foley-exit>
                         <span>{pair.nameA} & {pair.nameB}</span>
                         <button
                             class="destructive"
@@ -81,6 +81,8 @@ const partnersQuery = getPartners();
                                     confetti.error(m.secret_santa_failed());
                                 }
                             }}
+                            data-foley-press
+                            data-foley-release
                         >
                             {m.button_remove()}
                         </button>

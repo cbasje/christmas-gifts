@@ -19,14 +19,14 @@ const ideas = getAllIdeas();
     {:else if ideas.current}
         {#each Object.entries(ideas.current) as [recipient, items]}
             {#await getUser(recipient) then user}
-                <details style:--_accent="oklch(68% 0.21 {user?.hue})">
+                <details style:--_accent="oklch(68% 0.21 {user?.hue})" data-foley-change>
                     <summary style:--color-hue={user?.hue}>
                         <span>{user?.name}</span>
                     </summary>
 
                     <ul>
                         {#each items as idea}
-                            <li>
+                            <li data-foley-exit>
                                 <span>{idea.text}</span>
                                 <IdeaEditModal {idea} />
                                 <button
@@ -35,6 +35,8 @@ const ideas = getAllIdeas();
                                         removeIdea(idea.id);
                                     }}
                                     class="destructive"
+                                    data-foley-press
+                                    data-foley-release
                                 >
                                     Remove
                                 </button>

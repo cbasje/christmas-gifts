@@ -18,6 +18,7 @@ let formRef = $state<HTMLFormElement>();
 
 <dialog
     bind:this={dialogRef}
+    data-foley-change="latch"
     onclose={async (e) => {
         if (e.currentTarget.returnValue !== "default") return;
 
@@ -42,7 +43,7 @@ let formRef = $state<HTMLFormElement>();
 
         <label>
             <span>{m.gift_text()}</span>
-            <input type="text" name="text" value={idea.text} required />
+            <input type="text" name="text" value={idea.text} required data-foley-type />
         </label>
 
         <label>
@@ -59,8 +60,8 @@ let formRef = $state<HTMLFormElement>();
         </label>
 
         <footer>
-            <button type="submit" value="default">{m.button_save()}</button>
-            <button value="cancel">{m.button_cancel()}</button>
+            <button type="submit" value="default" data-foley-press data-foley-release>{m.button_save()}</button>
+            <button value="cancel" data-foley-press data-foley-release>{m.button_cancel()}</button>
         </footer>
     </form>
 </dialog>
@@ -69,6 +70,8 @@ let formRef = $state<HTMLFormElement>();
     onclick={() => {
         dialogRef?.showModal();
     }}
+    data-foley-press
+    data-foley-release
 >
     {m.button_edit()}
 </button>

@@ -18,7 +18,7 @@ const list = getWishList();
     {:else if list.current}
         <ul class="wishes">
             {#each list.current as gift}
-                <li>
+                <li data-foley-exit>
                     <span class="dot" aria-hidden="true">·</span>
                     <span>{gift.text}</span>
                     {#if gift.price}
@@ -37,6 +37,8 @@ const list = getWishList();
                             removeGift(gift.id);
                         }}
                         class="destructive"
+                        data-foley-press
+                        data-foley-release
                     >
                         {m.button_remove()}
                     </button>

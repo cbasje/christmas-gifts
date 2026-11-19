@@ -18,6 +18,8 @@ let preview = $derived(getPreview(link));
         target="_blank"
         rel="noopener noreferrer"
         class="preview"
+        data-foley-hover
+        data-foley-click
     >
         {#if header}
             <img

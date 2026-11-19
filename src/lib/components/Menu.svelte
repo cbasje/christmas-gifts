@@ -66,6 +66,8 @@ $effect.pre(() => {
                             ? "page"
                             : undefined}
                         class="btn"
+                        data-foley-hover
+                        data-foley-click
                     >
                         <l.icon />
                         <span>{l.label}</span>
@@ -85,6 +87,8 @@ $effect.pre(() => {
                             "radio",
                             f.id.toString(),
                         )}
+                        aria-checked={updateFamily.fields.family.value() === f.id.toString()}
+                        data-foley-change
                         onchange={() => {
                             submitButtonRef?.click();
                         }}
@@ -111,7 +115,7 @@ $effect.pre(() => {
         })}
         class="logout"
     >
-        <button type="submit" class="destructive">
+        <button type="submit" class="destructive" data-foley-press data-foley-release>
             <span>{m.sign_out()}</span>
             <LogoutIcon />
         </button>

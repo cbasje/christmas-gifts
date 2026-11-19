@@ -18,6 +18,7 @@ let link = $state<string>();
 
 <dialog
     bind:this={dialogRef}
+    data-foley-change="latch"
     onclose={async (e) => {
         if (e.currentTarget.returnValue !== "default") return;
 
@@ -44,17 +45,17 @@ let link = $state<string>();
 
         <label>
             <span>{m.gift_text()}</span>
-            <input type="text" name="text" required />
+            <input type="text" name="text" required data-foley-type />
         </label>
 
         <label>
             <span>{m.gift_price()}</span>
-            <input type="price" name="price" />
+            <input type="price" name="price" data-foley-type />
         </label>
 
         <label>
             <span>{m.gift_notes()}</span>
-            <textarea name="notes"></textarea>
+            <textarea name="notes" data-foley-type></textarea>
         </label>
 
         <label>
@@ -68,6 +69,7 @@ let link = $state<string>();
                         link = forceToValidURL(val);
                     }
                 }
+                data-foley-type
             />
         </label>
 
@@ -91,8 +93,8 @@ let link = $state<string>();
         {/if}
 
         <footer>
-            <button type="submit" value="default">{m.button_save()}</button>
-            <button value="cancel">{m.button_cancel()}</button>
+            <button type="submit" value="default" data-foley-press data-foley-release>{m.button_save()}</button>
+            <button value="cancel" data-foley-press data-foley-release>{m.button_cancel()}</button>
         </footer>
     </form>
 </dialog>
@@ -102,6 +104,8 @@ let link = $state<string>();
         onclick={() => {
             dialogRef?.showModal();
         }}
+        data-foley-press
+        data-foley-release
     >
         <PlusIcon />
         <span>{m.button_create()}</span>

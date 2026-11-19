@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@foleyjs/core':
+        specifier: ^2.9.0
+        version: 2.9.0
       '@neoconfetti/svelte':
         specifier: ^2.2.2
         version: 2.2.2(svelte@5.57.3)
@@ -621,6 +624,9 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
+
+  '@foleyjs/core@2.9.0':
+    resolution: {integrity: sha512-mL15Y3KDQiU7BUcvVpojBkpgJgsanCQjyH7Rv9CDdVIDhNS1jAXdInX+jjW2983q1jRvkmCcv/s5Qn5k9gViSg==}
 
   '@iconify/types@2.0.0':
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
@@ -2060,6 +2066,8 @@ snapshots:
 
   '@esbuild/win32-x64@0.28.2':
     optional: true
+
+  '@foleyjs/core@2.9.0': {}
 
   '@iconify/types@2.0.0': {}
 

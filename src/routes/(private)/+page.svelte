@@ -37,6 +37,7 @@ $effect(() => {
                 <details
                     id="recipient-{user?.id}"
                     style:--_accent="oklch(68% 0.21 {user?.hue})"
+                    data-foley-change
                 >
                     <summary style:--color-hue={user?.hue}>
                         <span>{user?.name}</span>
@@ -48,6 +49,8 @@ $effect(() => {
                                 <input
                                     id="gift-{gift.id}"
                                     type="checkbox"
+                                    data-foley-change
+                                    aria-checked={gift.isPurchased}
                                     bind:checked={
                                         () => gift.isPurchased,
                                         (val) => {
@@ -74,6 +77,8 @@ $effect(() => {
                                             href={gift.link}
                                             target="_blank"
                                             rel="noopener noreferrer"
+                                            data-foley-hover
+                                            data-foley-click
                                         >
                                             {gift.link}
                                         </a>

@@ -18,6 +18,7 @@ let link = $state<string | null>(gift.link);
 
 <dialog
     bind:this={dialogRef}
+    data-foley-change="latch"
     onclose={async (e) => {
         if (e.currentTarget.returnValue !== "default") return;
 
@@ -26,9 +27,15 @@ let link = $state<string | null>(gift.link);
             await editGift({
                 gift: Number(formData.get("gift")),
                 text: String(formData.get("text") ?? ""),
-                price: formData.get("price") ? String(formData.get("price")) : null,
-                notes: formData.get("notes") ? String(formData.get("notes")) : null,
-                link: formData.get("link") ? String(formData.get("link")) : null,
+                price: formData.get("price")
+                    ? String(formData.get("price"))
+                    : null,
+                notes: formData.get("notes")
+                    ? String(formData.get("notes"))
+                    : null,
+                link: formData.get("link")
+                    ? String(formData.get("link"))
+                    : null,
             });
 
             confetti.success(m.gift_popup_edit_toast_success());
@@ -44,7 +51,7 @@ let link = $state<string | null>(gift.link);
 
         <label>
             <span>{m.gift_text()}</span>
-            <input type="text" name="text" value={gift.text} required />
+            <input type="text" name="text" value={gift.text} required data-foley-type />
         </label>
 
         <label>
@@ -59,24 +66,25 @@ let link = $state<string | null>(gift.link);
                           currencyDisplay: "narrowSymbol",
                       }).format(gift.price.value)
                     : ""}
+                data-foley-type
             />
         </label>
 
         <label>
             <span>{m.gift_notes()}</span>
-            <textarea name="notes" value={gift.notes}></textarea>
+            <textarea name="notes" value={gift.notes} data-foley-type></textarea>
         </label>
 
         <label>
             <span>{m.gift_link()}</span>
-            <input type="link" name="link" bind:value={link} />
+            <input type="link" name="link" bind:value={link} data-foley-type />
         </label>
 
         <LinkPreview link={link ?? undefined} />
 
         <footer>
-            <button type="submit" value="default">{m.button_save()}</button>
-            <button value="cancel">{m.button_cancel()}</button>
+            <button type="submit" value="default" data-foley-press data-foley-release>{m.button_save()}</button>
+            <button value="cancel" data-foley-press data-foley-release>{m.button_cancel()}</button>
         </footer>
     </form>
 </dialog>
@@ -85,6 +93,8 @@ let link = $state<string | null>(gift.link);
     onclick={() => {
         dialogRef?.showModal();
     }}
+    data-foley-press
+    data-foley-release
 >
     {m.button_edit()}
 </button>

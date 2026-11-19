@@ -29,10 +29,10 @@ const drawMembers = getDrawMembers();
                 </p>
 
                 <nav class="payoff">
-                    <a href="/#recipient-{secretSanta.current?.assignment.id}">
+                    <a href="/#recipient-{secretSanta.current?.assignment.id}" data-foley-hover data-foley-click>
                         {m.secret_santa_wishlist()}
                     </a>
-                    <a href="/size-chart/{secretSanta.current?.assignment.id}">
+                    <a href="/size-chart/{secretSanta.current?.assignment.id}" data-foley-hover data-foley-click>
                         {m.secret_santa_sizes()}
                     </a>
                 </nav>
@@ -54,7 +54,7 @@ const drawMembers = getDrawMembers();
                         }
                     })}
                 >
-                    <button class="destructive">{m.secret_santa_finish()}</button>
+                    <button class="destructive" data-foley-press data-foley-release>{m.secret_santa_finish()}</button>
                 </form>
             {/if}
         {:else if secretSanta.current?.isAdmin}
@@ -94,7 +94,7 @@ const drawMembers = getDrawMembers();
                 {/if}
 
                 <div class="page-cta">
-                    <button>{m.secret_santa_generate()}</button>
+                    <button data-foley-press data-foley-release>{m.secret_santa_generate()}</button>
                 </div>
 
                 {#each generateList.fields.allIssues() ?? [] as issue}

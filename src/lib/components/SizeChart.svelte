@@ -87,7 +87,7 @@ const hasSizes = $derived([...simpleRows, ...advancedRows].some((row) => row.val
                     <div>
                         <dt>{row.label}</dt>
                         <dd>
-                            <input {...row.field.as("text", row.value)} />
+                            <input {...row.field.as("text", row.value)} data-foley-type />
                         </dd>
                     </div>
                 {/each}
@@ -98,14 +98,14 @@ const hasSizes = $derived([...simpleRows, ...advancedRows].some((row) => row.val
                     <div>
                         <dt>{row.label}</dt>
                         <dd>
-                            <input {...row.field.as("text", row.value)} />
+                            <input {...row.field.as("text", row.value)} data-foley-type />
                         </dd>
                     </div>
                 {/each}
             </dl>
 
             <div class="actions">
-                <button>{m.button_save()}</button>
+                <button data-foley-press data-foley-release>{m.button_save()}</button>
             </div>
 
             {#each updateSizes.fields.allIssues() ?? [] as issue}
