@@ -9,6 +9,21 @@ let { data }: PageProps = $props();
 
 const home = getHome();
 const currentUser = getUser(page.data.user);
+
+// When landing with a #recipient-<id> hash (e.g. from Secret Santa), open that
+// person's details and scroll to them.
+const targetRecipient = $derived(page.url.hash.replace('#recipient-', ''));
+let focused = false;
+
+$effect(() => {
+	if (focused || !targetRecipient || !home.ready || !home.current) return;
+	focused = true;
+	const el = document.getElementById(`recipient-${targetRecipient}`);
+	if (el) {
+		(el as HTMLDetailsElement).open = true;
+		el.scrollIntoView({ block: 'start' });
+	}
+});
 </script>
 
 <main>
@@ -19,7 +34,10 @@ const currentUser = getUser(page.data.user);
     {:else if home.current}
         {#each Object.entries(home.current) as [recipient, gifts]}
             {#await getUser(recipient) then user}
-                <details style:--_accent="oklch(68% 0.21 {user?.hue})">
+                <details
+                    id="recipient-{user?.id}"
+                    style:--_accent="oklch(68% 0.21 {user?.hue})"
+                >
                     <summary style:--color-hue={user?.hue}>
                         <span>{user?.name}</span>
                     </summary>

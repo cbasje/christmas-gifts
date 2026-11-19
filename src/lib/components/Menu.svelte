@@ -13,8 +13,12 @@ import RulerIcon from '~icons/chunk/ruler';
 import { confetti } from '../../routes/+layout.svelte';
 
 const families = getAllFamilies();
-let enableSecretSanta = $state<boolean>(false);
+const enableSecretSanta = $derived(
+	families.current?.find((f) => f.id === page.data.family)?.enableSecretSanta ?? false
+);
 let submitButtonRef = $state<HTMLButtonElement>();
+
+$inspect(enableSecretSanta);
 
 type Link = {
 	label: string;
@@ -22,7 +26,7 @@ type Link = {
 	icon: Component;
 	disabled?: boolean;
 };
-let links = $derived<Link[]>([
+const links = $derived.by<Link[]>(() => [
 	{ label: m.overview_title(), path: '/', icon: HomeIcon },
 	{ label: m.wish_list_title(), path: '/wish-list', icon: ListIcon },
 	{ label: m.ideas_title(), path: '/ideas', icon: ClipboardIcon },
@@ -41,16 +45,12 @@ $effect.pre(() => {
 $effect.pre(() => {
 	updateFamily.fields.family.set(page.data.family.toString());
 });
-$effect.pre(() => {
-	enableSecretSanta =
-		families.current?.find((f) => f.id === page.data.family)?.enableSecretSanta ?? false;
-});
 </script>
 
 <nav>
     <ul class="links">
         {#each links as l}
-            {#if l.disabled !== false}
+            {#if l.disabled !== true}
                 <li>
                     <a
                         href={l.path}
@@ -84,17 +84,17 @@ $effect.pre(() => {
                 </label>
             {/each}
 
-            <button {...updateFamily.buttonProps} bind:this={submitButtonRef}>
+            <button type="submit" bind:this={submitButtonRef}>
                 {m.button_switch()}
             </button>
         </form>
     {/if}
 
     <form
-        {...logout.enhance(async ({ form, data, submit }) => {
+        {...logout.enhance(async ({ element, submit }) => {
             try {
                 await submit();
-                form.reset();
+                element.reset();
 
                 confetti.success("Successfully logged out!");
             } catch (error) {
@@ -103,7 +103,7 @@ $effect.pre(() => {
         })}
         class="logout"
     >
-        <button {...logout.buttonProps} class="destructive">
+        <button type="submit" class="destructive">
             <span>{m.sign_out()}</span>
             <LogoutIcon />
         </button>

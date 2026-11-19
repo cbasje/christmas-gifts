@@ -1,11 +1,12 @@
 type Player = { id: string; partnerId: string | null };
 
+type Assignment = { giver: string; receiver: string };
+
 export class SecretSanta {
 	private restrictions = new Map<Player['id'], Set<Player['id']>>();
-	private players = new Map<Player['id'], Player>();
 
 	/**
-	 * Generates a Secret Santa list ensuring partners don't pick each other
+	 * Generates a Secret Santa list ensuring partners don't pick each other.
 	 */
 	constructor(players: Player[]) {
 		// Validate input
@@ -21,19 +22,16 @@ export class SecretSanta {
 				forbidden.add(player.partnerId); // Can't pick your partner
 			}
 
-			this.players.set(player.id, player);
 			this.restrictions.set(player.id, forbidden);
 		}
 	}
 
-	generate() {
-		// Try to find a valid assignment (with retry logic)
-		const maxAttempts = 1000;
-		for (let attempt = 0; attempt < maxAttempts; attempt++) {
-			const result = this.tryAssignment();
-			if (result) {
-				return result;
-			}
+	generate(): Assignment[] {
+		// The backtracking search below is complete, so a single attempt either
+		// finds a valid assignment or proves that none exists.
+		const result = this.tryAssignment();
+		if (result) {
+			return result;
 		}
 
 		throw new Error(
@@ -41,35 +39,62 @@ export class SecretSanta {
 		);
 	}
 
-	private tryAssignment() {
-		const givers = Array.from(this.players.keys());
-		const receivers = Array.from(this.players.keys());
-		const assignments = [];
+	private tryAssignment(): Assignment[] | null {
+		const givers = Array.from(this.restrictions.keys());
+		const available = new Set<Player['id']>(givers);
+		const assigned = new Map<Player['id'], Player['id']>();
 
-		// Shuffle receivers
-		this.shuffleArray(receivers);
+		// Most-constrained-first backtracking: at every step pick the giver with
+		// the fewest valid receivers left. Dead ends are found early, and unlike
+		// a plain greedy pass this is guaranteed to find an assignment whenever
+		// one exists.
+		const search = (remaining: Player['id'][]): boolean => {
+			if (remaining.length === 0) return true;
 
-		for (const giver of givers) {
-			const forbidden = this.restrictions.get(giver);
+			// Pick the giver with the fewest currently-valid receivers
+			let best: Player['id'] | undefined;
+			let bestCandidates: Player['id'][] = [];
+			let fewest = Infinity;
 
-			// Find first valid receiver
-			const validIndex = receivers.findIndex(
-				(r) => forbidden === undefined || !forbidden.has(r)
-			);
+			for (const giver of remaining) {
+				const forbidden = this.restrictions.get(giver);
+				const candidates: Player['id'][] = [];
 
-			if (validIndex === -1) {
-				return null; // No valid assignment found
+				for (const receiver of available) {
+					if (!forbidden?.has(receiver)) candidates.push(receiver);
+				}
+
+				if (candidates.length === 0) return false; // Dead end
+				if (candidates.length < fewest) {
+					fewest = candidates.length;
+					best = giver;
+					bestCandidates = candidates;
+					if (fewest === 1) break;
+				}
 			}
 
-			const receiver = receivers[validIndex];
-			receivers.splice(validIndex, 1);
-			assignments.push({ giver, receiver });
-		}
+			// Shuffle so a re-run produces a different draw
+			this.shuffleArray(bestCandidates);
 
-		return assignments;
+			for (const candidate of bestCandidates) {
+				assigned.set(best!, candidate);
+				available.delete(candidate);
+
+				if (search(remaining.filter((giver) => giver !== best))) return true;
+
+				available.add(candidate);
+				assigned.delete(best!);
+			}
+
+			return false;
+		};
+
+		if (!search(givers)) return null;
+
+		return Array.from(assigned, ([giver, receiver]) => ({ giver, receiver }));
 	}
 
-	private shuffleArray(array: any[]) {
+	private shuffleArray<T>(array: T[]) {
 		for (let i = array.length - 1; i > 0; i--) {
 			const j = Math.floor(Math.random() * (i + 1));
 			[array[i], array[j]] = [array[j], array[i]];
