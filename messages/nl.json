@@ -53,6 +53,8 @@
 	"size_chart_title": "Mijn maattabel",
 	"size_chart_description": "Geef hier je maten aan!",
 	"size_chart_empty": "Nog geen maten gedeeld.",
+	"size_chart_saved": "Maten opgeslagen!",
+	"size_chart_failed": "Kon maten niet opslaan.",
 
 	"partners_title": "Partners",
 	"size_chart_areas_simple_top": "Boven",

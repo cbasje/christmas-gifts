@@ -14,6 +14,6 @@ const user = getUser(page.data.user);
     {#if user.loading}
         {m.loading()}
     {:else if user.current}
-        <SizeChart sizes={user.current.sizes} />
+        <SizeChart sizes={user.current.sizes} editable />
     {/if}
 </main>

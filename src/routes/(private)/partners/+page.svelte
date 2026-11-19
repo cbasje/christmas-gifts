@@ -1,7 +1,7 @@
 <script lang="ts">
 import { addPartner, getPartners, removePartner } from '#db/remotes/secret-santa.remote.js';
 import { m } from '#lib/paraglide/messages.js';
-import { confetti } from '../../../+layout.svelte';
+import { confetti } from '../../+layout.svelte';
 
 const partnersQuery = getPartners();
 </script>
