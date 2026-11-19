@@ -40,18 +40,19 @@ const routeHandle = (async ({ event, resolve }) => {
 			.limit(1);
 		if (!user) return resolve(event);
 
-		const timestamp = Date.now() + 365 * 24 * 60 * 60 * 1000;
+		const maxAge = 365 * 24 * 60 * 60; // one year, in seconds
+		const expires = new Date(Date.now() + maxAge * 1000);
 		event.cookies.set('user', user.id, {
 			path: '/',
 			secure: !dev,
-			maxAge: Math.round(timestamp / 1000),
-			expires: new Date(timestamp),
+			maxAge,
+			expires,
 		});
 		event.cookies.set('family', user.families.at(0)!, {
 			path: '/',
 			secure: !dev,
-			maxAge: Math.round(timestamp / 1000),
-			expires: new Date(timestamp),
+			maxAge,
+			expires,
 		});
 
 		redirect(302, '/');

@@ -27,18 +27,19 @@ export const login = form(
 
 		const { cookies } = getRequestEvent();
 
-		const timestamp = Date.now() + 365 * 24 * 60 * 60 * 1000;
+		const maxAge = 365 * 24 * 60 * 60; // one year, in seconds
+		const expires = new Date(Date.now() + maxAge * 1000);
 		cookies.set('user', user.id, {
 			path: '/',
 			secure: !dev,
-			maxAge: Math.round(timestamp / 1000),
-			expires: new Date(timestamp),
+			maxAge,
+			expires,
 		});
 		cookies.set('family', user.families.at(0)!, {
 			path: '/',
 			secure: !dev,
-			maxAge: Math.round(timestamp / 1000),
-			expires: new Date(timestamp),
+			maxAge,
+			expires,
 		});
 
 		redirect(302, '/');
