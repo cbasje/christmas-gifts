@@ -52,6 +52,7 @@
 
 	"size_chart_title": "My size chart",
 	"size_chart_description": "Let everyone know your size!",
+	"size_chart_empty": "No sizes shared yet.",
 	"size_chart_areas_simple_top": "Top",
 	"size_chart_areas_simple_bottom": "Bottom",
 	"size_chart_areas_simple_shoe": "Shoe size",

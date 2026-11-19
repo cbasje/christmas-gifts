@@ -1,5 +1,6 @@
 <script lang="ts">
 import { getUser } from '#db/remotes/users.remote.js';
+import SizeChart from '#components/SizeChart.svelte';
 import { m } from '#lib/paraglide/messages.js';
 import { page } from '$app/state';
 
@@ -13,6 +14,6 @@ const user = getUser(page.data.user);
     {#if user.loading}
         {m.loading()}
     {:else if user.current}
-        <pre>{JSON.stringify(user.current.sizes)}</pre>
+        <SizeChart sizes={user.current.sizes} />
     {/if}
 </main>

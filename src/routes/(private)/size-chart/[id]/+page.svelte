@@ -1,5 +1,6 @@
 <script lang="ts">
 import { getUser } from '#db/remotes/users.remote.js';
+import SizeChart from '#components/SizeChart.svelte';
 import { m } from '#lib/paraglide/messages.js';
 import type { PageProps } from './$types';
 
@@ -15,6 +16,6 @@ const user = $derived(getUser(params.id));
     {#if user.loading}
         {m.loading()}
     {:else if user.current}
-        <pre>{JSON.stringify(user.current.sizes)}</pre>
+        <SizeChart sizes={user.current.sizes} />
     {/if}
 </main>

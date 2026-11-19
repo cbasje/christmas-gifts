@@ -52,6 +52,7 @@
 
 	"size_chart_title": "Mijn maattabel",
 	"size_chart_description": "Geef hier je maten aan!",
+	"size_chart_empty": "Nog geen maten gedeeld.",
 	"size_chart_areas_simple_top": "Boven",
 	"size_chart_areas_simple_bottom": "Beneden",
 	"size_chart_areas_simple_shoe": "Schoenmaat",
