@@ -11,6 +11,7 @@ import HomeIcon from '~icons/chunk/home';
 import ListIcon from '~icons/chunk/list';
 import LogoutIcon from '~icons/chunk/logout';
 import RulerIcon from '~icons/chunk/ruler';
+import UsersIcon from '~icons/chunk/users';
 import { confetti } from '../../routes/+layout.svelte';
 
 const families = getAllFamilies();
@@ -19,8 +20,6 @@ const enableSecretSanta = $derived(
 	families.current?.find((f) => f.id === page.data.family)?.enableSecretSanta ?? false
 );
 let submitButtonRef = $state<HTMLButtonElement>();
-
-$inspect(enableSecretSanta);
 
 type Link = {
 	label: string;
@@ -33,6 +32,12 @@ const links = $derived.by<Link[]>(() => [
 	{ label: m.wish_list_title(), path: '/wish-list', icon: ListIcon },
 	{ label: m.ideas_title(), path: '/ideas', icon: ClipboardIcon },
 	{ label: m.size_chart_title(), path: '/size-chart', icon: RulerIcon },
+	{
+		label: m.members_title(),
+		path: '/members',
+		icon: UsersIcon,
+		disabled: !me.current?.isAdmin,
+	},
 	{
 		label: m.secret_santa_title(),
 		path: '/secret-santa',
@@ -87,7 +92,8 @@ $effect.pre(() => {
                             "radio",
                             f.id.toString(),
                         )}
-                        aria-checked={updateFamily.fields.family.value() === f.id.toString()}
+                        aria-checked={updateFamily.fields.family.value() ===
+                            f.id.toString()}
                         data-foley-change
                         onchange={() => {
                             submitButtonRef?.click();
@@ -115,7 +121,12 @@ $effect.pre(() => {
         })}
         class="logout"
     >
-        <button type="submit" class="destructive" data-foley-press data-foley-release>
+        <button
+            type="submit"
+            class="destructive"
+            data-foley-press
+            data-foley-release
+        >
             <span>{m.sign_out()}</span>
             <LogoutIcon />
         </button>

@@ -103,6 +103,15 @@
 	"secret_santa_partner_member": "Both people must be members of this family.",
 	"secret_santa_partner_exists": "That pair is already added.",
 
+	"members_title": "Members",
+	"members_hint": "See who's in this family and invite new members.",
+	"members_invited": "{name} was invited!",
+	"members_invite_failed": "Couldn't invite member.",
+	"members_invite_name": "Name",
+	"members_invite_email": "Email",
+	"members_invite_family": "Family",
+	"members_invite_button": "Invite",
+
 	"button_create": "Create",
 	"button_edit": "Edit",
 	"button_save": "Save",

@@ -103,6 +103,15 @@
 	"secret_santa_partner_member": "Beide personen moeten lid zijn van deze familie.",
 	"secret_santa_partner_exists": "Dat paar is al toegevoegd.",
 
+	"members_title": "Leden",
+	"members_hint": "Bekijk wie er in deze familie zitten en nodig nieuwe leden uit.",
+	"members_invited": "{name} is uitgenodigd!",
+	"members_invite_failed": "Kon lid niet uitnodigen.",
+	"members_invite_name": "Naam",
+	"members_invite_email": "E-mail",
+	"members_invite_family": "Familie",
+	"members_invite_button": "Uitnodigen",
+
 	"button_create": "Aanmaken",
 	"button_edit": "Bewerken",
 	"button_save": "Opslaan",
